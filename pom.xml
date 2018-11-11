@@ -21,23 +21,6 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <profiles> <!-- TODO remove -->
-        <profile>
-            <id>conf</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.0.2</version>
-                        <configuration>
-                            <outputDirectory>C:\Users\Сергей\Desktop\Nukkit\plugins</outputDirectory>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
     <build>
         <plugins>
             <plugin>
