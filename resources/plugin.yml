@@ -1,0 +1,86 @@
+name: "${pom.artifactId}"
+main: Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain
+api: [1.0.0]
+version: "${pom.version}"
+author: Sergey_Dertan
+website: https://vk.com/sergey_dertan
+load: POSTWORLD
+prefix: '§eSRegionProtector§f'
+permissions:
+  sregionprotector.*:
+    default: false
+    children:
+      sregionprotector.admin:
+        description: "Allows to editing all regions"
+        default: op
+      sregionprotector.command.*:
+        default: false
+        children:
+          sregionprotector.command.pos1:
+            default: true
+          sregionprotector.command.wand:
+            default: true
+          sregionprotector.command.pos2:
+            default: true
+          sregionprotector.command.create:
+            default: true
+          sregionprotector.command.list:
+            default: true
+          sregionprotector.command.remove:
+            default: true
+          sregionprotector.command.addmember:
+            default: true
+          sregionprotector.command.addowner:
+            default: true
+          sregionprotector.command.removemember:
+            default: true
+          sregionprotector.command.removeowner:
+            default: true
+          sregionprotector.command.flag:
+            default: true
+          sregionprotector.command.info:
+            default: true
+          sregionprotector.command.teleport:
+            default: true
+          sregionprotector.command.buy:
+            default: true
+          sregionprotector.command.size:
+            default: true
+      sregionprotector.region.*:
+        default: op
+        children:
+          sregionprotector.region.size.*:
+            description: "Allows to creating regions with any size"
+            default: op
+          sregionprotector.region.amount.*:
+            description: "Allows to creating any amount of regions"
+            default: op
+          sregionprotector.region.flag.*:
+            default: false
+            children:
+              sregionprotector.region.flag.build:
+                default: op
+              sregionprotector.region.flag.interact:
+                default: op
+              sregionprotector.region.flag.use:
+                default: op
+              sregionprotector.region.flag.pvp:
+                default: op
+              sregionprotector.region.flag.tnt:
+                default: op
+              sregionprotector.region.flag.lighter:
+                default: op
+              sregionprotector.region.flag.magic_item_use:
+                default: op
+              sregionprotector.region.flag.heal:
+                default: op
+              sregionprotector.region.flag.invincible:
+                default: op
+              sregionprotector.region.flag.teleport:
+                default: op
+              sregionprotector.region.flag.sell:
+                default: true
+              sregionprotector.region.flag.potion_launch:
+                default: true
+              sregionprotector.region.flag.move:
+                default: op

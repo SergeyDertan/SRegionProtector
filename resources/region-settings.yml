@@ -1,0 +1,14 @@
+default-flags:
+  move: false
+  build: true
+  interact: true
+  use: true
+  pvp: true
+  explode: true
+  lighter: true
+  magic-item-use: false
+  heal: false
+  invincible: false
+  potion-launch: false
+max-region-name-length: 10
+min-region-name-length: 3
