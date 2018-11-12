@@ -9,5 +9,4 @@ soon
 * High performance
 ## Translating help required
 
-## Permissions
-soon
+## [Wiki](https://github.com/SergeyDertan/SRegionProtector/wiki).
