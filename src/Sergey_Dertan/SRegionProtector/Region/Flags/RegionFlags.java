@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
+import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.PluginManager;
 
@@ -224,5 +225,21 @@ public abstract class RegionFlags {
 
     public static FlagList fixMissingFlags(FlagList flagList) {
         return fixMissingFlags(flagList.getFlags());
+    }
+
+    public static boolean hasFlagPermission(Permissible target, int flag) {
+        return target.hasPermission(permissions[flag]);
+    }
+
+    public static boolean hasFlagPermission(Permissible target, String flag) {
+        return hasFlagPermission(target, getFlagIdByName(flag));
+    }
+
+    public static boolean getDefaultFlagState(int flag) {
+        return defaults[flag].state;
+    }
+
+    public static boolean getDefaultFlagState(String flag) {
+        return getDefaultFlagState(getFlagIdByName(flag));
     }
 }
