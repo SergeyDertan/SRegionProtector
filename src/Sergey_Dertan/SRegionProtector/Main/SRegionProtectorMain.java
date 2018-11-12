@@ -56,8 +56,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + "Settings initializing...");
         this.initSettings();
 
-        this.getLogger().info(TextFormat.GREEN + "Provider initializing...");
-        this.initProvider("yml"); //TODO add more providers
+        this.getLogger().info(TextFormat.GREEN + "Data provider initializing...");
+        this.initDataProvider("yml"); //TODO add more providers
 
         this.getLogger().info(TextFormat.GREEN + "Regions initializing...");
         this.initRegions();
@@ -104,7 +104,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.settings.init(this);
     }
 
-    private void initProvider(String provider) {
+    private void initDataProvider(String provider) {
         switch (provider) {
             case "yaml":
             case "yml":
@@ -163,7 +163,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getServer().getCommandMap().register("wand", getWandCommand);
 
         RegionFlagCommand regionFlagCommand = new RegionFlagCommand("rgflag", (Map<String, String>) messages.getOrDefault("flag", new HashMap<>()), this.regionManager);
-        regionFlagCommand.setDescription("region flag");
+        regionFlagCommand.setDescription("change the region flag state");
         regionFlagCommand.setPermission("sregionprotector.command.flag");
         Map<String, CommandParameter[]> regionFlagCommandParameters = new HashMap<>();
         regionFlagCommandParameters.put("flagdata", new CommandParameter[]
@@ -203,7 +203,7 @@ public final class SRegionProtectorMain extends PluginBase {
         Map<String, CommandParameter[]> regionListCommandParameters = new HashMap<>();
         regionListCommandParameters.put("list-type", new CommandParameter[]
                 {
-                        new CommandParameter("owner:member", CommandParamType.TEXT, false)
+                        new CommandParameter("owner:member:creator", CommandParamType.TEXT, false)
                 }
         );
         regionListCommand.setCommandParameters(regionListCommandParameters);

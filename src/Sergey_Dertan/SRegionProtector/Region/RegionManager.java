@@ -186,8 +186,17 @@ public final class RegionManager {
         return this.getPlayersRegionAmount(player, true);
     }
 
+    public List<Region> getOwningRegions(Player player, boolean isCreator) {
+        if (!isCreator) return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+        List<Region> list = new ArrayList<>();
+        for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>())) {
+            if (region.isCreator(player.getName().toLowerCase())) list.add(region);
+        }
+        return list;
+    }
+
     public List<Region> getOwningRegions(Player player) {
-        return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+        return this.getOwningRegions(player, false);
     }
 
     public List<Region> getPlayerMemberRegions(Player player) {

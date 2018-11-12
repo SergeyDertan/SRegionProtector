@@ -27,8 +27,9 @@ list:
   usage: 'List types: owner/member'
   owner-no-regions: "You have no regions"
   member-no-regions: "You have no rgions"
-  owner-region-list: "Your regions: @list"
+  owner-region-list: "Regions in which you are a owner: @list"
   member-region-list: "Regions in which you are a member: @list"
+  creator-region-list: "You regions: @list"
 remove:
   permission: "You have no permission"
   region-doesnt-exists: "Region @name doesnt exists"

@@ -57,7 +57,7 @@ public final class RegionSettings {
         this.regionSize = new HashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
         for (Integer size : (List<Integer>) cnf.get("region-sizes")) {
-            Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size " + size + " and smaller");
+            Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks");
             Server.getInstance().getPluginManager().addPermission(permission);
             //mainPerm.addParent(mainPerm, true); //TODO test
             this.regionSize.put(size, permission);

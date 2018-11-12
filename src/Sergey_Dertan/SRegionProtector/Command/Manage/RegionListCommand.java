@@ -14,6 +14,10 @@ public final class RegionListCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
+    public static final String OWNER = "owner";
+    public static final String MEMBER = "member";
+    public static final String CREATOR = "creator";
+
     public RegionListCommand(String name, Map<String, String> messages, RegionManager regionManager) {
         super(name, messages);
         this.regionManager = regionManager;
@@ -31,22 +35,26 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             return false;
         }
         String type = args[0].toLowerCase();
-        if (!type.equals("owner") && !type.equals("member")) {
+        if (!type.equals(OWNER) && !type.equals(MEMBER) && !type.equals(CREATOR)) {
             sender.sendMessage(this.usageMessage);
             return false;
         }
         List<Region> regions;
-        if (type.equals("member")) {
+        if (type.equals(MEMBER)) {
             regions = this.regionManager.getPlayerMemberRegions((Player) sender);
-        } else {
+        } else if (type.equals(OWNER)) {
             regions = this.regionManager.getOwningRegions((Player) sender);
+        } else {
+            regions = this.regionManager.getOwningRegions((Player) sender, true);
         }
         List<String> list = new ArrayList<>();
         regions.forEach(region -> list.add(region.getName()));
-        if (type.equals("member")) {
+        if (type.equals(MEMBER)) {
             this.sendMessage(sender, "member-region-list", "@list", String.join(", ", list));
-        } else {
+        } else if (type.equals(OWNER)) {
             this.sendMessage(sender, "owner-region-list", "@list", String.join(", ", list));
+        } else {
+            this.sendMessage(sender, "creator-region-list", "@list", String.join(", ", list));
         }
         return true;
     }
