@@ -27,7 +27,7 @@ public final class SelectorEventsHandler implements Listener {
         this.regionSelector.removeSession(e.getPlayer());
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
     public void playerInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
         Item item = e.getItem();
@@ -41,9 +41,13 @@ public final class SelectorEventsHandler implements Listener {
         }
 
         if (session.pos2 == null) {
-            session.pos1 = Position.fromObject(block, block.level);
+            session.pos2 = Position.fromObject(block, block.level);
             player.sendMessage("pos2 set"); //TODO messages
             return;
         }
+
+        session.pos1 = Position.fromObject(block, block.level);
+        session.pos2 = null;
+        player.sendMessage("pos1 set"); //TODO messages
     }
 }
