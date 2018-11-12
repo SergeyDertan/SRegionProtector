@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
@@ -40,12 +41,17 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             return false;
         }
         List<Region> regions;
-        if (type.equals(MEMBER)) {
-            regions = this.regionManager.getPlayerMemberRegions((Player) sender);
-        } else if (type.equals(OWNER)) {
-            regions = this.regionManager.getOwningRegions((Player) sender);
-        } else {
-            regions = this.regionManager.getOwningRegions((Player) sender, true);
+        switch (type) {
+            case CREATOR:
+            default:
+                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.CREATOR);
+                break;
+            case OWNER:
+                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.OWNER);
+                break;
+            case MEMBER:
+                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.MEMBER);
+                break;
         }
         List<String> list = new ArrayList<>();
         regions.forEach(region -> list.add(region.getName()));

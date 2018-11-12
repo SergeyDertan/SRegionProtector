@@ -173,36 +173,6 @@ public final class RegionManager {
         return false;
     }
 
-    public int getPlayersRegionAmount(Player player, boolean isCreator) {
-        if (!isCreator) return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>()).size();
-        List<Region> regions = this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
-        if (regions.isEmpty()) return 0;
-        int amount = 0;
-        for (Region region : regions) if (region.isCreator(player.getName().toLowerCase())) ++amount;
-        return amount;
-    }
-
-    public int getPlayersRegionAmount(Player player) {
-        return this.getPlayersRegionAmount(player, true);
-    }
-
-    public List<Region> getOwningRegions(Player player, boolean isCreator) {
-        if (!isCreator) return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
-        List<Region> list = new ArrayList<>();
-        for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>())) {
-            if (region.isCreator(player.getName().toLowerCase())) list.add(region);
-        }
-        return list;
-    }
-
-    public List<Region> getOwningRegions(Player player) {
-        return this.getOwningRegions(player, false);
-    }
-
-    public List<Region> getPlayerMemberRegions(Player player) {
-        return this.members.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
-    }
-
     public void addMember(Region region, String target) {
         this.members.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
         region.addMember(target);
@@ -231,5 +201,26 @@ public final class RegionManager {
 
     public void save() {
         this.provider.saveRegionList(new ArrayList<>(this.regions.values()));
+    }
+
+    public List<Region> getPlayersRegionList(Player player, RegionGroup group) {
+        switch (group) {
+            case CREATOR:
+                List<Region> list = new ArrayList<>();
+                for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>())) {
+                    if (region.isCreator(player.getName().toLowerCase())) list.add(region);
+                }
+                return list;
+            case OWNER:
+                return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+            case MEMBER:
+                return this.members.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+            default:
+                return new ArrayList<>();
+        }
+    }
+
+    public int getPlayerRegionAmount(Player player, RegionGroup group) {
+        return this.getPlayersRegionList(player, group).size();
     }
 }

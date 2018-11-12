@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Creation;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
@@ -63,7 +64,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        if (!this.regionSettings.hasAmountPermission(sender, this.regionManager.getPlayersRegionAmount((Player) sender, true) + 1)) {
+        if (!this.regionSettings.hasAmountPermission(sender, this.regionManager.getPlayerRegionAmount((Player) sender, RegionGroup.CREATOR) + 1)) {
             this.sendMessage(sender, "too-much-regions");
             return false;
         }
