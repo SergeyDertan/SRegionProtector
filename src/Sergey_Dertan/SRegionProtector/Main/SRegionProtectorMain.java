@@ -185,7 +185,7 @@ public final class SRegionProtectorMain extends PluginBase {
         regionFlagCommand.setCommandParameters(regionFlagCommandParameters);
         this.getServer().getCommandMap().register("rgflag", regionFlagCommand);
 
-        RegionInfoCommand regionInfoCommand = new RegionInfoCommand("rginfo", (Map<String, String>) messages.getOrDefault("info", new HashMap<>()), this.regionManager, this.chunkManager);
+        RegionInfoCommand regionInfoCommand = new RegionInfoCommand("rginfo", (Map<String, String>) messages.getOrDefault("info", new HashMap<>()), this.regionManager, this.chunkManager, this.settings.regionSettings);
         regionInfoCommand.setDescription("region info");
         regionInfoCommand.setPermission("sregionprotector.command.info");
         Map<String, CommandParameter[]> regionInfoCommandParameters = new HashMap<>();
