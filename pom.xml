@@ -6,7 +6,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>Beta_11.0</version>
+    <version>12.0</version>
     <name>SRegionProtector</name>
     <description>Region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>
@@ -27,6 +27,23 @@
         <system>GitHub</system>
         <url>https://github.com/SergeyDertan/PrivateRegionProtector/issues</url>
     </issueManagement>
+    <profiles>
+        <profile>
+            <id>conf</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <configuration>
+                            <outputDirectory>C:\Users\Сергей\Desktop\Nukkit\plugins</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>nukkitx</id>

@@ -38,7 +38,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private static SRegionProtectorMain instance;
 
-    public boolean forceShutdown = false;
+    public boolean forceShutdown = false; //TODO
 
     private Settings settings;
     private Provider provider;

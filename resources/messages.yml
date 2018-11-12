@@ -24,7 +24,7 @@ create:
 list:
   in-game: "In game only"
   permission: "You have no permission"
-  usage: 'List types: owner/member'
+  usage: 'List types: owner/member/creator'
   owner-no-regions: "You have no regions"
   member-no-regions: "You have no rgions"
   owner-region-list: "Regions in which you are a owner: @list"
