@@ -9,4 +9,4 @@ soon
 * High performance
 ## Translating help required
 
-## [Wiki](https://github.com/SergeyDertan/SRegionProtector/wiki).
+## Commands and permissions can be found at [Wiki](https://github.com/SergeyDertan/SRegionProtector/wiki).
