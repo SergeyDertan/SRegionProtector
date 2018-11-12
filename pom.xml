@@ -7,6 +7,26 @@
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
     <version>Beta_11.0</version>
+    <name>SRegionProtector</name>
+    <description>Region protection plugin for nukkit</description>
+    <url>https://github.com/SergeyDertan/SRegionProtector</url>
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.ru.html</url>
+        </license>
+    </licenses>
+    <developers>
+        <developer>
+            <name>Sergey Dertan</name>
+            <email>superator2018@gmail.com</email>
+            <url>https://github.com/SergeyDertan</url>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/SergeyDertan/PrivateRegionProtector/issues</url>
+    </issueManagement>
     <repositories>
         <repository>
             <id>nukkitx</id>
