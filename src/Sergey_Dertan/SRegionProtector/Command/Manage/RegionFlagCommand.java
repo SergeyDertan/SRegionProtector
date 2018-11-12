@@ -28,21 +28,24 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
 
         String regionName = args[0].toLowerCase();
         int flag = RegionFlags.getFlagIdByName(args[1].toLowerCase());
-        if (flag == -1) {
+        if (flag == RegionFlags.FLAG_INVALID) {
             this.sendMessage(sender, "incorrect-flag");
             return false;
         }
 
-
-        //TODO get perm
 
         Region region = this.regionManager.getRegion(regionName);
         if (region == null) {
             this.sendMessage(sender, "region-doesnt-exists");
             return false;
         }
-        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner((sender).getName().toLowerCase())) {
+        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner((sender).getName().toLowerCase(), false)) {
             sender.sendMessage(this.getPermissionMessage());
+            return false;
+        }
+
+        if (!RegionFlags.hasFlagPermission(sender, flag)) {
+            this.sendMessage(sender, "permission");
             return false;
         }
 
@@ -83,7 +86,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         }
         region.getFlagList().setFlagState(flag, state);
         if (flag == RegionFlags.FLAG_TELEPORT || flag == RegionFlags.FLAG_SELL || flag == RegionFlags.FLAG_INVINCIBLE) state = !state;
-        this.sendMessage(sender, "flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.getName(), args[1], (state ? "deny" : "allow")}); //TODO customizable deny/allow words
+        this.sendMessage(sender, "flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.getName(), args[1], (state ? "enabled" : "disabled")}); //TODO
         return true;
     }
 }

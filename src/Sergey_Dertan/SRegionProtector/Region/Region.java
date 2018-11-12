@@ -75,8 +75,8 @@ public final class Region extends SimpleAxisAlignedBB {
         return this.owners;
     }
 
-    public boolean isOwner(String player, boolean ifCreator) {
-        return this.owners.contains(player) || (ifCreator && this.creator.equals(player));
+    public boolean isOwner(String player, boolean creator) {
+        return this.owners.contains(player) || (creator && this.creator.equals(player));
     }
 
     public boolean isOwner(String player) {

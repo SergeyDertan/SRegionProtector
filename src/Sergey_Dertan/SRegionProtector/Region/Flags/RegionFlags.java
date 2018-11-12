@@ -201,16 +201,14 @@ public abstract class RegionFlags {
             case "enabled":
             case "вкл":
             case "true":
-            case "allow":
-                return false;
+                return true;
             case "no":
             case "disable":
             case "disabled":
             case "выкл":
             case "false":
-            case "deny":
             default:
-                return true;
+                return false;
         }
     }
 

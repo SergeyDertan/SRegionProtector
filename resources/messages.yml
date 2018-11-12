@@ -71,6 +71,7 @@ info:
     Owners: @owners
     Members: @members
     Flags: @flags
+
 flag:
   permission: "You have no permission"
   usage: 'Required arguments: [REGION] [FLAG] [STATE]'
