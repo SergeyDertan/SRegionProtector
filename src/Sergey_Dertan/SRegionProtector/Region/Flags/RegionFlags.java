@@ -36,6 +36,9 @@ public abstract class RegionFlags {
     public static RegionFlag[] defaults;
     public static Permission[] permissions;
 
+    private RegionFlags() {
+    }
+
     public static void init(boolean[] flagsDefault) {
         defaults = new RegionFlag[FLAG_AMOUNT];
 
@@ -247,8 +250,5 @@ public abstract class RegionFlags {
 
     public static boolean getDefaultFlagState(String flag) {
         return getDefaultFlagState(getFlagIdByName(flag));
-    }
-
-    private RegionFlags() {
     }
 }

@@ -13,11 +13,10 @@ import java.util.Map;
 
 public final class RegionListCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
-
     public static final String OWNER = "owner";
     public static final String MEMBER = "member";
     public static final String CREATOR = "creator";
+    private RegionManager regionManager;
 
     public RegionListCommand(String name, Map<String, String> messages, RegionManager regionManager) {
         super(name, messages);

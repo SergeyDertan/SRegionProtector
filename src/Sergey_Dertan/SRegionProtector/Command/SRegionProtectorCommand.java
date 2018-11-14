@@ -7,8 +7,8 @@ import java.util.Map;
 
 public abstract class SRegionProtectorCommand extends Command {
 
-    private Map<String, String> messages;
     public static final String DEFAULT_MESSAGE = "Unknown message";
+    private Map<String, String> messages;
 
     public SRegionProtectorCommand(String name, Map<String, String> messages) {
         super(name);

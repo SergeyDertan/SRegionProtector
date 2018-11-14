@@ -46,6 +46,10 @@ public final class SRegionProtectorMain extends PluginBase {
     private ChunkManager chunkManager;
     private RegionSelector regionSelector;
 
+    public static SRegionProtectorMain getInstance() {
+        return SRegionProtectorMain.instance;
+    }
+
     @Override
     public void onEnable() {
         this.getLogger().info(TextFormat.GREEN + "Initializing SRegionProtector V_" + this.getDescription().getVersion() + " by Sergey Dertan...");
@@ -298,10 +302,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.chunkManager.save();
 
         this.getLogger().info(TextFormat.GREEN + "SRegionProtector disabled.");
-    }
-
-    public static SRegionProtectorMain getInstance() {
-        return SRegionProtectorMain.instance;
     }
 
     public RegionManager getRegionManager() {

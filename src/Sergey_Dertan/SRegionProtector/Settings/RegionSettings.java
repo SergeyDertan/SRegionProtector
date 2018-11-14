@@ -13,10 +13,10 @@ import java.util.Map;
 
 public final class RegionSettings {
 
-    private Map<Integer, Permission> regionSize;
-    private Map<Integer, Permission> regionAmount;
     public boolean[] flagsStatus;
     public boolean[] defaultFlags;
+    private Map<Integer, Permission> regionSize;
+    private Map<Integer, Permission> regionAmount;
 
     RegionSettings(Map<String, Object> cnf, ConfigSection rgCnf) {
         this.loadSizePermissions(cnf);
