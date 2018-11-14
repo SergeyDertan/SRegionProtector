@@ -14,6 +14,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
+import cn.nukkit.event.block.LeavesDecayEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
@@ -60,6 +61,11 @@ public final class RegionEventsHandler implements Listener {
         if (!(e instanceof EntityDamageByEntityEvent)) return;
         if (!(((EntityDamageByEntityEvent) e).getDamager() instanceof Player)) return;
         this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void leaveDecay(LeavesDecayEvent e) {
+        this.handleEvent(RegionFlags.FLAG_LEAVES_DECAY, e.getBlock(), null, e);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

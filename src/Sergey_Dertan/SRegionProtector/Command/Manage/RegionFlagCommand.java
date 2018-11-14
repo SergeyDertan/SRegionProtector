@@ -50,9 +50,6 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         }
 
         boolean state = RegionFlags.getStateFromString(args[2]);
-        if (flag == RegionFlags.FLAG_INVINCIBLE || flag == RegionFlags.FLAG_TELEPORT || flag == RegionFlags.FLAG_SELL) {
-            state = !state;
-        }
         if (flag == RegionFlags.FLAG_TELEPORT) {
             if (state) {
                 if (!(sender instanceof Player)) {
@@ -85,7 +82,6 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             }
         }
         region.getFlagList().setFlagState(flag, state);
-        if (flag == RegionFlags.FLAG_TELEPORT || flag == RegionFlags.FLAG_SELL || flag == RegionFlags.FLAG_INVINCIBLE) state = !state;
         this.sendMessage(sender, "flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.getName(), args[1], (state ? "enabled" : "disabled")}); //TODO
         return true;
     }

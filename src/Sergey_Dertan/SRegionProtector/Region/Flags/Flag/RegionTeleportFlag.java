@@ -30,4 +30,11 @@ public final class RegionTeleportFlag extends RegionFlag {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    @Override
+    public RegionTeleportFlag clone() {
+        return new RegionTeleportFlag(this.state, this.position == null ? null :
+                new Position(this.position.x, this.position.y, this.position.z, this.position.level) //TODO check
+        );
+    }
 }

@@ -1,6 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Flags.Flag;
 
-public class RegionFlag {
+public class RegionFlag implements Cloneable {
 
     public boolean state;
 
@@ -18,5 +18,10 @@ public class RegionFlag {
 
     public final void setState(boolean state) {
         this.state = state;
+    }
+
+    @Override
+    public RegionFlag clone() {
+        return new RegionFlag(this.state);
     }
 }

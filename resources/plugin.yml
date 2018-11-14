@@ -84,3 +84,7 @@ permissions:
                 default: true
               sregionprotector.region.flag.move:
                 default: op
+              sregionprotector.region.flag.leaves_decay:
+                default: op
+              sregionprotector.region.flag.explode:
+                default: op

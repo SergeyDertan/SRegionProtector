@@ -10,8 +10,6 @@ import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.PluginManager;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 public abstract class RegionFlags {
@@ -30,8 +28,9 @@ public abstract class RegionFlags {
     public static final int FLAG_SELL = 10;
     public static final int FLAG_POTION_LAUNCH = 11;
     public static final int FLAG_MOVE = 12;
+    public static final int FLAG_LEAVES_DECAY = 13;
 
-    public static final int FLAG_AMOUNT = 13;
+    public static final int FLAG_AMOUNT = 14;
 
     public static FlagList defaultFlagList;
     public static RegionFlag[] defaults;
@@ -53,6 +52,7 @@ public abstract class RegionFlags {
         defaults[FLAG_SELL] = new RegionSellFlag(flagsDefault[FLAG_SELL]);
         defaults[FLAG_POTION_LAUNCH] = new RegionFlag(flagsDefault[FLAG_POTION_LAUNCH]);
         defaults[FLAG_MOVE] = new RegionFlag(flagsDefault[FLAG_MOVE]);
+        defaults[FLAG_LEAVES_DECAY] = new RegionFlag(flagsDefault[FLAG_LEAVES_DECAY]);
 
         defaultFlagList = new FlagList(defaults);
 
@@ -60,19 +60,20 @@ public abstract class RegionFlags {
 
         permissions = new Permission[FLAG_AMOUNT];
 
-        permissions[FLAG_BUILD] = pluginManager.getPermission("sregionprotetor.region.flag.build");
-        permissions[FLAG_INTERACT] = pluginManager.getPermission("sregionprotetor.region.flag.interact");
-        permissions[FLAG_USE] = pluginManager.getPermission("sregionprotetor.region.flag.use");
-        permissions[FLAG_PVP] = pluginManager.getPermission("sregionprotetor.region.flag.pvp");
-        permissions[FLAG_EXPLODE] = pluginManager.getPermission("sregionprotetor.region.flag.explode");
-        permissions[FLAG_LIGHTER] = pluginManager.getPermission("sregionprotetor.region.flag.lighter");
-        permissions[FLAG_MAGIC_ITEM_USE] = pluginManager.getPermission("sregionprotetor.region.flag.magic_item_use");
-        permissions[FLAG_HEAL] = pluginManager.getPermission("sregionprotetor.region.flag.heal");
-        permissions[FLAG_INVINCIBLE] = pluginManager.getPermission("sregionprotetor.region.flag.invincible");
-        permissions[FLAG_TELEPORT] = pluginManager.getPermission("sregionprotetor.region.flag.teleport");
-        permissions[FLAG_SELL] = pluginManager.getPermission("sregionprotetor.region.flag.sell");
-        permissions[FLAG_POTION_LAUNCH] = pluginManager.getPermission("sregionprotetor.region.flag.potion_launch");
-        permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotetor.region.flag.move");
+        permissions[FLAG_BUILD] = pluginManager.getPermission("sregionprotector.region.flag.build");
+        permissions[FLAG_INTERACT] = pluginManager.getPermission("sregionprotector.region.flag.interact");
+        permissions[FLAG_USE] = pluginManager.getPermission("sregionprotector.region.flag.use");
+        permissions[FLAG_PVP] = pluginManager.getPermission("sregionprotector.region.flag.pvp");
+        permissions[FLAG_EXPLODE] = pluginManager.getPermission("sregionprotector.region.flag.explode");
+        permissions[FLAG_LIGHTER] = pluginManager.getPermission("sregionprotector.region.flag.lighter");
+        permissions[FLAG_MAGIC_ITEM_USE] = pluginManager.getPermission("sregionprotector.region.flag.magic_item_use");
+        permissions[FLAG_HEAL] = pluginManager.getPermission("sregionprotector.region.flag.heal");
+        permissions[FLAG_INVINCIBLE] = pluginManager.getPermission("sregionprotector.region.flag.invincible");
+        permissions[FLAG_TELEPORT] = pluginManager.getPermission("sregionprotector.region.flag.teleport");
+        permissions[FLAG_SELL] = pluginManager.getPermission("sregionprotector.region.flag.sell");
+        permissions[FLAG_POTION_LAUNCH] = pluginManager.getPermission("sregionprotector.region.flag.potion_launch");
+        permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotector.region.flag.move");
+        permissions[FLAG_LEAVES_DECAY] = pluginManager.getPermission("sregionprotector.region.flag.leaves_decay");
     }
 
     private static void registerFlag() { //TODO
@@ -84,7 +85,7 @@ public abstract class RegionFlags {
         RegionFlag[] flags = new RegionFlag[FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flagData : data.entrySet()) {
             int id = getFlagIdByName(flagData.getKey());
-            if (id == -1) continue;
+            if (id == RegionFlags.FLAG_INVALID) continue;
             switch (id) {
                 default:
                     flags[id] = new RegionFlag((boolean) flagData.getValue().get("state"));
@@ -120,12 +121,12 @@ public abstract class RegionFlags {
         return defaultFlagList.clone();
     }
 
-    public static Permission getFlagPermission(int flagID) {
-        return permissions[flagID];
+    public static Permission getFlagPermission(int flag) {
+        return permissions[flag];
     }
 
-    public static String getFlagName(int flagID) {
-        switch (flagID) {
+    public static String getFlagName(int flag) {
+        switch (flag) {
             default:
                 return "";
             case FLAG_BUILD:
@@ -154,6 +155,8 @@ public abstract class RegionFlags {
                 return "potion_launch";
             case FLAG_MOVE:
                 return "move";
+            case FLAG_LEAVES_DECAY:
+                return "leaves_decay";
         }
     }
 
@@ -174,7 +177,9 @@ public abstract class RegionFlags {
             case "lighter":
                 return FLAG_LIGHTER;
             case "magic_item":
+            case "magic-item":
             case "magic_item_use":
+            case "magic-item-use":
             case "magicitem":
             case "magic":
                 return FLAG_MAGIC_ITEM_USE;
@@ -188,9 +193,13 @@ public abstract class RegionFlags {
             case "sell":
                 return FLAG_SELL;
             case "potion_launch":
+            case "potion-launch":
                 return FLAG_POTION_LAUNCH;
             case "move":
                 return FLAG_MOVE;
+            case "leave_decay":
+            case "leaves-decay":
+                return FLAG_LEAVES_DECAY;
         }
     }
 
@@ -213,12 +222,11 @@ public abstract class RegionFlags {
     }
 
     public static FlagList fixMissingFlags(RegionFlag[] flags) {
-        if (flags.length == defaults.length) return new FlagList(flags);
-        List<RegionFlag> fix = Arrays.asList(flags);
-        for (int i = flags.length; i < FLAG_AMOUNT; ++i) {
-            fix.add(i, defaults[i]);
+        for (int i = 0; i < FLAG_AMOUNT; ++i) {
+            if (flags[i] != null) continue;
+            flags[i] = defaults[i].clone();
         }
-        return new FlagList(fix.toArray(new RegionFlag[FLAG_AMOUNT]));
+        return new FlagList(flags);
     }
 
     public static FlagList fixMissingFlags(FlagList flagList) {
@@ -239,5 +247,8 @@ public abstract class RegionFlags {
 
     public static boolean getDefaultFlagState(String flag) {
         return getDefaultFlagState(getFlagIdByName(flag));
+    }
+
+    private RegionFlags() {
     }
 }

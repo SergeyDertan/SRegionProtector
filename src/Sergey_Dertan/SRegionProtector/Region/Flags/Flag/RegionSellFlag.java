@@ -28,4 +28,9 @@ public final class RegionSellFlag extends RegionFlag {
     public void setPrice(int price) {
         this.price = price;
     }
+
+    @Override
+    public RegionSellFlag clone() {
+        return new RegionSellFlag(this.state, this.price);
+    }
 }

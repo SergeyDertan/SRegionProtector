@@ -16,12 +16,12 @@ public final class FlagList {
         this.flags = flags;
     }
 
-    public void setFlagState(int flagId, boolean state) {
-        this.flags[flagId].state = state;
+    public void setFlagState(int flag, boolean state) {
+        this.flags[flag].state = state;
     }
 
-    public boolean getFlagState(int flagId) {
-        return this.flags[flagId].state;
+    public boolean getFlagState(int flag) {
+        return this.flags[flag].state;
     }
 
     public RegionFlag[] getFlags() {
@@ -58,8 +58,8 @@ public final class FlagList {
         return flags;
     }
 
-    public RegionFlag getFlag(int flagID) {
-        return this.flags[flagID];
+    public RegionFlag getFlag(int flag) {
+        return this.flags[flag];
     }
 
     public RegionSellFlag getSellFlag() {
@@ -80,7 +80,11 @@ public final class FlagList {
     }
 
     @Override
-    public FlagList clone() {
-        return new FlagList(this.flags.clone());
+    public FlagList clone() { //TODO rewrite
+        RegionFlag[] flags = new RegionFlag[this.flags.length];
+        for (int i = 0; i < this.flags.length; ++i) {
+            flags[i] = this.flags[i].clone();
+        }
+        return new FlagList(flags);
     }
 }
