@@ -27,7 +27,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         }
 
         String regionName = args[0].toLowerCase();
-        int flag = RegionFlags.getFlagIdByName(args[1].toLowerCase());
+        int flag = RegionFlags.getFlagId(args[1].toLowerCase());
         if (flag == RegionFlags.FLAG_INVALID) {
             this.sendMessage(sender, "incorrect-flag");
             return false;

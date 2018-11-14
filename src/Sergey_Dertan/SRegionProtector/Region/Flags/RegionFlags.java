@@ -29,8 +29,9 @@ public abstract class RegionFlags {
     public static final int FLAG_POTION_LAUNCH = 11;
     public static final int FLAG_MOVE = 12;
     public static final int FLAG_LEAVES_DECAY = 13;
+    public static final int FLAG_ITEM_DROP = 14;
 
-    public static final int FLAG_AMOUNT = 14;
+    public static final int FLAG_AMOUNT = 15;
 
     public static FlagList defaultFlagList;
     public static RegionFlag[] defaults;
@@ -56,6 +57,7 @@ public abstract class RegionFlags {
         defaults[FLAG_POTION_LAUNCH] = new RegionFlag(flagsDefault[FLAG_POTION_LAUNCH]);
         defaults[FLAG_MOVE] = new RegionFlag(flagsDefault[FLAG_MOVE]);
         defaults[FLAG_LEAVES_DECAY] = new RegionFlag(flagsDefault[FLAG_LEAVES_DECAY]);
+        defaults[FLAG_ITEM_DROP] = new RegionFlag(flagsDefault[FLAG_ITEM_DROP]);
 
         defaultFlagList = new FlagList(defaults);
 
@@ -77,6 +79,7 @@ public abstract class RegionFlags {
         permissions[FLAG_POTION_LAUNCH] = pluginManager.getPermission("sregionprotector.region.flag.potion_launch");
         permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotector.region.flag.move");
         permissions[FLAG_LEAVES_DECAY] = pluginManager.getPermission("sregionprotector.region.flag.leaves_decay");
+        permissions[FLAG_ITEM_DROP] = pluginManager.getPermission("sregionprotector.region.flag.item_drop");
     }
 
     private static void registerFlag() { //TODO
@@ -87,7 +90,7 @@ public abstract class RegionFlags {
         if (data == null) return getDefaultFlagList();
         RegionFlag[] flags = new RegionFlag[FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flagData : data.entrySet()) {
-            int id = getFlagIdByName(flagData.getKey());
+            int id = getFlagId(flagData.getKey());
             if (id == RegionFlags.FLAG_INVALID) continue;
             switch (id) {
                 default:
@@ -160,10 +163,12 @@ public abstract class RegionFlags {
                 return "move";
             case FLAG_LEAVES_DECAY:
                 return "leaves_decay";
+            case FLAG_ITEM_DROP:
+                return "item_drop";
         }
     }
 
-    public static int getFlagIdByName(String name) {
+    public static int getFlagId(String name) {
         switch (name) {
             default:
                 return -1;
@@ -201,8 +206,14 @@ public abstract class RegionFlags {
             case "move":
                 return FLAG_MOVE;
             case "leave_decay":
+            case "leave-decay":
             case "leaves-decay":
+            case "leaves_decay":
                 return FLAG_LEAVES_DECAY;
+            case "item_drop":
+            case "itemdrop":
+            case "item-drop":
+                return FLAG_ITEM_DROP;
         }
     }
 
@@ -241,7 +252,7 @@ public abstract class RegionFlags {
     }
 
     public static boolean hasFlagPermission(Permissible target, String flag) {
-        return hasFlagPermission(target, getFlagIdByName(flag));
+        return hasFlagPermission(target, getFlagId(flag));
     }
 
     public static boolean getDefaultFlagState(int flag) {
@@ -249,6 +260,6 @@ public abstract class RegionFlags {
     }
 
     public static boolean getDefaultFlagState(String flag) {
-        return getDefaultFlagState(getFlagIdByName(flag));
+        return getDefaultFlagState(getFlagId(flag));
     }
 }

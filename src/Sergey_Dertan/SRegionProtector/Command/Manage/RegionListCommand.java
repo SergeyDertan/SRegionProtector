@@ -54,12 +54,16 @@ public final class RegionListCommand extends SRegionProtectorCommand {
         }
         List<String> list = new ArrayList<>();
         regions.forEach(region -> list.add(region.getName()));
-        if (type.equals(MEMBER)) {
-            this.sendMessage(sender, "member-region-list", "@list", String.join(", ", list));
-        } else if (type.equals(OWNER)) {
-            this.sendMessage(sender, "owner-region-list", "@list", String.join(", ", list));
-        } else {
-            this.sendMessage(sender, "creator-region-list", "@list", String.join(", ", list));
+        switch (type) {
+            case MEMBER:
+                this.sendMessage(sender, "member-region-list", "@list", String.join(", ", list));
+                break;
+            case OWNER:
+                this.sendMessage(sender, "owner-region-list", "@list", String.join(", ", list));
+                break;
+            case CREATOR:
+                this.sendMessage(sender, "creator-region-list", "@list", String.join(", ", list));
+                break;
         }
         return true;
     }

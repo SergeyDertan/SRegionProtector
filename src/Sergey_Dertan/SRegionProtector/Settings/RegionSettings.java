@@ -30,8 +30,8 @@ public final class RegionSettings {
         this.defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
         Arrays.fill(this.defaultFlags, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("default-flags")).entrySet()) {
-            if (RegionFlags.getFlagIdByName(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
-            this.defaultFlags[RegionFlags.getFlagIdByName(flag.getKey())] = flag.getValue();
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
+            this.defaultFlags[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();
         }
     }
 
@@ -82,15 +82,15 @@ public final class RegionSettings {
     }
 
     public boolean isFlagEnabled(String name) {
-        return this.isFlagEnabled(RegionFlags.getFlagIdByName(name));
+        return this.isFlagEnabled(RegionFlags.getFlagId(name));
     }
 
     private void loadFlagsStatuses(Map<String, Object> cnf) {
         this.flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
         Arrays.fill(flagsStatus, true);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("active-flags")).entrySet()) {
-            if (RegionFlags.getFlagIdByName(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
-            this.flagsStatus[RegionFlags.getFlagIdByName(flag.getKey())] = flag.getValue();
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
+            this.flagsStatus[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();
         }
     }
 }

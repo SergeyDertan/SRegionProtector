@@ -11,5 +11,6 @@ default-flags:
   invincible: false
   potion-launch: false
   leaves-decay: false
+  item_drop: false
 max-region-name-length: 10
 min-region-name-length: 3

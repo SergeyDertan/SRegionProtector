@@ -16,6 +16,7 @@ active-flags:
   potion-launch: true
   move: false
   leaves_decay: false
+  item_drop: false
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

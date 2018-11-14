@@ -19,6 +19,7 @@ import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.entity.EntityExplodeEvent;
 import cn.nukkit.event.entity.ProjectileLaunchEvent;
+import cn.nukkit.event.player.PlayerDropItemEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.level.Position;
@@ -79,6 +80,11 @@ public final class RegionEventsHandler implements Listener {
         Player source = null;
         if (e.getEntity().shootingEntity instanceof Player) source = (Player) e.getEntity().shootingEntity;
         this.handleEvent(RegionFlags.FLAG_POTION_LAUNCH, e.getEntity(), source, e, false, false);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void playerDropItem(PlayerDropItemEvent e) {
+        this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e, true, true);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
