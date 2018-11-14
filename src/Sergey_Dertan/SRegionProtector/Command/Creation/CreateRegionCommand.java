@@ -69,15 +69,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        double maxX = Math.max(pos1.x, pos2.x);
-        double maxY = Math.max(pos1.y, pos2.y);
-        double maxZ = Math.max(pos1.z, pos2.z);
-
-        double minX = Math.min(pos1.x, pos2.x);
-        double minY = Math.min(pos1.y, pos2.y);
-        double minZ = Math.min(pos1.z, pos2.z);
-
-        if (!this.regionSettings.hasSizePermission(sender, (int) ((maxX - minX) * (maxY - minY) * (maxZ - minZ)))) {
+        if (!this.regionSettings.hasSizePermission(sender, session.calculateRegionSize())) {
             this.sendMessage(sender, "too-large");
             return false;
         }
