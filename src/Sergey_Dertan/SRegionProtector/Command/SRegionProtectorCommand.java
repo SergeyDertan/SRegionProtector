@@ -14,6 +14,7 @@ public abstract class SRegionProtectorCommand extends Command {
         super(name);
         this.messages = messages;
         if (messages.containsKey("usage")) this.usageMessage = messages.get("usage");
+        ;
         this.setPermissionMessage(messages.get("permission"));
     }
 
