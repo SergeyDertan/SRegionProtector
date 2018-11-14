@@ -8,6 +8,6 @@ SRegionProtector is a nukkit plugin that allows players to protect this regions.
 * Lots of flags
 * Flexible settings
 * High performance
-## Translating help required 
+## Translating help required
 
 ## Commands and permissions can be found at [Wiki](https://github.com/SergeyDertan/SRegionProtector/wiki).
