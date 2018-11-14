@@ -6,7 +6,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>12.0</version>
+    <version>12.2</version>
     <name>SRegionProtector</name>
     <description>Region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>
@@ -64,6 +64,7 @@
                 <directory>${basedir}/resources/</directory>
                 <includes>
                     <include>plugin.yml</include>
+                    <include>config.yml</include>
                     <include>messages.yml</include>
                     <include>region-settings.yml</include>
                 </includes>
