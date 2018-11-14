@@ -47,7 +47,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             sender.sendMessage(this.usageMessage);
             return false;
         }
-        if (name.length() < 3 || name.length() > 12) {
+        if (name.length() < this.regionSettings.minRegionNameLength || name.length() > regionSettings.maxRegionNameLength) {
             this.sendMessage(sender, "incorrect-name");
             return false;
         }

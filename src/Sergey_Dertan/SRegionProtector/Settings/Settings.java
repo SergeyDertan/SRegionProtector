@@ -35,7 +35,7 @@ public final class Settings {
             main.getServer().getPluginManager().disablePlugin(main);
             return;
         }
-        this.regionSettings = new RegionSettings(this.getConfig(), new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getSections());
+        this.regionSettings = new RegionSettings(this.getConfig(), new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());
     }
 
     public ConfigSection getMessages() {

@@ -4,7 +4,6 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
-import cn.nukkit.utils.ConfigSection;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,16 +16,21 @@ public final class RegionSettings {
     public boolean[] defaultFlags;
     private Map<Long, Permission> regionSize;
     private Map<Integer, Permission> regionAmount;
+    public int maxRegionNameLength;
+    public int minRegionNameLength;
 
-    RegionSettings(Map<String, Object> cnf, ConfigSection rgCnf) {
+    RegionSettings(Map<String, Object> cnf, Map<String, Object> rgCnf) {
         this.loadSizePermissions(cnf);
         this.loadAmountPermissions(cnf);
         this.loadFlagsStatuses(cnf);
         this.loadDefaultFlags(rgCnf);
         RegionFlags.init(this.defaultFlags);
+
+        this.maxRegionNameLength = (int) rgCnf.get("max-region-name-length");
+        this.minRegionNameLength = (int) rgCnf.get("min-region-name-length");
     }
 
-    private void loadDefaultFlags(ConfigSection rgCnf) {
+    private void loadDefaultFlags(Map<String, Object> rgCnf) {
         this.defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
         Arrays.fill(this.defaultFlags, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("default-flags")).entrySet()) {
@@ -56,11 +60,11 @@ public final class RegionSettings {
     private void loadSizePermissions(Map<String, Object> cnf) {
         this.regionSize = new HashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
-        for (Long size : (List<Long>) cnf.get("region-sizes")) {
+        for (Integer size : (List<Integer>) cnf.get("region-sizes")) {
             Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks");
             Server.getInstance().getPluginManager().addPermission(permission);
             //mainPerm.addParent(mainPerm, true); //TODO test
-            this.regionSize.put(size, permission);
+            this.regionSize.put(size.longValue(), permission);
         }
         mainPerm.recalculatePermissibles();
     }

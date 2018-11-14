@@ -4,6 +4,7 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.utils.ConfigSection;
 
@@ -143,6 +144,10 @@ public final class Region extends SimpleAxisAlignedBB {
 
     void addOwner(String target) {
         this.owners.add(target);
+    }
+
+    public AxisAlignedBB getBoundingBox() {
+        return this.clone();
     }
 
     public boolean isLives(String target) {
