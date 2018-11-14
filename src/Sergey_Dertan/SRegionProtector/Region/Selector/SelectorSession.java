@@ -32,15 +32,19 @@ public final class SelectorSession {
         return this.expirationTime;
     }
 
-    public int calculateRegionSize() {
-        int minX = (int) Math.min(this.pos1.x, this.pos2.x);
-        int minY = (int) Math.min(this.pos1.y, this.pos2.y);
-        int minZ = (int) Math.min(this.pos1.z, this.pos2.z);
+    public long calculateRegionSize() {
+        long minX = (long) Math.min(this.pos1.x, this.pos2.x);
+        long minY = (long) Math.min(this.pos1.y, this.pos2.y);
+        long minZ = (long) Math.min(this.pos1.z, this.pos2.z);
 
-        int maxX = (int) Math.max(this.pos1.x, this.pos2.x);
-        int maxY = (int) Math.max(this.pos1.y, this.pos2.y);
-        int maxZ = (int) Math.max(this.pos1.z, this.pos2.z);
+        long maxX = (long) Math.max(this.pos1.x, this.pos2.x);
+        long maxY = (long) Math.max(this.pos1.y, this.pos2.y);
+        long maxZ = (long) Math.max(this.pos1.z, this.pos2.z);
 
-        return (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+        long size = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+
+        if (size < 0L) return Long.MAX_VALUE;
+
+        return size;
     }
 }

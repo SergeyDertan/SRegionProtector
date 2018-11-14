@@ -15,7 +15,7 @@ public final class RegionSettings {
 
     public boolean[] flagsStatus;
     public boolean[] defaultFlags;
-    private Map<Integer, Permission> regionSize;
+    private Map<Long, Permission> regionSize;
     private Map<Integer, Permission> regionAmount;
 
     RegionSettings(Map<String, Object> cnf, ConfigSection rgCnf) {
@@ -35,9 +35,9 @@ public final class RegionSettings {
         }
     }
 
-    public boolean hasSizePermission(Permissible target, int size) {
+    public boolean hasSizePermission(Permissible target, long size) {
         if (target.hasPermission("sregionprotector.region.size.*")) return true;
-        for (Map.Entry<Integer, Permission> perm : this.regionSize.entrySet()) {
+        for (Map.Entry<Long, Permission> perm : this.regionSize.entrySet()) {
             if (perm.getKey() < size) continue;
             if (target.hasPermission(perm.getValue())) return true;
         }
@@ -56,7 +56,7 @@ public final class RegionSettings {
     private void loadSizePermissions(Map<String, Object> cnf) {
         this.regionSize = new HashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
-        for (Integer size : (List<Integer>) cnf.get("region-sizes")) {
+        for (Long size : (List<Long>) cnf.get("region-sizes")) {
             Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks");
             Server.getInstance().getPluginManager().addPermission(permission);
             //mainPerm.addParent(mainPerm, true); //TODO test
