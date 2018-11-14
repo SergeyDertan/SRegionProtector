@@ -67,6 +67,7 @@
                     <include>config.yml</include>
                     <include>messages.yml</include>
                     <include>region-settings.yml</include>
+                    <include>config.yml</include>
                 </includes>
             </resource>
         </resources>
