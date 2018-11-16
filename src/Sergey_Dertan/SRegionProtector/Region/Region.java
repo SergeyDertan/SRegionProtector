@@ -8,7 +8,6 @@ import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.utils.ConfigSection;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,8 +16,8 @@ import java.util.Set;
 public final class Region extends SimpleAxisAlignedBB {
 
     private String name;
-    private String creator;
     private String level;
+    private String creator;
     private List<String> owners, members;
     private FlagList flags;
     private Set<Chunk> chunks;
@@ -104,7 +103,7 @@ public final class Region extends SimpleAxisAlignedBB {
         return this.chunks;
     }
 
-    public ConfigSection toMap() throws IOException {
+    public ConfigSection toMap() throws RuntimeException {
         ConfigSection arr = new ConfigSection();
         arr.put("name", this.name);
         arr.put("creator", this.creator);
@@ -150,7 +149,7 @@ public final class Region extends SimpleAxisAlignedBB {
         return this.clone();
     }
 
-    public boolean isLives(String target) {
+    public boolean isLivesIn(String target) {
         return this.creator.equals(target) || this.owners.contains(target) || this.members.contains(target);
     }
 }

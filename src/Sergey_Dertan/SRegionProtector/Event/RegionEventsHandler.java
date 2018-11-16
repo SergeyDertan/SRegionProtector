@@ -59,8 +59,10 @@ public final class RegionEventsHandler implements Listener {
     public void entityDamage(EntityDamageEvent e) {
         Entity ent = e.getEntity();
         if (!(ent instanceof Player)) return;
-        this.handleEvent(RegionFlags.FLAG_INVINCIBLE, ent, (Player) ent, e, false, false);
-        if (!(e instanceof EntityDamageByEntityEvent)) return;
+        if (!(e instanceof EntityDamageByEntityEvent)) {
+            this.handleEvent(RegionFlags.FLAG_INVINCIBLE, ent, (Player) ent, e, false, false);
+            return;
+        }
         if (!(((EntityDamageByEntityEvent) e).getDamager() instanceof Player)) return;
         this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
     }
@@ -118,7 +120,7 @@ public final class RegionEventsHandler implements Listener {
         Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
-            if ((mustBeMember && (player != null && region.isLives(player.getName().toLowerCase()))) || !region.isVectorInside(pos)) continue;
+            if ((mustBeMember && (player != null && region.isLivesIn(player.getName().toLowerCase()))) || !region.isVectorInside(pos)) continue;
             for (int flag : flags) {
                 if (!this.flagsStatus[flag] || !region.getFlagList().getFlagState(flag)) continue;
                 ev.setCancelled(true);

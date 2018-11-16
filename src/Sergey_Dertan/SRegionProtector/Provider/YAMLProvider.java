@@ -9,7 +9,6 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -88,7 +87,7 @@ public final class YAMLProvider extends Provider {
             file.set("data", region.toMap());
             file.save();
             this.saveFlags(region.getFlagList(), region.getName());
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.getName() + ": " + e.getMessage());
         }
     }

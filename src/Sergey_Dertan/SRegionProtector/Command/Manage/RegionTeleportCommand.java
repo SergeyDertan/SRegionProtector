@@ -34,7 +34,7 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
             this.sendMessage(sender, "region-doesnt-exists");
             return false;
         }
-        if (!sender.hasPermission("sregionprotector.admin") && !region.isLives(sender.getName().toLowerCase())) {
+        if (!sender.hasPermission("sregionprotector.admin") && !region.isLivesIn(sender.getName().toLowerCase())) {
             sender.sendMessage(this.getPermissionMessage());
             return false;
         }
