@@ -69,7 +69,7 @@ public final class YAMLProvider extends Provider {
             data.put("level", level);
             file.set("data", data);
             file.save();
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             this.logger.warning(TextFormat.YELLOW + "Cant save chunk(x: " + chunk.getX() + ", z: " + chunk.getZ() + ", level: " + level + ": " + e.getMessage());
         }
     }
