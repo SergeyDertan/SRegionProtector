@@ -3,7 +3,6 @@ package Sergey_Dertan.SRegionProtector.Region.Flags;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
-import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.level.Position;
 
 import java.util.HashMap;
@@ -82,6 +81,10 @@ public final class FlagList {
 
     @Override
     public FlagList clone() {
-        return new FlagList((RegionFlag[]) Utils.deepClone(this.flags));
+        RegionFlag[] flags = new RegionFlag[RegionFlags.FLAG_AMOUNT];
+        for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
+            flags[i] = this.flags[i].clone();
+        }
+        return new FlagList(flags);
     }
 }

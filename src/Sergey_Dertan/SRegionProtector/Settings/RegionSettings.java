@@ -91,7 +91,7 @@ public final class RegionSettings {
 
     private void loadFlagsStatuses(Map<String, Object> cnf) {
         this.flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
-        Arrays.fill(flagsStatus, true);
+        Arrays.fill(flagsStatus, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("active-flags")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
             this.flagsStatus[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();

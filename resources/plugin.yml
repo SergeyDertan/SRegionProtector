@@ -90,3 +90,9 @@ permissions:
                 default: op
               regionprotector.region.flag.item_drop:
                 default: op
+              regionprotector.region.flag.send_chat:
+                default: op
+              regionprotector.region.flag.receive_chat:
+                default: op
+              regionprotector.region.flag.health_regen:
+                default: op

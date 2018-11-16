@@ -1,10 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Utils;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 
 public final class Utils {
 
@@ -29,16 +26,16 @@ public final class Utils {
             throw new RuntimeException(e);
         }
     }
-
-    public static List<Cloneable> deepClone(List<Cloneable> arr) { //TODO rewrite
-        List<Cloneable> copy = new ArrayList<>();
-        for (Cloneable elem : arr) {
+/*
+    public static <T extends Cloneable> List<T> deepClone(List<T> arr) { //TODO rewrite
+        List<T> copy = new ArrayList<>();
+        for (T elem : arr) {
             copy.add(elem.clone());
         }
         return copy;
     }
 
-    public static Cloneable[] deepClone(Cloneable[] arr) {
-        return deepClone(Arrays.asList(arr)).toArray(new Cloneable[arr.length]);
-    }
+    public static <T extends Cloneable> T[] deepClone(T[] arr) {
+        return deepClone(Arrays.asList(arr)).toArray(new Cloneable[]{});
+    }*/
 }

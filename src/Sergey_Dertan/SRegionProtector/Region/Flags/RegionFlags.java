@@ -30,19 +30,20 @@ public abstract class RegionFlags {
     public static final int FLAG_MOVE = 12;
     public static final int FLAG_LEAVES_DECAY = 13;
     public static final int FLAG_ITEM_DROP = 14;
+    public static final int FLAG_SEND_CHAT = 15;
+    public static final int FLAG_RECEIVE_CHAT = 16;
+    public static final int FLAG_HEALTH_REGEN = 17;
 
-    public static int FLAG_AMOUNT = 0;
+    public static final int FLAG_AMOUNT = 18;
 
     public static FlagList defaultFlagList;
-    public static RegionFlag[] defaults;
-    public static Permission[] permissions;
+    public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
+    public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
 
     private RegionFlags() {
     }
 
     public static void init(boolean[] flagsDefault) {
-        defaults = new RegionFlag[FLAG_AMOUNT];
-
         defaults[FLAG_BUILD] = new RegionFlag(flagsDefault[FLAG_BUILD]);
         defaults[FLAG_INTERACT] = new RegionFlag(flagsDefault[FLAG_INTERACT]);
         defaults[FLAG_USE] = new RegionFlag(flagsDefault[FLAG_USE]);
@@ -58,12 +59,13 @@ public abstract class RegionFlags {
         defaults[FLAG_MOVE] = new RegionFlag(flagsDefault[FLAG_MOVE]);
         defaults[FLAG_LEAVES_DECAY] = new RegionFlag(flagsDefault[FLAG_LEAVES_DECAY]);
         defaults[FLAG_ITEM_DROP] = new RegionFlag(flagsDefault[FLAG_ITEM_DROP]);
+        defaults[FLAG_SEND_CHAT] = new RegionFlag(flagsDefault[FLAG_SEND_CHAT]);
+        defaults[FLAG_RECEIVE_CHAT] = new RegionFlag(flagsDefault[FLAG_RECEIVE_CHAT]);
+        defaults[FLAG_HEALTH_REGEN] = new RegionFlag(flagsDefault[FLAG_HEALTH_REGEN]);
 
         defaultFlagList = new FlagList(defaults);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
-
-        permissions = new Permission[FLAG_AMOUNT];
 
         permissions[FLAG_BUILD] = pluginManager.getPermission("sregionprotector.region.flag.build");
         permissions[FLAG_INTERACT] = pluginManager.getPermission("sregionprotector.region.flag.interact");
@@ -80,6 +82,9 @@ public abstract class RegionFlags {
         permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotector.region.flag.move");
         permissions[FLAG_LEAVES_DECAY] = pluginManager.getPermission("sregionprotector.region.flag.leaves_decay");
         permissions[FLAG_ITEM_DROP] = pluginManager.getPermission("sregionprotector.region.flag.item_drop");
+        permissions[FLAG_SEND_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.send_chat");
+        permissions[FLAG_RECEIVE_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.receive_chat");
+        permissions[FLAG_HEALTH_REGEN] = pluginManager.getPermission("sregionprotector.region.flag.health_regen");
     }
 
     public static FlagList loadFlagList(Map<String, Map<String, Object>> data) {
@@ -161,6 +166,12 @@ public abstract class RegionFlags {
                 return "leaves_decay";
             case FLAG_ITEM_DROP:
                 return "item_drop";
+            case FLAG_SEND_CHAT:
+                return "send_chat";
+            case FLAG_RECEIVE_CHAT:
+                return "receive_chat";
+            case FLAG_HEALTH_REGEN:
+                return "health_regen";
         }
     }
 
@@ -210,6 +221,18 @@ public abstract class RegionFlags {
             case "itemdrop":
             case "item-drop":
                 return FLAG_ITEM_DROP;
+            case "send-chat":
+            case "sendchat":
+            case "send_chat":
+                return FLAG_SEND_CHAT;
+            case "receive_chat":
+            case "receive-chat":
+            case "receivechat":
+                return FLAG_RECEIVE_CHAT;
+            case "health_regen":
+            case "health-regen":
+            case "healthregen":
+                return FLAG_HEALTH_REGEN;
         }
     }
 

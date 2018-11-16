@@ -4,6 +4,7 @@ import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
@@ -101,6 +102,16 @@ public final class ChunkManager {
 
     public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, String level) {
         return this.getRegionChunks(pos1, pos2, level, false);
+    }
+
+    public Region getRegion(Vector3 pos, String level) {
+        Chunk chunk = this.getChunk(((long) pos.x), ((long) pos.z), level, true, false);
+        if (chunk == null) return null;
+        for (Region region : chunk.getRegions()) {
+            if (!region.isVectorInside(pos)) continue;
+            return region;
+        }
+        return null;
     }
 
     public Chunk getChunk(long x, long z, String level, boolean shiftRight, boolean create) {

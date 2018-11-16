@@ -14,10 +14,12 @@ import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Provider.YAMLProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
+import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Settings.Settings;
 import Sergey_Dertan.SRegionProtector.Task.ClearSessionsTask;
+import Sergey_Dertan.SRegionProtector.Task.HealTask;
 import cn.nukkit.Server;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
@@ -127,6 +129,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.chunkManager = new ChunkManager(this.provider, this.getLogger(), this.regionManager);
         this.chunkManager.init();
         this.regionManager.setChunkManager(chunkManager);
+        if (!this.settings.regionSettings.flagsStatus[RegionFlags.FLAG_HEAL]) return;
+        this.getServer().getScheduler().scheduleRepeatingTask(this, new HealTask(this.chunkManager), 20, true); //TODO move
     }
 
     private void initEventsHandlers() {

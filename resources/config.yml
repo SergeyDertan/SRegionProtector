@@ -18,6 +18,9 @@ active-flags:
   move: false
   leaves_decay: false
   item_drop: false
+  send_chat: false
+  receive_chat: false
+  health_regen: false
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

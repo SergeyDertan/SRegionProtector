@@ -1,7 +1,7 @@
 default-flags:
   move: false
   build: true
-  interact: true
+  interact: false
   use: true
   pvp: true
   explode: true
@@ -12,5 +12,8 @@ default-flags:
   potion-launch: false
   leaves-decay: false
   item_drop: false
+  send_chat: false
+  receive_chat: false
+  health_regen: false
 max-region-name-length: 10
 min-region-name-length: 3

@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
+import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityPotion;
 import cn.nukkit.event.Event;
@@ -15,14 +16,14 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.block.LeavesDecayEvent;
-import cn.nukkit.event.entity.EntityDamageByEntityEvent;
-import cn.nukkit.event.entity.EntityDamageEvent;
-import cn.nukkit.event.entity.EntityExplodeEvent;
-import cn.nukkit.event.entity.ProjectileLaunchEvent;
+import cn.nukkit.event.entity.*;
+import cn.nukkit.event.player.PlayerChatEvent;
 import cn.nukkit.event.player.PlayerDropItemEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.level.Position;
+
+import java.util.Iterator;
 
 public final class RegionEventsHandler implements Listener {
 
@@ -71,7 +72,7 @@ public final class RegionEventsHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityExplode(EntityExplodeEvent e) {
-        this.handleEvent(RegionFlags.FLAG_INTERACT, e.getPosition(), null, e, true, false);
+        this.handleEvent(RegionFlags.FLAG_INTERACT, e.getPosition(), null, e, false, false);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -83,6 +84,20 @@ public final class RegionEventsHandler implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void playerChat(PlayerChatEvent e) {
+        this.handleEvent(RegionFlags.FLAG_SEND_CHAT, e.getPlayer(), e.getPlayer(), e, true, true);
+        if (e.isCancelled()) return;
+        Iterator<CommandSender> iterator = e.getRecipients().iterator();
+        while (iterator.hasNext()) { //TODO check
+            CommandSender var1 = iterator.next();
+            if (!(var1 instanceof Player)) return;
+            this.handleEvent(RegionFlags.FLAG_RECEIVE_CHAT, e.getPlayer(), e.getPlayer(), e, true, true);
+            if (e.isCancelled()) iterator.remove();
+            e.setCancelled(false);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerDropItem(PlayerDropItemEvent e) {
         this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e, true, true);
     }
@@ -90,6 +105,12 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerMove(PlayerMoveEvent e) {
         this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e, true, true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void entityRegainHealth(EntityRegainHealthEvent e) {
+        if (!(e.getEntity() instanceof Player)) return;
+        this.handleEvent(RegionFlags.FLAG_HEALTH_REGEN, e.getEntity(), (Player) e.getEntity(), e, true, true);
     }
 
     private void handleEvent(int[] flags, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm) {
@@ -109,10 +130,6 @@ public final class RegionEventsHandler implements Listener {
 
     private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm) {
         this.handleEvent(new int[]{flag}, pos, player, ev, mustBeMember, checkPerm);
-    }
-
-    private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember) {
-        this.handleEvent(new int[]{flag}, pos, player, ev, mustBeMember, true);
     }
 
     private void handleEvent(int flag, Position pos, Player player, Event ev) {
