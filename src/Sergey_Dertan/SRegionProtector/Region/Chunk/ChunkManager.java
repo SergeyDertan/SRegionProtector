@@ -8,7 +8,6 @@ import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -35,8 +34,8 @@ public final class ChunkManager {
             long z = new Integer((int) chunkData.get("z")).longValue();
             String[] regions;
             try {
-                regions = Utils.deserializeArray((String) chunkData.get("regions"));
-            } catch (IOException e) {
+                regions = Utils.deserializeStringArray((String) chunkData.get("regions"));
+            } catch (RuntimeException e) {
                 this.logger.alert(TextFormat.RED + "Cant load chunk regions: " + e.getMessage());
                 this.logger.alert(TextFormat.RED + "Check chunk: x: " + x + ", z: " + z + ", level: " + chunkData.get("level"));
                 continue;

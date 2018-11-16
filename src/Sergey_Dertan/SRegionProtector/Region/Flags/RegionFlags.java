@@ -31,7 +31,7 @@ public abstract class RegionFlags {
     public static final int FLAG_LEAVES_DECAY = 13;
     public static final int FLAG_ITEM_DROP = 14;
 
-    public static final int FLAG_AMOUNT = 15;
+    public static int FLAG_AMOUNT = 0;
 
     public static FlagList defaultFlagList;
     public static RegionFlag[] defaults;
@@ -80,9 +80,6 @@ public abstract class RegionFlags {
         permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotector.region.flag.move");
         permissions[FLAG_LEAVES_DECAY] = pluginManager.getPermission("sregionprotector.region.flag.leaves_decay");
         permissions[FLAG_ITEM_DROP] = pluginManager.getPermission("sregionprotector.region.flag.item_drop");
-    }
-
-    private static void registerFlag() { //TODO
     }
 
     public static FlagList loadFlagList(Map<String, Map<String, Object>> data) {

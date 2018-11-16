@@ -3,7 +3,6 @@ package Sergey_Dertan.SRegionProtector.Region.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 
-import java.io.IOException;
 import java.util.*;
 
 public final class Chunk {
@@ -57,7 +56,7 @@ public final class Chunk {
         return obj instanceof Chunk && this.x == ((Chunk) obj).x && this.z == ((Chunk) obj).z;
     }
 
-    public Map<String, Object> toMap() throws IOException {
+    public Map<String, Object> toMap() throws RuntimeException {
         Map<String, Object> sec = new HashMap<>();
 
         Set<String> regions = new HashSet<>();
@@ -66,7 +65,7 @@ public final class Chunk {
 
         sec.put("x", this.x);
         sec.put("z", this.z);
-        sec.put("regions", Utils.serializeArray(regions.toArray(new String[]{})));
+        sec.put("regions", Utils.serializeStringArray(regions.toArray(new String[]{})));
 
         return sec;
     }

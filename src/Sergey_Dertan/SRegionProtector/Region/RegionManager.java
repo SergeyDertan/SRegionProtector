@@ -12,7 +12,6 @@ import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
 
-import java.io.IOException;
 import java.util.*;
 
 public final class RegionManager {
@@ -63,9 +62,9 @@ public final class RegionManager {
             String[] members;
 
             try {
-                owners = Utils.deserializeArray((String) regionData.get("owners"));
-                members = Utils.deserializeArray((String) regionData.get("members"));
-            } catch (IOException e) {
+                owners = Utils.deserializeStringArray((String) regionData.get("owners"));
+                members = Utils.deserializeStringArray((String) regionData.get("members"));
+            } catch (RuntimeException e) {
                 this.logger.warning(TextFormat.YELLOW + "Cant load region " + name + ": " + e.getMessage());
                 continue;
             }

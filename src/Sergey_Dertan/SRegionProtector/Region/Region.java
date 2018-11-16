@@ -118,8 +118,8 @@ public final class Region extends SimpleAxisAlignedBB {
         arr.put("max_y", this.getMaxY());
         arr.put("max_z", this.getMaxZ());
 
-        String owners = Utils.serializeArray(this.owners.toArray(new String[]{}));
-        String members = Utils.serializeArray(this.members.toArray(new String[]{}));
+        String owners = Utils.serializeStringArray(this.owners.toArray(new String[]{}));
+        String members = Utils.serializeStringArray(this.members.toArray(new String[]{}));
 
         arr.put("owners", owners);
         arr.put("members", members);
