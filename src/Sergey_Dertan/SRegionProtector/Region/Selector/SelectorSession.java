@@ -8,8 +8,8 @@ public final class SelectorSession {
 
     private int expirationTime;
 
-    public SelectorSession() {
-        this.expirationTime = (int) System.currentTimeMillis() / 1000;
+    public SelectorSession(int lifeTime) {
+        this.expirationTime = (int) System.currentTimeMillis() / 1000 + lifeTime;
     }
 
     public Position getPos1() {

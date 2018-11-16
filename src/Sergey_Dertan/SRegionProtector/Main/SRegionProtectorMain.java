@@ -118,7 +118,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initRegions() {
-        this.regionSelector = new RegionSelector();
+        this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime);
         this.regionManager = new RegionManager(this.provider, this.getLogger());
         this.regionManager.init();
     }

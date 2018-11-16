@@ -1,6 +1,7 @@
 provider: yaml
 #1 second = 20 ticks
 select-session-clear-interval: 20
+session-life-time: 120
 #disabling flags may increase performance
 #by default flags are disabled
 active-flags:

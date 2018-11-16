@@ -80,7 +80,6 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
         }
 
         this.regionManager.createRegion(name, sender.getName().toLowerCase(), pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName());
-        this.selector.removeSession((Player) sender);
 
         this.sendMessage(sender, "region-created", "@region", name);
         return true;

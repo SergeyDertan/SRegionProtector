@@ -48,6 +48,6 @@ public final class SelectorEventsHandler implements Listener {
 
         session.pos1 = Position.fromObject(block, block.level);
         session.pos2 = null;
-        player.sendMessage("pos1 set"); //TODO messages
+        player.sendMessage("pos1 set, pos2 removed"); //TODO messages
     }
 }
