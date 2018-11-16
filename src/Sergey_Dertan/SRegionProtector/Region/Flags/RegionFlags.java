@@ -83,7 +83,6 @@ public abstract class RegionFlags {
     }
 
     private static void registerFlag() { //TODO
-
     }
 
     public static FlagList loadFlagList(Map<String, Map<String, Object>> data) {
