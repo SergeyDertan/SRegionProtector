@@ -14,10 +14,10 @@ public final class RegionSettings {
 
     public boolean[] flagsStatus;
     public boolean[] defaultFlags;
-    private Map<Long, Permission> regionSize;
-    private Map<Integer, Permission> regionAmount;
     public int maxRegionNameLength;
     public int minRegionNameLength;
+    private Map<Long, Permission> regionSize;
+    private Map<Integer, Permission> regionAmount;
 
     RegionSettings(Map<String, Object> cnf, Map<String, Object> rgCnf) {
         this.loadSizePermissions(cnf);

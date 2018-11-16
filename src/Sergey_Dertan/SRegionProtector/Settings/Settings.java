@@ -48,8 +48,8 @@ public final class Settings {
         for (Map.Entry<String, Object> var2 : var1.entrySet()) {
             if (var3.exists(var2.getKey())) continue;
             var3.set(var2.getKey(), var2.getValue());
+            var3.save();
         }
-        var3.save();
     }
 
     private void load(String fileName) throws Exception {

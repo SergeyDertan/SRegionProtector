@@ -33,7 +33,6 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             return false;
         }
 
-
         Region region = this.regionManager.getRegion(regionName);
         if (region == null) {
             this.sendMessage(sender, "region-doesnt-exists");
