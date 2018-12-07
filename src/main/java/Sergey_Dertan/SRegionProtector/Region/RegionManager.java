@@ -1,6 +1,5 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
-import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
@@ -9,9 +8,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.math.SimpleAxisAlignedBB;
-import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
@@ -69,7 +66,7 @@ public final class RegionManager {
                 owners = Utils.deserializeStringArray((String) regionData.get("owners"));
                 members = Utils.deserializeStringArray((String) regionData.get("members"));
             } catch (RuntimeException e) {
-                this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
+                this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@name", "@err"}, new String[]{name, e.getMessage()}));
                 continue;
             }
 
@@ -86,7 +83,7 @@ public final class RegionManager {
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ArrayList<>()).add(region);
         }
 
-        this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
+        this.logger.info(TextFormat.GREEN + "Loaded " + this.regions.size() + " regions.");
     }
 
     public Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, String level) {
@@ -103,13 +100,6 @@ public final class RegionManager {
         this.chunkManager.getRegionChunks(pos1, pos2, level, true).forEach(chunk -> chunk.addRegion(region));
         this.owners.computeIfAbsent(creator, (s) -> new ArrayList<>()).add(region);
         this.regions.put(name, region);
-
-        Vector3 pos = region.getHealerVector();
-
-        new BlockEntityHealer(
-                Server.getInstance().getLevelByName(level).getChunk((int) pos.x >> 4, (int) pos.z >> 4), //TODO true
-                BlockEntityHealer.getDefaultNBT(region.getHealerVector(), name)
-        );
         return region;
     }
 
@@ -161,11 +151,9 @@ public final class RegionManager {
 
         this.regions.remove(region.getName());
         this.provider.removeRegion(region);
-
-        region.getHealerBlockEntity().close();
     }
 
-    public boolean checkOverlap(Vector3f pos1, Vector3f pos2, String level, Player player) {
+    public boolean checkOverlap(Vector3f pos1, Vector3f pos2, String level) {
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
@@ -178,7 +166,7 @@ public final class RegionManager {
 
         for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level, false)) {
             for (Region region : chunk.getRegions()) {
-                if (!region.intersectsWith(bb) || region.isCreator(player.getName().toLowerCase())) continue;
+                if (!region.intersectsWith(bb)) continue;
                 return true;
             }
         }

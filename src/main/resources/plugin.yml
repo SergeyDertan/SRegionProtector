@@ -4,7 +4,7 @@ api: [1.0.0]
 version: "${pom.version}"
 author: Sergey_Dertan
 website: https://vk.com/sergey_dertan
-load: STARTUP
+load: POSTWORLD
 prefix: '§eSRegionProtector§f'
 permissions:
   sregionprotector.*:

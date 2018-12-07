@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage.Group;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
@@ -20,10 +19,7 @@ public final class RemoveMemberCommand extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!this.testPermissionSilent(sender)) {
-            Messenger.getInstance().sendMessage(sender, "command.removemember.permission");
-            return false;
-        }
+        if (!this.testPermission(sender)) return false;
         if (args.length < 2) {
             sender.sendMessage(this.usageMessage);
             return false;
@@ -31,7 +27,7 @@ public final class RemoveMemberCommand extends SRegionProtectorCommand {
 
         Region region = this.regionManager.getRegion(args[0].toLowerCase());
         if (region == null) {
-            Messenger.getInstance().sendMessage(sender, "command.removemember.region-doesnt-exists", "@region", args[0]);
+            this.sendMessage(sender, "region-doesnt-exists", "@region", args[0]);
             return false;
         }
 
@@ -41,15 +37,15 @@ public final class RemoveMemberCommand extends SRegionProtectorCommand {
             return false;
         }
         if ((sender instanceof Player && !region.isOwner(sender.getName().toLowerCase())) && !sender.hasPermission("sregionprotector.admin")) {
-            Messenger.getInstance().sendMessage(sender, "command.removemember.permission", "@region", args[0]);
+            sender.sendMessage(this.getPermissionMessage());
             return false;
         }
         if (!region.isMember(target)) {
-            Messenger.getInstance().sendMessage(sender, "command.removemember.not-a-member", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+            this.sendMessage(sender, "not-a-member", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
             return false;
         }
         this.regionManager.removeMember(region, target);
-        Messenger.getInstance().sendMessage(sender, "command.removemember.member-removed", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+        this.sendMessage(sender, "member-removed", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
         return true;
     }
 }

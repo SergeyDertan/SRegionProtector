@@ -6,8 +6,6 @@ public final class SelectorSession {
 
     public Position pos1, pos2;
 
-    public boolean nextPos = true;
-
     private int expirationTime;
 
     public SelectorSession(int lifeTime) {
@@ -48,14 +46,5 @@ public final class SelectorSession {
         if (size < 0L) return Long.MAX_VALUE;
 
         return size;
-    }
-
-    public void setNextPos(Position pos) {
-        if (this.nextPos) {
-            this.pos1 = pos;
-        } else {
-            this.pos2 = pos;
-        }
-        this.nextPos = !this.nextPos;
     }
 }
