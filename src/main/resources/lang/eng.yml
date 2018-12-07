@@ -25,7 +25,7 @@ region.protected: "There`s region"
 region.selection.pos1: "First pos set"
 region.selection.pos2: "Second pos set"
 
-command.pos1.in-game: In game only
+command.pos1.in-game: "In game only"
 command.pos1.permission: You have no permission
 command.pos1.pos-set: First pos set
 
