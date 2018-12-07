@@ -17,3 +17,6 @@ default-flags:
   health_regen: false
 max-region-name-length: 10
 min-region-name-length: 3
+# 1 second = 20 ticks
+heal-flag-heal-delay: 40
+heal-flag-heal-amount: 3

@@ -1,0 +1,127 @@
+loading.init.start: "Initializing SRegionProtector V_{@ver} by Sergey Dertan..."
+loading.init.folders: "Creating folders..."
+loading.init.settings: "Settings initializing..."
+loading.init.data-provider: "Data provider initializing..."
+loading.init.regions: "Regions initializing..."
+loading.init.chunks: "Chunks initializing..."
+loading.init.events-handlers: "Events handlers initializing..."
+loading.init.commands: "Commands initializing..."
+loading.init.successful: "SRegionProtector initialized."
+
+loading.error.folder: "Can`t create folder {@path}, disabling plugin..."
+loading.error.resource: "Can`t copy resource resource: {@err}, disabling plugin..."
+loading.error.regions: "Can`t load region {@region}: {@err}"
+loading.error.chunks: "Can`t load chunk x:{@x}, z:{@z}, level:{@level}: {@err}"
+
+disabling.start: "Disabling SRegionProtector V_{@ver} by Sergey Dertan..."
+disabling.regions: "Saving regions..."
+disabling.chunks: "Saving chunks..."
+disabling.successful: "SRegionProtector disabled."
+
+loading.chunks.success: "Loaded {@count} chunks."
+loading.regions.success: "Loaded {@count} regions."
+
+region.protected: "There`s region"
+region.selection.pos1: "First pos set"
+region.selection.pos2: "Second pos set"
+
+command.pos1.in-game: In game only
+command.pos1.permission: You have no permission
+command.pos1.pos-set: First pos set
+
+command.pos2.in-game: In game only
+command.pos2.permission: You have no permission
+command.pos2.pos-set: Second pos set
+
+command.wand.wand-give: Wand given
+command.wand.permission: You have no permission
+command.wand.in-game: In game only
+
+command.create.in-game: In game only
+command.create.permission: You have no permission
+command.create.incorrect-name: Incorrect region name
+command.create.region-exists: Region with this name already exists
+command.create.two-positions-required: You need to set 2 positions
+command.create.positions-in-different-worlds: Positions in different worlds
+command.create.too-big: Region is too big
+command.create.too-many: You cant create more regions
+command.create.regions-overlap: Regions overlap
+command.create.region-created: Region created
+command.create.usage: 'Required arguments: [NAME]'
+
+command.list.in-game: In game only
+command.list.permission: You have no permission
+command.list.usage: 'List types: owner, member, creator'
+command.list.owner-no-regions: You have no regions
+command.list.member-no-regions: You have no regions
+command.list.owner-region-list: 'Regions in which you are a owner: {@list}'
+command.list.member-region-list: 'Regions in which you are a member: {@list}'
+command.list.creator-region-list: 'Your regions: {@list}'
+
+command.remove.permission: You have no permission
+command.remove.region-doesnt-exists: Region {@region} doesnt exists
+command.remove.region-removed: Region {@region} deleted
+command.remove.all-removed: All of your regions deleted {@amount}
+
+command.addmember.permission: You have no permission
+command.addmember.usage: 'Required arguments: [REGION] [PLAYER]'
+command.addmember.region-doesnt-exists: Region {@region} doesnt exists
+command.addmember.already-member: Player {@target} already member of {@region}
+command.addmember.member-added: Player {@target} added to {@region} as member
+
+command.removemember.permission: You dont permission
+command.removemember.usage: 'Required arguments: [REGION] [PLAYER]'
+command.removemember.region-doesnt-exists: Region doesnt {@region} exists
+command.removemember.not-a-member: Player {@target} not a member of {@region}
+command.removemember.member-removed: Player {@target} no longer member of {@region}
+
+command.addowner.permission: You dont have permission
+command.addowner.usage: 'Required arguments: [REGION] [PLAYER]'
+command.addowner.region-doesnt-exists: Region doesnt exists
+command.addowner.already-owner: Player {@target} already owner of {@region}
+command.addowner.owner-added: Player {@target} now a member of {@region}
+
+command.removeowner.permission: You dont have permission
+command.removeowner.usage: 'Required arguments: [REGION] [PLAYER]'
+command.removeowner.region-doesnt-exists: Region {@region} doesnt exists
+command.removeowner.not-a-owner: Player {@target} not a owner of {@region}
+command.removeowner.owner-removed: Player {@target} no longer owner of {@region}
+command.removeowner.cant-remove-owner: Region creator cant be removed
+
+command.info.permission: You dont have permission
+command.info.usage: 'Required arguments: [REGION]'
+command.info.region-doesnt-exists: Region {@region} doesnt exists
+command.info.info: |-
+  Name: {@region}
+  World: {@level}
+  Creator: {@creator}
+  Owners: {@owners
+  Members: {@members}
+  Flags: {@flags}
+command.flag.permission: You have no permission
+command.flag.usage: 'Required arguments: [REGION] [FLAG] [STATE]'
+command.flag.region-doesnt-exists: Region doesnt exists
+command.flag.incorrect-flag: Flag doesnt exists
+command.flag.teleport-flag-in-game: In game only
+command.flag.teleport-should-be-in-region: Teleport position must be inside region
+command.flag.flag-state-changed: Flag state of {@flag} in region {@region} set to {@state}
+command.flag.wrong-price: Price must be >= 0
+command.flag.selling-region: Region {@region} selling for {@price} money
+command.flag.sell-flag-usage: 'Required arguments: [REGION] [FLAG] [STATE] [PRICE]'
+
+command.teleport.in-game: In game only
+command.teleport.permission: You have no permission
+command.teleport.usage: 'Required arguments: [REGION]'
+command.teleport.region-doesnt-exists: Region {@region} doesnt exists
+command.teleport.teleport-disabled: Teleport disabled in this region
+command.teleport.teleport: Teleportation to {@region}...
+
+command.buy.in-game: In game only
+command.buy.permission: You have no permission
+command.buy.usage: 'Required arguments: [REGION] [PRICE]'
+command.buy.region-doesnt-exists: Region doesnt exists
+command.buy.cant-buy-self: You cant buy your region
+command.buy.region-price: Region {@region} costs {@price} money
+command.buy.isnt-selling: Region {@region} doesnt selling
+command.buy.repeat-price: You must repeat price
+command.buy.not-enough-gold: Not enough money

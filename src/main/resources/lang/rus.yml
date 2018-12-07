@@ -1,0 +1,127 @@
+loading.init.start: "Инициализация SRegionProtector V_{@ver} от Sergey Dertan..."
+loading.init.folders: "Создание папок..."
+loading.init.settings: "Инициализация настроек..."
+loading.init.data-provider: "Data provider initializing..."
+loading.init.regions: "Инициализация регионов..."
+loading.init.chunks: "Инициализация чанков..."
+loading.init.events-handlers: "Инициализация обработчиков событий..."
+loading.init.commands: "Инициализация команд..."
+loading.init.successful: "SRegionProtector инициализирован."
+
+loading.error.folder: "Ошибка создании папки {@path}, отключение плагина..."
+loading.error.resource: "Ошибка копирования файла: {@err}, отключение плагина..."
+loading.error.regions: "Ошибка загрузки региона {@region}: {@err}"
+loading.error.chunks: "Ошика загрузки чанка x:{@x}, z:{@z}, мир:{@level}: {@err}"
+
+disabling.start: "Отключение SRegionProtector V_{@ver} от Sergey Dertan..."
+disabling.regions: "Сохранение регионов..."
+disabling.chunks: "Сохранение чанков..."
+disabling.successful: "SRegionProtector отключен."
+
+loading.chunks.success: "Загружено {@count} чанков."
+loading.regions.success: "Загружено {@count} регионов."
+
+region.protected: "Тут регион"
+region.selection.pos1: "Первая точка установлена"
+region.selection.pos2: "Вторая точка установлена"
+
+command.pos1.in-game: Только в игре
+command.pos1.permission: Недостаточно прав
+command.pos1.pos-set: Первая точка установлена
+
+command.pos2.in-game: Только в игре
+command.pos2.permission: Недостаточно прав
+command.pos2.pos-set: Вторая точка установлена
+
+command.wand.wand-give: Вы получили предмет для выделеная региона
+command.wand.permission: Недостаточно прав
+command.wand.in-game: Только в игре
+
+command.create.in-game: Только в игре
+command.create.permission: Недостаточно прав
+command.create.incorrect-name: Некорректное название региона
+command.create.region-exists: Такой регион уже есть
+command.create.two-positions-required: Вам нужно установить 2 точки
+command.create.positions-in-different-worlds: Точки в разных мирах
+command.create.too-big: Регион слишком большой
+command.create.too-many: Вы не можете создать больше регионов
+command.create.regions-overlap: Регионы пересекается
+command.create.region-created: Регион с названием {@region} создан
+command.create.usage: 'Необходимые аргументы: [РЕГИОН]'
+
+command.list.in-game: Только в игре
+command.list.permission: Недостаточно прав
+command.list.usage: 'Типы списков: owner, member, creator'
+command.list.owner-no-regions: У вас нет регионов
+command.list.member-no-regions: Вы не являетесь участником каких-либо регионов
+command.list.owner-region-list: 'Регионы, в которых вы явлетесь владельцем: {@list}'
+command.list.member-region-list: 'Регионы, в которых вы явлетесь участником: {@list}'
+command.list.creator-region-list: 'Ваши регионы: {@list}'
+
+command.remove.permission: Недостаточно прав
+command.remove.region-doesnt-exists: Регион {@region} не найден
+command.remove.region-removed: Регион {@region} удален
+command.remove.all-removed: Все ваши регионы удалены {@amount}шт.
+
+command.addmember.permission: Недостаточно прав
+command.addmember.usage: 'Необходимые аргументы: [РЕГИОН] [ИГРОК]'
+command.addmember.region-doesnt-exists: Регион не найден {@region}
+command.addmember.already-member: Игрок {@target} уже участник региона {@region}
+command.addmember.member-added: Игрок {@target} теперь участник региона {@region}
+
+command.removemember.permission: Недостаточно прав
+command.removemember.usage: 'Необходимые аргументы: [РЕГИОН] [ИГРОК]'
+command.removemember.region-doesnt-exists: Region doesnt exists
+command.removemember.not-a-member: Игрок {@target} не участник региона {@region}
+command.removemember.member-removed: Игрок {@target} более не участник региона {@region}
+
+command.addowner.permission: Недостаточно прав
+command.addowner.usage: 'Необходимые аргументы: [РЕГИОН] [ИГРОК]'
+command.addowner.region-doesnt-exists: Регион {@region} не найден
+command.addowner.already-owner: Игрок {@target} уже владелец региона {@region}
+command.addowner.owner-added: Игрок {@target} теперь владелец региона {@region}
+
+command.removeowner.permission: Недостаточно прав
+command.removeowner.usage: 'Необходимые аргументы: [РЕГИОН] [ИГРОК]'
+command.removeowner.region-doesnt-exists: Регион {@region} не найден
+command.removeowner.not-a-owner: Игрок {@target} не владелец региона {@region}
+command.removeowner.owner-removed: Игрок {@target} более не владелец региона {@region}
+command.removeowner.cant-remove-owner: Region creator cant be removed
+
+command.info.permission: Недостаточно прав
+command.info.usage: 'Необходимые аргументы: [РЕГИОН]'
+command.info.region-doesnt-exists: Регион {@region} не найден
+command.info.info: |-
+  Название: {@region}
+  Мир: {@level}
+  Создатель: {@creator}
+  Владельцы: {@owners}
+  Участники: {@members}
+  Флаги: {@flags}
+command.flag.permission: Недостаточно прав
+command.flag.usage: 'Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ]'
+command.flag.region-doesnt-exists: Регион {@region} не найден
+command.flag.incorrect-flag: Флаг не найден
+command.flag.teleport-flag-in-game: Только в игре
+command.flag.teleport-should-be-in-region: Позиция должна находится внутри региона
+command.flag.flag-state-changed: Значение флага {@flag} в регионе {@region} установлено на {@state}
+command.flag.wrong-price: Цена должна быть >= 0
+command.flag.selling-region: Регион @region выставлен на продажу за {@price} денег
+command.flag.sell-flag-usage: 'Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ] [ЦЕНА]'
+
+command.teleport.in-game: Только в игре
+command.teleport.permission: Недостаточно прав
+command.teleport.usage: 'Необходимые аргументы: [РЕГИОН]'
+command.teleport.region-doesnt-exists: Регион {@region} не найден
+command.teleport.teleport-disabled: Телепорт отключен
+command.teleport.teleport: Телепортация в {@region}...
+
+command.buy.in-game: Только в игре
+command.buy.permission: Недостаточно прав
+command.buy.usage: 'Необходимые аргументы: [РЕГИОН] [ЦЕНА]'
+command.buy.region-doesnt-exists: Регион {@region} не найден
+command.buy.cant-buy-self: Вы не можете купить свой регион
+command.buy.region-price: Регион {@region} стоит {@price} денег
+command.buy.isnt-selling: Регион {@region} не продается
+command.buy.repeat-price: Повторите цену дважды
+command.buy.not-enough-gold: Недостаточно денег
