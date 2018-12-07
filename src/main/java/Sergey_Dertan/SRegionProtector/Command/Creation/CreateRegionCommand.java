@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Creation;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
@@ -27,9 +28,12 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!this.testPermission(sender)) return false;
+        if (!this.testPermissionSilent(sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.create.permission");
+            return false;
+        }
         if (!(sender instanceof Player)) {
-            this.sendMessage(sender, "in-game");
+            Messenger.getInstance().sendMessage(sender, "command.create.in-game");
             return false;
         }
 
@@ -48,40 +52,40 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
         if (name.length() < this.regionSettings.minRegionNameLength || name.length() > regionSettings.maxRegionNameLength) {
-            this.sendMessage(sender, "incorrect-name");
+            Messenger.getInstance().sendMessage(sender, "command.create.incorrect-name");
             return false;
         }
         if (this.regionManager.regionExists(name)) {
-            this.sendMessage(sender, "region-exists");
+            Messenger.getInstance().sendMessage(sender, "command.create.region-exists");
             return false;
         }
         if (pos1 == null || pos2 == null) {
-            this.sendMessage(sender, "two-positions-required");
+            Messenger.getInstance().sendMessage(sender, "command.create.two-positions-required");
             return false;
         }
         if (pos1.level != pos2.level) {
-            this.sendMessage(sender, "positions-in-different-worlds");
+            Messenger.getInstance().sendMessage(sender, "command.create.positions-in-different-worlds");
             return false;
         }
 
         if (!this.regionSettings.hasAmountPermission(sender, this.regionManager.getPlayerRegionAmount((Player) sender, RegionGroup.CREATOR) + 1)) {
-            this.sendMessage(sender, "too-much-regions");
+            Messenger.getInstance().sendMessage(sender, "command.create.too-many");
             return false;
         }
 
         if (!this.regionSettings.hasSizePermission(sender, session.calculateRegionSize())) {
-            this.sendMessage(sender, "too-large");
+            Messenger.getInstance().sendMessage(sender, "command.create.too-large");
             return false;
         }
 
-        if (this.regionManager.checkOverlap(pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName())) {
-            this.sendMessage(sender, "regions-overlap");
+        if (this.regionManager.checkOverlap(pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName(), (Player) sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.create.regions-overlap");
             return false;
         }
 
         this.regionManager.createRegion(name, sender.getName().toLowerCase(), pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName());
 
-        this.sendMessage(sender, "region-created", "@region", name);
+        Messenger.getInstance().sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }
 }

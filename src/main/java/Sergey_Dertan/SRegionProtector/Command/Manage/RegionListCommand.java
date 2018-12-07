@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -25,9 +26,12 @@ public final class RegionListCommand extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!this.testPermission(sender)) return false;
+        if (!this.testPermissionSilent(sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.list.permission");
+            return false;
+        }
         if (!(sender instanceof Player)) {
-            this.sendMessage(sender, "in-game");
+            Messenger.getInstance().sendMessage(sender, "command.list.in-game");
             return false;
         }
         if (args.length < 1) {
@@ -56,13 +60,13 @@ public final class RegionListCommand extends SRegionProtectorCommand {
         regions.forEach(region -> list.add(region.getName()));
         switch (type) {
             case MEMBER:
-                this.sendMessage(sender, "member-region-list", "@list", String.join(", ", list));
+                Messenger.getInstance().sendMessage(sender, "command.list.member-region-list", "@list", String.join(", ", list));
                 break;
             case OWNER:
-                this.sendMessage(sender, "owner-region-list", "@list", String.join(", ", list));
+                Messenger.getInstance().sendMessage(sender, "command.list.owner-region-list", "@list", String.join(", ", list));
                 break;
             case CREATOR:
-                this.sendMessage(sender, "creator-region-list", "@list", String.join(", ", list));
+                Messenger.getInstance().sendMessage(sender, "command.list.creator-region-list", "@list", String.join(", ", list));
                 break;
         }
         return true;

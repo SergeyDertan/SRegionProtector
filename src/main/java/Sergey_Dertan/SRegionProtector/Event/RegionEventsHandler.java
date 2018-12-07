@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Event;
 
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
@@ -52,7 +53,8 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
         if (e.isCancelled()) return;
         int blockId = e.getBlock().getId();
-        if (blockId == BlockID.TRAPDOOR || blockId == BlockID.STONE_BUTTON || blockId == BlockID.WOODEN_BUTTON) this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
+        if (blockId == BlockID.TRAPDOOR || blockId == BlockID.STONE_BUTTON || blockId == BlockID.WOODEN_BUTTON)
+            this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -120,11 +122,12 @@ public final class RegionEventsHandler implements Listener {
         Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
-            if ((mustBeMember && (player != null && region.isLivesIn(player.getName().toLowerCase()))) || !region.isVectorInside(pos)) continue;
+            if ((mustBeMember && (player != null && region.isLivesIn(player.getName().toLowerCase()))) || !region.isVectorInside(pos))
+                continue;
             for (int flag : flags) {
                 if (!this.flagsStatus[flag] || !region.getFlagList().getFlagState(flag)) continue;
                 ev.setCancelled(true);
-                if (player != null) player.sendMessage("Some region here"); //TODO messages
+                if (player != null) Messenger.getInstance().sendMessage(player, "region.protected");
                 return;
             }
         }

@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Main;
 
+import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Command.Creation.CreateRegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.GetWandCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.SetPos1Command;
@@ -15,18 +16,16 @@ import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Provider.YAMLProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
-import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Settings.Settings;
 import Sergey_Dertan.SRegionProtector.Task.ClearSessionsTask;
-import Sergey_Dertan.SRegionProtector.Task.HealTask;
 import cn.nukkit.Server;
+import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.ConfigSection;
-import cn.nukkit.utils.MainLogger;
 import cn.nukkit.utils.TextFormat;
 
 import java.io.File;
@@ -81,10 +80,16 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.commands"));
         this.initCommands();
 
+        this.registerBlockEntities(); //TODO msg?
+
         this.initSessionsClearTask();
-        SRegionProtectorMain.instance = this;
+        instance = this;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful"));
+    }
+
+    private void registerBlockEntities() {
+        BlockEntity.registerBlockEntity(BlockEntityHealer.BLOCK_ENTITY_HEALER, BlockEntityHealer.class);
     }
 
     private void initSessionsClearTask() {
@@ -129,7 +134,6 @@ public final class SRegionProtectorMain extends PluginBase {
         try {
             this.messenger = new Messenger();
         } catch (Exception e) {
-            MainLogger.getLogger().logException(e);
             this.getLogger().alert(TextFormat.RED + "Messenger initializing error: " + e.getMessage());
             this.getLogger().alert(TextFormat.RED + "Disabling plugin...");
             this.forceShutdown = true;
@@ -147,8 +151,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.chunkManager = new ChunkManager(this.provider, this.getLogger(), this.regionManager);
         this.chunkManager.init();
         this.regionManager.setChunkManager(chunkManager);
-        if (!this.settings.regionSettings.flagsStatus[RegionFlags.FLAG_HEAL]) return;
-        this.getServer().getScheduler().scheduleRepeatingTask(this, new HealTask(this.chunkManager), 20, true); //TODO move
     }
 
     private void initEventsHandlers() {
@@ -314,16 +316,16 @@ public final class SRegionProtectorMain extends PluginBase {
 
     @Override
     public void onDisable() {
-        this.getLogger().info(TextFormat.GREEN + "Disabling SRegionProtector V_" + this.getDescription().getVersion() + " by Sergey Dertan...");
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
         if (this.forceShutdown) return;
 
-        this.getLogger().info(TextFormat.GREEN + "Saving regions...");
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions"));
         this.regionManager.save();
 
-        this.getLogger().info(TextFormat.GREEN + "Saving chunks...");
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.chunks"));
         this.chunkManager.save();
 
-        this.getLogger().info(TextFormat.GREEN + "SRegionProtector disabled.");
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.successful"));
     }
 
     public RegionManager getRegionManager() {

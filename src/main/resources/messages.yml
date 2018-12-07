@@ -32,7 +32,7 @@ list:
   creator-region-list: "Your regions: @list"
 remove:
   permission: "You have no permission"
-  region-doesnt-exists: "Region @name doesnt exists"
+  region-doesnt-exists: "Region @region doesnt exists"
   region-removed: "Region @region deleted"
   all-removed: "All of your regions deleted @amount"
 addmember:
@@ -65,7 +65,7 @@ info:
   usage: "Required arguments: [REGION]"
   region-doesnt-exists: "Region doesnt exists"
   info: |-
-    Name: @name
+    Name: @region
     World: @level
     Creator/owner: @creator
     Owners: @owners

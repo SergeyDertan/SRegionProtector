@@ -1,11 +1,15 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
+import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import cn.nukkit.Server;
+import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.ConfigSection;
 
 import java.util.ArrayList;
@@ -105,6 +109,7 @@ public final class Region extends SimpleAxisAlignedBB {
 
     public ConfigSection toMap() throws RuntimeException {
         ConfigSection arr = new ConfigSection();
+
         arr.put("name", this.name);
         arr.put("creator", this.creator);
 
@@ -151,5 +156,23 @@ public final class Region extends SimpleAxisAlignedBB {
 
     public boolean isLivesIn(String target) {
         return this.creator.equals(target) || this.owners.contains(target) || this.members.contains(target);
+    }
+
+    public Position getHealerPosition() {
+        double x = getMinX() + (getMaxX() - getMinX()) / 2;
+        double y = getMinY() + (getMaxY() - getMinY()) / 2;
+        double z = getMinZ() + (getMaxZ() - getMinZ()) / 2;
+        return new Position(x, y, z, Server.getInstance().getLevelByName(this.level));
+    }
+
+    public Vector3 getHealerVector() {
+        double x = getMinX() + (getMaxX() - getMinX()) / 2;
+        double y = getMinY() + (getMaxY() - getMinY()) / 2;
+        double z = getMinZ() + (getMaxZ() - getMinZ()) / 2;
+        return new Vector3(x, y, z);
+    }
+
+    public BlockEntityHealer getHealerBlockEntity() {
+        return (BlockEntityHealer) this.getHealerPosition().level.getBlockEntity(this.getHealerVector());
     }
 }

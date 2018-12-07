@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Event;
 
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
 import cn.nukkit.Player;
@@ -34,20 +35,11 @@ public final class SelectorEventsHandler implements Listener {
         Block block = e.getBlock();
         if (block instanceof BlockAir || !(item instanceof ItemAxeWood)) return;
         SelectorSession session = this.regionSelector.getSession(player);
-        if (session.pos1 == null) {
-            session.pos1 = Position.fromObject(block, block.level);
-            player.sendMessage("pos1 set"); //TODO messages
-            return;
+        if (session.nextPos) {
+            Messenger.getInstance().sendMessage(player, "region.selection.pos1");
+        } else {
+            Messenger.getInstance().sendMessage(player, "region.selection.pos2");
         }
-
-        if (session.pos2 == null) {
-            session.pos2 = Position.fromObject(block, block.level);
-            player.sendMessage("pos2 set"); //TODO messages
-            return;
-        }
-
-        session.pos1 = Position.fromObject(block, block.level);
-        session.pos2 = null;
-        player.sendMessage("pos1 set, pos2 removed"); //TODO messages
+        session.setNextPos(Position.fromObject(block, block.level));
     }
 }

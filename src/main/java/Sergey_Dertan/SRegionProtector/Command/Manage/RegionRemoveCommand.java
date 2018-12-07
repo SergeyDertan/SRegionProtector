@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
@@ -19,22 +20,25 @@ public final class RegionRemoveCommand extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!this.testPermission(sender)) return false;
+        if (!this.testPermissionSilent(sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.remove.permission");
+            return false;
+        }
         if (args.length < 1) {
             sender.sendMessage(this.usageMessage);
             return false;
         }
         Region region = this.regionManager.getRegion(args[0].toLowerCase());
         if (region == null) {
-            this.sendMessage(sender, "region-doesnt-exists", "@region", args[0]);
+            Messenger.getInstance().sendMessage(sender, "command.remove.region-doesnt-exists", "@region", args[0]);
             return false;
         }
         if (!sender.hasPermission("sregionprotector.admin") && (sender instanceof Player && !region.isOwner(sender.getName().toLowerCase()))) {
-            sender.sendMessage(this.getPermissionMessage());
+            Messenger.getInstance().sendMessage(sender, "command.remove.permission");
             return false;
         }
         this.regionManager.removeRegion(region);
-        this.sendMessage(sender, "region-removed", "@region", region.getName());
+        Messenger.getInstance().sendMessage(sender, "command.remove.region-removed", "@region", region.getName());
         return true;
     }
 }

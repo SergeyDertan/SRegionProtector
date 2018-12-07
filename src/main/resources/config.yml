@@ -28,9 +28,9 @@ active-flags:
 #  - 20
 # 2 permissions will be created: sregionprotector.region.size.10 and sregionprotector.region.size.20
 region-sizes:
-- 1000
-- 10000
-- 20000
+  - 1000
+  - 10000
+  - 20000
 # permissions will be created during the plugin loading and have names sregionprotector.region.amount.MAX_REGION_AMOUNT
 # for example, if you have
 # region-amounts:
@@ -38,6 +38,6 @@ region-sizes:
 #  - 2
 # 2 permissions will be created: sregionprotector.region.amount.1 and sregionprotector.region.amount.20
 region-amounts:
-- 1
-- 2
-- 3
+  - 1
+  - 2
+  - 3

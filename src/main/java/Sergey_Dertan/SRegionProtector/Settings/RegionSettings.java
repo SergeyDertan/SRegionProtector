@@ -1,21 +1,25 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
+import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public final class RegionSettings {
 
-    public boolean[] flagsStatus;
-    public boolean[] defaultFlags;
+    public final boolean[] flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
+    public final boolean[] defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
     public int maxRegionNameLength;
     public int minRegionNameLength;
+    public int healFlagHealDelay;
+    public int healFlagHealAmount;
     private Map<Long, Permission> regionSize;
     private Map<Integer, Permission> regionAmount;
 
@@ -24,15 +28,23 @@ public final class RegionSettings {
         this.loadAmountPermissions(cnf);
         this.loadFlagsStatuses(cnf);
         this.loadDefaultFlags(rgCnf);
+        this.loadHealFlagSettings(rgCnf);
         RegionFlags.init(this.defaultFlags);
 
         this.maxRegionNameLength = (int) rgCnf.get("max-region-name-length");
         this.minRegionNameLength = (int) rgCnf.get("min-region-name-length");
     }
 
+    private void loadHealFlagSettings(Map<String, Object> cnf) {
+        this.healFlagHealDelay = (int) cnf.get("heal-flag-heal-delay");
+        this.healFlagHealAmount = (int) cnf.get("heal-flag-heal-amount");
+
+        BlockEntityHealer.HEAL_DELAY = this.healFlagHealDelay;
+        BlockEntityHealer.HEAL_AMOUNT = this.healFlagHealAmount;
+        BlockEntityHealer.FLAG_ENABLED = this.flagsStatus[RegionFlags.FLAG_HEAL];
+    }
+
     private void loadDefaultFlags(Map<String, Object> rgCnf) {
-        this.defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
-        Arrays.fill(this.defaultFlags, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("default-flags")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
             this.defaultFlags[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();
@@ -58,7 +70,7 @@ public final class RegionSettings {
     }
 
     private void loadSizePermissions(Map<String, Object> cnf) {
-        this.regionSize = new HashMap<>();
+        this.regionSize = new Long2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
         for (Integer size : (List<Integer>) cnf.get("region-sizes")) {
             Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks");
@@ -70,7 +82,7 @@ public final class RegionSettings {
     }
 
     private void loadAmountPermissions(Map<String, Object> cnf) {
-        this.regionAmount = new HashMap<>();
+        this.regionAmount = new Int2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.amount.*");
         for (Integer amount : (List<Integer>) cnf.get("region-amounts")) {
             Permission permission = new Permission("sregionprotector.region.amount." + amount, "Allows to creating up to " + amount + " regions");
@@ -90,7 +102,6 @@ public final class RegionSettings {
     }
 
     private void loadFlagsStatuses(Map<String, Object> cnf) {
-        this.flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
         Arrays.fill(flagsStatus, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("active-flags")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;

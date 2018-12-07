@@ -9,6 +9,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +52,7 @@ public final class ChunkManager {
                 chunk.addRegion(region);
             }
             String level = (String) chunkData.get("level");
-            if (!this.chunks.containsKey(level)) this.chunks.put(level, new HashMap<>());
+            if (!this.chunks.containsKey(level)) this.chunks.put(level, new Long2ObjectOpenHashMap<>());
             this.chunks.get(level).put(chunk.getHash(), chunk);
             ++chunkAmount;
         }
@@ -68,9 +69,9 @@ public final class ChunkManager {
 
     public void save() {
         for (Map.Entry<String, Map<Long, Chunk>> level : this.chunks.entrySet()) {
-            for (Map.Entry<Long, Chunk> chunk : level.getValue().entrySet()) {
-                if (chunk.getValue().getRegions().size() == 0)
-                    this.provider.removeChunk(chunk.getValue(), level.getKey());
+            for (Chunk chunk : level.getValue().values()) {
+                if (chunk.getRegions().size() != 0) continue;
+                this.provider.removeChunk(chunk, level.getKey());
             }
         }
         this.provider.saveChunkList(this.chunks);
@@ -79,7 +80,7 @@ public final class ChunkManager {
     public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, String level, boolean create) {
         Set<Chunk> chunks = new HashSet<>();
 
-        long minX = (long) Math.min(pos1.x, pos2.x);
+        long minX = (long) Math.min(pos1.x, pos2.x); //TODO types
         long minZ = (long) Math.min(pos1.z, pos2.z);
 
         long maxX = (long) Math.max(pos1.x, pos2.x);
@@ -87,7 +88,7 @@ public final class ChunkManager {
 
         long x = minX;
 
-        while (x <= maxX) {
+        while (x <= maxX) { //TODO
             long z = minZ;
             while (z <= maxZ) {
                 Chunk chunk = this.getChunk(x, z, level, true, create);
@@ -125,10 +126,7 @@ public final class ChunkManager {
         long hash = this.chunkHash(x, z);
         Map<Long, Chunk> levelChunks = this.chunks.get(level);
         if (levelChunks == null && !create) return null;
-        if (levelChunks == null) {
-            levelChunks = new HashMap<>();
-            this.chunks.put(level, levelChunks);
-        }
+        levelChunks = this.chunks.computeIfAbsent(level, s -> new Long2ObjectOpenHashMap<>());
         Chunk chunk = levelChunks.get(hash);
         if (chunk != null) return chunk;
         if (!create) return null;

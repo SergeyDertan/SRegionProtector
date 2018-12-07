@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Creation;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
@@ -17,13 +18,16 @@ public final class SetPos2Command extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] strings) {
-        if (!this.testPermission(sender)) return false;
+        if (!this.testPermissionSilent(sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.pos2.permission");
+            return false;
+        }
         if (!(sender instanceof Player)) {
-            this.sendMessage(sender, "in-game");
+            Messenger.getInstance().sendMessage(sender, "command.pos2.in-game");
             return false;
         }
         this.selector.getSession((Player) sender).pos2 = ((Player) sender).getPosition();
-        this.sendMessage(sender, "pos-set");
+        Messenger.getInstance().sendMessage(sender, "command.pos2.pos-set");
         return false;
     }
 }

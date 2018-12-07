@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
@@ -33,7 +33,7 @@
                         <artifactId>maven-jar-plugin</artifactId>
                         <version>3.0.2</version>
                         <configuration>
-                            <outputDirectory>C:\Users\Сергей\Desktop\Nukkit\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\SergeyDertan\Desktop</outputDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -117,7 +117,7 @@
                 <filtering>false</filtering>
                 <directory>${basedir}/src/main/resources/lang</directory>
                 <includes>
-                    <include>eng.yml</include>
+                    <include>*.yml</include>
                 </includes>
             </resource>
         </resources>

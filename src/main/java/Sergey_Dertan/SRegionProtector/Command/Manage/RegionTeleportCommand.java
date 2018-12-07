@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -20,9 +21,12 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
 
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
-        if (!this.testPermission(sender)) return false;
+        if (!this.testPermissionSilent(sender)) {
+            Messenger.getInstance().sendMessage(sender, "command.teleport.permission");
+            return false;
+        }
         if (!(sender instanceof Player)) {
-            this.sendMessage(sender, "in-game");
+            Messenger.getInstance().sendMessage(sender, "command.teleport.in-game");
             return false;
         }
         if (args.length < 1) {
@@ -31,20 +35,20 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
         }
         Region region = this.regionManager.getRegion(args[0].toLowerCase());
         if (region == null) {
-            this.sendMessage(sender, "region-doesnt-exists");
+            Messenger.getInstance().sendMessage(sender, "command.teleport.region-doesnt-exists");
             return false;
         }
         if (!sender.hasPermission("sregionprotector.admin") && !region.isLivesIn(sender.getName().toLowerCase())) {
-            sender.sendMessage(this.getPermissionMessage());
+            Messenger.getInstance().sendMessage(sender, "command.teleport.permission");
             return false;
         }
         RegionTeleportFlag flag = region.getFlagList().getTeleportFlag();
         if (!flag.state || flag.position == null) {
-            this.sendMessage(sender, "teleport-disabled");
+            Messenger.getInstance().sendMessage(sender, "command.teleport.teleport-disabled");
             return false;
         }
         ((Player) sender).teleport(flag.position);
-        this.sendMessage(sender, "teleport", "@region", region.getName());
+        Messenger.getInstance().sendMessage(sender, "command.teleport.teleport", "@region", region.getName());
         return true;
     }
 }
