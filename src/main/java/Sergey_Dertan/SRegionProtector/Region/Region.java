@@ -118,7 +118,7 @@ public final class Region extends SimpleAxisAlignedBB {
         arr.put("name", this.name);
         arr.put("creator", this.creator);
 
-        arr.put("level", this.level);
+        arr.put("level", this.level.getName());
         arr.put("min_x", this.getMinX());
         arr.put("min_y", this.getMinY());
         arr.put("min_z", this.getMinZ());

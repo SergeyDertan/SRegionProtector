@@ -23,6 +23,8 @@ import Sergey_Dertan.SRegionProtector.Task.AutoSaveTask;
 import Sergey_Dertan.SRegionProtector.Task.ClearSessionsTask;
 import cn.nukkit.Server;
 import cn.nukkit.blockentity.BlockEntity;
+import cn.nukkit.command.Command;
+import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.PluginBase;

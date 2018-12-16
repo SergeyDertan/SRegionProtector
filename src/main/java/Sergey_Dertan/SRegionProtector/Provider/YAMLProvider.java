@@ -40,7 +40,12 @@ public final class YAMLProvider extends Provider {
         List<Map<String, Object>> list = new ArrayList<>();
         for (File file : (new File(SRegionProtectorMain.SRegionProtectorRegionsFolder).listFiles())) {
             if (file.isDirectory()) continue;
-            list.add((Map<String, Object>) new Config(file.getAbsolutePath(), Config.YAML).get("data"));
+            Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
+            if (o == null) {
+                this.logger.alert(TextFormat.RED + "Error while loading region from file " + file.getName());
+                continue;
+            }
+            list.add((Map<String, Object>) o);
         }
         return list;
     }
