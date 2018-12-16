@@ -9,9 +9,9 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public final class YAMLProvider extends Provider {
 
@@ -25,8 +25,8 @@ public final class YAMLProvider extends Provider {
     }
 
     @Override
-    public List<Map<String, Object>> loadChunkList() {
-        List<Map<String, Object>> list = new ArrayList<>();
+    public Set<Map<String, Object>> loadChunkList() {
+        Set<Map<String, Object>> list = new HashSet<>();
         for (File file : (new File(SRegionProtectorMain.SRegionProtectorChunksFolder).listFiles())) {
             if (file.isDirectory()) continue;
             list.add((Map<String, Object>) new Config(file.getAbsolutePath(), Config.YAML).get("data"));
@@ -35,9 +35,9 @@ public final class YAMLProvider extends Provider {
     }
 
     @Override
-    public List<Map<String, Object>> loadRegionList() {
+    public Set<Map<String, Object>> loadRegionList() {
         //TODO try catch data loading
-        List<Map<String, Object>> list = new ArrayList<>();
+        Set<Map<String, Object>> list = new HashSet<>();
         for (File file : (new File(SRegionProtectorMain.SRegionProtectorRegionsFolder).listFiles())) {
             if (file.isDirectory()) continue;
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");

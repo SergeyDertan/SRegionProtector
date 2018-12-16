@@ -12,44 +12,67 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.ConfigSection;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import static Sergey_Dertan.SRegionProtector.Region.RegionManager.*;
 
-public final class Region extends SimpleAxisAlignedBB {
+public final class Region implements AxisAlignedBB {
 
+    final Object lock = new Object();
+    private final double minX;
+    private final double minY;
+    private final double minZ;
+    private final double maxX;
+    private final double maxY;
+    private final double maxZ;
     private final String name;
     private final Level level;
+    boolean needUpdate = false;
     private String creator;
-    private List<String> owners, members;
+    private Set<String> owners, members;
     private FlagList flags;
     private Set<Chunk> chunks;
-    final Object lock = new Object();
-    boolean needUpdate = false;
 
-    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, List<String> owners, List<String> members, FlagList flags) {
-        super(minX, minY, minZ, maxX, maxY, maxZ);
+    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, FlagList flags) {
+        this.minX = minX;
+        this.minY = minY;
+        this.minZ = minZ;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
+
         this.name = name;
         this.creator = creator;
         this.level = level;
-        this.owners = owners;
-        this.members = members;
+
+        this.owners = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        this.owners.addAll(Arrays.asList(owners));
+
+        this.members = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        this.members.addAll(Arrays.asList(members));
+
         this.flags = flags;
         this.chunks = new HashSet<>();
     }
 
     public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>(), new ArrayList<>(), RegionFlags.getDefaultFlagList());
+        this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new String[0], new String[0], RegionFlags.getDefaultFlagList());
+    }
+
+    public AxisAlignedBB clone() {
+        return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public void clearUsers() {
-        this.creator = "";
-        this.owners.clear();
-        this.members.clear();
-        this.needUpdate = true;
+        synchronized (this.lock) {
+            this.creator = "";
+            this.owners.clear();
+            this.members.clear();
+            this.needUpdate = true;
+        }
     }
 
     public Level getLevel() {
@@ -82,12 +105,12 @@ public final class Region extends SimpleAxisAlignedBB {
         }
     }
 
-    public List<String> getMembers() {
-        return new ArrayList<>(this.members);
+    public Set<String> getMembers() {
+        return new HashSet<>(this.members);
     }
 
-    public List<String> getOwners() {
-        return new ArrayList<>(this.owners);
+    public Set<String> getOwners() {
+        return new HashSet<>(this.owners);
     }
 
     public boolean isOwner(String player, boolean creator) {
@@ -198,5 +221,35 @@ public final class Region extends SimpleAxisAlignedBB {
 
     public BlockEntityHealer getHealerBlockEntity() {
         return (BlockEntityHealer) this.getHealerPosition().level.getBlockEntity(this.getHealerVector());
+    }
+
+    @Override
+    public double getMaxX() {
+        return this.maxX;
+    }
+
+    @Override
+    public double getMaxY() {
+        return this.maxY;
+    }
+
+    @Override
+    public double getMaxZ() {
+        return this.maxZ;
+    }
+
+    @Override
+    public double getMinX() {
+        return this.minX;
+    }
+
+    @Override
+    public double getMinY() {
+        return this.minY;
+    }
+
+    @Override
+    public double getMinZ() {
+        return this.minZ;
     }
 }

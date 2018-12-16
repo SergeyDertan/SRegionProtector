@@ -17,7 +17,10 @@ import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 public final class RegionManager {
 
@@ -39,7 +42,7 @@ public final class RegionManager {
     private Map<String, Region> regions;
     private PluginLogger logger;
     private ChunkManager chunkManager;
-    private Map<String, List<Region>> owners, members;
+    private Map<String, Set<Region>> owners, members;
     private Messenger messenger;
 
     public RegionManager(Provider provider, PluginLogger logger) {
@@ -70,10 +73,10 @@ public final class RegionManager {
     }
 
     public void init() {
-        this.regions = new HashMap<>();
-        this.owners = new HashMap<>();
-        this.members = new HashMap<>();
-        List<Map<String, Object>> regions = this.provider.loadRegionList();
+        this.regions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.owners = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.members = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        Set<Map<String, Object>> regions = this.provider.loadRegionList();
         for (Map<String, Object> regionData : regions) {
             String name = (String) regionData.get(NAME_TAG);
             String creator = (String) regionData.get(CREATOR_TAG);
@@ -107,15 +110,15 @@ public final class RegionManager {
                 continue;
             }
 
-            Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>(Arrays.asList(owners)), new ArrayList<>(Arrays.asList(members)), flagList);
+            Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
 
             this.regions.put(name, region);
 
-            for (String user : owners) this.owners.computeIfAbsent(user, (usr) -> new ArrayList<>()).add(region);
+            for (String user : owners) this.owners.computeIfAbsent(user, (usr) -> new HashSet<>()).add(region);
 
-            for (String user : members) this.members.computeIfAbsent(user, (usr) -> new ArrayList<>()).add(region);
+            for (String user : members) this.members.computeIfAbsent(user, (usr) -> new HashSet<>()).add(region);
 
-            this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ArrayList<>()).add(region);
+            this.owners.computeIfAbsent(region.getCreator(), (usr) -> new HashSet<>()).add(region);
         }
 
         this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
@@ -136,7 +139,7 @@ public final class RegionManager {
             chunk.addRegion(region);
             region.addChunk(chunk);
         });
-        this.owners.computeIfAbsent(creator, (s) -> new ArrayList<>()).add(region);
+        this.owners.computeIfAbsent(creator, (s) -> new HashSet<>()).add(region);
         this.regions.put(name, region);
 
         Vector3 pos = region.getHealerVector();
@@ -170,7 +173,7 @@ public final class RegionManager {
 
             region.clearUsers();
 
-            this.owners.computeIfAbsent(newOwner, (s) -> new ArrayList<>()).add(region);
+            this.owners.computeIfAbsent(newOwner, (s) -> new HashSet<>()).add(region);
             region.setCreator(newOwner);
             region.getFlagList().getSellFlag().state = false;
             region.getFlagList().getSellFlag().price = -1;
@@ -219,14 +222,14 @@ public final class RegionManager {
 
     public void addMember(Region region, String target) {
         synchronized (region.lock) {
-            this.members.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
+            this.members.computeIfAbsent(target, (usr) -> new HashSet<>()).add(region);
             region.addMember(target);
         }
     }
 
     public void addOwner(Region region, String target) {
         synchronized (region.lock) {
-            this.owners.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
+            this.owners.computeIfAbsent(target, (usr) -> new HashSet<>()).add(region);
             region.addOwner(target);
         }
     }
@@ -272,20 +275,20 @@ public final class RegionManager {
         this.save(false);
     }
 
-    public List<Region> getPlayersRegionList(Player player, RegionGroup group) {
+    public Set<Region> getPlayersRegionList(Player player, RegionGroup group) {
         switch (group) {
             case CREATOR:
-                List<Region> list = new ArrayList<>();
-                for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>())) {
+                Set<Region> list = new HashSet<>();
+                for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new HashSet<>())) {
                     if (region.isCreator(player.getName().toLowerCase())) list.add(region);
                 }
                 return list;
             case OWNER:
-                return this.owners.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+                return this.owners.getOrDefault(player.getName().toLowerCase(), new HashSet<>());
             case MEMBER:
-                return this.members.getOrDefault(player.getName().toLowerCase(), new ArrayList<>());
+                return this.members.getOrDefault(player.getName().toLowerCase(), new HashSet<>());
             default:
-                return new ArrayList<>();
+                return new HashSet<>();
         }
     }
 

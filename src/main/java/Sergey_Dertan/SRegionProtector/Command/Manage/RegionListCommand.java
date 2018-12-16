@@ -8,15 +8,14 @@ import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import static Sergey_Dertan.SRegionProtector.Region.RegionGroup.*;
 
 public final class RegionListCommand extends SRegionProtectorCommand {
 
-    public static final String OWNER = "owner";
-    public static final String MEMBER = "member";
-    public static final String CREATOR = "creator";
     private RegionManager regionManager;
 
     public RegionListCommand(String name, Map<String, String> messages, RegionManager regionManager) {
@@ -38,25 +37,25 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             sender.sendMessage(this.usageMessage);
             return false;
         }
-        String type = args[0].toLowerCase();
-        if (!type.equals(OWNER) && !type.equals(MEMBER) && !type.equals(CREATOR)) {
+        RegionGroup type = RegionGroup.get(args[0].toLowerCase());
+        if (type == null) {
             sender.sendMessage(this.usageMessage);
             return false;
         }
-        List<Region> regions;
+        Set<Region> regions;
         switch (type) {
             case CREATOR:
             default:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.CREATOR);
+                regions = this.regionManager.getPlayersRegionList((Player) sender, CREATOR);
                 break;
             case OWNER:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.OWNER);
+                regions = this.regionManager.getPlayersRegionList((Player) sender, OWNER);
                 break;
             case MEMBER:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, RegionGroup.MEMBER);
+                regions = this.regionManager.getPlayersRegionList((Player) sender, MEMBER);
                 break;
         }
-        List<String> list = new ArrayList<>();
+        Set<String> list = new HashSet<>();
         regions.forEach(region -> list.add(region.getName()));
         switch (type) {
             case MEMBER:

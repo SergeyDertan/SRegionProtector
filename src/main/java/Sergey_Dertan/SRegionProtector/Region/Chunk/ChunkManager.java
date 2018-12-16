@@ -111,10 +111,10 @@ public final class ChunkManager {
             ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().iterator();
             while (chunks.hasNext()) {
                 Chunk chunk = chunks.next().getValue();
-                    if (chunk.getRegions().size() != 0) continue;
-                    chunks.remove();
-                    this.provider.removeChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
-                    ++amount;
+                if (chunk.getRegions().size() != 0) continue;
+                chunks.remove();
+                this.provider.removeChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
+                ++amount;
             }
         }
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", String.valueOf(amount)));

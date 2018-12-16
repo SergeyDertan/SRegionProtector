@@ -5,8 +5,8 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.plugin.PluginLogger;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class Provider {
 
@@ -22,7 +22,7 @@ public abstract class Provider {
 
     public abstract void saveChunk(Chunk chunk, String level);
 
-    public final synchronized void saveRegionList(List<Region> regions) {
+    public final synchronized void saveRegionList(Set<Region> regions) {
         regions.forEach(this::saveRegion);
     }
 
@@ -32,11 +32,11 @@ public abstract class Provider {
 
     public abstract void saveFlags(FlagList flags, String region);
 
-    public abstract List<Map<String, Object>> loadChunkList();
+    public abstract Set<Map<String, Object>> loadChunkList();
 
     public abstract Map<String, Map<String, Object>> loadFlags(String region);
 
-    public abstract List<Map<String, Object>> loadRegionList();
+    public abstract Set<Map<String, Object>> loadRegionList();
 
     public abstract void removeChunk(Chunk chunk, String level);
 

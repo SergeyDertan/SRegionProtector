@@ -7,12 +7,12 @@ import java.util.*;
 
 public final class Chunk {
 
+    final Object lock = new Object();
     boolean needUpdate;
     private long x;
     private long z;
     private long hash;
     private List<Region> regions;
-    final Object lock = new Object();
 
     public Chunk(long x, long z, long hash, List<Region> regions) {
         this.x = x;
