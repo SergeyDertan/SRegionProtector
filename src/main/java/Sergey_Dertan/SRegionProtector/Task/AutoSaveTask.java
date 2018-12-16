@@ -25,7 +25,7 @@ public final class AutoSaveTask extends AsyncTask {
     public void onRun() {
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("auto-save-start"));
         this.chunkManager.save(true);
-        //this.regionManager.save(true); //TODO
+        this.regionManager.save(true);
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("auto-save-success"));
     }
 }

@@ -12,6 +12,7 @@ public final class Chunk {
     private long z;
     private long hash;
     private List<Region> regions;
+    final Object lock = new Object();
 
     public Chunk(long x, long z, long hash, List<Region> regions) {
         this.x = x;
@@ -45,14 +46,18 @@ public final class Chunk {
         return this.z;
     }
 
-    public synchronized void addRegion(Region region) {
-        this.regions.add(region);
-        this.needUpdate = true;
+    public void addRegion(Region region) {
+        synchronized (this.lock) {
+            this.regions.add(region);
+            this.needUpdate = true;
+        }
     }
 
-    public synchronized void removeRegion(Region region) {
-        this.regions.remove(region);
-        this.needUpdate = true;
+    public void removeRegion(Region region) {
+        synchronized (this.lock) {
+            this.regions.remove(region);
+            this.needUpdate = true;
+        }
     }
 
     @Override

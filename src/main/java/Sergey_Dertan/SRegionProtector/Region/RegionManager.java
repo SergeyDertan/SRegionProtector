@@ -21,16 +21,31 @@ import java.util.*;
 
 public final class RegionManager {
 
+    public final static String MIN_X_TAG = "min_x";
+    public final static String MIN_Y_TAG = "min_y";
+    public final static String MIN_Z_TAG = "min_z";
+
+    public final static String MAX_X_TAG = "max_x";
+    public final static String MAX_Y_TAG = "max_y";
+    public final static String MAX_Z_TAG = "max_z";
+
+    public final static String OWNERS_TAG = "owners";
+    public final static String MEMBERS_TAG = "members";
+    public final static String NAME_TAG = "name";
+    public final static String LEVEL_TAG = "level";
+    public final static String CREATOR_TAG = "creator";
+
     private Provider provider;
     private Map<String, Region> regions;
     private PluginLogger logger;
     private ChunkManager chunkManager;
     private Map<String, List<Region>> owners, members;
-    //TODO need update
+    private Messenger messenger;
 
     public RegionManager(Provider provider, PluginLogger logger) {
         this.provider = provider;
         this.logger = logger;
+        this.messenger = Messenger.getInstance();
     }
 
     public void setChunkManager(ChunkManager chunkManager) { //TODO fix?
@@ -60,24 +75,24 @@ public final class RegionManager {
         this.members = new HashMap<>();
         List<Map<String, Object>> regions = this.provider.loadRegionList();
         for (Map<String, Object> regionData : regions) {
-            String name = (String) regionData.get("name");
-            String creator = (String) regionData.get("creator");
-            String level = (String) regionData.get("level");
+            String name = (String) regionData.get(NAME_TAG);
+            String creator = (String) regionData.get(CREATOR_TAG);
+            String level = (String) regionData.get(LEVEL_TAG);
 
-            double minX = (double) regionData.get("min_x");
-            double minY = (double) regionData.get("min_y");
-            double minZ = (double) regionData.get("min_z");
+            double minX = (double) regionData.get(MIN_X_TAG);
+            double minY = (double) regionData.get(MIN_Y_TAG);
+            double minZ = (double) regionData.get(MIN_Z_TAG);
 
-            double maxX = (double) regionData.get("max_x");
-            double maxY = (double) regionData.get("max_y");
-            double maxZ = (double) regionData.get("max_z");
+            double maxX = (double) regionData.get(MAX_X_TAG);
+            double maxY = (double) regionData.get(MAX_Y_TAG);
+            double maxZ = (double) regionData.get(MAX_Z_TAG);
 
             String[] owners;
             String[] members;
 
             try {
-                owners = Utils.deserializeStringArray((String) regionData.get("owners"));
-                members = Utils.deserializeStringArray((String) regionData.get("members"));
+                owners = Utils.deserializeStringArray((String) regionData.get(OWNERS_TAG));
+                members = Utils.deserializeStringArray((String) regionData.get(MEMBERS_TAG));
             } catch (RuntimeException e) {
                 this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
                 continue;
@@ -130,71 +145,68 @@ public final class RegionManager {
                 level.getChunk((int) pos.x >> 4, (int) pos.z >> 4, true), //TODO true
                 BlockEntityHealer.getDefaultNBT(region.getHealerVector(), name)
         );
+        region.needUpdate = true;
         return region;
     }
 
     public void changeRegionOwner(Region region, String newOwner) {
-        region.getMembers().forEach(member ->
-                {
-                    this.members.get(member).remove(region);
-                    if (this.members.get(member).size() == 0) this.members.remove(member);
-                }
-        );
+        synchronized (region.lock) {
+            region.getMembers().forEach(member ->
+                    {
+                        this.members.get(member).remove(region);
+                        if (this.members.get(member).size() == 0) this.members.remove(member);
+                    }
+            );
 
-        region.getOwners().forEach(owner ->
-                {
-                    this.owners.get(owner).remove(region);
-                    if (this.owners.get(owner).size() == 0) this.owners.remove(owner);
-                }
-        );
+            region.getOwners().forEach(owner ->
+                    {
+                        this.owners.get(owner).remove(region);
+                        if (this.owners.get(owner).size() == 0) this.owners.remove(owner);
+                    }
+            );
 
-        this.owners.get(region.getCreator()).remove(region);
-        if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
+            this.owners.get(region.getCreator()).remove(region);
+            if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
 
-        region.clearUsers();
+            region.clearUsers();
 
-        this.owners.computeIfAbsent(newOwner, (s) -> new ArrayList<>()).add(region);
-        region.setCreator(newOwner);
-        region.getFlagList().getSellFlag().state = false;
-        region.getFlagList().getSellFlag().price = -1;
+            this.owners.computeIfAbsent(newOwner, (s) -> new ArrayList<>()).add(region);
+            region.setCreator(newOwner);
+            region.getFlagList().getSellFlag().state = false;
+            region.getFlagList().getSellFlag().price = -1;
+        }
     }
 
     public void removeRegion(Region region) {
-        region.getMembers().forEach(member ->
-                {
-                    this.members.get(member).remove(region);
-                    if (this.members.get(member).size() == 0) this.members.remove(member);
-                }
-        );
+        synchronized (region.lock) {
+            region.getMembers().forEach(member ->
+                    {
+                        this.members.get(member).remove(region);
+                        if (this.members.get(member).size() == 0) this.members.remove(member);
+                    }
+            );
 
-        region.getOwners().forEach(owner ->
-                {
-                    this.owners.get(owner).remove(region);
-                    if (this.owners.get(owner).size() == 0) this.owners.remove(owner);
-                }
-        );
+            region.getOwners().forEach(owner ->
+                    {
+                        this.owners.get(owner).remove(region);
+                        if (this.owners.get(owner).size() == 0) this.owners.remove(owner);
+                    }
+            );
 
-        this.owners.get(region.getCreator()).remove(region);
-        if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
+            this.owners.get(region.getCreator()).remove(region);
+            if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
 
-        region.getChunks().forEach(chunk -> chunk.removeRegion(region));
+            region.getChunks().forEach(chunk -> chunk.removeRegion(region));
 
-        this.regions.remove(region.getName());
-        this.provider.removeRegion(region);
+            this.regions.remove(region.getName());
+            this.provider.removeRegion(region);
 
-        if (region.getHealerBlockEntity() != null) region.getHealerBlockEntity().close();
+            if (region.getHealerBlockEntity() != null) region.getHealerBlockEntity().close();
+        }
     }
 
     public boolean checkOverlap(Vector3f pos1, Vector3f pos2, Level level, Player player) {
-        double minX = Math.min(pos1.x, pos2.x);
-        double minY = Math.min(pos1.y, pos2.y);
-        double minZ = Math.min(pos1.z, pos2.z);
-
-        double maxX = Math.max(pos1.x, pos2.x);
-        double maxY = Math.max(pos1.y, pos2.y);
-        double maxZ = Math.max(pos1.z, pos2.z);
-
-        SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+        SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(pos1.asVector3(), pos2.asVector3());
 
         for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), false)) {
             for (Region region : chunk.getRegions()) {
@@ -206,33 +218,58 @@ public final class RegionManager {
     }
 
     public void addMember(Region region, String target) {
-        this.members.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
-        region.addMember(target);
+        synchronized (region.lock) {
+            this.members.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
+            region.addMember(target);
+        }
     }
 
     public void addOwner(Region region, String target) {
-        this.owners.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
-        region.addOwner(target);
+        synchronized (region.lock) {
+            this.owners.computeIfAbsent(target, (usr) -> new ArrayList<>()).add(region);
+            region.addOwner(target);
+        }
     }
 
     public void removeOwner(Region region, String target) {
-        this.owners.get(target).remove(region);
-        if (this.owners.get(target).size() == 0) this.owners.remove(target);
-        region.removeOwner(target);
+        synchronized (region.lock) {
+            this.owners.get(target).remove(region);
+            if (this.owners.get(target).size() == 0) this.owners.remove(target);
+            region.removeOwner(target);
+        }
     }
 
     public void removeMember(Region region, String target) {
-        this.members.get(target).remove(region);
-        if (this.members.get(target).size() == 0) this.members.remove(target);
-        region.removeMember(target);
+        synchronized (region.lock) {
+            this.members.get(target).remove(region);
+            if (this.members.get(target).size() == 0) this.members.remove(target);
+            region.removeMember(target);
+        }
     }
 
     public Region getRegion(String name) {
         return this.regions.get(name);
     }
 
+    public synchronized void save(boolean auto) {
+        int amount = 0;
+        for (Region region : this.regions.values()) {
+            synchronized (region.lock) {
+                if (!region.needUpdate) continue;
+                this.provider.saveRegion(region);
+                region.needUpdate = false;
+                ++amount;
+            }
+        }
+        if (auto) {
+            this.logger.info(this.messenger.getMessage(TextFormat.GREEN + "regions-auto-save", "@amount", String.valueOf(amount)));
+        } else {
+            this.logger.info(this.messenger.getMessage(TextFormat.GREEN + "disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
+        }
+    }
+
     public void save() {
-        this.provider.saveRegionList(new ArrayList<>(this.regions.values()));
+        this.save(false);
     }
 
     public List<Region> getPlayersRegionList(Player player, RegionGroup group) {

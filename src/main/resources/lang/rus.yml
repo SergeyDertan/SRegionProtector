@@ -17,7 +17,10 @@ disabling.start: "Отключение SRegionProtector V_{@ver} от Sergey Der
 disabling.regions: "Сохранение регионов..."
 disabling.chunks: "Сохранение чанков..."
 disabling.chunks-saved: "Сохранено {@amount} чанков."
+disabling.regions-saved: "Сохранено {@amount} регионов"
 disabling.successful: "SRegionProtector отключен."
+
+regions-auto-save: "{@amount} регионов автоматически сохранено"
 
 loading.chunks.success: "Загружено {@count} чанков."
 loading.regions.success: "Загружено {@count} регионов."

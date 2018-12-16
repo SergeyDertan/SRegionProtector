@@ -10,13 +10,14 @@ import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
-import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class ChunkManager {
 
@@ -32,27 +33,6 @@ public final class ChunkManager {
         this.regionManager = regionManager;
         this.messenger = Messenger.getInstance();
     }
-
-    /*public long bench() { //TODO remove
-        final List<Long> results = new ArrayList<>();
-        final int id = Server.getInstance().getLevelByName("world").getId();
-        for (int i = 0; i < 1000; i++) {
-            long start = System.nanoTime();
-            for (int q = 0; q < 100000; q++) {
-                getChunk(q, q, id, true,false);
-            }
-            results.add(System.nanoTime() - start);
-        }
-        Config q = new Config(Server.getInstance().getDataPath() + "res1.yml", Config.YAML);
-        q.set("res", results);
-        q.save();
-        long w = 0L;
-        for (long ww : results) {
-            w += ww;
-        }
-        w = w / results.size();
-        return w;
-    }*/
 
     public void init() {
         this.chunks = new Int2ObjectArrayMap<>();
@@ -76,7 +56,7 @@ public final class ChunkManager {
                 if (region == null) continue;
                 chunk.addRegion(region);
             }
-            /* TODO if (chunk.getRegions().size() == 0) continue;*/
+            if (chunk.getRegions().size() == 0) continue;
             chunk.needUpdate = false;
             String level = (String) chunkData.get("level");
             Level lvl = Server.getInstance().getLevelByName(level);
@@ -105,11 +85,13 @@ public final class ChunkManager {
             ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
             while (chunks.hasNext()) {
                 Chunk chunk = chunks.next().getValue();
-                ++amount;
-                if (!chunk.needUpdate) continue;
-                chunk.needUpdate = false;
-                this.provider.saveChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
-                ++saved;
+                synchronized (chunk.lock) {
+                    ++amount;
+                    if (!chunk.needUpdate) continue;
+                    chunk.needUpdate = false;
+                    this.provider.saveChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
+                    ++saved;
+                }
             }
         }
         if (auto) {
@@ -119,7 +101,7 @@ public final class ChunkManager {
         }
     }
 
-    public synchronized void save() {
+    public void save() {
         this.save(false);
     }
 
@@ -129,10 +111,10 @@ public final class ChunkManager {
             ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().iterator();
             while (chunks.hasNext()) {
                 Chunk chunk = chunks.next().getValue();
-                if (chunk.getRegions().size() != 0) continue;
-                chunks.remove();
-                this.provider.removeChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
-                ++amount;
+                    if (chunk.getRegions().size() != 0) continue;
+                    chunks.remove();
+                    this.provider.removeChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
+                    ++amount;
             }
         }
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", String.valueOf(amount)));

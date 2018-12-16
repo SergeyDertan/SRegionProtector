@@ -17,7 +17,10 @@ disabling.start: "Disabling SRegionProtector V_{@ver} by Sergey Dertan..."
 disabling.regions: "Saving regions..."
 disabling.chunks: "Saving chunks..."
 disabling.chunks-saved: "Saved {@amount} chunks."
+disabling.regions-saved: "Saved {@amount} regions"
 disabling.successful: "SRegionProtector disabled."
+
+regions-auto-save: "{@amount} of regions automatically saved"
 
 loading.chunks.success: "Loaded {@count} chunks."
 loading.regions.success: "Loaded {@count} regions."

@@ -16,13 +16,13 @@ public abstract class Provider {
         this.logger = logger;
     }
 
-    public void saveChunkList(Map<String, Map<Long, Chunk>> chunks) {
+    public synchronized void saveChunkList(Map<String, Map<Long, Chunk>> chunks) {
         chunks.forEach((level, levelChunks) -> levelChunks.values().forEach(chunk -> this.saveChunk(chunk, level)));
     }
 
     public abstract void saveChunk(Chunk chunk, String level);
 
-    public final void saveRegionList(List<Region> regions) {
+    public final synchronized void saveRegionList(List<Region> regions) {
         regions.forEach(this::saveRegion);
     }
 

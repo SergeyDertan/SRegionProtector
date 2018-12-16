@@ -5,7 +5,6 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
-import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
@@ -18,6 +17,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static Sergey_Dertan.SRegionProtector.Region.RegionManager.*;
+
 public final class Region extends SimpleAxisAlignedBB {
 
     private final String name;
@@ -26,6 +27,8 @@ public final class Region extends SimpleAxisAlignedBB {
     private List<String> owners, members;
     private FlagList flags;
     private Set<Chunk> chunks;
+    final Object lock = new Object();
+    boolean needUpdate = false;
 
     public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, List<String> owners, List<String> members, FlagList flags) {
         super(minX, minY, minZ, maxX, maxY, maxZ);
@@ -46,6 +49,7 @@ public final class Region extends SimpleAxisAlignedBB {
         this.creator = "";
         this.owners.clear();
         this.members.clear();
+        this.needUpdate = true;
     }
 
     public Level getLevel() {
@@ -61,7 +65,10 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     public void setCreator(String creator) {
-        this.creator = creator;
+        synchronized (this.lock) {
+            this.creator = creator;
+            this.needUpdate = true;
+        }
     }
 
     public FlagList getFlagList() {
@@ -69,15 +76,18 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     public void setFlags(FlagList flags) {
-        this.flags = flags;
+        synchronized (this.lock) {
+            this.flags = flags;
+            this.needUpdate = true;
+        }
     }
 
     public List<String> getMembers() {
-        return this.members;
+        return new ArrayList<>(this.members);
     }
 
     public List<String> getOwners() {
-        return this.owners;
+        return new ArrayList<>(this.owners);
     }
 
     public boolean isOwner(String player, boolean creator) {
@@ -97,11 +107,17 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     void removeOwner(String player) {
-        this.owners.remove(player);
+        synchronized (this.lock) {
+            this.owners.remove(player);
+            this.needUpdate = true;
+        }
     }
 
     void removeMember(String player) {
-        this.members.remove(player);
+        synchronized (this.lock) {
+            this.members.remove(player);
+            this.needUpdate = true;
+        }
     }
 
     Set<Chunk> getChunks() {
@@ -115,23 +131,23 @@ public final class Region extends SimpleAxisAlignedBB {
     public ConfigSection toMap() throws RuntimeException {
         ConfigSection arr = new ConfigSection();
 
-        arr.put("name", this.name);
-        arr.put("creator", this.creator);
+        arr.put(NAME_TAG, this.name);
+        arr.put(CREATOR_TAG, this.creator);
 
-        arr.put("level", this.level.getName());
-        arr.put("min_x", this.getMinX());
-        arr.put("min_y", this.getMinY());
-        arr.put("min_z", this.getMinZ());
+        arr.put(LEVEL_TAG, this.level.getName());
+        arr.put(MIN_X_TAG, this.getMinX());
+        arr.put(MIN_Y_TAG, this.getMinY());
+        arr.put(MIN_Z_TAG, this.getMinZ());
 
-        arr.put("max_x", this.getMaxX());
-        arr.put("max_y", this.getMaxY());
-        arr.put("max_z", this.getMaxZ());
+        arr.put(MAX_X_TAG, this.getMaxX());
+        arr.put(MAX_Y_TAG, this.getMaxY());
+        arr.put(MAX_Z_TAG, this.getMaxZ());
 
         String owners = Utils.serializeStringArray(this.owners.toArray(new String[]{}));
         String members = Utils.serializeStringArray(this.members.toArray(new String[]{}));
 
-        arr.put("owners", owners);
-        arr.put("members", members);
+        arr.put(OWNERS_TAG, owners);
+        arr.put(MEMBERS_TAG, members);
 
         return arr;
     }
@@ -148,11 +164,17 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     void addMember(String target) {
-        this.members.add(target);
+        synchronized (this.lock) {
+            this.members.add(target);
+            this.needUpdate = true;
+        }
     }
 
     void addOwner(String target) {
-        this.owners.add(target);
+        synchronized (this.lock) {
+            this.owners.add(target);
+            this.needUpdate = true;
+        }
     }
 
     public AxisAlignedBB getBoundingBox() {

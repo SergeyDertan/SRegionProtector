@@ -5,9 +5,7 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public abstract class Utils {
 
@@ -37,8 +35,7 @@ public abstract class Utils {
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
         File file = new File(targetFolder + fileName);
-        if (!file.exists())
-            cn.nukkit.utils.Utils.writeFile(file, clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName));
+        if (!file.exists()) cn.nukkit.utils.Utils.writeFile(file, clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName));
         if (!fixMissingContents) return;
         Config var3 = new Config(file.getAbsolutePath(), Config.YAML);
         DumperOptions dumperOptions = new DumperOptions();
@@ -61,16 +58,11 @@ public abstract class Utils {
         return clazz.getClassLoader().getResource(folder + fileName) != null;
     }
 
-/*
     public static <T extends Cloneable> List<T> deepClone(List<T> arr) { //TODO rewrite
         List<T> copy = new ArrayList<>();
         for (T elem : arr) {
-            copy.add(elem.clone());
+            copy.add((T) elem.clone());
         }
         return copy;
     }
-
-    public static <T extends Cloneable> T[] deepClone(T[] arr) {
-        return deepClone(Arrays.asList(arr)).toArray(new Cloneable[]{});
-    }*/
 }
