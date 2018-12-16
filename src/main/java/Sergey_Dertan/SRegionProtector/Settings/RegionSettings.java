@@ -16,10 +16,13 @@ public final class RegionSettings {
 
     public final boolean[] flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
     public final boolean[] defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
+    public final boolean[] needMessage = new boolean[RegionFlags.FLAG_AMOUNT];
+
     public int maxRegionNameLength;
     public int minRegionNameLength;
     public int healFlagHealDelay;
     public int healFlagHealAmount;
+
     private Map<Long, Permission> regionSize;
     private Map<Integer, Permission> regionAmount;
 
@@ -29,10 +32,18 @@ public final class RegionSettings {
         this.loadFlagsStatuses(cnf);
         this.loadDefaultFlags(rgCnf);
         this.loadHealFlagSettings(rgCnf);
+        this.loadMessages(rgCnf);
         RegionFlags.init(this.defaultFlags);
 
         this.maxRegionNameLength = (int) rgCnf.get("max-region-name-length");
         this.minRegionNameLength = (int) rgCnf.get("min-region-name-length");
+    }
+
+    private void loadMessages(Map<String, Object> rgCnf) {
+        for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("need-message")).entrySet()) {
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
+            this.needMessage[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();
+        }
     }
 
     private void loadHealFlagSettings(Map<String, Object> cnf) {

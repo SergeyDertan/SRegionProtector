@@ -16,6 +16,7 @@ loading.error.chunks: "Ошика загрузки чанка x:{@x}, z:{@z}, м
 disabling.start: "Отключение SRegionProtector V_{@ver} от Sergey Dertan..."
 disabling.regions: "Сохранение регионов..."
 disabling.chunks: "Сохранение чанков..."
+disabling.chunks-saved: "Сохранено {@amount} чанков."
 disabling.successful: "SRegionProtector отключен."
 
 loading.chunks.success: "Загружено {@count} чанков."
@@ -125,3 +126,9 @@ command.buy.region-price: Регион {@region} стоит {@price} денег
 command.buy.isnt-selling: Регион {@region} не продается
 command.buy.repeat-price: Повторите цену дважды
 command.buy.not-enough-gold: Недостаточно денег
+
+auto-save-start: "Запуск автоматического сохранения..."
+auto-save-success: "Автоматическое сохранение прошло успешо."
+
+chunk-manager.empty-chunks-removed: "Удалено {@amount} пустых чанков."
+chunk-manager.chunks-auto-save: "{@amount} чанков автоматически сохранено."

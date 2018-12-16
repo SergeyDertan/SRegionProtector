@@ -37,6 +37,7 @@ public abstract class RegionFlags {
     public static final int FLAG_AMOUNT = 18;
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
+    public static final boolean[] needMessage = new boolean[FLAG_AMOUNT];
     public static FlagList defaultFlagList;
 
     private RegionFlags() {

@@ -5,41 +5,46 @@ import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import cn.nukkit.Server;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.TextFormat;
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectIterator;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public final class ChunkManager {
 
-    private Map<String, Map<Long, Chunk>> chunks;
+    private Int2ObjectArrayMap<Long2ObjectOpenHashMap<Chunk>> chunks;
     private RegionManager regionManager;
     private Provider provider;
     private PluginLogger logger;
+    private Messenger messenger;
 
     public ChunkManager(Provider provider, PluginLogger logger, RegionManager regionManager) {
         this.provider = provider;
         this.logger = logger;
         this.regionManager = regionManager;
+        this.messenger = Messenger.getInstance();
     }
 
     public void init() {
-        this.chunks = new HashMap<>();
+        this.chunks = new Int2ObjectArrayMap<>();
         int chunkAmount = 0;
         for (Map<String, Object> chunkData : this.provider.loadChunkList()) {
-            long x = new Integer((int) chunkData.get("x")).longValue();
-            long z = new Integer((int) chunkData.get("z")).longValue();
+            long x = ((Integer) chunkData.get("x")).longValue();
+            long z = ((Integer) chunkData.get("z")).longValue();
             String[] regions;
             try {
                 regions = Utils.deserializeStringArray((String) chunkData.get("regions"));
             } catch (RuntimeException e) {
-                this.logger.alert(TextFormat.RED + Messenger.getInstance().getMessage(
+                this.logger.alert(TextFormat.RED + this.messenger.getMessage(
                         "loading.error.chunks",
                         new String[]{"@x", "@z", "@level"},
                         new String[]{String.valueOf(x), String.valueOf(z), (String) chunkData.get("level")}));
@@ -51,12 +56,16 @@ public final class ChunkManager {
                 if (region == null) continue;
                 chunk.addRegion(region);
             }
+            if (chunk.getRegions().size() == 0) continue;
+            chunk.needUpdate = false;
             String level = (String) chunkData.get("level");
-            if (!this.chunks.containsKey(level)) this.chunks.put(level, new Long2ObjectOpenHashMap<>());
-            this.chunks.get(level).put(chunk.getHash(), chunk);
+            Level lvl = Server.getInstance().getLevelByName(level);
+            if (level == null) continue;
+            if (!this.chunks.containsKey(lvl.getId())) this.chunks.put(lvl.getId(), new Long2ObjectOpenHashMap<>());
+            this.chunks.get(lvl.getId()).put(chunk.getHash(), chunk);
             ++chunkAmount;
         }
-        this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.chunks.success", "@count", String.valueOf(chunkAmount)));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", String.valueOf(chunkAmount)));
     }
 
     public long chunkHash(long x, long z) {
@@ -67,17 +76,49 @@ public final class ChunkManager {
         return this.chunkHash((long) x, (long) z);
     }
 
-    public void save() {
-        for (Map.Entry<String, Map<Long, Chunk>> level : this.chunks.entrySet()) {
-            for (Chunk chunk : level.getValue().values()) {
-                if (chunk.getRegions().size() != 0) continue;
-                this.provider.removeChunk(chunk, level.getKey());
+    public synchronized void save(boolean auto) { //TODO
+        this.removeEmptyChunks();
+        int saved = 0;
+        int amount = 0;
+
+        for (Int2ObjectArrayMap.Entry<Long2ObjectOpenHashMap<Chunk>> level : this.chunks.int2ObjectEntrySet()) {
+            ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
+            while (chunks.hasNext()) {
+                Chunk chunk = chunks.next().getValue();
+                ++amount;
+                if (!chunk.needUpdate) continue;
+                chunk.needUpdate = false;
+                this.provider.saveChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
+                ++saved;
             }
         }
-        this.provider.saveChunkList(this.chunks);
+        if (auto) {
+            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.chunks-auto-save", "@amount", String.valueOf(saved)));
+        } else {
+            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.chunks-saved", "@amount", String.valueOf(amount)));
+        }
     }
 
-    public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, String level, boolean create) {
+    public synchronized void save() {
+        this.save(false);
+    }
+
+    public synchronized void removeEmptyChunks() { //TODO remove empty levels
+        int amount = 0;
+        for (Int2ObjectArrayMap.Entry<Long2ObjectOpenHashMap<Chunk>> level : this.chunks.int2ObjectEntrySet()) {
+            ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().iterator();
+            while (chunks.hasNext()) {
+                Chunk chunk = chunks.next().getValue();
+                if (chunk.getRegions().size() != 0) continue;
+                chunks.remove();
+                this.provider.removeChunk(chunk, Server.getInstance().getLevel(level.getIntKey()).getName());
+                ++amount;
+            }
+        }
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", String.valueOf(amount)));
+    }
+
+    public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, int levelId, boolean create) {
         Set<Chunk> chunks = new HashSet<>();
 
         long minX = (long) Math.min(pos1.x, pos2.x); //TODO types
@@ -91,7 +132,7 @@ public final class ChunkManager {
         while (x <= maxX) { //TODO
             long z = minZ;
             while (z <= maxZ) {
-                Chunk chunk = this.getChunk(x, z, level, true, create);
+                Chunk chunk = this.getChunk(x, z, levelId, true, create);
                 if (chunk != null) chunks.add(chunk);
                 if (z == maxZ) break;
                 z += 16L;
@@ -104,12 +145,12 @@ public final class ChunkManager {
         return chunks;
     }
 
-    public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, String level) {
-        return this.getRegionChunks(pos1, pos2, level, false);
+    public Set<Chunk> getRegionChunks(Vector3f pos1, Vector3f pos2, int levelId) {
+        return this.getRegionChunks(pos1, pos2, levelId, false);
     }
 
-    public Region getRegion(Vector3 pos, String level) {
-        Chunk chunk = this.getChunk(((long) pos.x), ((long) pos.z), level, true, false);
+    public Region getRegion(Vector3 pos, int levelId) {
+        Chunk chunk = this.getChunk(((long) pos.x), ((long) pos.z), levelId, true, false);
         if (chunk == null) return null;
         for (Region region : chunk.getRegions()) {
             if (!region.isVectorInside(pos)) continue;
@@ -118,28 +159,29 @@ public final class ChunkManager {
         return null;
     }
 
-    public Chunk getChunk(long x, long z, String level, boolean shiftRight, boolean create) {
+    public Chunk getChunk(long x, long z, int levelId, boolean shiftRight, boolean create) { //TODO improve
         if (shiftRight) {
             x = x >> 4;
             z = z >> 4;
         }
         long hash = this.chunkHash(x, z);
-        Map<Long, Chunk> levelChunks = this.chunks.get(level);
+        Long2ObjectOpenHashMap<Chunk> levelChunks = this.chunks.get(levelId);
         if (levelChunks == null && !create) return null;
-        levelChunks = this.chunks.computeIfAbsent(level, s -> new Long2ObjectOpenHashMap<>());
+        levelChunks = this.chunks.computeIfAbsent(levelId, s -> new Long2ObjectOpenHashMap<>());
         Chunk chunk = levelChunks.get(hash);
         if (chunk != null) return chunk;
         if (!create) return null;
         chunk = new Chunk(x, z, hash);
+        chunk.needUpdate = true;
         levelChunks.put(hash, chunk);
         return chunk;
     }
 
-    public Chunk getChunk(long x, long z, String level, boolean shiftRight) {
-        return this.getChunk(x, z, level, shiftRight, true);
+    public Chunk getChunk(long x, long z, int levelId, boolean shiftRight) {
+        return this.getChunk(x, z, levelId, shiftRight, true);
     }
 
-    public Chunk getChunk(long x, long z, String level) {
-        return this.getChunk(x, z, level, false, true);
+    public Chunk getChunk(long x, long z, int levelId) {
+        return this.getChunk(x, z, levelId, false, true);
     }
 }

@@ -16,6 +16,7 @@ public final class Settings {
     public MySQLSettings mySQLSettings;
     public RegionSettings regionSettings;
     public int selectorSessionLifetime;
+    public int autoSavePeriod;
 
     public void init(SRegionProtectorMain main) {
         try {
@@ -29,6 +30,7 @@ public final class Settings {
             return;
         }
         this.selectorSessionLifetime = (int) this.getConfig().get("session-life-time");
+        this.autoSavePeriod = (int) this.getConfig().get("auto-save-period") * 20;
         this.regionSettings = new RegionSettings(this.getConfig(), new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());
     }
 

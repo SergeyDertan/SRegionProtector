@@ -41,3 +41,5 @@ region-amounts:
   - 1
   - 2
   - 3
+#in seconds
+auto-save-period: 60

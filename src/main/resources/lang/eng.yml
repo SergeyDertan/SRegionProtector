@@ -16,6 +16,7 @@ loading.error.chunks: "Can`t load chunk x:{@x}, z:{@z}, level:{@level}: {@err}"
 disabling.start: "Disabling SRegionProtector V_{@ver} by Sergey Dertan..."
 disabling.regions: "Saving regions..."
 disabling.chunks: "Saving chunks..."
+disabling.chunks-saved: "Saved {@amount} chunks."
 disabling.successful: "SRegionProtector disabled."
 
 loading.chunks.success: "Loaded {@count} chunks."
@@ -125,3 +126,9 @@ command.buy.region-price: Region {@region} costs {@price} money
 command.buy.isnt-selling: Region {@region} doesnt selling
 command.buy.repeat-price: You must repeat price
 command.buy.not-enough-gold: Not enough money
+
+auto-save-start: "Starting auto save..."
+auto-save-success: "Auto save ended."
+
+chunk-manager.empty-chunks-removed: "Removed {@amount} empty chunks."
+chunk-manager.chunks-auto-save: "{@amount} chunks save automatically."

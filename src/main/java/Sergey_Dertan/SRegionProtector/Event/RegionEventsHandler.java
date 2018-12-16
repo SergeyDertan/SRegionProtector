@@ -32,10 +32,12 @@ public final class RegionEventsHandler implements Listener {
 
     private ChunkManager chunkManager;
     private boolean[] flagsStatus;
+    private boolean[] needMessage;
 
-    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus) {
+    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
+        this.needMessage = needMessage;
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -119,15 +121,15 @@ public final class RegionEventsHandler implements Listener {
 
     private void handleEvent(int[] flags, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm) {
         if (checkPerm && (player != null && player.hasPermission("sregionprotector.admin"))) return;
-        Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
+        Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getId(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
-            if ((mustBeMember && (player != null && region.isLivesIn(player.getName().toLowerCase()))) || !region.isVectorInside(pos))
+            if ((mustBeMember && (player != null && region.isLivesIn(player.getName()))) || !region.isVectorInside(pos))
                 continue;
             for (int flag : flags) {
                 if (!this.flagsStatus[flag] || !region.getFlagList().getFlagState(flag)) continue;
                 ev.setCancelled(true);
-                if (player != null) Messenger.getInstance().sendMessage(player, "region.protected");
+                if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");
                 return;
             }
         }

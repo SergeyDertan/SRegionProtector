@@ -42,7 +42,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
                 return false;
             }
 
-            Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getName(), true, false);
+            Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getId(), true, false);
             if (chunk == null) {
                 Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", " {@region}", "");
                 return false;
@@ -50,7 +50,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
             for (Region region : chunk.getRegions()) {
                 if (!region.intersectsWith(((Player) sender).boundingBox)) continue;
                 String name = region.getName();
-                String level = region.getLevel();
+                String level = region.getLevel().getName();
                 String owner = region.getCreator();
                 String owners = String.join(", ", region.getOwners());
                 String members = String.join(", ", region.getMembers());
@@ -79,7 +79,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
             return false;
         }
         String name = region.getName();
-        String level = region.getLevel();
+        String level = region.getLevel().getName();
         String owner = region.getCreator();
         String owners = String.join(", ", region.getOwners());
         String members = String.join(", ", region.getMembers());

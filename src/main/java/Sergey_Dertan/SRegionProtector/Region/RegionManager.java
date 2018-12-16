@@ -10,6 +10,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.level.Level;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.math.Vector3f;
@@ -32,8 +33,17 @@ public final class RegionManager {
         this.logger = logger;
     }
 
-    public void setChunkManager(ChunkManager chunkManager) {
+    public void setChunkManager(ChunkManager chunkManager) { //TODO fix?
         this.chunkManager = chunkManager;
+        this.addChunksToRegions();
+    }
+
+    private void addChunksToRegions() {
+        for (Region region : this.regions.values()) {
+            Vector3 min = new Vector3(region.getMaxX(), region.getMaxY(), region.getMaxZ());
+            Vector3 max = new Vector3(region.getMinX(), region.getMinY(), region.getMinZ());
+            this.chunkManager.getRegionChunks(min.asVector3f(), max.asVector3f(), region.getLevel().getId()).forEach(region::addChunk);
+        }
     }
 
     public Map<String, Region> getRegions() {
@@ -75,7 +85,14 @@ public final class RegionManager {
 
             FlagList flagList = RegionFlags.loadFlagList(this.provider.loadFlags(name));
 
-            Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>(Arrays.asList(owners)), new ArrayList<>(Arrays.asList(members)), flagList);
+            Level lvl = Server.getInstance().getLevelByName(level);
+
+            if (lvl == null) {
+                this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, "level not found"})); //TODO msg
+                continue;
+            }
+
+            Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>(Arrays.asList(owners)), new ArrayList<>(Arrays.asList(members)), flagList);
 
             this.regions.put(name, region);
 
@@ -89,7 +106,7 @@ public final class RegionManager {
         this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
     }
 
-    public Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, String level) {
+    public Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, Level level) {
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
@@ -100,14 +117,17 @@ public final class RegionManager {
 
         Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ);
 
-        this.chunkManager.getRegionChunks(pos1, pos2, level, true).forEach(chunk -> chunk.addRegion(region));
+        this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), true).forEach(chunk -> {
+            chunk.addRegion(region);
+            region.addChunk(chunk);
+        });
         this.owners.computeIfAbsent(creator, (s) -> new ArrayList<>()).add(region);
         this.regions.put(name, region);
 
         Vector3 pos = region.getHealerVector();
 
         new BlockEntityHealer(
-                Server.getInstance().getLevelByName(level).getChunk((int) pos.x >> 4, (int) pos.z >> 4), //TODO true
+                level.getChunk((int) pos.x >> 4, (int) pos.z >> 4, true), //TODO true
                 BlockEntityHealer.getDefaultNBT(region.getHealerVector(), name)
         );
         return region;
@@ -162,10 +182,10 @@ public final class RegionManager {
         this.regions.remove(region.getName());
         this.provider.removeRegion(region);
 
-        region.getHealerBlockEntity().close();
+        if (region.getHealerBlockEntity() != null) region.getHealerBlockEntity().close();
     }
 
-    public boolean checkOverlap(Vector3f pos1, Vector3f pos2, String level, Player player) {
+    public boolean checkOverlap(Vector3f pos1, Vector3f pos2, Level level, Player player) {
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
@@ -176,9 +196,9 @@ public final class RegionManager {
 
         SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 
-        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level, false)) {
+        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), false)) {
             for (Region region : chunk.getRegions()) {
-                if (!region.intersectsWith(bb) || region.isCreator(player.getName().toLowerCase())) continue;
+                if (!region.intersectsWith(bb) || region.isCreator(player.getName())) continue;
                 return true;
             }
         }

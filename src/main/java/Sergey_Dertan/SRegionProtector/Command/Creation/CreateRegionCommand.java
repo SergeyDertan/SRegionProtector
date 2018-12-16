@@ -78,12 +78,12 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        if (this.regionManager.checkOverlap(pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName(), (Player) sender)) {
+        if (this.regionManager.checkOverlap(pos1.asVector3f(), pos2.asVector3f(), pos1.level, (Player) sender)) {
             Messenger.getInstance().sendMessage(sender, "command.create.regions-overlap");
             return false;
         }
 
-        this.regionManager.createRegion(name, sender.getName().toLowerCase(), pos1.asVector3f(), pos2.asVector3f(), pos1.level.getName());
+        this.regionManager.createRegion(name, sender.getName().toLowerCase(), pos1.asVector3f(), pos2.asVector3f(), pos1.level);
 
         Messenger.getInstance().sendMessage(sender, "command.create.region-created", "@region", name);
         return true;

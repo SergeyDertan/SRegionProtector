@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
@@ -19,14 +20,14 @@ import java.util.Set;
 
 public final class Region extends SimpleAxisAlignedBB {
 
-    private String name;
-    private String level;
+    private final String name;
+    private final Level level;
     private String creator;
     private List<String> owners, members;
     private FlagList flags;
     private Set<Chunk> chunks;
 
-    public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, List<String> owners, List<String> members, FlagList flags) {
+    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, List<String> owners, List<String> members, FlagList flags) {
         super(minX, minY, minZ, maxX, maxY, maxZ);
         this.name = name;
         this.creator = creator;
@@ -37,7 +38,7 @@ public final class Region extends SimpleAxisAlignedBB {
         this.chunks = new HashSet<>();
     }
 
-    public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new ArrayList<>(), new ArrayList<>(), RegionFlags.getDefaultFlagList());
     }
 
@@ -47,7 +48,7 @@ public final class Region extends SimpleAxisAlignedBB {
         this.members.clear();
     }
 
-    public String getLevel() {
+    public Level getLevel() {
         return this.level;
     }
 
@@ -88,7 +89,7 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     public boolean isCreator(String player) {
-        return this.creator.equals(player);
+        return this.creator.equalsIgnoreCase(player);
     }
 
     public boolean isMember(String player) {
@@ -103,8 +104,12 @@ public final class Region extends SimpleAxisAlignedBB {
         this.members.remove(player);
     }
 
-    public Set<Chunk> getChunks() {
+    Set<Chunk> getChunks() {
         return this.chunks;
+    }
+
+    void addChunk(Chunk chunk) {
+        this.chunks.add(chunk);
     }
 
     public ConfigSection toMap() throws RuntimeException {
@@ -155,14 +160,11 @@ public final class Region extends SimpleAxisAlignedBB {
     }
 
     public boolean isLivesIn(String target) {
-        return this.creator.equals(target) || this.owners.contains(target) || this.members.contains(target);
+        return this.creator.equalsIgnoreCase(target) || this.owners.contains(target) || this.members.contains(target);
     }
 
     public Position getHealerPosition() {
-        double x = getMinX() + (getMaxX() - getMinX()) / 2;
-        double y = getMinY() + (getMaxY() - getMinY()) / 2;
-        double z = getMinZ() + (getMaxZ() - getMinZ()) / 2;
-        return new Position(x, y, z, Server.getInstance().getLevelByName(this.level));
+        return Position.fromObject(this.getHealerVector(), this.level);
     }
 
     public Vector3 getHealerVector() {

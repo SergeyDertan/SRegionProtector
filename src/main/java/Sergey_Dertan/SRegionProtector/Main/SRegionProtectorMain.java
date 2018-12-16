@@ -19,6 +19,7 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Settings.Settings;
+import Sergey_Dertan.SRegionProtector.Task.AutoSaveTask;
 import Sergey_Dertan.SRegionProtector.Task.ClearSessionsTask;
 import cn.nukkit.Server;
 import cn.nukkit.blockentity.BlockEntity;
@@ -82,10 +83,16 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerBlockEntities(); //TODO msg?
 
+        this.initAutoSave();
+
         this.initSessionsClearTask();
         instance = this;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful"));
+    }
+
+    private void initAutoSave() {
+        this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, new AutoSaveTask(this.chunkManager, this.regionManager, this.getLogger()), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
     }
 
     private void registerBlockEntities() {
@@ -154,7 +161,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initEventsHandlers() {
-        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus), this);
+        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
     }
 
@@ -317,7 +324,7 @@ public final class SRegionProtectorMain extends PluginBase {
     @Override
     public void onDisable() {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
-        if (this.forceShutdown) return;
+        if (this.forceShutdown) return; //TODO message
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions"));
         this.regionManager.save();

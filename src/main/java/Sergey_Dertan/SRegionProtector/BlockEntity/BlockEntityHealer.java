@@ -18,8 +18,10 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     public static final String TAG_Y = "y";
     public static final String TAG_Z = "z";
     public static final String BLOCK_ENTITY_HEALER = "RegionHealer";
+
     public static int HEAL_DELAY;
     public static int HEAL_AMOUNT;
+
     public static boolean FLAG_ENABLED;
     private RegionManager regionManager;
     private AxisAlignedBB bb;
@@ -31,6 +33,10 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
         this.region = nbt.getString(TAG_REGION);
         this.regionManager = SRegionProtectorMain.getInstance().getRegionManager();
         this.delay = HEAL_DELAY;
+        if (!this.isBlockEntityValid()) {
+            this.closed = true;
+            return;
+        }
         this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
     }
 

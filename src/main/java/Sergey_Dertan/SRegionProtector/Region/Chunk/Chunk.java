@@ -7,6 +7,7 @@ import java.util.*;
 
 public final class Chunk {
 
+    boolean needUpdate;
     private long x;
     private long z;
     private long hash;
@@ -17,6 +18,7 @@ public final class Chunk {
         this.z = z;
         this.hash = hash;
         this.regions = regions;
+        this.needUpdate = false;
     }
 
     public Chunk(long x, long z, long hash) {
@@ -43,12 +45,14 @@ public final class Chunk {
         return this.z;
     }
 
-    public void addRegion(Region region) {
+    public synchronized void addRegion(Region region) {
         this.regions.add(region);
+        this.needUpdate = true;
     }
 
-    public void removeRegion(Region region) {
+    public synchronized void removeRegion(Region region) {
         this.regions.remove(region);
+        this.needUpdate = true;
     }
 
     @Override
