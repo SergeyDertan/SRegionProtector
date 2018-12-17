@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
@@ -42,7 +41,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
             }
             Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getId(), true, false);
             if (chunk == null) {
-                Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
+                this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
                 return false;
             }
             for (Region region : chunk.getRegions()) {

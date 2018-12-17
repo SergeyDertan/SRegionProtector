@@ -97,7 +97,7 @@ public final class RegionManager {
                 owners = Utils.deserializeStringArray((String) regionData.get(OWNERS_TAG));
                 members = Utils.deserializeStringArray((String) regionData.get(MEMBERS_TAG));
             } catch (RuntimeException e) {
-                this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
+                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
                 continue;
             }
 
@@ -106,7 +106,7 @@ public final class RegionManager {
             Level lvl = Server.getInstance().getLevelByName(level);
 
             if (lvl == null) {
-                this.logger.warning(TextFormat.YELLOW + Messenger.getInstance().getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, "level not found"})); //TODO msg
+                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, "level not found"})); //TODO msg
                 continue;
             }
 
@@ -121,7 +121,7 @@ public final class RegionManager {
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new HashSet<>()).add(region);
         }
 
-        this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
     }
 
     public synchronized Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, Level level) {
