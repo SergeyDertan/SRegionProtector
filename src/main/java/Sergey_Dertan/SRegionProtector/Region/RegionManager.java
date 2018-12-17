@@ -5,7 +5,7 @@ import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
-import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
@@ -101,7 +101,7 @@ public final class RegionManager {
                 continue;
             }
 
-            FlagList flagList = RegionFlags.loadFlagList(this.provider.loadFlags(name));
+            RegionFlag[] flagList = RegionFlags.loadFlagList(this.provider.loadFlags(name));
 
             Level lvl = Server.getInstance().getLevelByName(level);
 
@@ -124,7 +124,7 @@ public final class RegionManager {
         this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
     }
 
-    public Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, Level level) {
+    public synchronized Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, Level level) {
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
@@ -175,12 +175,11 @@ public final class RegionManager {
 
             this.owners.computeIfAbsent(newOwner, (s) -> new HashSet<>()).add(region);
             region.setCreator(newOwner);
-            region.getFlagList().getSellFlag().state = false;
-            region.getFlagList().getSellFlag().price = -1;
+            region.setSellFlagState(-1, false);
         }
     }
 
-    public void removeRegion(Region region) {
+    public synchronized void removeRegion(Region region) {
         synchronized (region.lock) {
             region.getMembers().forEach(member ->
                     {
@@ -265,9 +264,9 @@ public final class RegionManager {
             }
         }
         if (auto) {
-            this.logger.info(this.messenger.getMessage(TextFormat.GREEN + "regions-auto-save", "@amount", String.valueOf(amount)));
+            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", String.valueOf(amount)));
         } else {
-            this.logger.info(this.messenger.getMessage(TextFormat.GREEN + "disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
+            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
         }
     }
 

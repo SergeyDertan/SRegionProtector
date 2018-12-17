@@ -46,6 +46,8 @@ permissions:
             default: true
           sregionprotector.command.size:
             default: true
+          sregionprotector.command.region:
+            default: true
       sregionprotector.region.*:
         default: op
         children:

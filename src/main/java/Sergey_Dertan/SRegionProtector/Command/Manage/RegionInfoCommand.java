@@ -11,9 +11,8 @@ import Sergey_Dertan.SRegionProtector.Settings.RegionSettings;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.HashSet;
+import java.util.Set;
 
 public final class RegionInfoCommand extends SRegionProtectorCommand {
 
@@ -23,8 +22,8 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
 
     private RegionSettings regionSettings;
 
-    public RegionInfoCommand(String name, Map<String, String> messages, RegionManager regionManager, ChunkManager chunkManager, RegionSettings regionSettings) {
-        super(name, messages);
+    public RegionInfoCommand(String name, RegionManager regionManager, ChunkManager chunkManager, RegionSettings regionSettings) {
+        super(name);
         this.regionManager = regionManager;
         this.chunkManager = chunkManager;
         this.regionSettings = regionSettings;
@@ -33,65 +32,55 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
         if (!this.testPermissionSilent(sender)) {
-            Messenger.getInstance().sendMessage(sender, "command.list.info");
+            this.messenger.sendMessage(sender, "command.list.info");
             return false;
         }
         if (args.length < 1) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(this.usageMessage);
+                this.messenger.sendMessage(sender, "command.list.usage");
                 return false;
             }
-
             Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getId(), true, false);
             if (chunk == null) {
-                Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", " {@region}", "");
+                Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
                 return false;
             }
             for (Region region : chunk.getRegions()) {
                 if (!region.intersectsWith(((Player) sender).boundingBox)) continue;
-                String name = region.getName();
-                String level = region.getLevel().getName();
-                String owner = region.getCreator();
-                String owners = String.join(", ", region.getOwners());
-                String members = String.join(", ", region.getMembers());
-                List<String> flags = new ArrayList<>();
-                for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
-                    if (!this.regionSettings.flagsStatus[i]) continue;
-                    flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagList().getFlagState(i) ? "enabled" : "disabled")); //TODO
-                }
-                Messenger.getInstance().sendMessage(sender, "command.info.info",
-                        new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags"},
-                        new String[]{name, owner, level, owners, members, String.join(", ", flags)}
-                );
+                this.showRegionInfo(sender, region);
                 return false;
             }
-            Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists");
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
             return false;
         }
-        String rgName = args[0].toLowerCase();
-        if (rgName.equals("") || rgName.length() == 0) {
-            Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
+        String rgName = args[0];
+        if (rgName.isEmpty()) {
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
             return false;
         }
         Region region = this.regionManager.getRegion(rgName);
         if (region == null) {
-            Messenger.getInstance().sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
             return false;
         }
+        this.showRegionInfo(sender, region);
+        return true;
+    }
+
+    private void showRegionInfo(CommandSender sender, Region region) {
         String name = region.getName();
         String level = region.getLevel().getName();
         String owner = region.getCreator();
         String owners = String.join(", ", region.getOwners());
         String members = String.join(", ", region.getMembers());
-        List<String> flags = new ArrayList<>();
+        Set<String> flags = new HashSet<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
             if (!this.regionSettings.flagsStatus[i]) continue;
-            flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagList().getFlagState(i) ? "enabled" : "disabled")); //TODO
+            flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? "enabled" : "disabled")); //TODO
         }
-        Messenger.getInstance().sendMessage(sender, "command.info.info",
+        this.messenger.sendMessage(sender, "command.info.info",
                 new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags"},
                 new String[]{name, owner, level, owners, members, String.join(", ", flags)}
         );
-        return true;
     }
 }

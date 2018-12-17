@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
-import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.plugin.PluginLogger;
 
@@ -30,7 +29,7 @@ public abstract class Provider {
 
     public abstract String getName();
 
-    public abstract void saveFlags(FlagList flags, String region);
+    public abstract void saveFlags(Region region);
 
     public abstract Set<Map<String, Object>> loadChunkList();
 

@@ -2,7 +2,6 @@ package Sergey_Dertan.SRegionProtector.Provider;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
-import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.plugin.PluginLogger;
 import cn.nukkit.utils.Config;
@@ -56,7 +55,7 @@ public final class YAMLProvider extends Provider {
     }
 
     @Override
-    public void saveChunkList(Map<String, Map<Long, Chunk>> chunks) {
+    public synchronized void saveChunkList(Map<String, Map<Long, Chunk>> chunks) {
         File dir = new File(SRegionProtectorMain.SRegionProtectorChunksFolder);
         File[] files = dir.listFiles();
         for (File file : files) {
@@ -66,32 +65,38 @@ public final class YAMLProvider extends Provider {
     }
 
     @Override
-    public void saveChunk(Chunk chunk, String level) {
+    public synchronized void saveChunk(Chunk chunk, String level) {
         try {
-            Config file = new Config(SRegionProtectorMain.SRegionProtectorChunksFolder + level + "." + chunk.getHash() + ".yml", Config.YAML);
-            Map<String, Object> data = chunk.toMap();
-            data.put("level", level);
-            file.set("data", data);
-            file.save();
+            synchronized (chunk.lock) {
+                Config file = new Config(SRegionProtectorMain.SRegionProtectorChunksFolder + level + "." + chunk.getHash() + ".yml", Config.YAML);
+                Map<String, Object> data = chunk.toMap();
+                data.put("level", level);
+                file.set("data", data);
+                file.save();
+            }
         } catch (RuntimeException e) {
             this.logger.warning(TextFormat.YELLOW + "Cant save chunk(x: " + chunk.getX() + ", z: " + chunk.getZ() + ", level: " + level + ": " + e.getMessage());
         }
     }
 
     @Override
-    public void saveFlags(FlagList flags, String region) {
-        Config file = new Config(SRegionProtectorMain.SRegionProtectorFlagsFolder + region + ".yml", Config.YAML);
-        file.set("data", flags.toMap());
-        file.save();
+    public synchronized void saveFlags(Region region) {
+        synchronized (region.lock) {
+            Config file = new Config(SRegionProtectorMain.SRegionProtectorFlagsFolder + region.getName() + ".yml", Config.YAML);
+            file.set("data", region.flagsToMap());
+            file.save();
+        }
     }
 
     @Override
-    public void saveRegion(Region region) {
+    public synchronized void saveRegion(Region region) {
         try {
-            Config file = new Config(SRegionProtectorMain.SRegionProtectorRegionsFolder + region.getName() + ".yml", Config.YAML);
-            file.set("data", region.toMap());
-            file.save();
-            this.saveFlags(region.getFlagList(), region.getName());
+            synchronized (region.lock) {
+                Config file = new Config(SRegionProtectorMain.SRegionProtectorRegionsFolder + region.getName() + ".yml", Config.YAML);
+                file.set("data", region.toMap());
+                file.save();
+                this.saveFlags(region);
+            }
         } catch (RuntimeException e) {
             this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.getName() + ": " + e.getMessage());
         }

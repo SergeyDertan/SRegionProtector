@@ -2,7 +2,9 @@ package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
-import Sergey_Dertan.SRegionProtector.Region.Flags.FlagList;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.level.Level;
@@ -12,31 +14,31 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.ConfigSection;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static Sergey_Dertan.SRegionProtector.Region.RegionManager.*;
 
 public final class Region implements AxisAlignedBB {
 
-    final Object lock = new Object();
+    public final Object lock = new Object();
+
     private final double minX;
     private final double minY;
     private final double minZ;
     private final double maxX;
     private final double maxY;
     private final double maxZ;
+
     private final String name;
     private final Level level;
+
     boolean needUpdate = false;
     private String creator;
     private Set<String> owners, members;
-    private FlagList flags;
+    private RegionFlag[] flags;
     private Set<Chunk> chunks;
 
-    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, FlagList flags) {
+    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -66,7 +68,7 @@ public final class Region implements AxisAlignedBB {
         return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
-    public void clearUsers() {
+    void clearUsers() {
         synchronized (this.lock) {
             this.creator = "";
             this.owners.clear();
@@ -94,15 +96,43 @@ public final class Region implements AxisAlignedBB {
         }
     }
 
-    public FlagList getFlagList() {
-        return this.flags;
+    public boolean getFlagState(int id) {
+        return this.flags[id].state;
     }
 
-    public void setFlags(FlagList flags) {
+    public void setFlagState(int id, boolean state) {
         synchronized (this.lock) {
-            this.flags = flags;
+            this.flags[id].state = state;
             this.needUpdate = true;
         }
+    }
+
+    public RegionFlag getFlag(int flag) {
+        return this.flags[flag].clone();
+    }
+
+    public void setTeleportFlag(Position pos, boolean state) {
+        synchronized (this.lock) {
+            ((RegionTeleportFlag) this.flags[RegionFlags.FLAG_SELL]).position = pos;
+            ((RegionTeleportFlag) this.flags[RegionFlags.FLAG_SELL]).state = state;
+            this.needUpdate = true;
+        }
+    }
+
+    public void setSellFlagState(int price, boolean state) {
+        synchronized (this.lock) {
+            ((RegionSellFlag) this.flags[RegionFlags.FLAG_SELL]).state = state;
+            ((RegionSellFlag) this.flags[RegionFlags.FLAG_SELL]).price = price;
+            this.needUpdate = true;
+        }
+    }
+
+    public Position getTeleportFlagPos() {
+        return ((RegionTeleportFlag) this.flags[RegionFlags.FLAG_SELL]).position;
+    }
+
+    public int getSellFlagPrice() {
+        return ((RegionSellFlag) this.flags[RegionFlags.FLAG_SELL]).price;
     }
 
     public Set<String> getMembers() {
@@ -118,7 +148,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     public boolean isOwner(String player) {
-        return this.isOwner(player, true);
+        return this.isOwner(player, false);
     }
 
     public boolean isCreator(String player) {
@@ -130,17 +160,13 @@ public final class Region implements AxisAlignedBB {
     }
 
     void removeOwner(String player) {
-        synchronized (this.lock) {
-            this.owners.remove(player);
-            this.needUpdate = true;
-        }
+        this.owners.remove(player);
+        this.needUpdate = true;
     }
 
     void removeMember(String player) {
-        synchronized (this.lock) {
-            this.members.remove(player);
-            this.needUpdate = true;
-        }
+        this.members.remove(player);
+        this.needUpdate = true;
     }
 
     Set<Chunk> getChunks() {
@@ -175,6 +201,36 @@ public final class Region implements AxisAlignedBB {
         return arr;
     }
 
+    public Map<String, Map<String, Object>> flagsToMap() {
+
+        Map<String, Map<String, Object>> flags = new HashMap<>();
+
+        for (int i = 0; i < this.flags.length; ++i) {
+            String name = RegionFlags.getFlagName(i);
+            if (name.equals("")) continue;
+            Map<String, Object> flagData = new HashMap<>();
+            flagData.put("state", this.flags[i].state);
+            switch (i) {
+                case RegionFlags.FLAG_TELEPORT:
+                    Position teleportPos = ((RegionTeleportFlag) this.flags[i]).position;
+                    if (teleportPos == null) break;
+                    Map<String, Object> pos = new HashMap<>();
+                    pos.put("x", teleportPos.x);
+                    pos.put("y", teleportPos.y);
+                    pos.put("z", teleportPos.z);
+                    pos.put("level", teleportPos.level.getName());
+                    flagData.put("position", pos);
+                    break;
+                case RegionFlags.FLAG_SELL:
+                    flagData.put("price", ((RegionSellFlag) this.flags[i]).price);
+                    break;
+            }
+            flags.put(name, flagData);
+        }
+
+        return flags;
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Region && this.level.equals(((Region) obj).level) &&
@@ -187,17 +243,13 @@ public final class Region implements AxisAlignedBB {
     }
 
     void addMember(String target) {
-        synchronized (this.lock) {
-            this.members.add(target);
-            this.needUpdate = true;
-        }
+        this.members.add(target);
+        this.needUpdate = true;
     }
 
     void addOwner(String target) {
-        synchronized (this.lock) {
-            this.owners.add(target);
-            this.needUpdate = true;
-        }
+        this.owners.add(target);
+        this.needUpdate = true;
     }
 
     public AxisAlignedBB getBoundingBox() {

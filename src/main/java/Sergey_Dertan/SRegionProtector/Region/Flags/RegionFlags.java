@@ -3,6 +3,7 @@ package Sergey_Dertan.SRegionProtector.Region.Flags;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
+import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
@@ -10,6 +11,7 @@ import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.PluginManager;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public abstract class RegionFlags {
@@ -35,10 +37,8 @@ public abstract class RegionFlags {
     public static final int FLAG_HEALTH_REGEN = 17;
 
     public static final int FLAG_AMOUNT = 18;
-    public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
-    public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
-    public static final boolean[] needMessage = new boolean[FLAG_AMOUNT];
-    public static FlagList defaultFlagList;
+    private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
+    private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
 
     private RegionFlags() {
     }
@@ -63,8 +63,6 @@ public abstract class RegionFlags {
         defaults[FLAG_RECEIVE_CHAT] = new RegionFlag(flagsDefault[FLAG_RECEIVE_CHAT]);
         defaults[FLAG_HEALTH_REGEN] = new RegionFlag(flagsDefault[FLAG_HEALTH_REGEN]);
 
-        defaultFlagList = new FlagList(defaults);
-
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
         permissions[FLAG_BUILD] = pluginManager.getPermission("sregionprotector.region.flag.build");
@@ -87,7 +85,7 @@ public abstract class RegionFlags {
         permissions[FLAG_HEALTH_REGEN] = pluginManager.getPermission("sregionprotector.region.flag.health_regen");
     }
 
-    public static FlagList loadFlagList(Map<String, Map<String, Object>> data) {
+    public static RegionFlag[] loadFlagList(Map<String, Map<String, Object>> data) {
         if (data == null) return getDefaultFlagList();
         RegionFlag[] flags = new RegionFlag[FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flagData : data.entrySet()) {
@@ -124,8 +122,8 @@ public abstract class RegionFlags {
         return fixMissingFlags(flags);
     }
 
-    public static FlagList getDefaultFlagList() {
-        return defaultFlagList.clone();
+    public static RegionFlag[] getDefaultFlagList() {
+        return Utils.deepClone(Arrays.asList(defaults)).toArray(new RegionFlag[0]);
     }
 
     public static Permission getFlagPermission(int flag) {
@@ -254,16 +252,12 @@ public abstract class RegionFlags {
         }
     }
 
-    public static FlagList fixMissingFlags(RegionFlag[] flags) {
+    public static RegionFlag[] fixMissingFlags(RegionFlag[] flags) {
         for (int i = 0; i < FLAG_AMOUNT; ++i) {
             if (flags[i] != null) continue;
             flags[i] = defaults[i].clone();
         }
-        return new FlagList(flags);
-    }
-
-    public static FlagList fixMissingFlags(FlagList flagList) {
-        return fixMissingFlags(flagList.getFlags());
+        return flags;
     }
 
     public static boolean hasFlagPermission(Permissible target, int flag) {

@@ -126,7 +126,7 @@ public final class RegionEventsHandler implements Listener {
         for (Region region : chunk.getRegions()) {
             if ((mustBeMember && (player != null && region.isLivesIn(player.getName()))) || !region.isVectorInside(pos)) continue;
             for (int flag : flags) {
-                if (!this.flagsStatus[flag] || !region.getFlagList().getFlagState(flag)) continue;
+                if (!this.flagsStatus[flag] || !region.getFlagState(flag)) continue;
                 ev.setCancelled(true);
                 if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");
                 return;

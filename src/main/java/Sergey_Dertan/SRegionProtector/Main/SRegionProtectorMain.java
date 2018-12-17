@@ -10,6 +10,8 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.*;
+import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
+import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
@@ -26,7 +28,6 @@ import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
 
 import java.io.File;
@@ -166,40 +167,49 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initCommands() { //TODO rewrite
-        ConfigSection messages = this.settings.getMessages();
+        RegionCommand rg = new RegionCommand("region");
+        rg.setDescription(this.messenger.getMessage("command.region.description"));
+        rg.setPermission("sregionprotector.command.region");
+        rg.setAliases(new String[]{"rg"});
+        this.getServer().getCommandMap().register(rg.getName(), rg);
 
-        SetPos1Command setPos1Command = new SetPos1Command("pos1", (Map<String, String>) messages.getOrDefault("pos1", new HashMap<>()), this.regionSelector);
-        setPos1Command.setDescription("set first pos");
-        setPos1Command.setPermission("sregionprotector.command.pos1");
+        SRegionProtectorCommand command;
+        command = new SetPos1Command("pos1", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.pos1.description"));
+        command.setPermission("sregionprotector.command.pos1");
         Map<String, CommandParameter[]> setPos1CommandParameters = new HashMap<>();
-        setPos1Command.setCommandParameters(setPos1CommandParameters);
-        this.getServer().getCommandMap().register("pos1", setPos1Command);
+        command.setCommandParameters(setPos1CommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        SetPos2Command setPos2Command = new SetPos2Command("pos2", (Map<String, String>) messages.getOrDefault("pos2", new HashMap<>()), this.regionSelector);
-        setPos2Command.setDescription("set second pos");
-        setPos2Command.setPermission("sregionprotector.command.pos2");
+        command = new SetPos2Command("pos2", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.pos2.description"));
+        command.setPermission("sregionprotector.command.pos2");
         Map<String, CommandParameter[]> setPos2CommandParameters = new HashMap<>();
-        setPos2Command.setCommandParameters(setPos2CommandParameters);
-        this.getServer().getCommandMap().register("pos2", setPos2Command);
+        command.setCommandParameters(setPos2CommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        CreateRegionCommand createRegionCommand = new CreateRegionCommand("rgcreate", (Map<String, String>) messages.getOrDefault("create", new HashMap<>()), this.regionSelector, this.regionManager, this.settings.regionSettings);
-        createRegionCommand.setDescription("create new region");
-        createRegionCommand.setPermission("sregionprotector.command.create");
+        command = new CreateRegionCommand("rgcreate", this.regionSelector, this.regionManager, this.settings.regionSettings);
+        command.setDescription(this.messenger.getMessage("command.create.description"));
+        command.setPermission("sregionprotector.command.create");
         Map<String, CommandParameter[]> createRegionCommandParameters = new HashMap<>();
         createRegionCommandParameters.put("rgname", new CommandParameter[]{new CommandParameter("region", CommandParamType.STRING, false)});
-        createRegionCommand.setCommandParameters(createRegionCommandParameters);
-        this.getServer().getCommandMap().register("rgcreate", createRegionCommand);
+        command.setCommandParameters(createRegionCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        GetWandCommand getWandCommand = new GetWandCommand("wand", (Map<String, String>) messages.getOrDefault("wand", new HashMap<>()));
-        getWandCommand.setDescription("get a wand for region selecting");
-        getWandCommand.setPermission("sregionprotector.command.wand");
+        command = new GetWandCommand("wand");
+        command.setDescription(this.messenger.getMessage("command.wand.description"));
+        command.setPermission("sregionprotector.command.wand");
         Map<String, CommandParameter[]> getWantCommandParameters = new HashMap<>();
-        getWandCommand.setCommandParameters(getWantCommandParameters);
-        this.getServer().getCommandMap().register("wand", getWandCommand);
+        command.setCommandParameters(getWantCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RegionFlagCommand regionFlagCommand = new RegionFlagCommand("rgflag", (Map<String, String>) messages.getOrDefault("flag", new HashMap<>()), this.regionManager);
-        regionFlagCommand.setDescription("change the region flag state");
-        regionFlagCommand.setPermission("sregionprotector.command.flag");
+        command = new RegionFlagCommand("rgflag", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.flag.description"));
+        command.setPermission("sregionprotector.command.flag");
         Map<String, CommandParameter[]> regionFlagCommandParameters = new HashMap<>();
         regionFlagCommandParameters.put("flagdata", new CommandParameter[]
                 {
@@ -217,60 +227,65 @@ public final class SRegionProtectorMain extends PluginBase {
                         new CommandParameter("price", CommandParamType.INT, false)
                 }
         );
-        regionFlagCommand.setCommandParameters(regionFlagCommandParameters);
-        this.getServer().getCommandMap().register("rgflag", regionFlagCommand);
+        command.setCommandParameters(regionFlagCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RegionInfoCommand regionInfoCommand = new RegionInfoCommand("rginfo", (Map<String, String>) messages.getOrDefault("info", new HashMap<>()), this.regionManager, this.chunkManager, this.settings.regionSettings);
-        regionInfoCommand.setDescription("region info");
-        regionInfoCommand.setPermission("sregionprotector.command.info");
+        command = new RegionInfoCommand("rginfo", this.regionManager, this.chunkManager, this.settings.regionSettings);
+        command.setDescription(this.messenger.getMessage("command.info.description"));
+        command.setPermission("sregionprotector.command.info");
         Map<String, CommandParameter[]> regionInfoCommandParameters = new HashMap<>();
         regionInfoCommandParameters.put("rginfo", new CommandParameter[]
                 {
                         new CommandParameter("region", CommandParamType.STRING, true)
                 }
         );
-        regionInfoCommand.setCommandParameters(regionInfoCommandParameters);
-        this.getServer().getCommandMap().register("rginfo", regionInfoCommand);
+        command.setCommandParameters(regionInfoCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RegionListCommand regionListCommand = new RegionListCommand("rglist", (Map<String, String>) messages.getOrDefault("list", new HashMap<>()), this.regionManager);
-        regionListCommand.setDescription("your regions");
-        regionListCommand.setPermission("sregionprotector.command.list");
+        command = new RegionListCommand("rglist", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.list.description"));
+        command.setPermission("sregionprotector.command.list");
         Map<String, CommandParameter[]> regionListCommandParameters = new HashMap<>();
         regionListCommandParameters.put("list-type", new CommandParameter[]
                 {
                         new CommandParameter("owner:member:creator", CommandParamType.TEXT, false)
                 }
         );
-        regionListCommand.setCommandParameters(regionListCommandParameters);
-        this.getServer().getCommandMap().register("rglist", regionListCommand);
+        command.setCommandParameters(regionListCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RegionRemoveCommand regionRemoveCommand = new RegionRemoveCommand("rgremove", (Map<String, String>) messages.getOrDefault("remove", new HashMap<>()), this.regionManager);
-        regionRemoveCommand.setDescription("remove region");
-        regionRemoveCommand.setPermission("sregionprotector.command.remove");
+        command = new RegionRemoveCommand("rgremove", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.remove.description"));
+        command.setPermission("sregionprotector.command.remove");
         Map<String, CommandParameter[]> regionRemoveCommandParameters = new HashMap<>();
         regionRemoveCommandParameters.put("rgremove-rg", new CommandParameter[]
                 {
                         new CommandParameter("region", CommandParamType.TEXT, false)
                 }
         );
-        regionRemoveCommand.setCommandParameters(regionRemoveCommandParameters);
-        this.getServer().getCommandMap().register("rgremove", regionRemoveCommand);
+        command.setCommandParameters(regionRemoveCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RegionTeleportCommand regionTeleportCommand = new RegionTeleportCommand("rgtp", (Map<String, String>) messages.getOrDefault("teleport", new HashMap<>()), this.regionManager);
-        regionTeleportCommand.setDescription("teleport to region");
-        regionTeleportCommand.setPermission("sregionprotector.command.teleport");
+        command = new RegionTeleportCommand("rgtp", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.teleport.description"));
+        command.setPermission("sregionprotector.command.teleport");
         Map<String, CommandParameter[]> regionTeleportCommandParameters = new HashMap<>();
         regionTeleportCommandParameters.put("rgp-rg", new CommandParameter[]
                 {
                         new CommandParameter("region", CommandParamType.TEXT, false)
                 }
         );
-        regionTeleportCommand.setCommandParameters(regionTeleportCommandParameters);
-        this.getServer().getCommandMap().register("rgtp", regionTeleportCommand);
+        command.setCommandParameters(regionTeleportCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        AddMemberCommand addMemberCommand = new AddMemberCommand("rgaddmember", (Map<String, String>) messages.getOrDefault("addmember", new HashMap<>()), this.regionManager);
-        addMemberCommand.setDescription("add region member");
-        addMemberCommand.setPermission("sregionprotector.command.addmember");
+        command = new AddMemberCommand("rgaddmember", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.addmember.description"));
+        command.setPermission("sregionprotector.command.addmember");
         Map<String, CommandParameter[]> addMemberCommandParameters = new HashMap<>();
         addMemberCommandParameters.put("addmember", new CommandParameter[]
                 {
@@ -278,12 +293,13 @@ public final class SRegionProtectorMain extends PluginBase {
                         new CommandParameter("player", CommandParamType.TARGET, false)
                 }
         );
-        addMemberCommand.setCommandParameters(addMemberCommandParameters);
-        this.getServer().getCommandMap().register("rgaddmember", addMemberCommand);
+        command.setCommandParameters(addMemberCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        AddOwnerCommand addOwnerCommand = new AddOwnerCommand("rgaddowner", (Map<String, String>) messages.getOrDefault("addowner", new HashMap<>()), this.regionManager);
-        addOwnerCommand.setDescription("add region owner");
-        addOwnerCommand.setPermission("sregionprotector.command.addmember");
+        command = new AddOwnerCommand("rgaddowner", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.addowner.description"));
+        command.setPermission("sregionprotector.command.addmember");
         Map<String, CommandParameter[]> addOwnerCommandParameters = new HashMap<>();
         addOwnerCommandParameters.put("addowner", new CommandParameter[]
                 {
@@ -291,12 +307,13 @@ public final class SRegionProtectorMain extends PluginBase {
                         new CommandParameter("player", CommandParamType.TARGET, false)
                 }
         );
-        addOwnerCommand.setCommandParameters(addOwnerCommandParameters);
-        this.getServer().getCommandMap().register("rgaddowner", addOwnerCommand);
+        command.setCommandParameters(addOwnerCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RemoveMemberCommand removeMemberCommand = new RemoveMemberCommand("rgremovemember", (Map<String, String>) messages.getOrDefault("removemember", new HashMap<>()), this.regionManager);
-        removeMemberCommand.setDescription("remove region member");
-        removeMemberCommand.setPermission("sregionprotector.command.addmember");
+        command = new RemoveMemberCommand("rgremovemember", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.removemember.description"));
+        command.setPermission("sregionprotector.command.addmember");
         Map<String, CommandParameter[]> removeMemberCommandParameters = new HashMap<>();
         removeMemberCommandParameters.put("removemember", new CommandParameter[]
                 {
@@ -304,12 +321,13 @@ public final class SRegionProtectorMain extends PluginBase {
                         new CommandParameter("player", CommandParamType.TARGET, false)
                 }
         );
-        removeMemberCommand.setCommandParameters(removeMemberCommandParameters);
-        this.getServer().getCommandMap().register("rgremovemember", removeMemberCommand);
+        command.setCommandParameters(removeMemberCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
 
-        RemoveOwnerCommand removeOwnerCommand = new RemoveOwnerCommand("rgremoveowner", (Map<String, String>) messages.getOrDefault("removeowner", new HashMap<>()), this.regionManager);
-        removeOwnerCommand.setDescription("remove region owner");
-        removeOwnerCommand.setPermission("sregionprotector.command.addmember");
+        command = new RemoveOwnerCommand("rgremoveowner", this.regionManager);
+        command.setDescription(this.messenger.getMessage("command.removeowner.description"));
+        command.setPermission("sregionprotector.command.addmember");
         Map<String, CommandParameter[]> removeOwnerCommandParameters = new HashMap<>();
         removeOwnerCommandParameters.put("removeowner", new CommandParameter[]
                 {
@@ -317,8 +335,9 @@ public final class SRegionProtectorMain extends PluginBase {
                         new CommandParameter("player", CommandParamType.TARGET, false)
                 }
         );
-        removeOwnerCommand.setCommandParameters(removeOwnerCommandParameters);
-        this.getServer().getCommandMap().register("rgremoveowner", removeOwnerCommand);
+        command.setCommandParameters(removeOwnerCommandParameters);
+        this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
     }
 
     @Override

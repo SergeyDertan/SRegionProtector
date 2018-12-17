@@ -7,7 +7,7 @@ import java.util.*;
 
 public final class Chunk {
 
-    final Object lock = new Object();
+    public final Object lock = new Object();
     boolean needUpdate;
     private long x;
     private long z;

@@ -29,17 +29,25 @@ region.protected: "There`s region"
 region.selection.pos1: "First pos set"
 region.selection.pos2: "Second pos set"
 
+command.region.permission: You have no permission
+command.region.available-commands: 'Available commands: {@list}'
+command.region.region.command-doesnt-exits: 'Commands {@name} doesnt exists'
+command.region.desription: 'SRegionProtector commands'
+
 command.pos1.in-game: "In game only"
 command.pos1.permission: You have no permission
 command.pos1.pos-set: First pos set
+command.pos1.description: set first position
 
 command.pos2.in-game: In game only
 command.pos2.permission: You have no permission
 command.pos2.pos-set: Second pos set
+command.pos2.description: set second position
 
 command.wand.wand-give: Wand given
 command.wand.permission: You have no permission
 command.wand.in-game: In game only
+command.wand.description: get wand for region selecting
 
 command.create.in-game: In game only
 command.create.permission: You have no permission
@@ -52,6 +60,7 @@ command.create.too-many: You cant create more regions
 command.create.regions-overlap: Regions overlap
 command.create.region-created: Region created
 command.create.usage: 'Required arguments: [NAME]'
+command.create.descripton: create region
 
 command.list.in-game: In game only
 command.list.permission: You have no permission
@@ -61,29 +70,34 @@ command.list.member-no-regions: You have no regions
 command.list.owner-region-list: 'Regions in which you are a owner: {@list}'
 command.list.member-region-list: 'Regions in which you are a member: {@list}'
 command.list.creator-region-list: 'Your regions: {@list}'
+command.list.description: region list
 
 command.remove.permission: You have no permission
 command.remove.region-doesnt-exists: Region {@region} doesnt exists
 command.remove.region-removed: Region {@region} deleted
 command.remove.all-removed: All of your regions deleted {@amount}
+command.remove.description: remove region
 
 command.addmember.permission: You have no permission
 command.addmember.usage: 'Required arguments: [REGION] [PLAYER]'
 command.addmember.region-doesnt-exists: Region {@region} doesnt exists
 command.addmember.already-member: Player {@target} already member of {@region}
 command.addmember.member-added: Player {@target} added to {@region} as member
+command.addmember.description: add member to region
 
 command.removemember.permission: You dont permission
 command.removemember.usage: 'Required arguments: [REGION] [PLAYER]'
 command.removemember.region-doesnt-exists: Region doesnt {@region} exists
 command.removemember.not-a-member: Player {@target} not a member of {@region}
 command.removemember.member-removed: Player {@target} no longer member of {@region}
+command.removemember.description: remove member from region
 
 command.addowner.permission: You dont have permission
 command.addowner.usage: 'Required arguments: [REGION] [PLAYER]'
 command.addowner.region-doesnt-exists: Region doesnt exists
 command.addowner.already-owner: Player {@target} already owner of {@region}
 command.addowner.owner-added: Player {@target} now a member of {@region}
+command.addowner.description: add owner to region
 
 command.removeowner.permission: You dont have permission
 command.removeowner.usage: 'Required arguments: [REGION] [PLAYER]'
@@ -91,6 +105,7 @@ command.removeowner.region-doesnt-exists: Region {@region} doesnt exists
 command.removeowner.not-a-owner: Player {@target} not a owner of {@region}
 command.removeowner.owner-removed: Player {@target} no longer owner of {@region}
 command.removeowner.cant-remove-owner: Region creator cant be removed
+command.removeowner.description: remove owner from region
 
 command.info.permission: You dont have permission
 command.info.usage: 'Required arguments: [REGION]'
@@ -112,6 +127,7 @@ command.flag.flag-state-changed: Flag state of {@flag} in region {@region} set t
 command.flag.wrong-price: Price must be >= 0
 command.flag.selling-region: Region {@region} selling for {@price} money
 command.flag.sell-flag-usage: 'Required arguments: [REGION] [FLAG] [STATE] [PRICE]'
+command.flag.description: region flags
 
 command.teleport.in-game: In game only
 command.teleport.permission: You have no permission
@@ -119,6 +135,7 @@ command.teleport.usage: 'Required arguments: [REGION]'
 command.teleport.region-doesnt-exists: Region {@region} doesnt exists
 command.teleport.teleport-disabled: Teleport disabled in this region
 command.teleport.teleport: Teleportation to {@region}...
+command.teleport.description: teleport to region
 
 command.buy.in-game: In game only
 command.buy.permission: You have no permission
@@ -129,6 +146,7 @@ command.buy.region-price: Region {@region} costs {@price} money
 command.buy.isnt-selling: Region {@region} doesnt selling
 command.buy.repeat-price: You must repeat price
 command.buy.not-enough-gold: Not enough money
+command.buy.description: buy region
 
 auto-save-start: "Starting auto save..."
 auto-save-success: "Auto save ended."

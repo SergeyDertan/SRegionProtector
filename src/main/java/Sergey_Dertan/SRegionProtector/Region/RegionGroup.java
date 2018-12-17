@@ -15,6 +15,7 @@ public enum RegionGroup {
     }
 
     public static RegionGroup get(String name) {
+        name = name.toLowerCase();
         switch (name) {
             case "creator":
                 return CREATOR;
