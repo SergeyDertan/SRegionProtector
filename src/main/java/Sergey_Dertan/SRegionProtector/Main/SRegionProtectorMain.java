@@ -29,6 +29,7 @@ import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
+import cn.nukkit.utils.ThreadCache;
 
 import java.io.File;
 import java.util.HashMap;
@@ -87,9 +88,17 @@ public final class SRegionProtectorMain extends PluginBase {
         this.initAutoSave();
 
         this.initSessionsClearTask();
-        instance = this;
+
+        this.gc();
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful"));
+
+        instance = this;
+    }
+
+    private void gc() {
+        ThreadCache.clean();
+        System.gc();
     }
 
     private void initAutoSave() {
