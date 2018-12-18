@@ -83,7 +83,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.commands"));
         this.initCommands();
 
-        this.registerBlockEntities(); //TODO msg?
+        this.registerBlockEntities();
 
         this.initAutoSave();
 
