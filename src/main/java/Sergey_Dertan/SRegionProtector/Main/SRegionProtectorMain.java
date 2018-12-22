@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Main;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
+import Sergey_Dertan.SRegionProtector.Command.Admin.SaveCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.CreateRegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.GetWandCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.SetPos1Command;
@@ -102,7 +103,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initAutoSave() {
-        this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, new AutoSaveTask(this.chunkManager, this.regionManager, this.getLogger()), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
+        this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, new AutoSaveTask(this), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
     }
 
     private void registerBlockEntities() {
@@ -173,6 +174,38 @@ public final class SRegionProtectorMain extends PluginBase {
     private void initEventsHandlers() {
         this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
+    }
+
+    public void save(SaveType saveType) {
+        this.save(saveType, null);
+    }
+
+    public void save(SaveType saveType, String initiator) { //TODO manual save in the other thread?
+        switch (saveType) {
+            case AUTO:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-start"));
+                break;
+            case MANUAL:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("manual-save-start", "@initiator", initiator));
+                break;
+            case DISABLING:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling-save-start"));
+                break;
+        }
+        this.chunkManager.save(saveType, initiator);
+        this.regionManager.save(saveType, initiator);
+        this.gc();
+        switch (saveType) {
+            case AUTO:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-success"));
+                break;
+            case MANUAL:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("manual-save-success", "@initiator", initiator));
+                break;
+            case DISABLING:
+                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.successful"));
+                break;
+        }
     }
 
     private void initCommands() { //TODO rewrite
@@ -308,7 +341,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         command = new AddOwnerCommand("rgaddowner", this.regionManager);
         command.setDescription(this.messenger.getMessage("command.addowner.description"));
-        command.setPermission("sregionprotector.command.addmember");
+        command.setPermission("sregionprotector.command.addowner");
         Map<String, CommandParameter[]> addOwnerCommandParameters = new HashMap<>();
         addOwnerCommandParameters.put("addowner", new CommandParameter[]
                 {
@@ -322,7 +355,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         command = new RemoveMemberCommand("rgremovemember", this.regionManager);
         command.setDescription(this.messenger.getMessage("command.removemember.description"));
-        command.setPermission("sregionprotector.command.addmember");
+        command.setPermission("sregionprotector.command.removemember");
         Map<String, CommandParameter[]> removeMemberCommandParameters = new HashMap<>();
         removeMemberCommandParameters.put("removemember", new CommandParameter[]
                 {
@@ -336,7 +369,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         command = new RemoveOwnerCommand("rgremoveowner", this.regionManager);
         command.setDescription(this.messenger.getMessage("command.removeowner.description"));
-        command.setPermission("sregionprotector.command.addmember");
+        command.setPermission("sregionprotector.command.removeowner");
         Map<String, CommandParameter[]> removeOwnerCommandParameters = new HashMap<>();
         removeOwnerCommandParameters.put("removeowner", new CommandParameter[]
                 {
@@ -347,6 +380,15 @@ public final class SRegionProtectorMain extends PluginBase {
         command.setCommandParameters(removeOwnerCommandParameters);
         this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
+
+        command = new SaveCommand("rgsave", this);
+        command.setDescription(this.messenger.getMessage("command.save.description"));
+        command.setPermission("sregionprotector.command.save");
+        Map<String, CommandParameter[]> saveCommandParameters = new HashMap<>();
+        saveCommandParameters.put("rgsave", new CommandParameter[0]);
+        command.setCommandParameters(saveCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
     }
 
     @Override
@@ -354,13 +396,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
         if (this.forceShutdown) return; //TODO message
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions"));
-        this.regionManager.save();
-
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.chunks"));
-        this.chunkManager.save();
-
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.successful"));
+        this.save(SaveType.DISABLING);
     }
 
     public RegionManager getRegionManager() {

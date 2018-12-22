@@ -10,6 +10,9 @@ import cn.nukkit.block.BlockID;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityPotion;
+import cn.nukkit.entity.mob.EntityMob;
+import cn.nukkit.entity.passive.EntityAnimal;
+import cn.nukkit.entity.passive.EntityWaterAnimal;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -67,8 +70,17 @@ public final class RegionEventsHandler implements Listener {
             this.handleEvent(RegionFlags.FLAG_INVINCIBLE, ent, (Player) ent, e, false, false);
             return;
         }
-        if (!(((EntityDamageByEntityEvent) e).getDamager() instanceof Player)) return;
-        this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
+        if (((EntityDamageByEntityEvent) e).getDamager() instanceof Player) {
+            this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
+        } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob) {
+            this.handleEvent(RegionFlags.FLAG_MOB_DAMAGE, e.getEntity(), (Player) e.getEntity(), e, false, false);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void entitySpawn(EntitySpawnEvent e) {
+        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal)) return;
+        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), null, e, false, false);
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

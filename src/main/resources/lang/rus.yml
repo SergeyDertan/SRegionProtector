@@ -21,6 +21,7 @@ disabling.regions-saved: "Сохранено {@amount} регионов"
 disabling.successful: "SRegionProtector отключен."
 
 regions-auto-save: "{@amount} регионов автоматически сохранено"
+regions-manual-save: "{@amount} было сохранено по инициативе {@initiator}"
 
 loading.chunks.success: "Загружено {@count} чанков."
 loading.regions.success: "Загружено {@count} регионов."
@@ -148,8 +149,15 @@ command.buy.repeat-price: Повторите цену дважды
 command.buy.not-enough-gold: Недостаточно денег
 command.buy.description: купить регион
 
+command.save.description: "Ручное сохранение"
+command.save.permission: "Недостаточно прав"
+
 auto-save-start: "Запуск автоматического сохранения..."
 auto-save-success: "Автоматическое сохранение прошло успешо."
 
+manual-save-start: "Сохранение запущено по инициативе {@initiator}..."
+manual-save-success: "Сохранение запущенное по инициативе {@initiator} завершено."
+
 chunk-manager.empty-chunks-removed: "Удалено {@amount} пустых чанков."
 chunk-manager.chunks-auto-save: "{@amount} чанков автоматически сохранено."
+chunk-manager.chunks-manual-save: "{@amount} чанков было сохранено по инициативе {@initiator}."

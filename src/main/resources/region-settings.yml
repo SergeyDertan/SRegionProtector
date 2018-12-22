@@ -15,6 +15,8 @@ default-flags:
   send_chat: false
   receive_chat: false
   health_regen: false
+  mob-damage: false
+  mob-spawn: false
 #
 need-message:
   move: false
@@ -33,6 +35,8 @@ need-message:
   send_chat: true
   receive_chat: false
   health_regen: false
+  mob-damage: false
+  mob-spawn: false
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

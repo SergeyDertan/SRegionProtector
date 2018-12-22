@@ -35,8 +35,11 @@ public abstract class RegionFlags {
     public static final int FLAG_SEND_CHAT = 15;
     public static final int FLAG_RECEIVE_CHAT = 16;
     public static final int FLAG_HEALTH_REGEN = 17;
+    public static final int FLAG_MOB_DAMAGE = 18;
+    public static final int FLAG_MOB_SPAWN = 19;
 
-    public static final int FLAG_AMOUNT = 18;
+    public static final int FLAG_AMOUNT = 20;
+
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
 
@@ -62,6 +65,8 @@ public abstract class RegionFlags {
         defaults[FLAG_SEND_CHAT] = new RegionFlag(flagsDefault[FLAG_SEND_CHAT]);
         defaults[FLAG_RECEIVE_CHAT] = new RegionFlag(flagsDefault[FLAG_RECEIVE_CHAT]);
         defaults[FLAG_HEALTH_REGEN] = new RegionFlag(flagsDefault[FLAG_HEALTH_REGEN]);
+        defaults[FLAG_MOB_DAMAGE] = new RegionFlag(flagsDefault[FLAG_MOB_DAMAGE]);
+        defaults[FLAG_MOB_SPAWN] = new RegionFlag(flagsDefault[FLAG_MOB_SPAWN]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -83,6 +88,8 @@ public abstract class RegionFlags {
         permissions[FLAG_SEND_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.send_chat");
         permissions[FLAG_RECEIVE_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.receive_chat");
         permissions[FLAG_HEALTH_REGEN] = pluginManager.getPermission("sregionprotector.region.flag.health_regen");
+        permissions[FLAG_MOB_DAMAGE] = pluginManager.getPermission("sregionprotector.region.flag.mob_damage");
+        permissions[FLAG_MOB_SPAWN] = pluginManager.getPermission("sregionprotector.region.flag.mob_spawn");
     }
 
     public static RegionFlag[] loadFlagList(Map<String, Map<String, Object>> data) {
@@ -170,6 +177,10 @@ public abstract class RegionFlags {
                 return "receive_chat";
             case FLAG_HEALTH_REGEN:
                 return "health_regen";
+            case FLAG_MOB_DAMAGE:
+                return "mob-damage";
+            case FLAG_MOB_SPAWN:
+                return "mob-spawn";
         }
     }
 
@@ -231,6 +242,10 @@ public abstract class RegionFlags {
             case "health-regen":
             case "healthregen":
                 return FLAG_HEALTH_REGEN;
+            case "mob-damage":
+                return FLAG_MOB_DAMAGE;
+            case "mob-spawn":
+                return FLAG_MOB_SPAWN;
         }
     }
 

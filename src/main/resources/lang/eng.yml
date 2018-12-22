@@ -20,7 +20,8 @@ disabling.chunks-saved: "Saved {@amount} chunks."
 disabling.regions-saved: "Saved {@amount} regions"
 disabling.successful: "SRegionProtector disabled."
 
-regions-auto-save: "{@amount} of regions automatically saved"
+regions-auto-save: "{@amount} regions was automatically saved"
+regions-manual-save: "{@amount} regions was saved by {@initiator}"
 
 loading.chunks.success: "Loaded {@count} chunks."
 loading.regions.success: "Loaded {@count} regions."
@@ -148,8 +149,15 @@ command.buy.repeat-price: You must repeat price
 command.buy.not-enough-gold: Not enough money
 command.buy.description: buy region
 
+command.save.description: "Manual saving"
+command.save.permission: "You have no permission"
+
 auto-save-start: "Starting auto save..."
 auto-save-success: "Auto save ended."
 
+manual-save-start: "Manual save was started by {@initiator}..."
+manual-save-success: "Manual save started by {@initiator} ended."
+
 chunk-manager.empty-chunks-removed: "Removed {@amount} empty chunks."
-chunk-manager.chunks-auto-save: "{@amount} chunks save automatically."
+chunk-manager.chunks-auto-save: "{@amount} was automatically chunks saved."
+chunk-manager.chunks-manual-save: "{@amount} chunks was saved by {@initiator}."

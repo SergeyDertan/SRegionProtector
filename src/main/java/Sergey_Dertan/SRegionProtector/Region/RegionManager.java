@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
+import Sergey_Dertan.SRegionProtector.Main.SaveType;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
@@ -101,7 +102,9 @@ public final class RegionManager {
                 continue;
             }
 
-            RegionFlag[] flagList = RegionFlags.loadFlagList(this.provider.loadFlags(name));
+            Map<String, Map<String, Object>> flags = this.provider.loadFlags(name);
+
+            RegionFlag[] flagList = RegionFlags.loadFlagList(flags);
 
             Level lvl = Server.getInstance().getLevelByName(level);
 
@@ -111,6 +114,8 @@ public final class RegionManager {
             }
 
             Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
+
+            if (flagList.length > flags.size()) region.needUpdate = true;
 
             this.regions.put(name, region);
 
@@ -253,7 +258,7 @@ public final class RegionManager {
         return this.regions.get(name);
     }
 
-    public synchronized void save(boolean auto) {
+    public synchronized void save(SaveType saveType, String initiator) {
         int amount = 0;
         for (Region region : this.regions.values()) {
             synchronized (region.lock) {
@@ -263,15 +268,21 @@ public final class RegionManager {
                 ++amount;
             }
         }
-        if (auto) {
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", String.valueOf(amount)));
-        } else {
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
+        switch (saveType) {
+            case AUTO:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", String.valueOf(amount)));
+                break;
+            case DISABLING:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
+                break;
+            case MANUAL:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-manual-save", new String[]{"@amount", "@initiator"}, new String[]{String.valueOf(this.regions.size()), initiator}));
+                break;
         }
     }
 
-    public void save() {
-        this.save(false);
+    public void save(SaveType saveType) {
+        this.save(saveType, null);
     }
 
     public Set<Region> getPlayersRegionList(Player player, RegionGroup group) {

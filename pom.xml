@@ -6,7 +6,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>14.1</version>
+    <version>14.3</version>
     <name>SRegionProtector</name>
     <description>Region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>
@@ -33,7 +33,7 @@
                         <artifactId>maven-jar-plugin</artifactId>
                         <version>3.0.2</version>
                         <configuration>
-                            <outputDirectory>C:\Users\SergeyDertan\Desktop\nukkit\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\Сергей\Desktop\Nukkit\plugins</outputDirectory>
                         </configuration>
                     </plugin>
                 </plugins>

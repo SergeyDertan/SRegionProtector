@@ -33,7 +33,10 @@ public abstract class Utils {
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
         File file = new File(targetFolder + fileName);
-        if (!file.exists()) cn.nukkit.utils.Utils.writeFile(file, clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName));
+        if (!file.exists()) {
+            cn.nukkit.utils.Utils.writeFile(file, clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName));
+            return;
+        }
         if (!fixMissingContents) return;
         Config var3 = new Config(file.getAbsolutePath(), Config.YAML);
         DumperOptions dumperOptions = new DumperOptions();
@@ -41,10 +44,16 @@ public abstract class Utils {
         Yaml yaml = new Yaml(dumperOptions);
         Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
         for (Map.Entry<String, Object> var2 : var1.entrySet()) {
-            if (var3.exists(var2.getKey())) continue;
-            var3.set(var2.getKey(), var2.getValue());
-            var3.save();
+            if (!var3.exists(var2.getKey())) {
+                var3.set(var2.getKey(), var2.getValue());
+            } else if (var2.getValue() instanceof Map && var3.get(var2.getKey()) instanceof Map) {
+                for (Map.Entry<String, Object> var4 : ((Map<String, Object>) var2.getValue()).entrySet()) {
+                    if (((Map<String, Object>) var3.get(var2.getKey())).containsKey(var4.getKey())) continue;
+                    ((Map<String, Object>) var3.get(var2.getKey())).put(var4.getKey(), var4.getValue());
+                }
+            }
         }
+        var3.save();
     }
 
     public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz) throws Exception {

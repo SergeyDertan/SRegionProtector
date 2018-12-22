@@ -98,3 +98,7 @@ permissions:
                 default: op
               regionprotector.region.flag.health_regen:
                 default: op
+              regionprotector.region.flag.mob_spawn:
+                default: op
+              regionprotector.region.flag.mob_damage:
+                default: op

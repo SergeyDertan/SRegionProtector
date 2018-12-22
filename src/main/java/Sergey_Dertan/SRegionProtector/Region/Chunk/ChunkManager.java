@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
+import Sergey_Dertan.SRegionProtector.Main.SaveType;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.Provider;
 import Sergey_Dertan.SRegionProtector.Region.Region;
@@ -76,8 +77,9 @@ public final class ChunkManager {
         return this.chunkHash((long) x, (long) z);
     }
 
-    public synchronized void save(boolean auto) { //TODO
+    public synchronized void save(SaveType saveType, String initiator) {
         this.removeEmptyChunks();
+
         int saved = 0;
         int amount = 0;
 
@@ -94,15 +96,21 @@ public final class ChunkManager {
                 }
             }
         }
-        if (auto) {
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.chunks-auto-save", "@amount", String.valueOf(saved)));
-        } else {
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.chunks-saved", "@amount", String.valueOf(amount)));
+        switch (saveType) {
+            case DISABLING:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.chunks-saved", "@amount", String.valueOf(amount)));
+                break;
+            case MANUAL:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.chunks-manual-save", new String[]{"@amount", "@initiator"}, new String[]{String.valueOf(saved), initiator}));
+                break;
+            case AUTO:
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.chunks-auto-save", "@amount", String.valueOf(saved)));
+                break;
         }
     }
 
-    public void save() {
-        this.save(false);
+    public void save(SaveType saveType) {
+        this.save(saveType, null);
     }
 
     public synchronized void removeEmptyChunks() { //TODO remove empty levels
