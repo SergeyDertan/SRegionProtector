@@ -61,7 +61,7 @@ public final class RegionManager {
         for (Region region : this.regions.values()) {
             Vector3 min = new Vector3(region.getMaxX(), region.getMaxY(), region.getMaxZ());
             Vector3 max = new Vector3(region.getMinX(), region.getMinY(), region.getMinZ());
-            this.chunkManager.getRegionChunks(min.asVector3f(), max.asVector3f(), region.getLevel().getId()).forEach(region::addChunk);
+            this.chunkManager.getRegionChunks(min.asVector3f(), max.asVector3f(), region.level).forEach(region::addChunk);
         }
     }
 
@@ -106,14 +106,14 @@ public final class RegionManager {
 
             RegionFlag[] flagList = RegionFlags.loadFlagList(flags);
 
-            Level lvl = Server.getInstance().getLevelByName(level);
+            //Level lvl = Server.getInstance().getLevelByName(level);
 
-            if (lvl == null) {
+            /*if (lvl == null) {
                 this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, "level not found"})); //TODO msg
                 continue;
-            }
+            }*/
 
-            Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
+            Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
 
             if (flagList.length > flags.size()) region.needUpdate = true;
 
@@ -138,9 +138,9 @@ public final class RegionManager {
         double maxY = Math.max(pos1.y, pos2.y);
         double maxZ = Math.max(pos1.z, pos2.z);
 
-        Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ);
+        Region region = new Region(name, creator, level.getName(), minX, minY, minZ, maxX, maxY, maxZ);
 
-        this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), true).forEach(chunk -> {
+        this.chunkManager.getRegionChunks(pos1, pos2, level.getName(), true).forEach(chunk -> {
             chunk.addRegion(region);
             region.addChunk(chunk);
         });
@@ -215,7 +215,7 @@ public final class RegionManager {
     public boolean checkOverlap(Vector3f pos1, Vector3f pos2, Level level, Player player) {
         SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(pos1.asVector3(), pos2.asVector3());
 
-        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), false)) {
+        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level.getName(), false)) {
             for (Region region : chunk.getRegions()) {
                 if (!region.intersectsWith(bb) || region.isCreator(player.getName())) continue;
                 return true;

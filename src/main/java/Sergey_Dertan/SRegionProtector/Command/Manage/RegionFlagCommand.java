@@ -57,7 +57,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                     this.messenger.sendMessage(sender, "command.flag.teleport-flag-in-game");
                     return false;
                 }
-                if (region.getLevel().getId() != ((Player) sender).level.getId() || !region.intersectsWith(((Player) sender).boundingBox)) {
+                if (!region.level.equalsIgnoreCase(((Player) sender).level.getName()) || !region.intersectsWith(((Player) sender).boundingBox)) {
                     this.messenger.sendMessage(sender, "command.flag.teleport-should-be-in-region");
                     return false;
                 }

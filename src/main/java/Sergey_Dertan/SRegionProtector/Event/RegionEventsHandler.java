@@ -133,7 +133,7 @@ public final class RegionEventsHandler implements Listener {
 
     private void handleEvent(int[] flags, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm) {
         if (checkPerm && (player != null && player.hasPermission("sregionprotector.admin"))) return;
-        Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getId(), false, false);
+        Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
             if ((mustBeMember && (player != null && region.isLivesIn(player.getName()))) || !region.isVectorInside(pos)) continue;

@@ -7,6 +7,7 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
@@ -29,8 +30,8 @@ public final class Region implements AxisAlignedBB {
     private final double maxY;
     private final double maxZ;
 
-    private final String name;
-    private final Level level;
+    public final String name;
+    public final String level;
 
     boolean needUpdate = false;
     private String creator;
@@ -38,7 +39,7 @@ public final class Region implements AxisAlignedBB {
     private RegionFlag[] flags;
     private Set<Chunk> chunks;
 
-    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
+    public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -60,7 +61,7 @@ public final class Region implements AxisAlignedBB {
         this.chunks = new HashSet<>();
     }
 
-    public Region(String name, String creator, Level level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
+    public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
         this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new String[0], new String[0], RegionFlags.getDefaultFlagList());
     }
 
@@ -77,7 +78,7 @@ public final class Region implements AxisAlignedBB {
         }
     }
 
-    public Level getLevel() {
+    public String getLevel() {
         return this.level;
     }
 
@@ -183,7 +184,7 @@ public final class Region implements AxisAlignedBB {
         arr.put(NAME_TAG, this.name);
         arr.put(CREATOR_TAG, this.creator);
 
-        arr.put(LEVEL_TAG, this.level.getName());
+        arr.put(LEVEL_TAG, this.level);
         arr.put(MIN_X_TAG, this.getMinX());
         arr.put(MIN_Y_TAG, this.getMinY());
         arr.put(MIN_Z_TAG, this.getMinZ());
@@ -261,7 +262,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Position getHealerPosition() {
-        return Position.fromObject(this.getHealerVector(), this.level);
+        return Position.fromObject(this.getHealerVector(), Server.getInstance().getLevelByName(this.level));
     }
 
     public Vector3 getHealerVector() {
