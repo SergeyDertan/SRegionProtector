@@ -92,15 +92,15 @@ permissions:
                 default: op
               sregionprotector.region.flag.explode:
                 default: op
-              regionprotector.region.flag.item_drop:
+              sregionprotector.region.flag.item_drop:
                 default: op
-              regionprotector.region.flag.send_chat:
+              sregionprotector.region.flag.send_chat:
                 default: op
-              regionprotector.region.flag.receive_chat:
+              sregionprotector.region.flag.receive_chat:
                 default: op
-              regionprotector.region.flag.health_regen:
+              sregionprotector.region.flag.health_regen:
                 default: op
-              regionprotector.region.flag.mob_spawn:
+              sregionprotector.region.flag.mob_spawn:
                 default: op
-              regionprotector.region.flag.mob_damage:
+              sregionprotector.region.flag.mob_damage:
                 default: op
