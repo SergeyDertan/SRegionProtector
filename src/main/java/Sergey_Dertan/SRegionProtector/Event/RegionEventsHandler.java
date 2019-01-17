@@ -172,7 +172,7 @@ public final class RegionEventsHandler implements Listener {
 
     // liquid flow event
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void blockSpread(LiquidFlowEvent e) {
+    public void liquidFlow(LiquidFlowEvent e) {
         Block block = e.getSource();
         if (!(block instanceof BlockLava) && !(block instanceof BlockWater)) return;
         this.handleEvent(RegionFlags.FLAG_LIQUID_FLOW, e.getTo(), null, e, false, false, e.getSource()); //TODO
