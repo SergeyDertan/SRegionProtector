@@ -20,20 +20,7 @@ public class SaveCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "save.permission");
             return false;
         }
-        Server.getInstance().getScheduler().scheduleTask(this.pl, new Runnable() {
-
-            private SRegionProtectorMain pl;
-
-            @Override
-            public void run() {
-                this.pl.save(SRegionProtectorMain.SaveType.MANUAL, sender.getName());
-            }
-
-            public Runnable init(SRegionProtectorMain pl) {
-                this.pl = pl;
-                return this;
-            }
-        }.init(this.pl), true);
+        Server.getInstance().getScheduler().scheduleTask(this.pl, () -> pl.save(SRegionProtectorMain.SaveType.MANUAL, sender.getName()), true);
         return false;
     }
 }
