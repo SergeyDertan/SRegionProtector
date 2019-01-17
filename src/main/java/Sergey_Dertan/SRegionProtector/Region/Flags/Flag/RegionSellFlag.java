@@ -2,30 +2,30 @@ package Sergey_Dertan.SRegionProtector.Region.Flags.Flag;
 
 public final class RegionSellFlag extends RegionFlag {
 
-    public int price;
+    public long price;
 
-    public RegionSellFlag(boolean state, int price) {
+    public RegionSellFlag(boolean state, long price) {
         super(state);
         this.price = price;
     }
 
-    public RegionSellFlag(int price) {
+    public RegionSellFlag(long price) {
         this(false, price);
     }
 
     public RegionSellFlag(boolean state) {
-        this(state, 0);
+        this(state, 0L);
     }
 
     public RegionSellFlag() {
-        this(false, 0);
+        this(false, 0L);
     }
 
     public double getPrice() {
         return this.price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 

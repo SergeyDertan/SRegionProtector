@@ -50,9 +50,20 @@ permissions:
             default: true
           sregionprotector.command.save:
             default: op
+          sregionprotector.command.select:
+            default: true
+          sregionprotector.command.show-border:
+            default: true
+          sregionprotector.command.remove-borders:
+            default: true
+          sregionprotector.command.expand:
+            default: true
       sregionprotector.region.*:
         default: op
         children:
+          #allows players to select regions they are not lives in
+          sregionprotector.region.select-other:
+            default: op
           sregionprotector.region.size.*:
             description: "Allows to creating regions with any size"
             default: op
@@ -92,15 +103,25 @@ permissions:
                 default: op
               sregionprotector.region.flag.explode:
                 default: op
-              regionprotector.region.flag.item_drop:
+              sregionprotector.region.flag.item_drop:
                 default: op
-              regionprotector.region.flag.send_chat:
+              sregionprotector.region.flag.send_chat:
                 default: op
-              regionprotector.region.flag.receive_chat:
+              sregionprotector.region.flag.receive_chat:
                 default: op
-              regionprotector.region.flag.health_regen:
+              sregionprotector.region.flag.health_regen:
                 default: op
-              regionprotector.region.flag.mob_spawn:
+              sregionprotector.region.flag.mob_spawn:
                 default: op
-              regionprotector.region.flag.mob_damage:
+              sregionprotector.region.flag.mob_damage:
+                default: op
+              sregionprotector.region.flag.crops_destroy:
+                default: op
+              sregionprotector.region.flag.redstone:
+                default: op
+              sregionprotector.region.flag.ender_pearl:
+                default: op
+              sregionprotector.region.flag.explode_block_break:
+                default: op
+              sregionprotector.region.flag.liquid_flow:
                 default: op

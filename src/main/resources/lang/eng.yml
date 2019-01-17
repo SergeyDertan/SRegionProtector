@@ -6,12 +6,14 @@ loading.init.regions: "Regions initializing..."
 loading.init.chunks: "Chunks initializing..."
 loading.init.events-handlers: "Events handlers initializing..."
 loading.init.commands: "Commands initializing..."
+loading.data-provider: "Data provider was set to {@name}"
 loading.init.successful: "SRegionProtector initialized."
 
 loading.error.folder: "Can`t create folder {@path}, disabling plugin..."
 loading.error.resource: "Can`t copy resource resource: {@err}, disabling plugin..."
 loading.error.regions: "Can`t load region {@region}: {@err}"
 loading.error.chunks: "Can`t load chunk x:{@x}, z:{@z}, level:{@level}: {@err}"
+loading.error.data-provider-error: "Error during initializing {@provider} data provider: {@err}"
 
 disabling.start: "Disabling SRegionProtector V_{@ver} by Sergey Dertan..."
 disabling.regions: "Saving regions..."
@@ -19,6 +21,8 @@ disabling.chunks: "Saving chunks..."
 disabling.chunks-saved: "Saved {@amount} chunks."
 disabling.regions-saved: "Saved {@amount} regions"
 disabling.successful: "SRegionProtector disabled."
+disabling-save-start: "Starting saving..."
+disabling.error: "Something went wrong, saving wont be started"
 
 regions-auto-save: "{@amount} regions was automatically saved"
 regions-manual-save: "{@amount} regions was saved by {@initiator}"
@@ -27,127 +31,158 @@ loading.chunks.success: "Loaded {@count} chunks."
 loading.regions.success: "Loaded {@count} regions."
 
 region.protected: "There`s region"
+region.flag.state.enabled: "enabled"
+region.flag.state.disabled: "disabled"
 region.selection.pos1: "First pos set"
 region.selection.pos2: "Second pos set"
 
 command.region.permission: You have no permission
-command.region.available-commands: 'Available commands: {@list}'
-command.region.region.command-doesnt-exits: 'Commands {@name} doesnt exists'
-command.region.desription: 'SRegionProtector commands'
+command.region.available-commands: "Available commands: {@list}"
+command.region.region.command-doesnt-exits: "Commands {@name} doesnt exists"
+command.region.desription: "SRegionProtector commands"
 
 command.pos1.in-game: "In game only"
-command.pos1.permission: You have no permission
-command.pos1.pos-set: First pos set
-command.pos1.description: set first position
+command.pos1.permission: "You have no permission"
+command.pos1.pos-set: "First pos set"
+command.pos1.description: "set first position"
 
-command.pos2.in-game: In game only
-command.pos2.permission: You have no permission
-command.pos2.pos-set: Second pos set
-command.pos2.description: set second position
+command.pos2.in-game: "In game only"
+command.pos2.permission: "You have no permission"
+command.pos2.pos-set: "Second pos set"
+command.pos2.description: "set second position"
 
-command.wand.wand-give: Wand given
-command.wand.permission: You have no permission
-command.wand.in-game: In game only
-command.wand.description: get wand for region selecting
+command.select.description: "Show region borders"
+command.select.in-game: "In game only"
+command.select.permission: "You have no permission"
+command.select.usage: "Use /rgselect [REGION]"
+command.select.region-doesnt-exists: "Region {@region} doesnt exists"
+command.select.different-worlds: "You`re not in the region`s world"
+command.select.success: "Loading region`s borders..."
 
-command.create.in-game: In game only
-command.create.permission: You have no permission
-command.create.incorrect-name: Incorrect region name
-command.create.region-exists: Region with this name already exists
-command.create.two-positions-required: You need to set 2 positions
-command.create.positions-in-different-worlds: Positions in different worlds
-command.create.too-big: Region is too big
-command.create.too-many: You cant create more regions
-command.create.regions-overlap: Regions overlap
-command.create.region-created: Region created
-command.create.usage: 'Required arguments: [NAME]'
-command.create.descripton: create region
+command.remove-borders.description: "remove region`s borders"
+command.remove-borders.in-game: "In game only"
+command.remove-borders.permission: "You have no permission"
+command.remove-borders.success: "Removing borders..."
 
-command.list.in-game: In game only
-command.list.permission: You have no permission
-command.list.usage: 'List types: owner, member, creator'
-command.list.owner-no-regions: You have no regions
-command.list.member-no-regions: You have no regions
-command.list.owner-region-list: 'Regions in which you are a owner: {@list}'
-command.list.member-region-list: 'Regions in which you are a member: {@list}'
-command.list.creator-region-list: 'Your regions: {@list}'
-command.list.description: region list
+command.show-border.description: "Show borders of the selected area"
+command.show-border.in-game: "In game only"
+command.show-border.permission: "You have no permission"
+command.show-border.no-pos: "You need to set 2 positions first"
+command.show-border.success: "Loading area`s borders..."
 
-command.remove.permission: You have no permission
-command.remove.region-doesnt-exists: Region {@region} doesnt exists
-command.remove.region-removed: Region {@region} deleted
-command.remove.all-removed: All of your regions deleted {@amount}
-command.remove.description: remove region
+command.wand.wand-given: "Wand given"
+command.wand.permission: "You have no permission"
+command.wand.in-game: "In game only"
+command.wand.description: "get wand for region selecting"
 
-command.addmember.permission: You have no permission
-command.addmember.usage: 'Required arguments: [REGION] [PLAYER]'
-command.addmember.region-doesnt-exists: Region {@region} doesnt exists
-command.addmember.already-member: Player {@target} already member of {@region}
-command.addmember.member-added: Player {@target} added to {@region} as member
-command.addmember.description: add member to region
+command.size.permission: "You have no permission"
+command.size.in-game: "In game only"
+command.size.select-first: "Select 2 positions first"
+command.size.description: "calculate size of the selected region"
+command.size.positions-in-different-worlds: "Positions must be in the one world"
+command.size.size: "Size of selected region {@size} blocks"
 
-command.removemember.permission: You dont permission
-command.removemember.usage: 'Required arguments: [REGION] [PLAYER]'
-command.removemember.region-doesnt-exists: Region doesnt {@region} exists
-command.removemember.not-a-member: Player {@target} not a member of {@region}
-command.removemember.member-removed: Player {@target} no longer member of {@region}
-command.removemember.description: remove member from region
+command.create.in-game: "In game only"
+command.create.permission: "You have no permission"
+command.create.incorrect-name: "Incorrect region name"
+command.create.region-exists: "Region with this name already exists"
+command.create.two-positions-required: "You need to set 2 positions"
+command.create.positions-in-different-worlds: "Positions in different worlds"
+command.create.too-big: "Region is too big"
+command.create.too-many: "You cant create more regions"
+command.create.regions-overlap: "Regions overlap"
+command.create.region-created: "Region created"
+command.create.usage: "Required arguments: [NAME]"
+command.create.descripton: "create region"
 
-command.addowner.permission: You dont have permission
-command.addowner.usage: 'Required arguments: [REGION] [PLAYER]'
-command.addowner.region-doesnt-exists: Region doesnt exists
-command.addowner.already-owner: Player {@target} already owner of {@region}
-command.addowner.owner-added: Player {@target} now a member of {@region}
-command.addowner.description: add owner to region
+command.list.in-game: "In game only"
+command.list.permission: "You have no permission"
+command.list.usage: "List types: owner, member, creator"
+command.list.owner-no-regions: "You have no regions"
+command.list.member-no-regions: "You have no regions"
+command.list.owner-region-list: "Regions in which you are a owner: {@list}"
+command.list.member-region-list: "Regions in which you are a member: {@list}"
+command.list.creator-region-list: "Your regions: {@list}"
+command.list.description: "region list"
 
-command.removeowner.permission: You dont have permission
-command.removeowner.usage: 'Required arguments: [REGION] [PLAYER]'
-command.removeowner.region-doesnt-exists: Region {@region} doesnt exists
-command.removeowner.not-a-owner: Player {@target} not a owner of {@region}
-command.removeowner.owner-removed: Player {@target} no longer owner of {@region}
-command.removeowner.cant-remove-owner: Region creator cant be removed
-command.removeowner.description: remove owner from region
+command.remove.permission: "You have no permission"
+command.remove.region-doesnt-exists: "Region {@region} doesnt exists"
+command.remove.region-removed: "Region {@region} deleted"
+command.remove.all-removed: "All of your regions deleted {@amount}"
+command.remove.description: "remove region"
 
-command.info.permission: You dont have permission
-command.info.usage: 'Required arguments: [REGION]'
-command.info.region-doesnt-exists: Region {@region} doesnt exists
-command.info.info: |-
-  Name: {@region}
-  World: {@level}
-  Creator: {@creator}
-  Owners: {@owners
-  Members: {@members}
-  Flags: {@flags}
-command.flag.permission: You have no permission
-command.flag.usage: 'Required arguments: [REGION] [FLAG] [STATE]'
-command.flag.region-doesnt-exists: Region doesnt exists
-command.flag.incorrect-flag: Flag doesnt exists
-command.flag.teleport-flag-in-game: In game only
-command.flag.teleport-should-be-in-region: Teleport position must be inside region
-command.flag.flag-state-changed: Flag state of {@flag} in region {@region} set to {@state}
-command.flag.wrong-price: Price must be >= 0
-command.flag.selling-region: Region {@region} selling for {@price} money
-command.flag.sell-flag-usage: 'Required arguments: [REGION] [FLAG] [STATE] [PRICE]'
-command.flag.description: region flags
+command.expand.permission: "You have no permission"
+command.expand.usage: "Use /rgexpand [BLOCKS] [UP/DOWN]"
+command.expand.in-game: "In game only"
+command.expand.positions-required: "Select 2 positions first"
+command.expand.command.expand.positions-in-different-worlds: "Positions in different worlds"
+command.expand.success: "Region expanded, new size {@size} blocks"
+command.expand.up-or-down: "only UP or DOWN"
 
-command.teleport.in-game: In game only
-command.teleport.permission: You have no permission
-command.teleport.usage: 'Required arguments: [REGION]'
-command.teleport.region-doesnt-exists: Region {@region} doesnt exists
-command.teleport.teleport-disabled: Teleport disabled in this region
-command.teleport.teleport: Teleportation to {@region}...
-command.teleport.description: teleport to region
+command.addmember.permission: "You have no permission"
+command.addmember.usage: "Required arguments: [REGION] [PLAYER]"
+command.addmember.region-doesnt-exists: "Region {@region} doesnt exists"
+command.addmember.already-member: "Player {@target} already member of {@region}"
+command.addmember.member-added: "Player {@target} added to {@region} as member"
+command.addmember.description: "add member to region"
 
-command.buy.in-game: In game only
-command.buy.permission: You have no permission
-command.buy.usage: 'Required arguments: [REGION] [PRICE]'
-command.buy.region-doesnt-exists: Region doesnt exists
-command.buy.cant-buy-self: You cant buy your region
-command.buy.region-price: Region {@region} costs {@price} money
-command.buy.isnt-selling: Region {@region} doesnt selling
-command.buy.repeat-price: You must repeat price
-command.buy.not-enough-gold: Not enough money
-command.buy.description: buy region
+command.removemember.permission: "You dont permission"
+command.removemember.usage: "Required arguments: [REGION] [PLAYER]"
+command.removemember.region-doesnt-exists: "Region doesnt {@region} exists"
+command.removemember.not-a-member: "Player {@target} not a member of {@region}"
+command.removemember.member-removed: "Player {@target} no longer member of {@region}"
+command.removemember.description: "remove member from region"
+
+command.addowner.permission: "You dont have permission"
+command.addowner.usage: "Required arguments: [REGION] [PLAYER]"
+command.addowner.region-doesnt-exists: "Region doesnt exists"
+command.addowner.already-owner: "Player {@target} already owner of {@region}"
+command.addowner.owner-added: "Player {@target} now a member of {@region}"
+command.addowner.description: "add owner to region"
+
+command.removeowner.permission: "You have no permission"
+command.removeowner.usage: "Required arguments: [REGION] [PLAYER]"
+command.removeowner.region-doesnt-exists: "Region {@region} doesnt exists"
+command.removeowner.not-a-owner: "Player {@target} not a owner of {@region}"
+command.removeowner.owner-removed: "Player {@target} no longer owner of {@region}"
+command.removeowner.cant-remove-owner: "Region creator cant be removed"
+command.removeowner.description: "remove owner from region"
+
+command.info.permission: "You dont have permission"
+command.info.usage: "Required arguments: [REGION]"
+command.info.region-doesnt-exists: "Region {@region} doesnt exists"
+command.info.info: "Name: {@region}\nWorld: {@level}\nCreator: {@creator}\nOwners: {@owners}\nMembers: {@members}\nFlags: {@flags}\nSize: {@size}"
+command.flag.permission: "You have no permission"
+command.flag.usage: "Required arguments: [REGION] [FLAG] [STATE]"
+command.flag.region-doesnt-exists: "Region doesnt exists"
+command.flag.incorrect-flag: "Flag doesnt exists"
+command.flag.teleport-flag-in-game: "In game only"
+command.flag.teleport-should-be-in-region: "Teleport position must be inside region"
+command.flag.flag-state-changed: "Flag state of {@flag} in region {@region} set to {@state}"
+command.flag.wrong-price: "Price must be >= 0"
+command.flag.selling-region: "Region {@region} selling for {@price} money"
+command.flag.sell-flag-usage: "Required arguments: [REGION] [FLAG] [STATE] [PRICE]"
+command.flag.cant-sell-region-in-region: "You cant sell region which intersect with other region"
+command.flag.description: "region flags"
+
+command.teleport.in-game: "In game only"
+command.teleport.permission: "You have no permission"
+command.teleport.usage: "Required arguments: [REGION]"
+command.teleport.region-doesnt-exists: "Region {@region} doesnt exists"
+command.teleport.teleport-disabled: "Teleport disabled in this region"
+command.teleport.teleport: "Teleportation to {@region}..."
+command.teleport.description: "teleport to region"
+
+command.buy.in-game: "In game only"
+command.buy.permission: "You have no permission"
+command.buy.usage: "Required arguments: [REGION] [PRICE]"
+command.buy.region-doesnt-exists: "Region doesnt exists"
+command.buy.cant-buy-self: "You cant buy your region"
+command.buy.region-price: "Region {@region} costs {@price} money"
+command.buy.isnt-selling: "Region {@region} doesnt selling"
+command.buy.repeat-price: "You must repeat price"
+command.buy.not-enough-gold: "Not enough money"
+command.buy.description: "buy region"
 
 command.save.description: "Manual saving"
 command.save.permission: "You have no permission"
@@ -159,5 +194,5 @@ manual-save-start: "Manual save was started by {@initiator}..."
 manual-save-success: "Manual save started by {@initiator} ended."
 
 chunk-manager.empty-chunks-removed: "Removed {@amount} empty chunks."
-chunk-manager.chunks-auto-save: "{@amount} was automatically chunks saved."
+chunk-manager.chunks-auto-save: "{@amount} chunks was automatically saved."
 chunk-manager.chunks-manual-save: "{@amount} chunks was saved by {@initiator}."

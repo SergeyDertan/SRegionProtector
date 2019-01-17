@@ -1,3 +1,4 @@
+help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
 default-flags:
   move: false
   build: true
@@ -17,7 +18,11 @@ default-flags:
   health_regen: false
   mob-damage: false
   mob-spawn: false
-#
+  crops-destroy: true
+  redstone: false
+  ender-pearl: false
+  explode-block-break: true
+  liquid-flow: true
 need-message:
   move: false
   build: true
@@ -37,6 +42,11 @@ need-message:
   health_regen: false
   mob-damage: false
   mob-spawn: false
+  crops-destroy: true
+  redstone: false
+  ender-pearl: true
+  explode-block-break: true
+  liquid-flow: false
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

@@ -1,18 +1,18 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
 import cn.nukkit.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 import java.util.Arrays;
-import java.util.Map;
-import java.util.TreeMap;
 
 public final class RegionCommand extends SRegionProtectorCommand {
 
-    private Map<String, SRegionProtectorCommand> commands;
+    private Object2ObjectMap<String, SRegionProtectorCommand> commands;
 
     public RegionCommand(String name) {
         super(name);
-        this.commands = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.commands = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     @Override

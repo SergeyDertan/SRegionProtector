@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.math.Vector3;
 
 public final class RegionFlagCommand extends SRegionProtectorCommand {
 
@@ -57,7 +58,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                     this.messenger.sendMessage(sender, "command.flag.teleport-flag-in-game");
                     return false;
                 }
-                if (region.getLevel().getId() != ((Player) sender).level.getId() || !region.intersectsWith(((Player) sender).boundingBox)) {
+                if (!region.level.equalsIgnoreCase(((Player) sender).level.getName()) || !region.intersectsWith(((Player) sender).boundingBox)) {
                     this.messenger.sendMessage(sender, "command.flag.teleport-should-be-in-region");
                     return false;
                 }
@@ -68,7 +69,11 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         } else if (flag == RegionFlags.FLAG_SELL) {
             if (state) {
                 if (args.length < 4) {
-                    this.messenger.sendMessage(sender, "command.flag.sell-flag-usage");
+                    this.messenger.sendMessage(sender, "command.flag.sellData-flag-usage");
+                    return false;
+                }
+                if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "")) {
+                    this.messenger.sendMessage(sender, "command.flag.cant-sell-region-in-region");
                     return false;
                 }
                 int price = Integer.valueOf(args[3]);
@@ -78,10 +83,11 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                 }
                 region.setSellFlagState(price, true);
                 this.messenger.sendMessage(sender, "command.flag.selling-region", new String[]{"@region", "@price"}, new String[]{region.getName(), args[3]});
+                return false;
             }
         }
-        region.setSellFlagState(flag, state);
-        this.messenger.sendMessage(sender, "command.flag.flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.getName(), args[1], (state ? "enabled" : "disabled")}); //TODO
+        region.setFlagState(flag, state);
+        this.messenger.sendMessage(sender, "command.flag.flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.getName(), args[1], (state ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled"))});
         return true;
     }
 }

@@ -44,11 +44,11 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
         Position pos2 = session.pos2;
         String name = args[0];
 
-        if (name.isEmpty()) {
+        if (name.replace(" ", "").isEmpty()) {
             this.messenger.sendMessage(sender, "command.create.usage");
             return false;
         }
-        if (name.length() < this.regionSettings.minRegionNameLength || name.length() > regionSettings.maxRegionNameLength) {
+        if (name.length() < this.regionSettings.minRegionNameLength || name.length() > regionSettings.maxRegionNameLength || !name.matches("[a-zA-Z0-9]*")) {
             this.messenger.sendMessage(sender, "command.create.incorrect-name");
             return false;
         }
@@ -75,11 +75,11 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        if (this.regionManager.checkOverlap(pos1.asVector3f(), pos2.asVector3f(), pos1.level, (Player) sender)) {
+        if (this.regionManager.checkOverlap(pos1, pos2, pos1.level.getName(), sender.getName(), true)) {
             this.messenger.sendMessage(sender, "command.create.regions-overlap");
             return false;
         }
-        this.regionManager.createRegion(name, sender.getName(), pos1.asVector3f(), pos2.asVector3f(), pos1.level);
+        this.regionManager.createRegion(name, sender.getName(), pos1, pos2, pos1.level);
         this.messenger.sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }

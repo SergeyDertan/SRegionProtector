@@ -5,17 +5,17 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
-import cn.nukkit.level.Level;
-import cn.nukkit.level.Position;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.PluginManager;
 
 import java.util.Arrays;
-import java.util.Map;
 
 public abstract class RegionFlags {
 
+    /**
+     * https://github.com/SergeyDertan/SRegionProtector/wiki/Flags
+     */
     public static final int FLAG_INVALID = -1;
     public static final int FLAG_BUILD = 0;
     public static final int FLAG_INTERACT = 1;
@@ -37,8 +37,13 @@ public abstract class RegionFlags {
     public static final int FLAG_HEALTH_REGEN = 17;
     public static final int FLAG_MOB_DAMAGE = 18;
     public static final int FLAG_MOB_SPAWN = 19;
+    public static final int FLAG_CROPS_DESTROY = 20;
+    public static final int FLAG_REDSTONE = 21;
+    public static final int FLAG_ENDER_PEARL = 22;
+    public static final int FLAG_EXPLODE_BLOCK_BREAK = 23;
+    public static final int FLAG_LIQUID_FLOW = 24; //lava & water spread
 
-    public static final int FLAG_AMOUNT = 20;
+    public static final int FLAG_AMOUNT = 25;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -67,6 +72,11 @@ public abstract class RegionFlags {
         defaults[FLAG_HEALTH_REGEN] = new RegionFlag(flagsDefault[FLAG_HEALTH_REGEN]);
         defaults[FLAG_MOB_DAMAGE] = new RegionFlag(flagsDefault[FLAG_MOB_DAMAGE]);
         defaults[FLAG_MOB_SPAWN] = new RegionFlag(flagsDefault[FLAG_MOB_SPAWN]);
+        defaults[FLAG_CROPS_DESTROY] = new RegionFlag(flagsDefault[FLAG_CROPS_DESTROY]);
+        defaults[FLAG_REDSTONE] = new RegionFlag(flagsDefault[FLAG_REDSTONE]);
+        defaults[FLAG_ENDER_PEARL] = new RegionFlag(flagsDefault[FLAG_ENDER_PEARL]);
+        defaults[FLAG_EXPLODE_BLOCK_BREAK] = new RegionFlag(flagsDefault[FLAG_EXPLODE_BLOCK_BREAK]);
+        defaults[FLAG_LIQUID_FLOW] = new RegionFlag(flagsDefault[FLAG_LIQUID_FLOW]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -90,43 +100,11 @@ public abstract class RegionFlags {
         permissions[FLAG_HEALTH_REGEN] = pluginManager.getPermission("sregionprotector.region.flag.health_regen");
         permissions[FLAG_MOB_DAMAGE] = pluginManager.getPermission("sregionprotector.region.flag.mob_damage");
         permissions[FLAG_MOB_SPAWN] = pluginManager.getPermission("sregionprotector.region.flag.mob_spawn");
-    }
-
-    public static RegionFlag[] loadFlagList(Map<String, Map<String, Object>> data) {
-        if (data == null) return getDefaultFlagList();
-        RegionFlag[] flags = new RegionFlag[FLAG_AMOUNT];
-        for (Map.Entry<String, Map<String, Object>> flagData : data.entrySet()) {
-            int id = getFlagId(flagData.getKey());
-            if (id == RegionFlags.FLAG_INVALID) continue;
-            switch (id) {
-                default:
-                    flags[id] = new RegionFlag((boolean) flagData.getValue().get("state"));
-                    break;
-                case FLAG_TELEPORT:
-                    flags[id] = new RegionTeleportFlag(false);
-                    Map<String, Object> posData = (Map<String, Object>) flagData.getValue().get("position");
-                    if (posData != null) {
-                        double x = (double) posData.get("x");
-                        double y = (double) posData.get("y");
-                        double z = (double) posData.get("z");
-                        String levelName = (String) posData.get("level");
-                        if (x == 0 && y == 0 && z == 0) continue;
-                        Level level = Server.getInstance().getLevelByName(levelName);
-                        if (level == null) continue;
-                        ((RegionTeleportFlag) flags[id]).position = new Position(x, y, z, level);
-                    }
-                    flags[id].state = (boolean) flagData.getValue().get("state");
-                    break;
-                case FLAG_SELL:
-                    flags[id] = new RegionSellFlag();
-                    int price = (int) flagData.getValue().getOrDefault("price", 0);
-                    if (price < 0) continue;
-                    ((RegionSellFlag) flags[id]).price = price;
-                    flags[id].state = (boolean) flagData.getValue().get("state");
-                    break;
-            }
-        }
-        return fixMissingFlags(flags);
+        permissions[FLAG_CROPS_DESTROY] = pluginManager.getPermission("sregionprotector.region.flag.crops_destroy");
+        permissions[FLAG_REDSTONE] = pluginManager.getPermission("sregionprotector.region.flag.redstone");
+        permissions[FLAG_ENDER_PEARL] = pluginManager.getPermission("sregionprotector.region.flag.ender_pearl");
+        permissions[FLAG_EXPLODE_BLOCK_BREAK] = pluginManager.getPermission("sregionprotector.region.flag.explode_block_break");
+        permissions[FLAG_LIQUID_FLOW] = pluginManager.getPermission("sregionprotector.region.flag.liquid_flow");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
@@ -154,7 +132,7 @@ public abstract class RegionFlags {
             case FLAG_LIGHTER:
                 return "lighter";
             case FLAG_MAGIC_ITEM_USE:
-                return "magicitem";
+                return "magic-item";
             case FLAG_HEAL:
                 return "heal";
             case FLAG_INVINCIBLE:
@@ -164,30 +142,40 @@ public abstract class RegionFlags {
             case FLAG_SELL:
                 return "sell";
             case FLAG_POTION_LAUNCH:
-                return "potion_launch";
+                return "potion-launch";
             case FLAG_MOVE:
                 return "move";
             case FLAG_LEAVES_DECAY:
-                return "leaves_decay";
+                return "leaves-decay";
             case FLAG_ITEM_DROP:
-                return "item_drop";
+                return "item-drop";
             case FLAG_SEND_CHAT:
                 return "send_chat";
             case FLAG_RECEIVE_CHAT:
-                return "receive_chat";
+                return "receive-chat";
             case FLAG_HEALTH_REGEN:
-                return "health_regen";
+                return "health-regen";
             case FLAG_MOB_DAMAGE:
                 return "mob-damage";
             case FLAG_MOB_SPAWN:
                 return "mob-spawn";
+            case FLAG_CROPS_DESTROY:
+                return "crops-destroy";
+            case FLAG_REDSTONE:
+                return "redstone";
+            case FLAG_ENDER_PEARL:
+                return "ender-pearl";
+            case FLAG_EXPLODE_BLOCK_BREAK:
+                return "explode-block-break";
+            case FLAG_LIQUID_FLOW:
+                return "liquid-flow";
         }
     }
 
     public static int getFlagId(String name) {
-        switch (name) {
+        switch (name.toLowerCase()) {
             default:
-                return -1;
+                return FLAG_INVALID;
             case "build":
                 return FLAG_BUILD;
             case "interact":
@@ -225,14 +213,16 @@ public abstract class RegionFlags {
             case "leave-decay":
             case "leaves-decay":
             case "leaves_decay":
+            case "leavesdecay":
+            case "leavedecay":
                 return FLAG_LEAVES_DECAY;
             case "item_drop":
             case "itemdrop":
             case "item-drop":
                 return FLAG_ITEM_DROP;
             case "send-chat":
-            case "sendchat":
             case "send_chat":
+            case "sendchat":
                 return FLAG_SEND_CHAT;
             case "receive_chat":
             case "receive-chat":
@@ -243,14 +233,42 @@ public abstract class RegionFlags {
             case "healthregen":
                 return FLAG_HEALTH_REGEN;
             case "mob-damage":
+            case "mob_damage":
+            case "mobdamage":
                 return FLAG_MOB_DAMAGE;
             case "mob-spawn":
+            case "mob_spawn":
+            case "mobspawn":
                 return FLAG_MOB_SPAWN;
+            case "crops-destroy":
+            case "crops_destroy":
+            case "cropsdestroy":
+                return FLAG_CROPS_DESTROY;
+            case "redstone":
+                return FLAG_REDSTONE;
+            case "ender-pearl":
+            case "ender_pearl":
+            case "enderpearl":
+                return FLAG_ENDER_PEARL;
+            case "explode-block-break":
+            case "explode_block_break":
+            case "explodeblockbreak":
+                return FLAG_EXPLODE_BLOCK_BREAK;
+            case "liquid-flow":
+            case "liquid_flow":
+            case "liquidflow":
+            case "lava-flow":
+            case "lava_flow":
+            case "lavaflow":
+            case "water-flow":
+            case "water_flow":
+            case "waterflow":
+                return FLAG_LIQUID_FLOW;
         }
     }
 
     public static boolean getStateFromString(String state) {
-        switch (state) {
+        switch (state.toLowerCase()) {
             case "yes":
             case "enable":
             case "enabled":

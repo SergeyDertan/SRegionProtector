@@ -2,10 +2,7 @@ package Sergey_Dertan.SRegionProtector.Main;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Command.Admin.SaveCommand;
-import Sergey_Dertan.SRegionProtector.Command.Creation.CreateRegionCommand;
-import Sergey_Dertan.SRegionProtector.Command.Creation.GetWandCommand;
-import Sergey_Dertan.SRegionProtector.Command.Creation.SetPos1Command;
-import Sergey_Dertan.SRegionProtector.Command.Creation.SetPos2Command;
+import Sergey_Dertan.SRegionProtector.Command.Creation.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
@@ -16,8 +13,9 @@ import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
-import Sergey_Dertan.SRegionProtector.Provider.Provider;
-import Sergey_Dertan.SRegionProtector.Provider.YAMLProvider;
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.MySQLDataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.YAMLDataProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
@@ -49,7 +47,7 @@ public final class SRegionProtectorMain extends PluginBase {
     public boolean forceShutdown = false; //TODO
 
     private Settings settings;
-    private Provider provider;
+    private DataProvider provider;
     private RegionManager regionManager;
     private ChunkManager chunkManager;
     private RegionSelector regionSelector;
@@ -61,16 +59,20 @@ public final class SRegionProtectorMain extends PluginBase {
 
     @Override
     public void onEnable() {
-        if (!this.createDirectories()) return;
-        this.initMessenger();
+        if (!this.createDirectories()) {
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+        if (!this.initMessenger()) return;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.start", "@ver", this.getDescription().getVersion()));
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.settings"));
-        this.initSettings();
+        if (!this.initSettings()) return;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider"));
-        this.initDataProvider("yml"); //TODO add more providers
+        if (!this.initDataProvider()) return;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.regions"));
         this.initRegions();
@@ -102,6 +104,30 @@ public final class SRegionProtectorMain extends PluginBase {
         System.gc();
     }
 
+    private boolean initDataProvider() {
+        try {
+            switch (this.settings.provider) {
+                default:
+                case YAML:
+                    this.provider = new YAMLDataProvider(this.getLogger());
+                    break;
+                case MYSQL:
+                    //this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
+                    this.provider = new YAMLDataProvider(this.getLogger());
+                    break;
+                case SQLite3:
+                    this.provider = new YAMLDataProvider(this.getLogger()); //TODO sqlite
+            }
+            this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name));
+            return true;
+        } catch (Exception e) {
+            this.getLogger().info(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name}));
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
+            return false;
+        }
+    }
+
     private void initAutoSave() {
         this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, new AutoSaveTask(this), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
     }
@@ -111,7 +137,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initSessionsClearTask() {
-        this.getServer().getScheduler().scheduleRepeatingTask(this, new ClearSessionsTask(this.regionSelector), (int) this.settings.getConfig().get("select-session-clear-interval") * 20);
+        this.getServer().getScheduler().scheduleRepeatingTask(this, new ClearSessionsTask(this.regionSelector), ((Number) this.settings.getConfig().get("select-session-clear-interval")).intValue() * 20, true);
     }
 
     private boolean createDirectories() {
@@ -133,34 +159,33 @@ public final class SRegionProtectorMain extends PluginBase {
         return true;
     }
 
-    private void initSettings() {
-        this.settings = new Settings();
-        this.settings.init(this);
-    }
-
-    private void initDataProvider(String provider) {
-        switch (provider) {
-            case "yaml":
-            case "yml":
-            default:
-                this.provider = new YAMLProvider(this.getLogger());
-                break;
+    private boolean initSettings() {
+        try {
+            this.settings = new Settings();
+            return true;
+        } catch (Exception e) {
+            this.getLogger().info(TextFormat.RED + Messenger.getInstance().getMessage("loading.error.resource", "@err", e.getMessage()));
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
+            return false;
         }
     }
 
-    private void initMessenger() {
+    private boolean initMessenger() {
         try {
             this.messenger = new Messenger();
+            return true;
         } catch (Exception e) {
             this.getLogger().alert(TextFormat.RED + "Messenger initializing error: " + e.getMessage());
             this.getLogger().alert(TextFormat.RED + "Disabling plugin...");
             this.forceShutdown = true;
-            this.getServer().getPluginManager().disablePlugin(this);
+            this.getPluginLoader().disablePlugin(this);
+            return false;
         }
     }
 
     private void initRegions() {
-        this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime);
+        this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime, this.settings.borderBlock);
         this.regionManager = new RegionManager(this.provider, this.getLogger());
         this.regionManager.init();
     }
@@ -180,7 +205,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.save(saveType, null);
     }
 
-    public void save(SaveType saveType, String initiator) { //TODO manual save in the other thread?
+    public synchronized void save(SaveType saveType, String initiator) {
         switch (saveType) {
             case AUTO:
                 this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-start"));
@@ -389,13 +414,62 @@ public final class SRegionProtectorMain extends PluginBase {
         command.setCommandParameters(saveCommandParameters);
         rg.registerCommand(command);
         this.getServer().getCommandMap().register(command.getName(), command);
+
+        command = new RegionSizeCommand("rgsize", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.size.description"));
+        command.setPermission("sregionprotector.command.size");
+        Map<String, CommandParameter[]> sizeCommandParameters = new HashMap<>();
+        sizeCommandParameters.put("rgsize", new CommandParameter[0]);
+        command.setCommandParameters(sizeCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
+
+        command = new ShowBorderCommand("rgshowborder", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.show-border.description"));
+        command.setPermission("sregionprotector.command.show-border");
+        Map<String, CommandParameter[]> showBorderCommandParameters = new HashMap<>();
+        showBorderCommandParameters.put("rgshowborder", new CommandParameter[0]);
+        command.setCommandParameters(showBorderCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
+
+        command = new RegionSelectCommand("rgselect", this.regionManager, this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.select.description"));
+        command.setPermission("sregionprotector.command.select");
+        Map<String, CommandParameter[]> regionSelectCommandParameters = new HashMap<>();
+        regionSelectCommandParameters.put("rgselect", new CommandParameter[0]);
+        command.setCommandParameters(regionSelectCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
+
+        command = new RemoveBordersCommand("rgremoveborders", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.remove-borders.description"));
+        command.setPermission("sregionprotector.command.remove-borders");
+        Map<String, CommandParameter[]> removeBordersCommandParameters = new HashMap<>();
+        removeBordersCommandParameters.put("rgremoveborders", new CommandParameter[0]);
+        command.setCommandParameters(removeBordersCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
+
+        command = new RegionExpandCommand("rgexpand", this.regionSelector);
+        command.setDescription(this.messenger.getMessage("command.expand.description"));
+        command.setPermission("sregionprotector.command.expand");
+        Map<String, CommandParameter[]> expandCommandParameters = new HashMap<>();
+        expandCommandParameters.put("rgexpand", new CommandParameter[0]);
+        command.setCommandParameters(expandCommandParameters);
+        rg.registerCommand(command);
+        this.getServer().getCommandMap().register(command.getName(), command);
     }
 
     @Override
     public void onDisable() {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
-        if (this.forceShutdown) return; //TODO message
-
+        if (this.forceShutdown) {
+            if (this.messenger != null) {
+                this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));
+            }
+            return;
+        }
         this.save(SaveType.DISABLING);
     }
 
@@ -409,5 +483,19 @@ public final class SRegionProtectorMain extends PluginBase {
 
     public RegionSelector getRegionSelector() {
         return this.regionSelector;
+    }
+
+    public Settings getSettings() {
+        return this.settings;
+    }
+
+    public void dataMigration() {
+        //TODO
+    }
+
+    public enum SaveType {
+        AUTO,
+        MANUAL,
+        DISABLING
     }
 }

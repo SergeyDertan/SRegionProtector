@@ -2,7 +2,7 @@ package Sergey_Dertan.SRegionProtector.Command.Admin;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
-import Sergey_Dertan.SRegionProtector.Main.SaveType;
+import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 
 public class SaveCommand extends SRegionProtectorCommand {
@@ -20,7 +20,20 @@ public class SaveCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "save.permission");
             return false;
         }
-        this.pl.save(SaveType.MANUAL, sender.getName());
+        Server.getInstance().getScheduler().scheduleTask(this.pl, new Runnable() {
+
+            private SRegionProtectorMain pl;
+
+            @Override
+            public void run() {
+                this.pl.save(SRegionProtectorMain.SaveType.MANUAL, sender.getName());
+            }
+
+            public Runnable init(SRegionProtectorMain pl) {
+                this.pl = pl;
+                return this;
+            }
+        }.init(this.pl), true);
         return false;
     }
 }

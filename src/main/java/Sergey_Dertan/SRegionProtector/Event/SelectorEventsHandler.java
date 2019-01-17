@@ -9,6 +9,7 @@ import cn.nukkit.block.BlockAir;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.item.Item;
@@ -26,20 +27,28 @@ public final class SelectorEventsHandler implements Listener {
     @EventHandler
     public void playerQuit(PlayerQuitEvent e) {
         this.regionSelector.removeSession(e.getPlayer());
+        this.regionSelector.removeBorders(e.getPlayer(), false);
     }
 
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
-        Player player = e.getPlayer();
-        Item item = e.getItem();
-        Block block = e.getBlock();
-        if (block instanceof BlockAir || !(item instanceof ItemAxeWood)) return;
+        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void blockBreak(BlockBreakEvent e) {
+        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled(true);
+    }
+
+    private boolean selectPosition(Player player, Block pos, Item item) {
+        if (pos instanceof BlockAir || !(item instanceof ItemAxeWood)) return false;
         SelectorSession session = this.regionSelector.getSession(player);
+        if (!session.setNextPos(Position.fromObject(pos, pos.level))) return false;
         if (session.nextPos) {
-            Messenger.getInstance().sendMessage(player, "region.selection.pos1");
-        } else {
             Messenger.getInstance().sendMessage(player, "region.selection.pos2");
+        } else {
+            Messenger.getInstance().sendMessage(player, "region.selection.pos1");
         }
-        session.setNextPos(Position.fromObject(block, block.level));
+        return true;
     }
 }

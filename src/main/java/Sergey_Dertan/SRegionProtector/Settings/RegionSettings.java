@@ -18,8 +18,8 @@ public final class RegionSettings {
     public final boolean[] defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
     public final boolean[] needMessage = new boolean[RegionFlags.FLAG_AMOUNT];
 
-    public int maxRegionNameLength;
-    public int minRegionNameLength;
+    public final int maxRegionNameLength;
+    public final int minRegionNameLength;
     public int healFlagHealDelay;
     public int healFlagHealAmount;
 
@@ -35,10 +35,11 @@ public final class RegionSettings {
         this.loadMessages(rgCnf);
         RegionFlags.init(this.defaultFlags);
 
-        this.maxRegionNameLength = (int) rgCnf.get("max-region-name-length");
-        this.minRegionNameLength = (int) rgCnf.get("min-region-name-length");
+        this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
+        this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();
     }
 
+    @SuppressWarnings("unchecked")
     private void loadMessages(Map<String, Object> rgCnf) {
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("need-message")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
@@ -47,14 +48,15 @@ public final class RegionSettings {
     }
 
     private void loadHealFlagSettings(Map<String, Object> cnf) {
-        this.healFlagHealDelay = (int) cnf.get("heal-flag-heal-delay");
-        this.healFlagHealAmount = (int) cnf.get("heal-flag-heal-amount");
+        this.healFlagHealDelay = ((Number) cnf.get("heal-flag-heal-delay")).intValue();
+        this.healFlagHealAmount = ((Number) cnf.get("heal-flag-heal-amount")).intValue();
 
         BlockEntityHealer.HEAL_DELAY = this.healFlagHealDelay;
         BlockEntityHealer.HEAL_AMOUNT = this.healFlagHealAmount;
         BlockEntityHealer.FLAG_ENABLED = this.flagsStatus[RegionFlags.FLAG_HEAL];
     }
 
+    @SuppressWarnings("unchecked")
     private void loadDefaultFlags(Map<String, Object> rgCnf) {
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("default-flags")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
@@ -80,6 +82,7 @@ public final class RegionSettings {
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     private void loadSizePermissions(Map<String, Object> cnf) {
         this.regionSize = new Long2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
@@ -92,6 +95,7 @@ public final class RegionSettings {
         mainPerm.recalculatePermissibles();
     }
 
+    @SuppressWarnings("unchecked")
     private void loadAmountPermissions(Map<String, Object> cnf) {
         this.regionAmount = new Int2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.amount.*");
@@ -112,6 +116,7 @@ public final class RegionSettings {
         return this.isFlagEnabled(RegionFlags.getFlagId(name));
     }
 
+    @SuppressWarnings("unchecked")
     private void loadFlagsStatuses(Map<String, Object> cnf) {
         Arrays.fill(flagsStatus, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("active-flags")).entrySet()) {

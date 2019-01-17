@@ -1,0 +1,4 @@
+user: root
+password: ""
+address: localhost
+port: 3306

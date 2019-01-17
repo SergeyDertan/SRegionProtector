@@ -1,58 +1,53 @@
 package Sergey_Dertan.SRegionProtector.Region;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
-import Sergey_Dertan.SRegionProtector.Main.SaveType;
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
-import Sergey_Dertan.SRegionProtector.Provider.Provider;
+import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
+import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
+import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
-import cn.nukkit.Server;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.math.Vector3f;
-import cn.nukkit.plugin.PluginLogger;
+import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
+import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
+import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.fixMissingFlags;
+
 public final class RegionManager {
 
-    public final static String MIN_X_TAG = "min_x";
-    public final static String MIN_Y_TAG = "min_y";
-    public final static String MIN_Z_TAG = "min_z";
-
-    public final static String MAX_X_TAG = "max_x";
-    public final static String MAX_Y_TAG = "max_y";
-    public final static String MAX_Z_TAG = "max_z";
-
-    public final static String OWNERS_TAG = "owners";
-    public final static String MEMBERS_TAG = "members";
-    public final static String NAME_TAG = "name";
-    public final static String LEVEL_TAG = "level";
-    public final static String CREATOR_TAG = "creator";
-
-    private Provider provider;
-    private Map<String, Region> regions;
-    private PluginLogger logger;
+    private DataProvider provider;
+    private Object2ObjectMap<String, Region> regions;
+    private Logger logger;
     private ChunkManager chunkManager;
-    private Map<String, Set<Region>> owners, members;
+    private Object2ObjectMap<String, ObjectList<Region>> owners;
+    private Object2ObjectMap<String, ObjectList<Region>> members;
     private Messenger messenger;
 
-    public RegionManager(Provider provider, PluginLogger logger) {
+    public RegionManager(DataProvider provider, Logger logger) {
         this.provider = provider;
         this.logger = logger;
         this.messenger = Messenger.getInstance();
     }
 
-    public void setChunkManager(ChunkManager chunkManager) { //TODO fix?
+    public void setChunkManager(ChunkManager chunkManager) {
         this.chunkManager = chunkManager;
         this.addChunksToRegions();
     }
@@ -61,75 +56,77 @@ public final class RegionManager {
         for (Region region : this.regions.values()) {
             Vector3 min = new Vector3(region.getMaxX(), region.getMaxY(), region.getMaxZ());
             Vector3 max = new Vector3(region.getMinX(), region.getMinY(), region.getMinZ());
-            this.chunkManager.getRegionChunks(min.asVector3f(), max.asVector3f(), region.getLevel().getId()).forEach(region::addChunk);
+            this.chunkManager.getRegionChunks(min, max, region.level).forEach(region::addChunk);
         }
     }
 
     public Map<String, Region> getRegions() {
-        return this.regions;
+        Map<String, Region> regions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        regions.putAll(this.regions);
+        return regions;
     }
 
-    public boolean regionExists(String name) {
+    public synchronized boolean regionExists(String name) {
+        if (name.replace(" ", "").isEmpty()) return false;
         return this.regions.containsKey(name);
     }
 
     public void init() {
-        this.regions = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        this.owners = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        this.members = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        Set<Map<String, Object>> regions = this.provider.loadRegionList();
-        for (Map<String, Object> regionData : regions) {
-            String name = (String) regionData.get(NAME_TAG);
-            String creator = (String) regionData.get(CREATOR_TAG);
-            String level = (String) regionData.get(LEVEL_TAG);
+        this.regions = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.owners = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.members = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        Set<RegionDataObject> regions = this.provider.loadRegionList();
+        for (RegionDataObject rdo : regions) {
+            String name = rdo.name;
+            String creator = rdo.creator;
+            String level = rdo.level;
 
-            double minX = (double) regionData.get(MIN_X_TAG);
-            double minY = (double) regionData.get(MIN_Y_TAG);
-            double minZ = (double) regionData.get(MIN_Z_TAG);
+            double minX = rdo.minX;
+            double minY = rdo.minY;
+            double minZ = rdo.minZ;
 
-            double maxX = (double) regionData.get(MAX_X_TAG);
-            double maxY = (double) regionData.get(MAX_Y_TAG);
-            double maxZ = (double) regionData.get(MAX_Z_TAG);
+            double maxX = rdo.maxX;
+            double maxY = rdo.maxY;
+            double maxZ = rdo.maxZ;
 
             String[] owners;
             String[] members;
 
             try {
-                owners = Utils.deserializeStringArray((String) regionData.get(OWNERS_TAG));
-                members = Utils.deserializeStringArray((String) regionData.get(MEMBERS_TAG));
+                owners = Utils.deserializeStringArray(rdo.owners);
+                members = Utils.deserializeStringArray(rdo.members);
             } catch (RuntimeException e) {
                 this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
                 continue;
             }
 
-            Map<String, Map<String, Object>> flags = this.provider.loadFlags(name);
+            FlagListDataObject flags = this.provider.loadFlags(name);
 
-            RegionFlag[] flagList = RegionFlags.loadFlagList(flags);
+            RegionFlag[] flagList = Converter.fromDataObject(flags);
 
-            Level lvl = Server.getInstance().getLevelByName(level);
-
-            if (lvl == null) {
-                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, "level not found"})); //TODO msg
-                continue;
+            boolean needUpdate = false;
+            if (flagList.length < FLAG_AMOUNT) {
+                needUpdate = true;
+                fixMissingFlags(flagList);
             }
 
-            Region region = new Region(name, creator, lvl, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
+            Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
 
-            if (flagList.length > flags.size()) region.needUpdate = true;
+            region.needUpdate = needUpdate;
 
             this.regions.put(name, region);
 
-            for (String user : owners) this.owners.computeIfAbsent(user, (usr) -> new HashSet<>()).add(region);
+            for (String user : owners) this.owners.computeIfAbsent(user, (usr) -> new ObjectArrayList<>()).add(region);
 
-            for (String user : members) this.members.computeIfAbsent(user, (usr) -> new HashSet<>()).add(region);
+            for (String user : members) this.members.computeIfAbsent(user, (usr) -> new ObjectArrayList<>()).add(region);
 
-            this.owners.computeIfAbsent(region.getCreator(), (usr) -> new HashSet<>()).add(region);
+            this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ObjectArrayList<>()).add(region);
         }
 
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
     }
 
-    public synchronized Region createRegion(String name, String creator, Vector3f pos1, Vector3f pos2, Level level) {
+    public synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
@@ -138,26 +135,26 @@ public final class RegionManager {
         double maxY = Math.max(pos1.y, pos2.y);
         double maxZ = Math.max(pos1.z, pos2.z);
 
-        Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ);
+        Region region = new Region(name, creator, level.getName(), minX, minY, minZ, maxX, maxY, maxZ);
 
-        this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), true).forEach(chunk -> {
+        this.chunkManager.getRegionChunks(pos1, pos2, level.getName(), true).forEach(chunk -> {
             chunk.addRegion(region);
             region.addChunk(chunk);
         });
-        this.owners.computeIfAbsent(creator, (s) -> new HashSet<>()).add(region);
+        this.owners.computeIfAbsent(creator, (s) -> new ObjectArrayList<>()).add(region);
         this.regions.put(name, region);
 
         Vector3 pos = region.getHealerVector();
 
         new BlockEntityHealer(
-                level.getChunk((int) pos.x >> 4, (int) pos.z >> 4, true), //TODO true
-                BlockEntityHealer.getDefaultNBT(region.getHealerVector(), name)
+                level.getChunk((int) pos.x >> 4, (int) pos.z >> 4, true),
+                BlockEntityHealer.getDefaultNBT(region.getHealerVector(), region.name)
         );
         region.needUpdate = true;
         return region;
     }
 
-    public void changeRegionOwner(Region region, String newOwner) {
+    public synchronized void changeRegionOwner(Region region, String newOwner) {
         synchronized (region.lock) {
             region.getMembers().forEach(member ->
                     {
@@ -178,9 +175,9 @@ public final class RegionManager {
 
             region.clearUsers();
 
-            this.owners.computeIfAbsent(newOwner, (s) -> new HashSet<>()).add(region);
+            this.owners.computeIfAbsent(newOwner, (s) -> new ObjectArrayList<>()).add(region);
             region.setCreator(newOwner);
-            region.setSellFlagState(-1, false);
+            region.setSellFlagState(-1L, false);
         }
     }
 
@@ -212,33 +209,39 @@ public final class RegionManager {
         }
     }
 
-    public boolean checkOverlap(Vector3f pos1, Vector3f pos2, Level level, Player player) {
-        SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(pos1.asVector3(), pos2.asVector3());
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String player, boolean checkSellFlag) {
+        SimpleAxisAlignedBB bb = new SimpleAxisAlignedBB(pos1, pos2);
 
-        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level.getId(), false)) {
+        for (Chunk chunk : this.chunkManager.getRegionChunks(pos1, pos2, level, false)) {
             for (Region region : chunk.getRegions()) {
-                if (!region.intersectsWith(bb) || region.isCreator(player.getName())) continue;
+                if (!region.intersectsWith(bb)) continue;
+                if (checkSellFlag && region.getFlagState(RegionFlags.FLAG_SELL)) return true;
+                if (region.isCreator(player)) continue;
                 return true;
             }
         }
         return false;
     }
 
-    public void addMember(Region region, String target) {
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String player) {
+        return this.checkOverlap(pos1, pos2, level, player, false);
+    }
+
+    public synchronized void addMember(Region region, String target) {
         synchronized (region.lock) {
-            this.members.computeIfAbsent(target, (usr) -> new HashSet<>()).add(region);
+            this.members.computeIfAbsent(target, (usr) -> new ObjectArrayList<>()).add(region);
             region.addMember(target);
         }
     }
 
-    public void addOwner(Region region, String target) {
+    public synchronized void addOwner(Region region, String target) {
         synchronized (region.lock) {
-            this.owners.computeIfAbsent(target, (usr) -> new HashSet<>()).add(region);
+            this.owners.computeIfAbsent(target, (usr) -> new ObjectArrayList<>()).add(region);
             region.addOwner(target);
         }
     }
 
-    public void removeOwner(Region region, String target) {
+    public synchronized void removeOwner(Region region, String target) {
         synchronized (region.lock) {
             this.owners.get(target).remove(region);
             if (this.owners.get(target).size() == 0) this.owners.remove(target);
@@ -246,7 +249,7 @@ public final class RegionManager {
         }
     }
 
-    public void removeMember(Region region, String target) {
+    public synchronized void removeMember(Region region, String target) {
         synchronized (region.lock) {
             this.members.get(target).remove(region);
             if (this.members.get(target).size() == 0) this.members.remove(target);
@@ -254,11 +257,11 @@ public final class RegionManager {
         }
     }
 
-    public Region getRegion(String name) {
+    public synchronized Region getRegion(String name) {
         return this.regions.get(name);
     }
 
-    public synchronized void save(SaveType saveType, String initiator) {
+    public synchronized void save(SRegionProtectorMain.SaveType saveType, String initiator) {
         int amount = 0;
         for (Region region : this.regions.values()) {
             synchronized (region.lock) {
@@ -281,7 +284,7 @@ public final class RegionManager {
         }
     }
 
-    public void save(SaveType saveType) {
+    public synchronized void save(SRegionProtectorMain.SaveType saveType) {
         this.save(saveType, null);
     }
 
@@ -289,14 +292,14 @@ public final class RegionManager {
         switch (group) {
             case CREATOR:
                 Set<Region> list = new HashSet<>();
-                for (Region region : this.owners.getOrDefault(player.getName().toLowerCase(), new HashSet<>())) {
-                    if (region.isCreator(player.getName().toLowerCase())) list.add(region);
+                for (Region region : this.owners.getOrDefault(player.getName(), new ObjectArrayList<>())) {
+                    if (region.isCreator(player.getName())) list.add(region);
                 }
                 return list;
             case OWNER:
-                return this.owners.getOrDefault(player.getName().toLowerCase(), new HashSet<>());
+                return new HashSet<>(this.owners.getOrDefault(player.getName(), new ObjectArrayList<>()));
             case MEMBER:
-                return this.members.getOrDefault(player.getName().toLowerCase(), new HashSet<>());
+                return new HashSet<>(this.members.getOrDefault(player.getName(), new ObjectArrayList<>()));
             default:
                 return new HashSet<>();
         }

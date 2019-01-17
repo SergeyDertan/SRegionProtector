@@ -1,4 +1,7 @@
+help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
+async-chunks-loading: true
 provider: yaml
+border-block: "20"
 #1 second = 20 ticks
 select-session-clear-interval: 20
 session-life-time: 120
@@ -23,6 +26,11 @@ active-flags:
   health_regen: false
   mob-damage: false
   mob-spawn: false
+  crops-destroy: true
+  redstone: false
+  ender-pearl: false
+  explode-block-break: true
+  liquid-flow: true
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:
@@ -30,9 +38,9 @@ active-flags:
 #  - 20
 # 2 permissions will be created: sregionprotector.region.size.10 and sregionprotector.region.size.20
 region-sizes:
-  - 1000
-  - 10000
-  - 20000
+- 1000
+- 10000
+- 20000
 # permissions will be created during the plugin loading and have names sregionprotector.region.amount.MAX_REGION_AMOUNT
 # for example, if you have
 # region-amounts:
@@ -40,8 +48,8 @@ region-sizes:
 #  - 2
 # 2 permissions will be created: sregionprotector.region.amount.1 and sregionprotector.region.amount.20
 region-amounts:
-  - 1
-  - 2
-  - 3
+- 1
+- 2
+- 3
 #in seconds
 auto-save-period: 60

@@ -39,7 +39,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
                 this.messenger.sendMessage(sender, "command.list.usage");
                 return false;
             }
-            Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getId(), true, false);
+            Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getName(), true, false);
             if (chunk == null) {
                 this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
                 return false;
@@ -68,18 +68,19 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
 
     private void showRegionInfo(CommandSender sender, Region region) {
         String name = region.getName();
-        String level = region.getLevel().getName();
+        String level = region.level;
         String owner = region.getCreator();
         String owners = String.join(", ", region.getOwners());
         String members = String.join(", ", region.getMembers());
+        String size = String.valueOf(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)));
         Set<String> flags = new HashSet<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
             if (!this.regionSettings.flagsStatus[i]) continue;
-            flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? "enabled" : "disabled")); //TODO
+            flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled")));
         }
         this.messenger.sendMessage(sender, "command.info.info",
-                new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags"},
-                new String[]{name, owner, level, owners, members, String.join(", ", flags)}
+                new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags", "@size"},
+                new String[]{name, owner, level, owners, members, String.join(", ", flags), size}
         );
     }
 }

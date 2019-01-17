@@ -10,13 +10,10 @@ import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.tag.CompoundTag;
 
+import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
+
 public final class BlockEntityHealer extends BlockEntitySpawnable {
 
-    public static final String TAG_REGION = "region";
-    public static final String TAG_ID = "id";
-    public static final String TAG_X = "x";
-    public static final String TAG_Y = "y";
-    public static final String TAG_Z = "z";
     public static final String BLOCK_ENTITY_HEALER = "RegionHealer";
 
     public static int HEAL_DELAY;
@@ -30,23 +27,23 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     public BlockEntityHealer(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
-        this.region = nbt.getString(TAG_REGION);
+        this.region = nbt.getString(REGION_TAG);
         this.regionManager = SRegionProtectorMain.getInstance().getRegionManager();
-        this.delay = HEAL_DELAY;
         if (!this.isBlockEntityValid()) {
             this.closed = true;
             return;
         }
+        this.delay = HEAL_DELAY;
         this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
     }
 
     public static CompoundTag getDefaultNBT(Vector3 pos, String region) {
         return new CompoundTag("")
-                .putString(TAG_ID, BLOCK_ENTITY_HEALER)
-                .putInt(TAG_X, pos.getFloorX())
-                .putInt(TAG_Y, pos.getFloorY())
-                .putInt(TAG_Z, pos.getFloorZ())
-                .putString(TAG_REGION, region);
+                .putString(ID_TAG, BLOCK_ENTITY_HEALER)
+                .putInt(X_TAG, pos.getFloorX())
+                .putInt(Y_TAG, pos.getFloorY())
+                .putInt(Z_TAG, pos.getFloorZ())
+                .putString(REGION_TAG, region);
     }
 
     @Override
@@ -66,18 +63,18 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     @Override
     public CompoundTag getSpawnCompound() {
         return new CompoundTag("")
-                .putString(TAG_ID, BLOCK_ENTITY_HEALER)
-                .putInt(TAG_X, this.getFloorX())
-                .putInt(TAG_Y, this.getFloorY())
-                .putInt(TAG_Z, this.getFloorZ())
-                .putString(TAG_REGION, region);
+                .putString(ID_TAG, BLOCK_ENTITY_HEALER)
+                .putInt(X_TAG, this.getFloorX())
+                .putInt(Y_TAG, this.getFloorY())
+                .putInt(Z_TAG, this.getFloorZ())
+                .putString(REGION_TAG, this.region);
     }
 
     @Override
     public void saveNBT() {
         super.saveNBT();
-        this.namedTag.putString(TAG_ID, BLOCK_ENTITY_HEALER);
-        this.namedTag.putString(TAG_REGION, this.region);
+        this.namedTag.putString(ID_TAG, BLOCK_ENTITY_HEALER);
+        this.namedTag.putString(REGION_TAG, this.region);
     }
 
     @Override
@@ -86,7 +83,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     }
 
     @Override
-    public boolean onUpdate() { //TODO
+    public boolean onUpdate() {
         if (!FLAG_ENABLED) return true;
         if (this.closed) return false;
         if (--this.delay > 0) return true;

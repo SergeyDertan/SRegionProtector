@@ -3,7 +3,12 @@ package Sergey_Dertan.SRegionProtector.Region.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
 public final class Chunk {
 
@@ -11,27 +16,21 @@ public final class Chunk {
     boolean needUpdate;
     private long x;
     private long z;
-    private long hash;
-    private List<Region> regions;
+    private Set<Region> regions;
 
-    public Chunk(long x, long z, long hash, List<Region> regions) {
+    public Chunk(long x, long z, Set<Region> regions) {
         this.x = x;
         this.z = z;
-        this.hash = hash;
         this.regions = regions;
         this.needUpdate = false;
     }
 
-    public Chunk(long x, long z, long hash) {
-        this(x, z, hash, new ArrayList<>());
+    public Chunk(long x, long z) {
+        this(x, z, new HashSet<>());
     }
 
-    public long getHash() {
-        return this.hash;
-    }
-
-    public List<Region> getRegions() {
-        return this.regions;
+    public Set<Region> getRegions() {
+        return new HashSet<>(this.regions);
     }
 
     public int getRegionsAmount() {
@@ -72,10 +71,9 @@ public final class Chunk {
 
         this.regions.forEach(region -> regions.add(region.getName()));
 
-        sec.put("x", this.x);
-        sec.put("z", this.z);
-        sec.put("regions", Utils.serializeStringArray(regions.toArray(new String[]{})));
-
+        sec.put(X_TAG, this.x);
+        sec.put(Z_TAG, this.z);
+        sec.put(REGIONS_TAG, Utils.serializeStringArray(regions.toArray(new String[]{})));
         return sec;
     }
 }
