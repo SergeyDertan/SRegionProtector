@@ -41,11 +41,11 @@ public final class RemoveOwnerCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.removeowner.permission");
             return false;
         }
-        if (!region.isCreator(target)) {
+        if (!region.isOwner(target)) {
             this.messenger.sendMessage(sender, "command.removeowner.not-a-owner", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
             return false;
         }
-        this.regionManager.removeMember(region, target);
+        this.regionManager.removeOwner(region, target);
         this.messenger.sendMessage(sender, "command.removeowner.owner-removed", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
         return true;
     }
