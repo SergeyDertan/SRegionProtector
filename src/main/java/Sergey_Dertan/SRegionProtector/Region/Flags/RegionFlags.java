@@ -14,7 +14,7 @@ import java.util.Arrays;
 public abstract class RegionFlags {
 
     /**
-     * https://github.com/SergeyDertan/SRegionProtector/wiki/Flags q
+     * https://github.com/SergeyDertan/SRegionProtector/wiki/Flags
      */
     public static final int FLAG_INVALID = -1;
     public static final int FLAG_BUILD = 0;

@@ -52,9 +52,9 @@
     </repositories>
     <dependencies>
         <dependency>
-            <groupId>cn.nukkitt</groupId>
+            <groupId>cn.nukkit</groupId>
             <artifactId>nukkit</artifactId>
-            <version>1</version>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

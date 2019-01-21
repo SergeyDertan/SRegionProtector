@@ -163,14 +163,14 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_REDSTONE, e.getBlock(), null, e);
     }
 
-    // ender pearl flag
+    //ender pearl flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerTeleport(PlayerTeleportEvent e) {
         if (e.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) return;
         this.handleEvent(RegionFlags.FLAG_ENDER_PEARL, e.getTo(), e.getPlayer(), e, true, true);
     }
 
-    // liquid flow event
+    //liquid flow event
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void liquidFlow(LiquidFlowEvent e) {
         Block block = e.getSource();
