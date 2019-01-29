@@ -5,6 +5,11 @@ import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class RegionExpandCommand extends SRegionProtectorCommand {
 
@@ -13,9 +18,16 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 
-    public RegionExpandCommand(String name, RegionSelector selector) {
-        super(name);
+    public RegionExpandCommand(RegionSelector selector) {
+        super("rgexpand", "expand");
         this.selector = selector;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("rgexpand", new CommandParameter[]{
+                new CommandParameter("amount", CommandParamType.INT, false),
+                new CommandParameter("up/down", false, new String[]{"up", "down"})
+        });
+        this.setCommandParameters(parameters);
     }
 
     @Override

@@ -5,11 +5,14 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class GetWandCommand extends SRegionProtectorCommand {
 
-    public GetWandCommand(String name) {
-        super(name);
+    public GetWandCommand() {
+        super("wand");
+
+        this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
 
     @Override

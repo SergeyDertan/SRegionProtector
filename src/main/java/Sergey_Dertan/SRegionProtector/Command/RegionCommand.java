@@ -19,8 +19,13 @@ public final class RegionCommand extends SRegionProtectorCommand {
     private Executor executor;
     private boolean async;
 
-    public RegionCommand(String name, boolean async) {
-        super(name);
+    public RegionCommand(boolean async) {
+        super("region");
+
+        this.setDescription(this.messenger.getMessage("command.region.description"));
+        this.setPermission("sregionprotector.command.region");
+        this.setAliases(new String[]{"rg"});
+
         this.commands = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
         this.registerCommand(new HelpCommand(this));

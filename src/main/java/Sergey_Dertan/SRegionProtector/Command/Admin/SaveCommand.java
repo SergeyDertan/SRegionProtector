@@ -4,14 +4,17 @@ import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public class SaveCommand extends SRegionProtectorCommand {
 
     private SRegionProtectorMain pl;
 
-    public SaveCommand(String name, SRegionProtectorMain pl) {
-        super(name);
+    public SaveCommand(SRegionProtectorMain pl) {
+        super("rgsave", "save");
         this.pl = pl;
+
+        this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
 
     @Override

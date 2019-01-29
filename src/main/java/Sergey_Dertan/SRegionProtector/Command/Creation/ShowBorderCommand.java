@@ -5,14 +5,22 @@ import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParameter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShowBorderCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 
-    public ShowBorderCommand(String name, RegionSelector selector) {
-        super(name);
+    public ShowBorderCommand(RegionSelector selector) {
+        super("rgshowborder", "show-border");
         this.selector = selector;
+
+        Map<String, CommandParameter[]> parameters = new HashMap<>();
+        parameters.put("rgshowborder", new CommandParameter[0]);
+        this.setCommandParameters(parameters);
     }
 
     @Override

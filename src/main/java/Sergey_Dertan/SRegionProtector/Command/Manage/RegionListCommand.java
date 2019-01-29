@@ -6,8 +6,11 @@ import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import static Sergey_Dertan.SRegionProtector.Region.RegionGroup.*;
@@ -16,9 +19,17 @@ public final class RegionListCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
-    public RegionListCommand(String name, RegionManager regionManager) {
-        super(name);
+    public RegionListCommand(RegionManager regionManager) {
+        super("rglist", "list");
         this.regionManager = regionManager;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("list-type", new CommandParameter[]
+                {
+                        new CommandParameter("type", false, new String[]{"owner", "member", "creator"})
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override

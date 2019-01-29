@@ -5,14 +5,28 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class AddOwnerCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
-    public AddOwnerCommand(String name, RegionManager regionManager) {
-        super(name);
+    public AddOwnerCommand(RegionManager regionManager) {
+        super("rgaddowner", "addowner");
         this.regionManager = regionManager;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("addowner", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, false),
+                        new CommandParameter("player", CommandParamType.TARGET, false)
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override

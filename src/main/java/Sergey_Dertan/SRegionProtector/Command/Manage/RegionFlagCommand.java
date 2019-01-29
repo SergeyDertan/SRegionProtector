@@ -6,15 +6,39 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.math.Vector3;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class RegionFlagCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
-    public RegionFlagCommand(String name, RegionManager regionManager) {
-        super(name);
+    public RegionFlagCommand(RegionManager regionManager) {
+        super("rgflag", "flag");
         this.regionManager = regionManager;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("flagdata", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, false),
+                        new CommandParameter("flag", CommandParamType.STRING, false),
+                        new CommandParameter("state", false, new String[]{"true", "false"})
+                }
+        );
+
+        parameters.put("sell-flag", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, false),
+                        new CommandParameter("flag", CommandParamType.STRING, false),
+                        new CommandParameter("state", false, new String[]{"true", "false"}),
+                        new CommandParameter("price", CommandParamType.INT, false)
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override

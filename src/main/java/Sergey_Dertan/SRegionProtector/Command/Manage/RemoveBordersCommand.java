@@ -4,14 +4,17 @@ import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class RemoveBordersCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 
-    public RemoveBordersCommand(String name, RegionSelector selector) {
-        super(name);
+    public RemoveBordersCommand(RegionSelector selector) {
+        super("rgremoveborders", "remove-borders");
         this.selector = selector;
+
+        this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
 
     @Override

@@ -6,17 +6,28 @@ import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.math.Vector3;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class RegionSelectCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
     private RegionSelector selector;
 
-    public RegionSelectCommand(String name, RegionManager regionManager, RegionSelector selector) {
-        super(name);
+    public RegionSelectCommand(RegionManager regionManager, RegionSelector selector) {
+        super("rgselect", "select");
         this.regionManager = regionManager;
         this.selector = selector;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("rgselect", new CommandParameter[]{
+                new CommandParameter("region", CommandParamType.STRING, false)
+        });
+        this.setCommandParameters(parameters);
     }
 
     @Override

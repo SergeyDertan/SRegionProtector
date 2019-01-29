@@ -4,14 +4,17 @@ import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class SetPos2Command extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 
-    public SetPos2Command(String name, RegionSelector selector) {
-        super(name);
+    public SetPos2Command(RegionSelector selector) {
+        super("pos2");
         this.selector = selector;
+
+        this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
 
     @Override

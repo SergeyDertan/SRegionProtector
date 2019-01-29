@@ -9,8 +9,12 @@ import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Settings.RegionSettings;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 public final class RegionInfoCommand extends SRegionProtectorCommand {
@@ -21,11 +25,19 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
 
     private RegionSettings regionSettings;
 
-    public RegionInfoCommand(String name, RegionManager regionManager, ChunkManager chunkManager, RegionSettings regionSettings) {
-        super(name);
+    public RegionInfoCommand(RegionManager regionManager, ChunkManager chunkManager, RegionSettings regionSettings) {
+        super("rginfo", "info");
         this.regionManager = regionManager;
         this.chunkManager = chunkManager;
         this.regionSettings = regionSettings;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("rginfo", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, true)
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override

@@ -8,7 +8,12 @@ import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
 import Sergey_Dertan.SRegionProtector.Settings.RegionSettings;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.level.Position;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class CreateRegionCommand extends SRegionProtectorCommand {
 
@@ -16,11 +21,15 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
     private RegionManager regionManager;
     private RegionSettings regionSettings;
 
-    public CreateRegionCommand(String name, RegionSelector selector, RegionManager regionManager, RegionSettings regionSettings) {
-        super(name);
+    public CreateRegionCommand(RegionSelector selector, RegionManager regionManager, RegionSettings regionSettings) {
+        super("rgcreate", "create");
         this.selector = selector;
         this.regionManager = regionManager;
         this.regionSettings = regionSettings;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("rgname", new CommandParameter[]{new CommandParameter("region", CommandParamType.STRING, false)});
+        this.setCommandParameters(parameters);
     }
 
     @Override

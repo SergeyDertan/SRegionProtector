@@ -5,14 +5,17 @@ import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Region.Selector.SelectorSession;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public class RegionSizeCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 
-    public RegionSizeCommand(String name, RegionSelector selector) {
-        super(name);
+    public RegionSizeCommand(RegionSelector selector) {
+        super("rgsize", "size");
         this.selector = selector;
+
+        this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
 
     @Override

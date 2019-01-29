@@ -5,14 +5,28 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class AddMemberCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
-    public AddMemberCommand(String name, RegionManager regionManager) {
-        super(name);
+    public AddMemberCommand(RegionManager regionManager) {
+        super("rgaddmember", "addmember");
         this.regionManager = regionManager;
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("addmember", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, false),
+                        new CommandParameter("player", CommandParamType.TARGET, false)
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override

@@ -5,6 +5,11 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_TELEPORT;
 
@@ -12,9 +17,19 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
 
     private RegionManager regionManager;
 
-    public RegionTeleportCommand(String name, RegionManager regionManager) {
-        super(name);
+    public RegionTeleportCommand(RegionManager regionManager) {
+        super("rgteleport", "teleport");
         this.regionManager = regionManager;
+
+        this.setAliases(new String[]{"rgtp"});
+
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("rgp-rg", new CommandParameter[]
+                {
+                        new CommandParameter("region", CommandParamType.STRING, false)
+                }
+        );
+        this.setCommandParameters(parameters);
     }
 
     @Override
