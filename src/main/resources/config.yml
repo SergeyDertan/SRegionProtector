@@ -1,6 +1,15 @@
 help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
-async-chunks-loading: true
+# default means that plugin will use server`s default language
+language: "default"
 provider: yaml
+#when enabled only /rg and /region commands will be shown
+hide-commands: false
+#when enabled /rg and /region commands will be executed async
+async-commands: false
+
+async-chunk-loading: true
+async-chunk-loading-threads: -1
+# "20", "20:2"
 border-block: "20"
 #1 second = 20 ticks
 select-session-clear-interval: 20

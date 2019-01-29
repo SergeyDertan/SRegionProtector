@@ -184,11 +184,22 @@ public abstract class Utils {
     /*---------------- resources end ----------------*/
 
     @SuppressWarnings("unchecked")
-    public static <T extends Cloneable> List<T> deepClone(List<T> arr) {
-        List<T> copy = new ArrayList<>();
+    public static <T extends Cloneable> Collection<T> deepClone(Collection<T> arr) {
+        Collection<T> copy = new ArrayList<>();
         for (T elem : arr) {
             copy.add((T) elem.clone());
         }
         return copy;
+    }
+
+    public static double round(double value, int precision) {
+        for (int i = 0; i < precision; ++i) {
+            value *= 10D;
+        }
+        value = Math.round(value);
+        for (int i = 0; i < precision; ++i) {
+            value /= 10D;
+        }
+        return value;
     }
 }

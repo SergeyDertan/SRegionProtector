@@ -9,11 +9,15 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.*;
 import static Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager.chunkHash;
@@ -26,8 +30,19 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     public static final String REGION_FILE_NAME = "{@region-name}.yml";
     public static final String FLAG_LIST_FILE_NAME = "{@region-name}.yml";
 
-    public YAMLDataProvider(Logger logger) {
+    public final boolean async;
+
+    private ExecutorService executor;
+    private int threads;
+
+    public YAMLDataProvider(Logger logger, boolean async, int threads) {
         super(logger);
+        this.async = async;
+        if (async) {
+            if (threads == -1) threads = Runtime.getRuntime().availableProcessors();
+            this.executor = Executors.newFixedThreadPool(threads);
+            this.threads = threads;
+        }
     }
 
     @Override
@@ -38,12 +53,36 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     @Override
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public Set<ChunkDataObject> loadChunkList() {
-        Set<ChunkDataObject> list = new HashSet<>();
-        for (File file : (new File(SRegionProtectorChunksFolder).listFiles())) {
-            if (file.isDirectory()) continue;
-            list.add(Converter.toChunkDataObject((Map<String, Object>) new Config(file.getAbsolutePath(), Config.YAML).get(DATA_TAG)));
+        File[] files = new File(SRegionProtectorChunksFolder).listFiles();
+
+        if (this.async) {
+            List<ChunkDataObject> list = new CopyOnWriteArrayList<>();
+            for (int i = 0; i < this.threads; ++i) {
+                int e = (i + 1) * (files.length / this.threads);
+                if (e > files.length) e = files.length;
+                File[] load = Arrays.copyOfRange(files, i * (files.length / this.threads), e);
+                this.executor.execute(() -> {
+                    for (File file : load) {
+                        if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
+                        list.add(Converter.toChunkDataObject((Map<String, Object>) new Config(file.getAbsolutePath(), Config.YAML).get(DATA_TAG)));
+                    }
+                });
+            }
+            this.executor.shutdown();
+            try {
+                this.executor.awaitTermination(Long.MAX_VALUE, TimeUnit.HOURS);
+            } catch (Exception ignore) {
+            }
+            this.executor = Executors.newFixedThreadPool(this.threads);
+            return new ObjectArraySet<>(list);
+        } else {
+            Set<ChunkDataObject> chunks = new ObjectOpenHashSet<>();
+            for (File file : files) {
+                if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
+                chunks.add(Converter.toChunkDataObject((Map<String, Object>) new Config(file.getAbsolutePath(), Config.YAML).get(DATA_TAG)));
+            }
+            return chunks;
         }
-        return list;
     }
 
     @Override
@@ -60,7 +99,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public Set<RegionDataObject> loadRegionList() {
         Set<RegionDataObject> list = new HashSet<>();
-        for (File file : (new File(SRegionProtectorRegionsFolder).listFiles())) {
+        for (File file : new File(SRegionProtectorRegionsFolder).listFiles()) {
             if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
             if (o == null) {

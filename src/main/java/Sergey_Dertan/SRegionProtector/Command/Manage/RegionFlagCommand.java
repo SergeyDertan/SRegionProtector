@@ -69,7 +69,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         } else if (flag == RegionFlags.FLAG_SELL) {
             if (state) {
                 if (args.length < 4) {
-                    this.messenger.sendMessage(sender, "command.flag.sellData-flag-usage");
+                    this.messenger.sendMessage(sender, "command.flag.sell-flag-usage");
                     return false;
                 }
                 if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "")) {

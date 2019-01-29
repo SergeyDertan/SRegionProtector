@@ -3,6 +3,7 @@ package Sergey_Dertan.SRegionProtector.Messenger;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorLangFolder;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorMainFolder;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.resourceExists;
 
@@ -26,7 +28,16 @@ public final class Messenger {
 
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
-        String lang = Server.getInstance().getLanguage().getLang();
+        String lang = null;
+        if (new File(SRegionProtectorMainFolder + "config.yml").exists()) {
+            Map<String, Object> cnf = new Config(SRegionProtectorMainFolder + "config.yml", Config.YAML).getAll();
+            if (cnf.containsKey("language") && !((String) cnf.get("language")).equalsIgnoreCase("default")) {
+                lang = (String) cnf.get("language");
+            }
+        }
+        if (lang == null) {
+            lang = Server.getInstance().getLanguage().getLang();
+        }
         if (!resourceExists(lang + ".yml", "resources/lang", SRegionProtectorMain.class)) lang = DEFAULT_LANGUAGE;
         this.language = lang;
         copyResource(lang + ".yml", "resources/lang", SRegionProtectorLangFolder, SRegionProtectorMain.class);
@@ -50,6 +61,7 @@ public final class Messenger {
         if (search.length == replace.length) {
             for (int i = 0; i < search.length; ++i) {
                 String var1 = search[i];
+                if (var1 == null || replace[i] == null) continue; //TODO remove
                 if (var1.charAt(0) != '{') var1 = '{' + var1;
                 if (var1.charAt(var1.length() - 1) != '}') var1 += '}';
                 msg = msg.replace(var1, replace[i]);

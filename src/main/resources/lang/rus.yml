@@ -7,7 +7,7 @@ loading.init.chunks: "Инициализация чанков..."
 loading.init.events-handlers: "Инициализация обработчиков событий..."
 loading.init.commands: "Инициализация команд..."
 loading.data-provider: "В качестве поставщика данных выбран {@name}"
-loading.init.successful: "SRegionProtector инициализирован."
+loading.init.successful: "Инициализация SRegionProtector завершена за {@time}мс."
 
 loading.error.folder: "Ошибка создании папки {@path}, отключение плагина..."
 loading.error.resource: "Ошибка копирования файла: {@err}, отключение плагина..."

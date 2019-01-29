@@ -5,7 +5,9 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
 import java.util.Arrays;
@@ -20,11 +22,12 @@ public final class RegionSettings {
 
     public final int maxRegionNameLength;
     public final int minRegionNameLength;
+
     public int healFlagHealDelay;
     public int healFlagHealAmount;
 
-    private Map<Long, Permission> regionSize;
-    private Map<Integer, Permission> regionAmount;
+    private Long2ObjectMap<Permission> regionSize;
+    private Int2ObjectMap<Permission> regionAmount;
 
     RegionSettings(Map<String, Object> cnf, Map<String, Object> rgCnf) {
         this.loadSizePermissions(cnf);
@@ -66,7 +69,7 @@ public final class RegionSettings {
 
     public boolean hasSizePermission(Permissible target, long size) {
         if (target.hasPermission("sregionprotector.region.size.*")) return true;
-        for (Map.Entry<Long, Permission> perm : this.regionSize.entrySet()) {
+        for (Map.Entry<Long, Permission> perm : this.regionSize.long2ObjectEntrySet()) {
             if (perm.getKey() < size) continue;
             if (target.hasPermission(perm.getValue())) return true;
         }
@@ -75,7 +78,7 @@ public final class RegionSettings {
 
     public boolean hasAmountPermission(Permissible target, int amount) {
         if (target.hasPermission("sregionprotector.region.amount.*")) return true;
-        for (Map.Entry<Integer, Permission> perm : this.regionAmount.entrySet()) {
+        for (Map.Entry<Integer, Permission> perm : this.regionAmount.int2ObjectEntrySet()) {
             if (perm.getKey() < amount) continue;
             if (target.hasPermission(perm.getValue())) return true;
         }
@@ -103,7 +106,7 @@ public final class RegionSettings {
             Permission permission = new Permission("sregionprotector.region.amount." + amount, "Allows to creating up to " + amount + " regions");
             Server.getInstance().getPluginManager().addPermission(permission);
             //mainPerm.addParent(mainPerm, true); //TODO test
-            this.regionAmount.put(amount, permission);
+            this.regionAmount.put((int) amount, permission);
         }
         mainPerm.recalculatePermissibles();
     }

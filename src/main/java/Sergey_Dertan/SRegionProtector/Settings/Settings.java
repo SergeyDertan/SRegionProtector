@@ -16,9 +16,16 @@ public final class Settings {
     public final int autoSavePeriod;
     public final Block borderBlock;
 
+    public final boolean hideCommands;
+
     public final MySQLSettings mySQLSettings;
     public final RegionSettings regionSettings;
     public final ProviderType provider;
+
+    public final boolean asyncCommands;
+
+    public final boolean asyncChunkLoading;
+    public final int chunkLoadingThreads;
 
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
@@ -27,6 +34,11 @@ public final class Settings {
 
         this.selectorSessionLifetime = ((Number) this.getConfig().get("session-life-time")).intValue();
         this.autoSavePeriod = ((Number) this.getConfig().get("auto-save-period")).intValue() * 20;
+
+        this.hideCommands = (boolean) this.getConfig().getOrDefault("hide-commands", false);
+        this.asyncCommands = (boolean) this.getConfig().getOrDefault("async-commands", false);
+        this.asyncChunkLoading = (boolean) this.getConfig().getOrDefault("async-chunk-loading", true);
+        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("async-chunk-loading-threads", -1)).intValue();
 
         String border = (String) getConfig().get("border-block");
         int id;
