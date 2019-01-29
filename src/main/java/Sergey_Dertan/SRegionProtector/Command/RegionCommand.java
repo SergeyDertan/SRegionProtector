@@ -10,14 +10,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public final class RegionCommand extends SRegionProtectorCommand {
 
     private Object2ObjectMap<String, Command> commands;
-    private ThreadPoolExecutor executor;
+    private Executor executor;
     private boolean async;
 
     public RegionCommand(String name, boolean async) {
@@ -28,11 +27,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
 
         this.async = async;
         if (async) {
-            this.executor = new ThreadPoolExecutor(1,
-                    Runtime.getRuntime().availableProcessors(),
-                    3, TimeUnit.SECONDS,
-                    new LinkedBlockingQueue<>(),
-                    new ThreadPoolExecutor.AbortPolicy());
+            this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         }
     }
 
