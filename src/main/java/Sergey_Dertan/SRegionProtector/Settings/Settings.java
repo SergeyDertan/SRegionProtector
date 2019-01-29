@@ -24,7 +24,7 @@ public final class Settings {
 
     public final boolean asyncCommands;
 
-    public final boolean asyncChunkLoading;
+    public final boolean multithreadedChunkLoading;
     public final int chunkLoadingThreads;
 
     public Settings() throws Exception {
@@ -37,9 +37,8 @@ public final class Settings {
 
         this.hideCommands = (boolean) this.getConfig().getOrDefault("hide-commands", false);
         this.asyncCommands = (boolean) this.getConfig().getOrDefault("async-commands", false);
-        this.asyncChunkLoading = (boolean) this.getConfig().getOrDefault("async-chunk-loading", true);
-        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("async-chunk-loading-threads", -1)).intValue();
-
+        this.multithreadedChunkLoading = (boolean) this.getConfig().getOrDefault("multithreaded-chunk-loading", true);
+        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("chunk-loading-threads", -1)).intValue();
         String border = (String) getConfig().get("border-block");
         int id;
         int meta;

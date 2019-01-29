@@ -1,8 +1,12 @@
 package Sergey_Dertan.SRegionProtector.Messenger;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.network.RakNetInterface;
+import cn.nukkit.network.SourceInterface;
+import cn.nukkit.network.protocol.TextPacket;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
@@ -26,6 +30,9 @@ public final class Messenger {
     public final String language;
     private final Object2ObjectMap<String, String> messages;
 
+    private boolean async;
+    private SourceInterface interfaz; //async packets should be put directly to the interface
+
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
         String lang = null;
@@ -45,7 +52,14 @@ public final class Messenger {
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
         this.messages = new Object2ObjectAVLTreeMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(SRegionProtectorLangFolder + lang + ".yml")), HashMap.class));
+        Server.getInstance().getNetwork().getInterfaces().forEach(s -> {
+            if (s instanceof RakNetInterface) this.interfaz = s;
+        });
         instance = this;
+    }
+
+    public void setAsync() {
+        this.async = true;
     }
 
     public static Messenger getInstance() {
@@ -79,7 +93,14 @@ public final class Messenger {
     }
 
     public void sendMessage(CommandSender target, String message, String[] search, String[] replace) {
-        target.sendMessage(this.getMessage(message, search, replace));
+        if (!this.async || !(target instanceof Player)) {
+            target.sendMessage(this.getMessage(message, search, replace));
+        } else {
+            TextPacket pk = new TextPacket();
+            pk.type = 0;
+            pk.message = this.getMessage(message, search, replace);
+            this.interfaz.putPacket((Player) target, pk);
+        }
     }
 
     public void sendMessage(CommandSender target, String message, String search, String replace) {

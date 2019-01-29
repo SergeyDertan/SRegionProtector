@@ -28,6 +28,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
         this.async = async;
         if (async) {
             this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            this.messenger.setAsync();
         }
     }
 

@@ -109,14 +109,14 @@ public final class SRegionProtectorMain extends PluginBase {
             switch (this.settings.provider) {
                 default:
                 case YAML:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.asyncChunkLoading, this.settings.chunkLoadingThreads);
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadChunkLoading, this.settings.chunkLoadingThreads);
                     break;
                 case MYSQL:
                     //this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.asyncChunkLoading, this.settings.chunkLoadingThreads);
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadChunkLoading, this.settings.chunkLoadingThreads);
                     break;
                 case SQLite3:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.asyncChunkLoading, this.settings.chunkLoadingThreads); //TODO sqlite
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadChunkLoading, this.settings.chunkLoadingThreads); //TODO sqlite
             }
             this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name));
             return true;
