@@ -7,8 +7,9 @@ hide-commands: false
 #when enabled /rg and /region commands will be executed async
 async-commands: false
 
-multithreaded-chunk-loading: true
-chunk-loading-threads: -1
+#multithreaded regions loading
+multithreaded-loading: true
+multithreaded-loading-threads: -1
 # "20", "20:2"
 border-block: "20"
 #1 second = 20 ticks

@@ -53,19 +53,18 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        String regionName = args[0].toLowerCase();
-        int flag = RegionFlags.getFlagId(args[1].toLowerCase());
+        int flag = RegionFlags.getFlagId(args[1]);
         if (flag == RegionFlags.FLAG_INVALID) {
             this.messenger.sendMessage(sender, "command.flag.incorrect-flag");
             return false;
         }
 
-        Region region = this.regionManager.getRegion(regionName);
+        Region region = this.regionManager.getRegion(args[0]);
         if (region == null) {
             this.messenger.sendMessage(sender, "command.flag.region-doesnt-exists");
             return false;
         }
-        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner((sender).getName().toLowerCase(), false)) {
+        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner((sender).getName(), true)) {
             this.messenger.sendMessage(sender, "command.flag.permission");
             return false;
         }
@@ -96,11 +95,11 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                     this.messenger.sendMessage(sender, "command.flag.sell-flag-usage");
                     return false;
                 }
-                if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "")) {
+                if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "", false, region)) {
                     this.messenger.sendMessage(sender, "command.flag.cant-sell-region-in-region");
                     return false;
                 }
-                int price = Integer.valueOf(args[3]);
+                long price = Long.valueOf(args[3]);
                 if (price < 0) {
                     this.messenger.sendMessage(sender, "command.flag.wrong-price");
                     return false;

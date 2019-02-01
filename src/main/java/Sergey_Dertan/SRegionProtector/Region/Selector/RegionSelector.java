@@ -7,8 +7,8 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.HashSet;
 import java.util.Set;
 
 public final class RegionSelector {
@@ -23,7 +23,7 @@ public final class RegionSelector {
         this.borders = new Int2ObjectArrayMap<>();
         this.sessionLifetime = sessionLifetime;
         this.borderBlock = borderBlock;
-        this.borders.defaultReturnValue(new HashSet<>());
+        this.borders.defaultReturnValue(new ObjectArraySet<>());
     }
 
     public void removeSession(Player player) {
@@ -36,11 +36,7 @@ public final class RegionSelector {
 
     public void clear() {
         int currentTime = (int) System.currentTimeMillis() / 1000;
-
-        for (Int2ObjectMap.Entry<SelectorSession> sessionData : this.sessions.int2ObjectEntrySet()) {
-            if (sessionData.getValue().getExpirationTime() > currentTime) continue;
-            this.sessions.remove(sessionData.getIntKey());
-        }
+        this.sessions.int2ObjectEntrySet().removeIf(s -> s.getValue().getExpirationTime() < currentTime);
     }
 
     public boolean sessionExists(Player player) {
@@ -56,7 +52,7 @@ public final class RegionSelector {
         int maxY = (int) Math.max(pos1.y, pos2.y);
         int maxZ = (int) Math.max(pos1.z, pos2.z);
 
-        Set<Vector3> blocks = new HashSet<>(10); //TODO
+        Set<Vector3> blocks = new ObjectArraySet<>(10); //TODO
 
         for (int yt = minY; yt <= maxY; ++yt) {
             for (int xt = minX; ; xt = maxX) {

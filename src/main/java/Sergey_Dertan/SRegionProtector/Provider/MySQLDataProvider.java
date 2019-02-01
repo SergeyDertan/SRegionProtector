@@ -1,9 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
-import Sergey_Dertan.SRegionProtector.Provider.DataObject.ChunkDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
-import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
 import cn.nukkit.Server;
@@ -42,14 +40,6 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     }
 
     @Override
-    public Set<ChunkDataObject> loadChunkList() {
-        //Query<ChunkDataObject> query = this.pm.newQuery(ChunkDataObject.class);
-        // Collection<ChunkDataObject> result = query.executeResultList(ChunkDataObject.class);
-        //return new HashSet<>(result);
-        return null;
-    }
-
-    @Override
     public Set<RegionDataObject> loadRegionList() {
         /*Query<RegionDataObject> query = this.pm.newQuery(RegionDataObject.class);
         Collection<RegionDataObject> result = query.executeResultList(RegionDataObject.class);
@@ -61,19 +51,6 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     public RegionDataObject loadRegion(String name) {
         //TypedQuery<RegionDataObject> result=this.emf.createNamedQuery("") TODO
         return null;
-    }
-
-    @Override
-    public ChunkDataObject loadChunk(long x, long z, String level) {
-        return null;
-    }
-
-    @Override
-    public void saveChunk(Chunk chunk, String level) {
-        /*Transaction tr = this.pm.currentTransaction();
-        tr.begin();
-        pm.makePersistent(Converter.toDataObject(chunk, level));
-        tr.commit();*/
     }
 
     @Override
@@ -127,11 +104,6 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     public boolean checkConnection() { //TODO
         return false;
     }
-
-    @Override
-    public void removeChunk(Chunk chunk, String level) {
-    }
-
     @Override
     public void removeRegion(String region) {
     }

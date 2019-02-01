@@ -2,9 +2,9 @@ package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -13,24 +13,18 @@ import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 public final class Chunk {
 
     public final Object lock = new Object();
-    boolean needUpdate;
-    private long x;
-    private long z;
+    public final long x;
+    public final long z;
     private Set<Region> regions;
 
-    public Chunk(long x, long z, Set<Region> regions) {
+    public Chunk(long x, long z) {
         this.x = x;
         this.z = z;
-        this.regions = regions;
-        this.needUpdate = false;
-    }
-
-    public Chunk(long x, long z) {
-        this(x, z, new HashSet<>());
+        this.regions = new ObjectArraySet<>();
     }
 
     public Set<Region> getRegions() {
-        return new HashSet<>(this.regions);
+        return new ObjectArraySet<>(this.regions);
     }
 
     public int getRegionsAmount() {
@@ -48,26 +42,24 @@ public final class Chunk {
     public void addRegion(Region region) {
         synchronized (this.lock) {
             this.regions.add(region);
-            this.needUpdate = true;
         }
     }
 
     public void removeRegion(Region region) {
         synchronized (this.lock) {
             this.regions.remove(region);
-            this.needUpdate = true;
         }
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Chunk && this.x == ((Chunk) obj).x && this.z == ((Chunk) obj).z;
+        return this == obj;
     }
 
     public Map<String, Object> toMap() throws RuntimeException {
-        Map<String, Object> sec = new HashMap<>();
+        Map<String, Object> sec = new Object2ObjectArrayMap<>();
 
-        Set<String> regions = new HashSet<>();
+        Set<String> regions = new ObjectArraySet<>();
 
         this.regions.forEach(region -> regions.add(region.getName()));
 

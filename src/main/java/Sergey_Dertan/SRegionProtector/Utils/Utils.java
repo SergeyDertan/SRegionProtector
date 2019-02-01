@@ -3,6 +3,7 @@ package Sergey_Dertan.SRegionProtector.Utils;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import com.google.gson.Gson;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -201,5 +202,24 @@ public abstract class Utils {
             value /= 10D;
         }
         return value;
+    }
+
+    public static <T> List<List<T>> sliceArray(T[] array, int pieces, boolean keepEmpty) { //TODO complete
+        List<List<T>> result = new ObjectArrayList<>();
+        for (int i = 0; i < pieces; ++i) {
+            result.add(new ObjectArrayList<>());
+        }
+
+        int i = 0;
+
+        for (T obj : array) {
+            if (i == pieces) i = 0;
+            result.get(i).add(obj);
+            ++i;
+        }
+        if (!keepEmpty) {
+            result.removeIf(s -> s.size() == 0);
+        }
+        return result;
     }
 }

@@ -12,8 +12,13 @@ import cn.nukkit.level.Position;
 import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
@@ -49,14 +54,14 @@ public final class Region implements AxisAlignedBB {
         this.creator = creator;
         this.level = level;
 
-        this.owners = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        this.owners = new ObjectAVLTreeSet<>(String.CASE_INSENSITIVE_ORDER);
         this.owners.addAll(Arrays.asList(owners));
 
-        this.members = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        this.members = new ObjectAVLTreeSet<>(String.CASE_INSENSITIVE_ORDER);
         this.members.addAll(Arrays.asList(members));
 
         this.flags = flags;
-        this.chunks = new HashSet<>();
+        this.chunks = new ObjectArraySet<>();
     }
 
     public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
@@ -76,6 +81,10 @@ public final class Region implements AxisAlignedBB {
         this.owners.clear();
         this.members.clear();
         this.needUpdate = true;
+    }
+
+    public boolean isSelling() {
+        return this.flags[RegionFlags.FLAG_SELL].state;
     }
 
     public String getLevel() {
@@ -144,13 +153,13 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Set<String> getMembers() {
-        Set<String> members = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        Set<String> members = new ObjectAVLTreeSet<>(String.CASE_INSENSITIVE_ORDER);
         members.addAll(this.members);
         return members;
     }
 
     public Set<String> getOwners() {
-        Set<String> owners = new TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+        Set<String> owners = new ObjectAVLTreeSet<>(String.CASE_INSENSITIVE_ORDER);
         owners.addAll(this.owners);
         return owners;
     }
@@ -182,7 +191,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     Set<Chunk> getChunks() {
-        return new HashSet<>(this.chunks);
+        return new ObjectArraySet<>(this.chunks);
     }
 
     void addChunk(Chunk chunk) {
@@ -190,7 +199,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Map<String, Object> toMap() throws RuntimeException {
-        Map<String, Object> arr = new HashMap<>();
+        Map<String, Object> arr = new Object2ObjectArrayMap<>();
 
         arr.put(NAME_TAG, this.name);
         arr.put(CREATOR_TAG, this.creator);
@@ -214,17 +223,17 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Map<String, Map<String, Object>> flagsToMap() {
-        Map<String, Map<String, Object>> flags = new HashMap<>();
+        Map<String, Map<String, Object>> flags = new Object2ObjectArrayMap<>();
         for (int i = 0; i < this.flags.length; ++i) {
             String name = RegionFlags.getFlagName(i);
             if (name.isEmpty() || name.replace(" ", "").isEmpty()) continue;
-            Map<String, Object> flagData = new HashMap<>();
+            Map<String, Object> flagData = new Object2ObjectArrayMap<>();
             flagData.put(STATE_TAG, this.flags[i].state);
             switch (i) {
                 case RegionFlags.FLAG_TELEPORT:
                     Vector3 teleportPos = ((RegionTeleportFlag) this.flags[i]).position;
                     if (teleportPos == null) break;
-                    Map<String, Object> pos = new HashMap<>();
+                    Map<String, Object> pos = new Object2ObjectArrayMap<>();
                     pos.put(X_TAG, teleportPos.x);
                     pos.put(Y_TAG, teleportPos.y);
                     pos.put(Z_TAG, teleportPos.z);

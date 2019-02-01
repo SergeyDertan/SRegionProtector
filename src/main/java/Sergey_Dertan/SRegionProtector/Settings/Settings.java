@@ -37,8 +37,8 @@ public final class Settings {
 
         this.hideCommands = (boolean) this.getConfig().getOrDefault("hide-commands", false);
         this.asyncCommands = (boolean) this.getConfig().getOrDefault("async-commands", false);
-        this.multithreadedChunkLoading = (boolean) this.getConfig().getOrDefault("multithreaded-chunk-loading", true);
-        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("chunk-loading-threads", -1)).intValue();
+        this.multithreadedChunkLoading = (boolean) this.getConfig().getOrDefault("multithreaded-loading", true);
+        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("multithreaded-loading-threads", -1)).intValue();
         String border = (String) getConfig().get("border-block");
         int id;
         int meta;

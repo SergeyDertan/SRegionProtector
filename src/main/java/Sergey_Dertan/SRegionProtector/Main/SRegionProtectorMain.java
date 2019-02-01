@@ -7,9 +7,13 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
+import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
+import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionPriceCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
+import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
@@ -32,7 +36,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
     public static final String SRegionProtectorMainFolder = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
     public static final String SRegionProtectorRegionsFolder = SRegionProtectorMainFolder + "Regions/";
-    public static final String SRegionProtectorChunksFolder = SRegionProtectorMainFolder + "Chunks/";
     public static final String SRegionProtectorFlagsFolder = SRegionProtectorMainFolder + "Flags/";
     public static final String SRegionProtectorLangFolder = SRegionProtectorMainFolder + "Lang/";
 
@@ -70,11 +73,11 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider"));
         if (!this.initDataProvider()) return;
 
+        //this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.chunks")); TODO remove
+        this.initChunks();
+
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.regions"));
         this.initRegions();
-
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.chunks"));
-        this.initChunks();
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.events-handlers"));
         this.initEventsHandlers();
@@ -140,7 +143,6 @@ public final class SRegionProtectorMain extends PluginBase {
         return
                 this.createFolder(SRegionProtectorMainFolder) &&
                         this.createFolder(SRegionProtectorRegionsFolder) &&
-                        this.createFolder(SRegionProtectorChunksFolder) &&
                         this.createFolder(SRegionProtectorFlagsFolder) &&
                         this.createFolder(SRegionProtectorLangFolder);
     }
@@ -186,14 +188,13 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private void initRegions() {
         this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime, this.settings.borderBlock);
-        this.regionManager = new RegionManager(this.provider, this.getLogger());
+        this.regionManager = new RegionManager(this.provider, this.getLogger(), this.chunkManager);
         this.regionManager.init();
     }
 
     private void initChunks() {
-        this.chunkManager = new ChunkManager(this.provider, this.getLogger(), this.regionManager);
+        this.chunkManager = new ChunkManager(this.getLogger());
         this.chunkManager.init();
-        this.regionManager.setChunkManager(chunkManager);
     }
 
     private void initEventsHandlers() {
@@ -217,7 +218,7 @@ public final class SRegionProtectorMain extends PluginBase {
                 this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling-save-start"));
                 break;
         }
-        this.chunkManager.save(saveType, initiator);
+        //this.chunkManager.save(saveType, initiator); TODO remove
         this.regionManager.save(saveType, initiator);
         this.gc();
         switch (saveType) {
@@ -312,6 +313,16 @@ public final class SRegionProtectorMain extends PluginBase {
         rg.registerCommand(command);
 
         command = new RegionExpandCommand(this.regionSelector);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
+
+        AbstractEconomy economy = null;
+        if (this.getServer().getPluginManager().getPlugin("EconomyAPI") != null) economy = new OneBoneEconomyAPI();
+        command = new BuyRegionCommand(this.regionManager, economy);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
+
+        command = new RegionPriceCommand(this.regionManager);
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
     }

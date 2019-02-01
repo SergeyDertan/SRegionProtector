@@ -1,6 +1,5 @@
 package Sergey_Dertan.SRegionProtector.Provider.DataObject;
 
-import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
@@ -19,10 +18,6 @@ import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 public abstract class Converter {
 
     private Converter() {
-    }
-
-    public static ChunkDataObject toDataObject(Chunk chunk, String level) {
-        return new ChunkDataObject(chunk.getX(), chunk.getZ(), (String) chunk.toMap().get(REGIONS_TAG), level);
     }
 
     public static RegionDataObject toDataObject(Region region) {
@@ -44,15 +39,6 @@ public abstract class Converter {
         );
     }
 
-    public static ChunkDataObject toChunkDataObject(Map<String, Object> data) { //for the yaml data provider
-        return new ChunkDataObject(
-                ((Number) data.get(X_TAG)).longValue(),
-                ((Number) data.get(Z_TAG)).longValue(),
-                (String) data.get(LEVEL_TAG),
-                (String) data.get(REGIONS_TAG)
-        );
-    }
-
     public static FlagListDataObject toDataObject(RegionFlag[] flags) {
         boolean[] state = new boolean[flags.length];
         for (int i = 0; i < flags.length; ++i) {
@@ -65,10 +51,6 @@ public abstract class Converter {
         teleport.put(Z_TAG, tpFlag.position.z);
         teleport.put(LEVEL_TAG, tpFlag.level);
         return new FlagListDataObject(Utils.serializeBooleanArray(state), JSON.toJSONString(teleport), ((RegionSellFlag) flags[RegionFlags.FLAG_SELL]).price);
-    }
-
-    public static Chunk fromDataObject(ChunkDataObject dataObject) {
-        return new Chunk(dataObject.x, dataObject.z);
     }
 
     public static Region fromDataObject(RegionDataObject dataObject, RegionFlag[] flags) {

@@ -10,6 +10,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -55,7 +56,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
             return false;
         }
         Command cmd = this.commands.get(args[0]);
-        final String[] newArgs = args.length == 1 ? new String[0] : Arrays.copyOfRange(args, 1, args.length);
+        String[] newArgs = args.length == 1 ? new String[0] : Arrays.copyOfRange(args, 1, args.length);
         if (this.async) {
             this.executor.execute(() -> cmd.execute(sender, cmd.getName(), newArgs));
         } else {
@@ -65,7 +66,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
     }
 
     private void updateArguments() {
-        Object2ObjectMap<String, CommandParameter[]> params = new Object2ObjectArrayMap<>();
+        Map<String, CommandParameter[]> params = new Object2ObjectArrayMap<>();
         this.commands.forEach((k, v) -> {
             List<CommandParameter> p = new ObjectArrayList<>();
             p.add(new CommandParameter(k, false, new String[]{k}));
