@@ -38,7 +38,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     }
 
     public static CompoundTag getDefaultNBT(Vector3 pos, String region) {
-        return new CompoundTag("")
+        return new CompoundTag()
                 .putString(ID_TAG, BLOCK_ENTITY_HEALER)
                 .putInt(X_TAG, pos.getFloorX())
                 .putInt(Y_TAG, pos.getFloorY())
@@ -62,7 +62,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     @Override
     public CompoundTag getSpawnCompound() {
-        return new CompoundTag("")
+        return new CompoundTag()
                 .putString(ID_TAG, BLOCK_ENTITY_HEALER)
                 .putInt(X_TAG, this.getFloorX())
                 .putInt(Y_TAG, this.getFloorY())
@@ -72,9 +72,12 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     @Override
     public void saveNBT() {
-        super.saveNBT();
         this.namedTag.putString(ID_TAG, BLOCK_ENTITY_HEALER);
         this.namedTag.putString(REGION_TAG, this.region);
+        this.namedTag.putInt(X_TAG, this.getFloorX());
+        this.namedTag.putInt(Y_TAG, this.getFloorY());
+        this.namedTag.putInt(Z_TAG, this.getFloorZ());
+        this.namedTag.putBoolean(IS_MOVABLE_TAG, false);
     }
 
     @Override

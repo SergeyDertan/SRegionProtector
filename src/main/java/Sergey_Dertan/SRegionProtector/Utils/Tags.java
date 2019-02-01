@@ -22,6 +22,7 @@ public abstract class Tags { //do I need this?
     public final static String DATA_TAG = "data";
     public final static String ID_TAG = "id";
     public final static String REGION_TAG = "region";
+    public final static String IS_MOVABLE_TAG = "isMovable";
 
     private Tags() {
     }

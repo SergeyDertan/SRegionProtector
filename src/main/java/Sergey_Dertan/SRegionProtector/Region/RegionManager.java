@@ -143,7 +143,7 @@ public final class RegionManager {
 
         new BlockEntityHealer(
                 level.getChunk((int) pos.x >> 4, (int) pos.z >> 4, true),
-                BlockEntityHealer.getDefaultNBT(region.getHealerVector(), region.name)
+                BlockEntityHealer.getDefaultNBT(pos, region.name)
         );
         region.needUpdate = true;
         return region;
