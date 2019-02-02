@@ -6,7 +6,7 @@ author: Sergey_Dertan
 website: https://vk.com/sergey_dertan
 load: STARTUP
 prefix: '§eSRegionProtector§f'
-depend:
+softdepend:
 - EconomyAPI
 permissions:
   sregionprotector.*:
