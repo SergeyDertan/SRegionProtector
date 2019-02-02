@@ -74,7 +74,6 @@ public final class Messenger {
         if (search.length == replace.length) {
             for (int i = 0; i < search.length; ++i) {
                 String var1 = search[i];
-                if (var1 == null || replace[i] == null) continue; //TODO remove
                 if (var1.charAt(0) != '{') var1 = '{' + var1;
                 if (var1.charAt(var1.length() - 1) != '}') var1 += '}';
                 msg = msg.replace(var1, replace[i]);

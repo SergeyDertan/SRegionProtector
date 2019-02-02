@@ -121,7 +121,7 @@ public final class RegionSettings {
 
     @SuppressWarnings("unchecked")
     private void loadFlagsStatuses(Map<String, Object> cnf) {
-        Arrays.fill(flagsStatus, false);
+        Arrays.fill(this.flagsStatus, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("active-flags")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
             this.flagsStatus[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();

@@ -73,7 +73,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider"));
         if (!this.initDataProvider()) return;
 
-        //this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.chunks")); TODO remove
         this.initChunks();
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.regions"));
@@ -187,7 +186,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initRegions() {
-        this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime, this.settings.borderBlock);
+        this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime, this.settings.borderBlock, this.settings.asyncCommands);
         this.regionManager = new RegionManager(this.provider, this.getLogger(), this.chunkManager);
         this.regionManager.init();
     }
@@ -218,7 +217,6 @@ public final class SRegionProtectorMain extends PluginBase {
                 this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling-save-start"));
                 break;
         }
-        //this.chunkManager.save(saveType, initiator); TODO remove
         this.regionManager.save(saveType, initiator);
         this.gc();
         switch (saveType) {

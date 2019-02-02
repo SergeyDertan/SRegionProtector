@@ -105,7 +105,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), null, e, false, false);
         if (e.isCancelled()) return;
         Iterator<Block> it = e.getBlockList().iterator();
-        while (it.hasNext()) { //TODO?
+        while (it.hasNext()) {
             this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), null, e);
             if (e.isCancelled()) {
                 e.setCancelled(false);
@@ -129,12 +129,14 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_SEND_CHAT, e.getPlayer(), e.getPlayer(), e, true, true);
         if (e.isCancelled()) return;
         Iterator<CommandSender> iterator = e.getRecipients().iterator();
-        while (iterator.hasNext()) { //TODO check
+        while (iterator.hasNext()) {
             CommandSender var1 = iterator.next();
             if (!(var1 instanceof Player)) return;
-            this.handleEvent(RegionFlags.FLAG_RECEIVE_CHAT, e.getPlayer(), e.getPlayer(), e, true, true);
-            if (e.isCancelled()) iterator.remove();
-            e.setCancelled(false);
+            this.handleEvent(RegionFlags.FLAG_RECEIVE_CHAT, (Position) var1, (Player) var1, e, true, true);
+            if (e.isCancelled()) {
+                iterator.remove();
+                e.setCancelled(false);
+            }
         }
     }
 
@@ -175,7 +177,7 @@ public final class RegionEventsHandler implements Listener {
     public void liquidFlow(LiquidFlowEvent e) {
         Block block = e.getSource();
         if (!(block instanceof BlockLava) && !(block instanceof BlockWater)) return;
-        this.handleEvent(RegionFlags.FLAG_LIQUID_FLOW, e.getTo(), null, e, false, false, e.getSource()); //TODO
+        this.handleEvent(RegionFlags.FLAG_LIQUID_FLOW, e.getTo(), null, e, false, false, e.getSource());
     }
 
     private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 additionalPos) {

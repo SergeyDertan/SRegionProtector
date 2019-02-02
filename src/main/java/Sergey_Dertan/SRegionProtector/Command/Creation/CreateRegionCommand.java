@@ -88,7 +88,10 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.create.regions-overlap");
             return false;
         }
-        this.regionManager.createRegion(name, sender.getName(), pos1, pos2, pos1.level);
+        if (this.regionManager.createRegion(name, sender.getName(), pos1, pos2, pos1.level) == null) {
+            this.messenger.sendMessage(sender, "command.create.region-exists");
+            return false;
+        }
         this.messenger.sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }

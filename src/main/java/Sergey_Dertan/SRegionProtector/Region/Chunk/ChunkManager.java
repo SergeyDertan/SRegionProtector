@@ -40,7 +40,7 @@ public final class ChunkManager {
         this.chunks = new Object2ObjectArrayMap<>();
     }
 
-    public int getChunksAmount() {
+    public int getChunkAmount() {
         int amount = 0;
         for (Long2ObjectMap<Chunk> chunks : this.chunks.values()) amount += chunks.size();
         return amount;
@@ -109,18 +109,20 @@ public final class ChunkManager {
         return null;
     }
 
-    public Chunk getChunk(long x, long z, String levelId, boolean shiftRight, boolean create) { //TODO improve
+    public Chunk getChunk(long x, long z, String levelId, boolean shiftRight, boolean create) {
+        Long2ObjectOpenHashMap<Chunk> levelChunks = this.chunks.get(levelId);
+        if (levelChunks == null && !create) return null;
+
         if (shiftRight) {
             x = x >> 4;
             z = z >> 4;
         }
         long hash = chunkHash(x, z);
-        Long2ObjectOpenHashMap<Chunk> levelChunks = this.chunks.get(levelId);
-        if (levelChunks == null && !create) return null;
-        levelChunks = this.chunks.computeIfAbsent(levelId, s -> new Long2ObjectOpenHashMap<>());
-        Chunk chunk = levelChunks.get(hash);
-        if (chunk != null) return chunk;
+
         synchronized (this.lock) {
+            levelChunks = this.chunks.computeIfAbsent(levelId, s -> new Long2ObjectOpenHashMap<>());
+            Chunk chunk = levelChunks.get(hash);
+            if (chunk != null) return chunk;
             chunk = new Chunk(x, z);
             levelChunks.put(hash, chunk);
             return chunk;

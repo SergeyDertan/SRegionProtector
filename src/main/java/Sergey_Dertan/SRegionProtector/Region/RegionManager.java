@@ -118,10 +118,11 @@ public final class RegionManager {
         ).forEach(c -> c.addRegion(s)));
 
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
-        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", String.valueOf(this.chunkManager.getChunksAmount())));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", String.valueOf(this.chunkManager.getChunkAmount())));
     }
 
     public synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
+        if (this.regions.containsKey(name)) return null;
         double minX = Math.min(pos1.x, pos2.x);
         double minY = Math.min(pos1.y, pos2.y);
         double minZ = Math.min(pos1.z, pos2.z);
