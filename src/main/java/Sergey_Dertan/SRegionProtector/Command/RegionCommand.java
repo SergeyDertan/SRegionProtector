@@ -1,9 +1,10 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
+import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
-import cn.nukkit.command.data.CommandParameter;
+import cn.nukkit.command.data.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -40,6 +41,34 @@ public final class RegionCommand extends SRegionProtectorCommand {
     }
 
     @Override
+    public CommandDataVersions generateCustomCommandData(Player player) {
+        if (!this.testPermission(player)) {
+            return null;
+        }
+
+        CommandData customData = this.commandData.clone();
+
+        List<String> aliases = new ObjectArrayList<>();
+        aliases.add("region");
+        aliases.add("rg");
+
+        customData.aliases = new CommandEnum("RegionAliases", aliases);
+
+        customData.description = player.getServer().getLanguage().translateString(this.getDescription());
+        this.commandParameters.forEach((key, par) -> {
+            if (this.commands.get(key).testPermissionSilent(player)) {
+                CommandOverload overload = new CommandOverload();
+                overload.input.parameters = par;
+                customData.overloads.put(key, overload);
+            }
+        });
+        if (customData.overloads.size() == 0) customData.overloads.put("default", new CommandOverload());
+        CommandDataVersions versions = new CommandDataVersions();
+        versions.versions.add(customData);
+        return versions;
+    }
+
+    @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
         if (!this.testPermissionSilent(sender)) {
             this.messenger.sendMessage(sender, "command.region.permission");
@@ -48,7 +77,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
         if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
             this.messenger.sendMessage(sender, "command.region.available-commands");
             this.commands.forEach((k, v) -> {
-                if (sender.hasPermission(v.getPermission())) sender.sendMessage(k + " - " + v.getDescription());
+                if (!(v instanceof HelpCommand) && sender.hasPermission(v.getPermission())) sender.sendMessage(k + " - " + v.getDescription());
             });
             return false;
         }
@@ -85,7 +114,8 @@ public final class RegionCommand extends SRegionProtectorCommand {
         this.updateArguments();
     }
 
-    class HelpCommand extends Command {
+    final class HelpCommand extends Command {
+
         private RegionCommand mainCMD;
 
         HelpCommand(RegionCommand mainCMD) {

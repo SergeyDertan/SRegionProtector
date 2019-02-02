@@ -205,6 +205,7 @@ public final class Region implements AxisAlignedBB {
         arr.put(CREATOR_TAG, this.creator);
 
         arr.put(LEVEL_TAG, this.level);
+
         arr.put(MIN_X_TAG, this.minX);
         arr.put(MIN_Y_TAG, this.minY);
         arr.put(MIN_Z_TAG, this.minZ);
@@ -252,14 +253,7 @@ public final class Region implements AxisAlignedBB {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Region &&
-                this.minX == ((Region) obj).minX &&
-                this.minY == ((Region) obj).minY &&
-                this.minZ == ((Region) obj).minZ &&
-                this.maxX == ((Region) obj).maxX &&
-                this.maxY == ((Region) obj).maxY &&
-                this.maxZ == ((Region) obj).maxZ &&
-                this.level.equals(((Region) obj).level);
+        return obj == this;
     }
 
     void addMember(String target) {
@@ -285,9 +279,9 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Vector3 getHealerVector() {
-        double x = getMinX() + (getMaxX() - getMinX()) / 2;
-        double y = getMinY() + (getMaxY() - getMinY()) / 2;
-        double z = getMinZ() + (getMaxZ() - getMinZ()) / 2;
+        double x = minX + (maxX - minX) / 2D;
+        double y = minY + (maxY - minY) / 2D;
+        double z = minZ + (maxZ - minZ) / 2D;
         return new Vector3(x, y, z);
     }
 

@@ -8,8 +8,8 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParameter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -64,7 +64,7 @@ public final class RegionListCommand extends SRegionProtectorCommand {
                 regions = this.regionManager.getPlayersRegionList((Player) sender, MEMBER);
                 break;
         }
-        Set<String> list = new HashSet<>();
+        Set<String> list = new ObjectArraySet<>();
         regions.forEach(region -> list.add(region.getName()));
         switch (type) {
             case MEMBER:

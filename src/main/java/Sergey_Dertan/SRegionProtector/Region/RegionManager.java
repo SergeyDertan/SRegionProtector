@@ -288,7 +288,7 @@ public final class RegionManager {
         this.save(saveType, null);
     }
 
-    public Set<Region> getPlayersRegionList(Player player, RegionGroup group) {
+    public synchronized Set<Region> getPlayersRegionList(Player player, RegionGroup group) {
         switch (group) {
             case CREATOR:
                 Set<Region> list = new ObjectArraySet<>();

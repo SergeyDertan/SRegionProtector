@@ -1,14 +1,9 @@
 package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
-import Sergey_Dertan.SRegionProtector.Utils.Utils;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.Map;
 import java.util.Set;
-
-import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
 public final class Chunk {
 
@@ -54,18 +49,5 @@ public final class Chunk {
     @Override
     public boolean equals(Object obj) {
         return this == obj;
-    }
-
-    public Map<String, Object> toMap() throws RuntimeException {
-        Map<String, Object> sec = new Object2ObjectArrayMap<>();
-
-        Set<String> regions = new ObjectArraySet<>();
-
-        this.regions.forEach(region -> regions.add(region.getName()));
-
-        sec.put(X_TAG, this.x);
-        sec.put(Z_TAG, this.z);
-        sec.put(REGIONS_TAG, Utils.serializeStringArray(regions.toArray(new String[]{})));
-        return sec;
     }
 }

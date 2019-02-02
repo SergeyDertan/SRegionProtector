@@ -5,18 +5,20 @@ import me.onebone.economyapi.EconomyAPI;
 
 public final class OneBoneEconomyAPI implements AbstractEconomy {
 
+    private EconomyAPI eco = EconomyAPI.getInstance();
+
     @Override
     public long getMoney(Player player) {
-        return (int) EconomyAPI.getInstance().myMoney(player);
+        return (long) this.eco.myMoney(player);
     }
 
     @Override
     public void addMoney(String player, long amount) {
-        EconomyAPI.getInstance().addMoney(player, (double) amount);
+        this.eco.addMoney(player, (double) amount);
     }
 
     @Override
     public void reduceMoney(String player, long amount) {
-        EconomyAPI.getInstance().reduceMoney(player, (double) amount);
+        this.eco.reduceMoney(player, (double) amount);
     }
 }
