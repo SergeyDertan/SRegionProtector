@@ -35,6 +35,7 @@ public final class Messenger {
 
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
+        //d
         String lang = null;
         if (new File(SRegionProtectorMainFolder + "config.yml").exists()) {
             Map<String, Object> cnf = new Config(SRegionProtectorMainFolder + "config.yml", Config.YAML).getAll();
