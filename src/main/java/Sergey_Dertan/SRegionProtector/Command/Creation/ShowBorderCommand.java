@@ -10,7 +10,7 @@ import cn.nukkit.command.data.CommandParameter;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShowBorderCommand extends SRegionProtectorCommand {
+public final class ShowBorderCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 

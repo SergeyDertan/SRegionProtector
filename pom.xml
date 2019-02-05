@@ -175,7 +175,6 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>false</filtering>
                 <includes>
-                    <include>messages.yml</include>
                     <include>mysql.yml</include>
                     <include>config.yml</include>
                     <include>region-settings.yml</include>

@@ -25,7 +25,6 @@ public final class GetWandCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.wand.in-game");
             return false;
         }
-        if (!this.testPermission(sender)) return false;
         ((Player) sender).getInventory().addItem(Item.get(ItemID.WOODEN_AXE, 0, 1));
         this.messenger.sendMessage(sender, "command.wand.wand-given");
         return true;

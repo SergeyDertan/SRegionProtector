@@ -64,7 +64,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.flag.region-doesnt-exists");
             return false;
         }
-        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner((sender).getName(), true)) {
+        if (sender instanceof Player && !sender.hasPermission("sregionprotector.admin") && !region.isOwner(sender.getName(), true)) {
             this.messenger.sendMessage(sender, "command.flag.permission");
             return false;
         }

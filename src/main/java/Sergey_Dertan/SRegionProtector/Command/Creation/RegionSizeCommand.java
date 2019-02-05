@@ -7,7 +7,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
-public class RegionSizeCommand extends SRegionProtectorCommand {
+public final class RegionSizeCommand extends SRegionProtectorCommand {
 
     private RegionSelector selector;
 

@@ -6,7 +6,7 @@ import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
-public class SaveCommand extends SRegionProtectorCommand {
+public final class SaveCommand extends SRegionProtectorCommand {
 
     private SRegionProtectorMain pl;
 
