@@ -90,6 +90,16 @@ command.size.description: "расчет размера выделенного р
 command.size.positions-in-different-worlds: "Точки должны быть в одном мире"
 command.size.size: "Размер выделенного региона {@size} блоков"
 
+command.sell.in-game: "Только в игре"
+command.sell.permission: "Недостаточно прав"
+command.sell.description: "продать регион"
+command.sell.usage: "Необходимые аргументы: [РЕГИОН] [ЦЕНА]"
+command.sell.wrong-target: "Регион не найден"
+command.sell.not-creator: "Только создатель региона может его продать"
+command.sell.overlap: "Регион пересекается с другим регионом"
+command.sell.min-price: "Минимальная цена 0"
+command.sell.success: "Регион {@region} теперь продается за {@price} денег"
+
 command.create.in-game: "Только в игре"
 command.create.permission: "Недостаточно прав"
 command.create.incorrect-name: "Некорректное название региона"

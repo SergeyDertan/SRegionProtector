@@ -279,9 +279,9 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Vector3 getHealerVector() {
-        double x = minX + (maxX - minX) / 2D;
-        double y = minY + (maxY - minY) / 2D;
-        double z = minZ + (maxZ - minZ) / 2D;
+        double x = this.minX + (this.maxX - this.minX) / 2D;
+        double y = this.minY + (this.maxY - this.minY) / 2D;
+        double z = this.minZ + (this.maxZ - this.minZ) / 2D;
         return new Vector3(x, y, z);
     }
 

@@ -20,4 +20,18 @@ public enum ProviderType {
     public String toString() {
         return this.name;
     }
+
+    public static ProviderType fromString(String name) {
+        switch (name.toLowerCase()) {
+            case "yaml":
+            case "yml":
+                return ProviderType.YAML;
+            case "mysql":
+                return ProviderType.MYSQL;
+            case "sqlite":
+            case "sqlite3":
+                return ProviderType.SQLite3;
+        }
+        return null;
+    }
 }

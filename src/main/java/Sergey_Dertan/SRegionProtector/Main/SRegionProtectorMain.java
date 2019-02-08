@@ -9,6 +9,7 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionPriceCommand;
+import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionSellCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
@@ -321,6 +322,10 @@ public final class SRegionProtectorMain extends PluginBase {
         rg.registerCommand(command);
 
         command = new RegionPriceCommand(this.regionManager);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
+
+        command = new RegionSellCommand(this.regionManager);
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
     }

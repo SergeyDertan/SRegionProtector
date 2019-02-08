@@ -32,42 +32,31 @@ public final class Settings {
         copyResource("mysql.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
         copyResource("region-settings.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
 
-        this.selectorSessionLifetime = ((Number) this.getConfig().get("session-life-time")).intValue();
-        this.autoSavePeriod = ((Number) this.getConfig().get("auto-save-period")).intValue() * 20;
+        Map<String, Object> config = this.getConfig();
 
-        this.hideCommands = (boolean) this.getConfig().getOrDefault("hide-commands", false);
-        this.asyncCommands = (boolean) this.getConfig().getOrDefault("async-commands", false);
-        this.multithreadedChunkLoading = (boolean) this.getConfig().getOrDefault("multithreaded-loading", true);
-        this.chunkLoadingThreads = ((Number) this.getConfig().getOrDefault("multithreaded-loading-threads", -1)).intValue();
-        String border = (String) getConfig().get("border-block");
+        this.selectorSessionLifetime = ((Number) config.get("session-life-time")).intValue();
+        this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
+
+        this.hideCommands = (boolean) config.getOrDefault("hide-commands", false);
+        this.asyncCommands = (boolean) config.getOrDefault("async-commands", false);
+        this.multithreadedChunkLoading = (boolean) config.getOrDefault("multithreaded-loading", true);
+        this.chunkLoadingThreads = ((Number) config.getOrDefault("multithreaded-loading-threads", -1)).intValue();
+        String border = (String) config.get("border-block");
         int id;
         int meta;
         if (border.split(":").length == 2) {
-            id = Integer.valueOf(border.split(":")[0]);
-            meta = Integer.valueOf(border.split(":")[1]);
+            id = Integer.parseInt(border.split(":")[0]);
+            meta = Integer.parseInt(border.split(":")[1]);
         } else {
             id = Integer.valueOf(border);
             meta = 0;
         }
         this.borderBlock = Block.get(id, meta);
 
-        switch (((String) this.getConfig().get("provider")).toLowerCase()) {
-            case "yaml":
-            case "yml":
-            default:
-                this.provider = ProviderType.YAML;
-                break;
-            case "mysql":
-                this.provider = ProviderType.MYSQL;
-                break;
-            case "sqlite":
-            case "sqlite3":
-                this.provider = ProviderType.YAML; //TODO change to sqlite
-                break;
-        }
+        this.provider = ProviderType.fromString((String) this.getConfig().get("provider"));
 
         this.mySQLSettings = new MySQLSettings(new Config(SRegionProtectorMainFolder + "mysql.yml", Config.YAML).getAll());
-        this.regionSettings = new RegionSettings(this.getConfig(), new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());
+        this.regionSettings = new RegionSettings(config, new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());
     }
 
     public Map<String, Object> getConfig() {

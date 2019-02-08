@@ -8,7 +8,6 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
@@ -29,15 +28,6 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                         new CommandParameter("state", false, new String[]{"true", "false"})
                 }
         );
-
-        parameters.put("sell-flag", new CommandParameter[]
-                {
-                        new CommandParameter("region", CommandParamType.STRING, false),
-                        new CommandParameter("flag", CommandParamType.STRING, false),
-                        new CommandParameter("state", false, new String[]{"true", "false"}),
-                        new CommandParameter("price", CommandParamType.INT, false)
-                }
-        );
         this.setCommandParameters(parameters);
     }
 
@@ -45,7 +35,6 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
     public boolean execute(CommandSender sender, String s, String[] args) {
         if (!this.testPermissionSilent(sender)) {
             this.messenger.sendMessage(sender, "command.flag.permission");
-
             return false;
         }
         if (args.length < 3) {
@@ -81,32 +70,13 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                     this.messenger.sendMessage(sender, "command.flag.teleport-flag-in-game");
                     return false;
                 }
-                if (!region.level.equalsIgnoreCase(((Player) sender).level.getName()) || !region.intersectsWith(((Player) sender).boundingBox)) {
+                if (!region.level.equalsIgnoreCase(((Player) sender).level.getName()) || !region.isVectorInside(((Player) sender))) {
                     this.messenger.sendMessage(sender, "command.flag.teleport-should-be-in-region");
                     return false;
                 }
                 region.setTeleportFlag(((Player) sender).getPosition(), true);
             } else {
                 region.setTeleportFlag(null, false);
-            }
-        } else if (flag == RegionFlags.FLAG_SELL) {
-            if (state) {
-                if (args.length < 4) {
-                    this.messenger.sendMessage(sender, "command.flag.sell-flag-usage");
-                    return false;
-                }
-                if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "", false, region)) {
-                    this.messenger.sendMessage(sender, "command.flag.cant-sell-region-in-region");
-                    return false;
-                }
-                long price = Long.valueOf(args[3]);
-                if (price < 0) {
-                    this.messenger.sendMessage(sender, "command.flag.wrong-price");
-                    return false;
-                }
-                region.setSellFlagState(price, true);
-                this.messenger.sendMessage(sender, "command.flag.selling-region", new String[]{"@region", "@price"}, new String[]{region.getName(), args[3]});
-                return false;
             }
         }
         region.setFlagState(flag, state);
