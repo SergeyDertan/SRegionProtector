@@ -6,6 +6,7 @@ provider: yaml
 hide-commands: false
 #when enabled /rg and /region commands will be executed async
 async-commands: false
+async-commands-threads: -1
 
 #multithreaded regions loading
 multithreaded-loading: true

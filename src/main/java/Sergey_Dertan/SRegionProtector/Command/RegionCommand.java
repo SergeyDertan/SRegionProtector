@@ -22,7 +22,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
     private Executor executor;
     private boolean async;
 
-    public RegionCommand(boolean async) {
+    public RegionCommand(boolean async, int threads) {
         super("region");
 
         this.setDescription(this.messenger.getMessage("command.region.description"));
@@ -35,7 +35,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
 
         this.async = async;
         if (async) {
-            this.executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+            this.executor = Executors.newFixedThreadPool(threads);
             this.messenger.setAsync();
         }
     }

@@ -23,9 +23,10 @@ public final class Settings {
     public final ProviderType provider;
 
     public final boolean asyncCommands;
+    public final int asyncCommandsThreads;
 
-    public final boolean multithreadedChunkLoading;
-    public final int chunkLoadingThreads;
+    public final boolean multithreadedDataLoading;
+    public final int dataLoadingThreads;
 
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
@@ -38,9 +39,12 @@ public final class Settings {
         this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
 
         this.hideCommands = (boolean) config.getOrDefault("hide-commands", false);
+
         this.asyncCommands = (boolean) config.getOrDefault("async-commands", false);
-        this.multithreadedChunkLoading = (boolean) config.getOrDefault("multithreaded-loading", true);
-        this.chunkLoadingThreads = ((Number) config.getOrDefault("multithreaded-loading-threads", -1)).intValue();
+        this.asyncCommandsThreads = ((Number) config.getOrDefault("async-commands-threads", -1)).intValue();
+
+        this.multithreadedDataLoading = (boolean) config.getOrDefault("multithreaded-loading", true);
+        this.dataLoadingThreads = ((Number) config.getOrDefault("multithreaded-loading-threads", -1)).intValue();
         String border = (String) config.get("border-block");
         int id;
         int meta;
@@ -48,7 +52,7 @@ public final class Settings {
             id = Integer.parseInt(border.split(":")[0]);
             meta = Integer.parseInt(border.split(":")[1]);
         } else {
-            id = Integer.valueOf(border);
+            id = Integer.parseInt(border);
             meta = 0;
         }
         this.borderBlock = Block.get(id, meta);

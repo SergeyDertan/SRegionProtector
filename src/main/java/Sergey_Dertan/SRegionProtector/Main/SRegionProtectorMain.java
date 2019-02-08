@@ -108,14 +108,14 @@ public final class SRegionProtectorMain extends PluginBase {
             switch (this.settings.provider) {
                 default:
                 case YAML:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedChunkLoading, this.settings.chunkLoadingThreads);
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
                     break;
                 case MYSQL:
                     //this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedChunkLoading, this.settings.chunkLoadingThreads);
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
                     break;
                 case SQLite3:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedChunkLoading, this.settings.chunkLoadingThreads); //TODO sqlite
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
             }
             this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name));
             return true;
@@ -234,7 +234,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initCommands() {
-        RegionCommand rg = new RegionCommand(this.settings.asyncCommands);
+        RegionCommand rg = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
         this.getServer().getCommandMap().register(rg.getName(), rg);
 
         SRegionProtectorCommand command;
