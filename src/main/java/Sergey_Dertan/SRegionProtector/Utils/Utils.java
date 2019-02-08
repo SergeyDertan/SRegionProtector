@@ -3,6 +3,7 @@ package Sergey_Dertan.SRegionProtector.Utils;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import com.google.gson.Gson;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -89,7 +90,7 @@ public abstract class Utils {
 
     /*---------------- serializers ----------------*/
 
-    public static String serializeStringArray(final String[] arr) throws RuntimeException {
+    public static String serializeStringArray(String[] arr) throws RuntimeException {
         try (final ByteArrayOutputStream boas = new ByteArrayOutputStream(); final ObjectOutputStream oos = new ObjectOutputStream(boas)) {
             oos.writeObject(arr);
             return Base64.getEncoder().encodeToString(boas.toByteArray());
@@ -98,7 +99,7 @@ public abstract class Utils {
         }
     }
 
-    public static String[] deserializeStringArray(final String data) throws RuntimeException {
+    public static String[] deserializeStringArray(String data) throws RuntimeException {
         try (final ByteArrayInputStream bias = new ByteArrayInputStream(Base64.getDecoder().decode(data)); final ObjectInputStream ois = new ObjectInputStream(bias)) {
             return (String[]) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -106,7 +107,7 @@ public abstract class Utils {
         }
     }
 
-    public static String serializeBooleanArray(final boolean[] arr) {
+    public static String serializeBooleanArray(boolean[] arr) {
         String[] strings = new String[arr.length];
         for (int i = 0; i < arr.length; ++i) {
             strings[i] = arr[i] ? "true" : "false";
@@ -114,7 +115,7 @@ public abstract class Utils {
         return serializeStringArray(strings);
     }
 
-    public static boolean[] deserializeBooleanArray(final String str) {
+    public static boolean[] deserializeBooleanArray(String str) {
         String[] strings = deserializeStringArray(str);
         boolean[] arr = new boolean[strings.length];
         for (int i = 0; i < arr.length; ++i) {
@@ -140,7 +141,7 @@ public abstract class Utils {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
-        Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
+        Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), Object2ObjectArrayMap.class);
 
         ConfigSection var4 = new ConfigSection(new LinkedHashMap<>(var3.getAll()));
         boolean changed = copyMapOfMaps(var1, var4); //for messages updating;

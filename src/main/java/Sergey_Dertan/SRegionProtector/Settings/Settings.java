@@ -38,13 +38,14 @@ public final class Settings {
         this.selectorSessionLifetime = ((Number) config.get("session-life-time")).intValue();
         this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
 
-        this.hideCommands = (boolean) config.getOrDefault("hide-commands", false);
+        this.hideCommands = (boolean) config.get("hide-commands");
 
-        this.asyncCommands = (boolean) config.getOrDefault("async-commands", false);
+        this.asyncCommands = (boolean) config.get("async-commands");
         this.asyncCommandsThreads = ((Number) config.getOrDefault("async-commands-threads", -1)).intValue();
 
-        this.multithreadedDataLoading = (boolean) config.getOrDefault("multithreaded-loading", true);
-        this.dataLoadingThreads = ((Number) config.getOrDefault("multithreaded-loading-threads", -1)).intValue();
+        this.multithreadedDataLoading = (boolean) config.get("multithreaded-loading");
+        this.dataLoadingThreads = ((Number) config.get("multithreaded-loading-threads")).intValue();
+
         String border = (String) config.get("border-block");
         int id;
         int meta;
@@ -57,7 +58,7 @@ public final class Settings {
         }
         this.borderBlock = Block.get(id, meta);
 
-        this.provider = ProviderType.fromString((String) this.getConfig().get("provider"));
+        this.provider = ProviderType.fromString((String) config.get("provider"));
 
         this.mySQLSettings = new MySQLSettings(new Config(SRegionProtectorMainFolder + "mysql.yml", Config.YAML).getAll());
         this.regionSettings = new RegionSettings(config, new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());

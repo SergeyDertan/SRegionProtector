@@ -83,7 +83,7 @@ public final class RegionSelector {
                     pk.z = zt;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
                     pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
-                    if (async) {
+                    if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
                         target.dataPacket(pk);
@@ -104,7 +104,7 @@ public final class RegionSelector {
                     pk.z = zd;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
                     pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
-                    if (async) {
+                    if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
                         target.dataPacket(pk);
@@ -122,7 +122,7 @@ public final class RegionSelector {
                     pk.z = zx;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
                     pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
-                    if (async) {
+                    if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
                         target.dataPacket(pk);
@@ -144,7 +144,7 @@ public final class RegionSelector {
     @SuppressWarnings("ConstantConditions")
     public synchronized void removeBorders(Player target, boolean send) {
         if (send) {
-            if (async) {
+            if (this.async) {
                 SourceInterface interfaz = null;
                 try {
                     interfaz = (SourceInterface) this.interfaz.get(target);

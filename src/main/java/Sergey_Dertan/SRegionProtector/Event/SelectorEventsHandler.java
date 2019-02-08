@@ -32,12 +32,12 @@ public final class SelectorEventsHandler implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
-        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled(true);
+        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent e) {
-        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled(true);
+        if (this.selectPosition(e.getPlayer(), e.getBlock(), e.getItem())) e.setCancelled();
     }
 
     private boolean selectPosition(Player player, Block pos, Item item) {
