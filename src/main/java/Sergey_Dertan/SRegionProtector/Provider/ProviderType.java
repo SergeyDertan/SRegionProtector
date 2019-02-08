@@ -12,15 +12,6 @@ public enum ProviderType {
         this.name = name;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
-    public String toString() {
-        return this.name;
-    }
-
     public static ProviderType fromString(String name) {
         switch (name.toLowerCase()) {
             case "yaml":
@@ -33,5 +24,14 @@ public enum ProviderType {
                 return ProviderType.SQLite3;
         }
         return null;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    @Override
+    public String toString() {
+        return this.name;
     }
 }

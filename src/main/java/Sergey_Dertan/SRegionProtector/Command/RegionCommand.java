@@ -87,7 +87,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
             return false;
         }
         String[] newArgs = args.length == 1 ? new String[0] : Arrays.copyOfRange(args, 1, args.length);
-        if (this.async && !(cmd instanceof BuyRegionCommand)) {
+        if (this.async && !(cmd instanceof BuyRegionCommand)) { //economy plugin may not support concurrency
             this.executor.execute(() -> cmd.execute(sender, cmd.getName(), newArgs));
         } else {
             cmd.execute(sender, cmd.getName(), newArgs);

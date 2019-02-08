@@ -57,12 +57,12 @@ public final class Messenger {
         instance = this;
     }
 
-    public void setAsync() {
-        this.async = true;
-    }
-
     public static Messenger getInstance() {
         return instance;
+    }
+
+    public void setAsync() {
+        this.async = true;
     }
 
     public String getLanguage() {

@@ -104,6 +104,7 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     public boolean checkConnection() { //TODO
         return false;
     }
+
     @Override
     public void removeRegion(String region) {
     }
