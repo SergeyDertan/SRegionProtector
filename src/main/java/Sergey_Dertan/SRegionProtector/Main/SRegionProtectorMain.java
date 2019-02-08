@@ -136,7 +136,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initSessionsClearTask() {
-        this.getServer().getScheduler().scheduleRepeatingTask(this, () -> this.regionSelector.clear(), ((Number) this.settings.getConfig().get("select-session-clear-interval")).intValue() * 20);
+        this.getServer().getScheduler().scheduleRepeatingTask(this, () -> this.regionSelector.clear(), ((Number) this.settings.getConfig().get("select-session-clear-interval")).intValue() * 20, true);
     }
 
     private boolean createDirectories() {

@@ -81,11 +81,11 @@ public final class RegionCommand extends SRegionProtectorCommand {
             });
             return false;
         }
-        if (!this.commands.containsKey(args[0])) {
+        Command cmd = this.commands.get(args[0]);
+        if (cmd == null) {
             this.messenger.sendMessage(sender, "command.region.command-doesnt-exists", "@name", args[0]);
             return false;
         }
-        Command cmd = this.commands.get(args[0]);
         String[] newArgs = args.length == 1 ? new String[0] : Arrays.copyOfRange(args, 1, args.length);
         if (this.async && !(cmd instanceof BuyRegionCommand)) {
             this.executor.execute(() -> cmd.execute(sender, cmd.getName(), newArgs));
