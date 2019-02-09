@@ -60,6 +60,10 @@ permissions:
             default: true
           sregionprotector.command.expand:
             default: true
+          sregionprotector.command.sell:
+            default: true
+          sregionprotector.command.remove-from-sell:
+            default: true
       sregionprotector.region.*:
         default: op
         children:
