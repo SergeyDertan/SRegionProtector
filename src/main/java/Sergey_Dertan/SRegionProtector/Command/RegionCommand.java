@@ -31,8 +31,6 @@ public final class RegionCommand extends SRegionProtectorCommand {
 
         this.commands = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-        this.registerCommand(new HelpCommand(this));
-
         this.async = async;
         if (async) {
             this.executor = Executors.newFixedThreadPool(threads == -1 ? Runtime.getRuntime().availableProcessors() : threads);
@@ -77,7 +75,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
         if (args.length < 1 || args[0].equalsIgnoreCase("help")) {
             this.messenger.sendMessage(sender, "command.region.available-commands");
             this.commands.forEach((k, v) -> {
-                if (!(v instanceof HelpCommand) && sender.hasPermission(v.getPermission())) sender.sendMessage(k + " - " + v.getDescription());
+                if (sender.hasPermission(v.getPermission())) sender.sendMessage(k + " - " + v.getDescription());
             });
             return false;
         }
@@ -112,21 +110,5 @@ public final class RegionCommand extends SRegionProtectorCommand {
     public void registerCommand(Command command) {
         this.commands.put(command.getName().replace("rg", "").replace("region", "").toLowerCase(), command);
         this.updateArguments();
-    }
-
-    final class HelpCommand extends Command {
-
-        private RegionCommand mainCMD;
-
-        HelpCommand(RegionCommand mainCMD) {
-            super("help");
-            this.mainCMD = mainCMD;
-            this.setCommandParameters(new Object2ObjectArrayMap<>());
-        }
-
-        @Override
-        public boolean execute(CommandSender sender, String s, String[] strings) {
-            return this.mainCMD.execute(sender, s, new String[0]);
-        }
     }
 }
