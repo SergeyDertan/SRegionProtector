@@ -173,15 +173,12 @@ command.info.info: "Название: {@region}\nМир: {@level}\nСоздат�
 
 command.flag.permission: "Недостаточно прав"
 command.flag.usage: "Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ]"
+command.flag.sell: "Используйте /rg sell или /rg removefromsale"
 command.flag.region-doesnt-exists: "Регион {@region} не найден"
 command.flag.incorrect-flag: "Флаг не найден"
 command.flag.teleport-flag-in-game: "Только в игре"
 command.flag.teleport-should-be-in-region: "Позиция должна находится внутри региона"
 command.flag.flag-state-changed: "Значение флага {@flag} в регионе {@region} установлено на {@state}"
-command.flag.wrong-price: "Цена должна быть >= 0"
-command.flag.selling-region: "Регион @region выставлен на продажу за {@price} денег"
-command.flag.sell-flag-usage: "Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ] [ЦЕНА]"
-command.flag.cant-sell-region-in-region: "Вы не можете продать регион т.к. он пересекается с другим регионом"
 command.flag.description: "управление флагами региона"
 
 command.teleport.in-game: "Только в игре"

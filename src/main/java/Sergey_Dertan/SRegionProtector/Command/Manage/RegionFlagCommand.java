@@ -63,6 +63,11 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             return false;
         }
 
+        if (flag == RegionFlags.FLAG_SELL) {
+            this.messenger.sendMessage(sender, "command.flag.sell");
+            return false;
+        }
+
         boolean state = RegionFlags.getStateFromString(args[2]);
         if (flag == RegionFlags.FLAG_TELEPORT) {
             if (state) {
