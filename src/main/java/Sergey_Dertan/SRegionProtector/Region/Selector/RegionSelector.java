@@ -17,7 +17,7 @@ public final class RegionSelector {
 
     public final int sessionLifetime;
     private Int2ObjectMap<SelectorSession> sessions;
-    private Block borderBlock;
+    private int borderBlock;
     private Int2ObjectMap<Set<Vector3>> borders;
     private Field interfaz;
     private boolean async;
@@ -26,7 +26,7 @@ public final class RegionSelector {
         this.sessions = new Int2ObjectArrayMap<>();
         this.borders = new Int2ObjectArrayMap<>();
         this.sessionLifetime = sessionLifetime;
-        this.borderBlock = borderBlock;
+        this.borderBlock = GlobalBlockPalette.getOrCreateRuntimeId(borderBlock.getId(), borderBlock.getDamage());
         this.borders.defaultReturnValue(new ObjectArraySet<>());
         this.async = async;
         if (async) {
@@ -82,7 +82,7 @@ public final class RegionSelector {
                     pk.y = yt;
                     pk.z = zt;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
-                    pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
+                    pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
@@ -103,7 +103,7 @@ public final class RegionSelector {
                     pk.y = yd;
                     pk.z = zd;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
-                    pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
+                    pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
@@ -121,7 +121,7 @@ public final class RegionSelector {
                     pk.y = yd;
                     pk.z = zx;
                     pk.flags = UpdateBlockPacket.FLAG_NONE;
-                    pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(this.borderBlock.getId(), this.borderBlock.getDamage());
+                    pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
                     } else {
