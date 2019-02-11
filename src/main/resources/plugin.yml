@@ -64,6 +64,10 @@ permissions:
             default: true
           sregionprotector.command.remove-from-sell:
             default: true
+          sregionprotector.command.lpos1:
+            default: true
+          sregionprotector.command.lpos2:
+            default: true
       sregionprotector.region.*:
         default: op
         children:

@@ -8,6 +8,8 @@ hide-commands: false
 async-commands: false
 async-commands-threads: -1
 
+lpos-max-radius: 250
+
 #multithreaded regions loading
 multithreaded-loading: true
 multithreaded-loading-threads: -1

@@ -41,6 +41,18 @@ command.region.available-commands: 'Доступные команды: {@list}'
 command.region.region.command-doesnt-exits: 'Команда {@name} не найдена'
 command.region.description: 'Команды SRegionProtector'
 
+command.lpos1.in-game: "Только в игре"
+command.lpos1.permission: "Недостаточно прав"
+command.lpos1.success: "Первая точка установлена"
+command.lpos1.fail: "Не удалось найти блок в радиусе {@radius}"
+command.lpos1.description: "установить первую точку глядя на блок"
+
+command.lpos2.in-game: "Только в игре"
+command.lpos2.permission: "Недостаточно прав"
+command.lpos2.success: "Вторая точка установлена"
+command.lpos2.fail: "Не удалось найти блок в радиусе {@radius}"
+command.lpos2.description: "установить вторую точку глядя на блок"
+
 command.pos1.in-game: "Только в игре"
 command.pos1.permission: "Недостаточно прав"
 command.pos1.pos-set: "Первая точка установлена"

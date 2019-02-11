@@ -41,6 +41,18 @@ command.region.available-commands: "Available commands: {@list}"
 command.region.region.command-doesnt-exits: "Commands {@name} doesnt exists"
 command.region.desription: "SRegionProtector commands"
 
+command.lpos1.in-game: "In game only"
+command.lpos1.permission: "You have no permission"
+command.lpos1.success: "First pos set"
+command.lpos1.fail: "Couldn`t find block in radius {@radius}"
+command.lpos1.description: "set first position at the block you are looking at"
+
+command.lpos2.in-game: "In game only"
+command.lpos2.permission: "You have no permission"
+command.lpos2.success: "First pos set"
+command.lpos2.fail: "Couldn`t find block in radius {@radius}"
+command.lpos2.description: "set first position at the block you are looking at"
+
 command.pos1.in-game: "In game only"
 command.pos1.permission: "You have no permission"
 command.pos1.pos-set: "First pos set"

@@ -28,6 +28,8 @@ public final class Settings {
     public final boolean multithreadedDataLoading;
     public final int dataLoadingThreads;
 
+    public final int lposMaxRadius;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
@@ -45,6 +47,8 @@ public final class Settings {
 
         this.multithreadedDataLoading = (boolean) config.get("multithreaded-loading");
         this.dataLoadingThreads = ((Number) config.get("multithreaded-loading-threads")).intValue();
+
+        this.lposMaxRadius = ((Number) config.get("lpos-max-radius")).intValue();
 
         String border = (String) config.get("border-block");
         int id;

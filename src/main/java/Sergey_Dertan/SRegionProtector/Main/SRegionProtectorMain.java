@@ -104,6 +104,7 @@ public final class SRegionProtectorMain extends PluginBase {
         System.gc();
     }
 
+    @SuppressWarnings("ConstantConditions")
     private boolean initDataProvider() {
         try {
             switch (this.settings.provider) {
@@ -113,7 +114,7 @@ public final class SRegionProtectorMain extends PluginBase {
                     break;
                 case MYSQL:
                     //this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
+                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO mysql
                     break;
                 case SQLite3:
                     this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
@@ -331,6 +332,14 @@ public final class SRegionProtectorMain extends PluginBase {
         rg.registerCommand(command);
 
         command = new RegionRemoveFromSaleCommand(this.regionManager);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
+
+        command = new LPos1Command(this.regionSelector, this.settings.lposMaxRadius);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
+
+        command = new LPos2Command(this.regionSelector, this.settings.lposMaxRadius);
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
     }

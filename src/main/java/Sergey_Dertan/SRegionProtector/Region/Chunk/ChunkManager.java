@@ -4,7 +4,7 @@ import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.Server;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.plugin.PluginLogger;
+import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
@@ -18,10 +18,10 @@ public final class ChunkManager {
 
     private final Object lock = new Object();
     private Object2ObjectArrayMap<String, Long2ObjectOpenHashMap<Chunk>> chunks;
-    private PluginLogger logger;
+    private Logger logger;
     private Messenger messenger;
 
-    public ChunkManager(PluginLogger logger) {
+    public ChunkManager(Logger logger) {
         this.logger = logger;
         this.messenger = Messenger.getInstance();
 
