@@ -58,7 +58,7 @@
         <dependency>
             <groupId>cn.nukkit</groupId>
             <artifactId>nukkit</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
         <dependency> <!--TODO-->

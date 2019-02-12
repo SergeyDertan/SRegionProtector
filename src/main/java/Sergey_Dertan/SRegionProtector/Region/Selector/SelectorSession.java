@@ -5,14 +5,14 @@ import cn.nukkit.level.Position;
 public final class SelectorSession {
 
     public static final long ACTION_TIMEOUT = 500L;
-    private final int lifeTime;
+    private final long lifeTime;
     public long lastAction;
     public Position pos1, pos2;
     public boolean nextPos = true;
-    private int expirationTime;
+    private long expirationTime;
 
-    public SelectorSession(int lifeTime) {
-        this.expirationTime = (int) (System.currentTimeMillis() / 1000L) + lifeTime;
+    public SelectorSession(long lifeTime) {
+        this.expirationTime = System.currentTimeMillis() + lifeTime;
         this.lifeTime = lifeTime;
         this.lastAction = System.currentTimeMillis() - ACTION_TIMEOUT - 1L;
     }
@@ -33,7 +33,7 @@ public final class SelectorSession {
         this.pos2 = pos2;
     }
 
-    public int getExpirationTime() {
+    public long getExpirationTime() {
         return this.expirationTime;
     }
 
@@ -62,7 +62,7 @@ public final class SelectorSession {
         }
         this.nextPos = !this.nextPos;
         this.lastAction = System.currentTimeMillis();
-        this.expirationTime = (int) System.currentTimeMillis() / 1000 + lifeTime;
+        this.expirationTime = System.currentTimeMillis() + this.lifeTime;
         return true;
     }
 }

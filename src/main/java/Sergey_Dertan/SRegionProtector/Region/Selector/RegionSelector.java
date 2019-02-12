@@ -15,14 +15,14 @@ import java.util.Set;
 
 public final class RegionSelector {
 
-    public final int sessionLifetime;
+    private final long sessionLifetime;
     private Int2ObjectMap<SelectorSession> sessions;
     private int borderBlock;
     private Int2ObjectMap<Set<Vector3>> borders;
     private Field interfaz;
     private boolean async;
 
-    public RegionSelector(int sessionLifetime, Block borderBlock, boolean async) {
+    public RegionSelector(long sessionLifetime, Block borderBlock, boolean async) {
         this.sessions = new Int2ObjectArrayMap<>();
         this.borders = new Int2ObjectArrayMap<>();
         this.sessionLifetime = sessionLifetime;
@@ -47,7 +47,7 @@ public final class RegionSelector {
     }
 
     public synchronized void clear() {
-        int currentTime = (int) System.currentTimeMillis() / 1000;
+        long currentTime = System.currentTimeMillis();
         this.sessions.int2ObjectEntrySet().removeIf(s -> s.getValue().getExpirationTime() < currentTime);
     }
 
