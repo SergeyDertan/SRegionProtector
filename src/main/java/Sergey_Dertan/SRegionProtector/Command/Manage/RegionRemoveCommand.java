@@ -48,7 +48,7 @@ public final class RegionRemoveCommand extends SRegionProtectorCommand {
             return false;
         }
         this.regionManager.removeRegion(region);
-        this.messenger.sendMessage(sender, "command.remove.region-removed", "@region", region.getName());
+        this.messenger.sendMessage(sender, "command.remove.region-removed", "@region", region.name);
         return true;
     }
 }

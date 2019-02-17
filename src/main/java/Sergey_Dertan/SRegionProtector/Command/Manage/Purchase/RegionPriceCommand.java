@@ -43,7 +43,7 @@ public final class RegionPriceCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.price.doesnt-selling");
             return false;
         }
-        this.messenger.sendMessage(sender, "command.price.success", new String[]{"@region", "@price"}, new String[]{region.getName(), String.valueOf(region.getSellFlagPrice())});
+        this.messenger.sendMessage(sender, "command.price.success", new String[]{"@region", "@price"}, new String[]{region.name, Long.toString(region.getSellFlagPrice())});
         return false;
     }
 }

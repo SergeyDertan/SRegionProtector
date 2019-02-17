@@ -65,7 +65,7 @@ public final class RegionListCommand extends SRegionProtectorCommand {
                 break;
         }
         Set<String> list = new ObjectArraySet<>();
-        regions.forEach(region -> list.add(region.getName()));
+        regions.forEach(region -> list.add(region.name));
         switch (type) {
             case MEMBER:
                 this.messenger.sendMessage(sender, "command.list.member-region-list", "@list", String.join(", ", list));

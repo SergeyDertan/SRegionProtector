@@ -56,11 +56,11 @@ public final class AddMemberCommand extends SRegionProtectorCommand {
             return false;
         }
         if (region.isMember(target)) {
-            this.messenger.sendMessage(sender, "command.addmember.already-member", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+            this.messenger.sendMessage(sender, "command.addmember.already-member", new String[]{"@region", "@target"}, new String[]{region.name, target});
             return false;
         }
         this.regionManager.addMember(region, target);
-        this.messenger.sendMessage(sender, "command.addmember.member-added", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+        this.messenger.sendMessage(sender, "command.addmember.member-added", new String[]{"@region", "@target"}, new String[]{region.name, target});
         return true;
     }
 }

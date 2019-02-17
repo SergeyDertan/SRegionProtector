@@ -56,11 +56,11 @@ public final class AddOwnerCommand extends SRegionProtectorCommand {
             return false;
         }
         if (region.isOwner(target)) {
-            this.messenger.sendMessage(sender, "command.addowner.already-owner", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+            this.messenger.sendMessage(sender, "command.addowner.already-owner", new String[]{"@region", "@target"}, new String[]{region.name, target});
             return false;
         }
         this.regionManager.addOwner(region, target);
-        this.messenger.sendMessage(sender, "command.addowner.owner-added", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+        this.messenger.sendMessage(sender, "command.addowner.owner-added", new String[]{"@region", "@target"}, new String[]{region.name, target});
         return true;
     }
 }

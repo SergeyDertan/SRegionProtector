@@ -57,11 +57,11 @@ public final class RemoveMemberCommand extends SRegionProtectorCommand {
             return false;
         }
         if (!region.isMember(target)) {
-            this.messenger.sendMessage(sender, "command.removemember.not-a-member", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+            this.messenger.sendMessage(sender, "command.removemember.not-a-member", new String[]{"@region", "@target"}, new String[]{region.name, target});
             return false;
         }
         this.regionManager.removeMember(region, target);
-        this.messenger.sendMessage(sender, "command.removemember.member-removed", new String[]{"@region", "@target"}, new String[]{region.getName(), target});
+        this.messenger.sendMessage(sender, "command.removemember.member-removed", new String[]{"@region", "@target"}, new String[]{region.name, target});
         return true;
     }
 }

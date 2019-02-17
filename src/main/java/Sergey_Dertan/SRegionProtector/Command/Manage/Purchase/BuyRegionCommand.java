@@ -72,7 +72,7 @@ public final class BuyRegionCommand extends SRegionProtectorCommand {
         this.economy.addMoney(target.getCreator(), price);
         this.economy.reduceMoney(sender.getName(), price);
         this.regionManager.changeRegionOwner(target, sender.getName());
-        this.messenger.sendMessage(sender, "command.buy.success", new String[]{"@region", "@price"}, new String[]{target.getName(), String.valueOf(price)});
+        this.messenger.sendMessage(sender, "command.buy.success", new String[]{"@region", "@price"}, new String[]{target.name, Long.toString(price)});
         return false;
     }
 }

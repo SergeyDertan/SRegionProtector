@@ -60,7 +60,7 @@ public final class RegionTeleportCommand extends SRegionProtectorCommand {
             return false;
         }
         ((Player) sender).teleport(region.getTeleportFlagPos());
-        this.messenger.sendMessage(sender, "command.teleport.teleport", "@region", region.getName());
+        this.messenger.sendMessage(sender, "command.teleport.teleport", "@region", region.name);
         return true;
     }
 }

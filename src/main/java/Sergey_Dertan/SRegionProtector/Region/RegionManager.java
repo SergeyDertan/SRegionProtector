@@ -117,8 +117,8 @@ public final class RegionManager {
                 true
         ).forEach(c -> c.addRegion(s)));
 
-        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", String.valueOf(this.regions.size())));
-        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", String.valueOf(this.chunkManager.getChunkAmount())));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", Integer.toString(this.regions.size())));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", Integer.toString(this.chunkManager.getChunkAmount())));
     }
 
     public synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
@@ -198,7 +198,7 @@ public final class RegionManager {
 
             region.getChunks().forEach(chunk -> chunk.removeRegion(region));
 
-            this.regions.remove(region.getName());
+            this.regions.remove(region.name);
             this.provider.removeRegion(region);
 
             if (region.getHealerBlockEntity() != null) region.getHealerBlockEntity().close();
@@ -273,13 +273,13 @@ public final class RegionManager {
         }
         switch (saveType) {
             case AUTO:
-                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", String.valueOf(amount)));
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", Integer.toString(amount)));
                 break;
             case DISABLING:
-                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", String.valueOf(this.regions.size())));
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", Integer.toString(this.regions.size())));
                 break;
             case MANUAL:
-                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-manual-save", new String[]{"@amount", "@initiator"}, new String[]{String.valueOf(this.regions.size()), initiator}));
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-manual-save", new String[]{"@amount", "@initiator"}, new String[]{Integer.toString(this.regions.size()), initiator}));
                 break;
         }
     }

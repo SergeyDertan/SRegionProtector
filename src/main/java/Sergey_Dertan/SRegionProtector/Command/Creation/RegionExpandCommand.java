@@ -74,7 +74,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             this.selector.removeBorders((Player) sender);
             this.selector.showBorders((Player) sender, session.pos1, session.pos2);
         }
-        this.messenger.sendMessage(sender, "command.expand.success", "@size", String.valueOf(session.calculateRegionSize()));
+        this.messenger.sendMessage(sender, "command.expand.success", "@size", Long.toString(session.calculateRegionSize()));
         return false;
     }
 }

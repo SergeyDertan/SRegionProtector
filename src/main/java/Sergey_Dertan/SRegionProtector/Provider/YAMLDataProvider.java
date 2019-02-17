@@ -119,7 +119,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
                 this.saveFlags(region);
             }
         } catch (RuntimeException e) {
-            this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.getName() + ": " + e.getMessage()); //TODO message
+            this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.name + ": " + e.getMessage()); //TODO message
         }
     }
 

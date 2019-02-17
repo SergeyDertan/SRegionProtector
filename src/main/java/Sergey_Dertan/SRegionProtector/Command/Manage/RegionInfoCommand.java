@@ -12,10 +12,10 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public final class RegionInfoCommand extends SRegionProtectorCommand {
 
@@ -64,14 +64,9 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
             return false;
         }
-        String rgName = args[0];
-        if (rgName.isEmpty()) {
-            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
-            return false;
-        }
-        Region region = this.regionManager.getRegion(rgName);
+        Region region = this.regionManager.getRegion(args[0]);
         if (region == null) {
-            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", rgName);
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", args[0]);
             return false;
         }
         this.showRegionInfo(sender, region);
@@ -79,13 +74,13 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
     }
 
     private void showRegionInfo(CommandSender sender, Region region) {
-        String name = region.getName();
+        String name = region.name;
         String level = region.level;
         String owner = region.getCreator();
         String owners = String.join(", ", region.getOwners());
         String members = String.join(", ", region.getMembers());
-        String size = String.valueOf(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)));
-        Set<String> flags = new HashSet<>();
+        String size = Long.toString(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)));
+        List<String> flags = new ObjectArrayList<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
             if (!this.regionSettings.flagsStatus[i]) continue;
             flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled")));

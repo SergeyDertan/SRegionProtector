@@ -34,6 +34,6 @@ public abstract class DataProvider {
     public abstract void removeRegion(String region);
 
     public final void removeRegion(Region region) {
-        this.removeRegion(region.getName());
+        this.removeRegion(region.name);
     }
 }

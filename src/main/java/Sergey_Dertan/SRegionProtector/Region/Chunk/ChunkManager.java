@@ -64,7 +64,7 @@ public final class ChunkManager {
                     ++amount;
                 }
             }
-            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", String.valueOf(amount)));
+            this.logger.info(TextFormat.GREEN + this.messenger.getMessage("chunk-manager.empty-chunks-removed", "@amount", Integer.toString(amount)));
         }
     }
 
@@ -122,7 +122,7 @@ public final class ChunkManager {
         synchronized (this.lock) {
             levelChunks = this.chunks.computeIfAbsent(levelId, s -> new Long2ObjectOpenHashMap<>());
             Chunk chunk = levelChunks.get(hash);
-            if (chunk != null) return chunk;
+            if (chunk != null || !create) return chunk;
             chunk = new Chunk(x, z);
             levelChunks.put(hash, chunk);
             return chunk;

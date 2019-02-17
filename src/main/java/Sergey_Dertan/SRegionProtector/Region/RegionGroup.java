@@ -6,8 +6,8 @@ public enum RegionGroup {
     OWNER(1, "owner"),
     MEMBER(2, "member");
 
-    private final int id;
-    private final String name;
+    public final int id;
+    public final String name;
 
     RegionGroup(int id, String name) {
         this.id = id;

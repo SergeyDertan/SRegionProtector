@@ -94,7 +94,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.gc();
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful", "@time", String.valueOf(System.currentTimeMillis() - start)));
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful", "@time", Long.toString(System.currentTimeMillis() - start)));
 
         instance = this;
     }

@@ -41,7 +41,7 @@ public final class RegionSizeCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.size.positions-in-different-worlds");
             return false;
         }
-        this.messenger.sendMessage(sender, "command.size.size", "@size", String.valueOf(session.calculateRegionSize()));
+        this.messenger.sendMessage(sender, "command.size.size", "@size", Long.toString(session.calculateRegionSize()));
         return false;
     }
 }
