@@ -25,7 +25,7 @@ public final class RegionTeleportFlag extends RegionFlag {
     }
 
     public RegionTeleportFlag(Position position) {
-        this(false, position.clone(), position.getLevel().getName());
+        this(false, position.clone(), position.level.getName());
     }
 
     public RegionTeleportFlag() {
@@ -52,9 +52,7 @@ public final class RegionTeleportFlag extends RegionFlag {
 
     @Override
     public RegionTeleportFlag clone() {
-        if (this.position == null) return new RegionTeleportFlag(this.state);
-        Level lvl = Server.getInstance().getLevelByName(this.level);
-        if (lvl == null) return new RegionTeleportFlag(this.state);
-        return new RegionTeleportFlag(this.state, new Position(this.position.x, this.position.y, this.position.z, lvl));
+        if (this.position == null || this.level == null || this.level.isEmpty()) return new RegionTeleportFlag(this.state);
+        return new RegionTeleportFlag(this.state, this.position.clone(), this.level);
     }
 }

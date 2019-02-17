@@ -24,6 +24,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -62,7 +63,8 @@ public final class RegionManager {
         this.regions = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
         this.owners = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
         this.members = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        Set<RegionDataObject> regions = this.provider.loadRegionList();
+
+        List<RegionDataObject> regions = this.provider.loadRegionList();
         for (RegionDataObject rdo : regions) {
             String name = rdo.name;
             String creator = rdo.creator;

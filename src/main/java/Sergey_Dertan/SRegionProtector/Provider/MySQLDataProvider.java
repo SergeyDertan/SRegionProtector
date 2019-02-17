@@ -13,6 +13,7 @@ import org.datanucleus.metadata.PersistenceUnitMetaData;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Transaction;
+import java.util.List;
 import java.util.Set;
 
 //import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -40,7 +41,7 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     }
 
     @Override
-    public Set<RegionDataObject> loadRegionList() {
+    public List<RegionDataObject> loadRegionList() {
         /*Query<RegionDataObject> query = this.pm.newQuery(RegionDataObject.class);
         Collection<RegionDataObject> result = query.executeResultList(RegionDataObject.class);
         return new HashSet<>(result);*/

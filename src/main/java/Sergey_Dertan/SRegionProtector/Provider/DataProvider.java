@@ -5,6 +5,8 @@ import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.utils.Logger;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public abstract class DataProvider {
@@ -15,7 +17,7 @@ public abstract class DataProvider {
         this.logger = logger;
     }
 
-    public final synchronized void saveRegionList(Set<Region> regions) {
+    public final synchronized void saveRegionList(Collection<Region> regions) {
         regions.forEach(this::saveRegion);
     }
 
@@ -27,7 +29,7 @@ public abstract class DataProvider {
 
     public abstract FlagListDataObject loadFlags(String region);
 
-    public abstract Set<RegionDataObject> loadRegionList();
+    public abstract List<RegionDataObject> loadRegionList();
 
     public abstract RegionDataObject loadRegion(String name);
 

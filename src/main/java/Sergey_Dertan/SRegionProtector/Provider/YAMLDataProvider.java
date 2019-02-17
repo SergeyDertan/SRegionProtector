@@ -9,12 +9,10 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -55,7 +53,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
 
     @Override
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    public Set<RegionDataObject> loadRegionList() {
+    public List<RegionDataObject> loadRegionList() {
         if (this.async) {
             AtomicInteger done = new AtomicInteger();
             List<List<RegionDataObject>> result = new ObjectArrayList<>();
@@ -75,12 +73,12 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
             });
             while (done.get() < result.size()) {
             }
-            Set<RegionDataObject> list = new ObjectArraySet<>();
+            List<RegionDataObject> list = new ObjectArrayList<>();
             result.forEach(list::addAll);
             return list;
         }
 
-        Set<RegionDataObject> list = new ObjectArraySet<>();
+        List<RegionDataObject> list = new ObjectArrayList<>();
         for (File file : new File(SRegionProtectorRegionsFolder).listFiles()) {
             if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
