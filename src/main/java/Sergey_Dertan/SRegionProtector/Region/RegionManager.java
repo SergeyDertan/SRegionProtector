@@ -150,7 +150,7 @@ public final class RegionManager {
         return region;
     }
 
-    public synchronized void changeRegionOwner(Region region, String newOwner) {
+    private synchronized void clearUsers(Region region) {
         synchronized (region.lock) {
             region.getMembers().forEach(member ->
                     {
@@ -168,6 +168,12 @@ public final class RegionManager {
 
             this.owners.get(region.getCreator()).remove(region);
             if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
+        }
+    }
+
+    public synchronized void changeRegionOwner(Region region, String newOwner) {
+        synchronized (region.lock) {
+            this.clearUsers(region);
 
             region.clearUsers();
 
@@ -179,22 +185,7 @@ public final class RegionManager {
 
     public synchronized void removeRegion(Region region) {
         synchronized (region.lock) {
-            region.getMembers().forEach(member ->
-                    {
-                        this.members.get(member).remove(region);
-                        if (this.members.get(member).size() == 0) this.members.remove(member);
-                    }
-            );
-
-            region.getOwners().forEach(owner ->
-                    {
-                        this.owners.get(owner).remove(region);
-                        if (this.owners.get(owner).size() == 0) this.owners.remove(owner);
-                    }
-            );
-
-            this.owners.get(region.getCreator()).remove(region);
-            if (this.owners.get(region.getCreator()).size() == 0) this.owners.remove(region.getCreator());
+            this.clearUsers(region);
 
             region.getChunks().forEach(chunk -> chunk.removeRegion(region));
 
