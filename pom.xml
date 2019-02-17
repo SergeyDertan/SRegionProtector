@@ -7,7 +7,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>17.4</version>
+    <version>17.5</version>
     <name>SRegionProtector</name>
     <description>Region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>
@@ -34,7 +34,7 @@
                         <artifactId>maven-jar-plugin</artifactId>
                         <version>3.0.2</version>
                         <configuration>
-                            <outputDirectory>C:\Users\Сергей\Desktop\Nukkit\plugins</outputDirectory>
+                            <outputDirectory>C:\Users\SergeyDertan\Desktop\nukkit\plugins</outputDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -62,10 +62,10 @@
             <version>LATEST</version>
             <scope>provided</scope>
         </dependency>
-        <dependency> <!--TODO-->
-            <groupId>it.unimi.dsi</groupId>
-            <artifactId>fastutil</artifactId>
-            <version>8.1.0</version>
+        <dependency>
+            <groupId>sergeydertan.sregionprotector</groupId>
+            <artifactId>fastutil-lite</artifactId>
+            <version>8.1.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
