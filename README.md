@@ -11,6 +11,7 @@ SRegionProtector is a nukkit plugin that allows players to protect their regions
 ## Maven dependency
 <details>
 <summary>Maven dependency</summary>
+
 ```
 <repositories>
         <repository>
@@ -30,6 +31,7 @@ SRegionProtector is a nukkit plugin that allows players to protect their regions
         </dependency>
     </dependencies>
 ```
+
 </details>
 
 ## Commands and permissions can be found at [Wiki](https://github.com/SergeyDertan/SRegionProtector/wiki).
