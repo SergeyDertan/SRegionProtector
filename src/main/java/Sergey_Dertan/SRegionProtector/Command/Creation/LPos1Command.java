@@ -35,7 +35,7 @@ public final class LPos1Command extends SRegionProtectorCommand {
         double x = -Math.sin(((Player) sender).yaw / 180 * Math.PI) * Math.cos(((Player) sender).pitch / 180 * Math.PI);
         double y = -Math.sin(((Player) sender).pitch / 180 * Math.PI);
         double z = Math.cos(((Player) sender).yaw / 180 * Math.PI) * Math.cos(((Player) sender).pitch / 180 * Math.PI);
-        Vector3 pos = new Vector3(((Player) sender).x, ((Player) sender).y, ((Player) sender).z);
+        Vector3 pos = new Vector3(((Player) sender).x, ((Player) sender).y + ((Player) sender).getEyeHeight(), ((Player) sender).z);
         while (pos.distance(((Vector3) sender)) < this.maxRadius) {
             if (((Player) sender).level.getBlock(pos = pos.add(x, y, z)).getId() == 0) continue;
             this.selector.getSession((Player) sender).pos1 = new Position(Math.floor(pos.x), Math.floor(pos.y), Math.floor(pos.z), ((Player) sender).level);
