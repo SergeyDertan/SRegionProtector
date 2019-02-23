@@ -7,7 +7,7 @@ import cn.nukkit.utils.Config;
 
 import java.util.Map;
 
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorMainFolder;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 
 public final class Settings {
@@ -31,9 +31,9 @@ public final class Settings {
     public final int lposMaxRadius;
 
     public Settings() throws Exception {
-        copyResource("config.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
-        copyResource("mysql.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
-        copyResource("region-settings.yml", "resources/", SRegionProtectorMainFolder, SRegionProtectorMain.class);
+        copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
+        copyResource("mysql.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
+        copyResource("region-settings.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
 
         Map<String, Object> config = this.getConfig();
 
@@ -64,11 +64,11 @@ public final class Settings {
 
         this.provider = ProviderType.fromString((String) config.get("provider"));
 
-        this.mySQLSettings = new MySQLSettings(new Config(SRegionProtectorMainFolder + "mysql.yml", Config.YAML).getAll());
-        this.regionSettings = new RegionSettings(config, new Config(SRegionProtectorMainFolder + "region-settings.yml", Config.YAML).getAll());
+        this.mySQLSettings = new MySQLSettings(new Config(MAIN_FOLDER + "mysql.yml", Config.YAML).getAll());
+        this.regionSettings = new RegionSettings(config, new Config(MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
     }
 
     public Map<String, Object> getConfig() {
-        return new Config(SRegionProtectorMainFolder + "config.yml", Config.YAML).getAll();
+        return new Config(MAIN_FOLDER + "config.yml", Config.YAML).getAll();
     }
 }

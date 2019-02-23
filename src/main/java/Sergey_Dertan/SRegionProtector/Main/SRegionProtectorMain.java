@@ -20,6 +20,7 @@ import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.MySQLDataProvider;
 import Sergey_Dertan.SRegionProtector.Provider.YAMLDataProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -36,10 +37,10 @@ import java.io.File;
 
 public final class SRegionProtectorMain extends PluginBase {
 
-    public static final String SRegionProtectorMainFolder = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
-    public static final String SRegionProtectorRegionsFolder = SRegionProtectorMainFolder + "Regions/";
-    public static final String SRegionProtectorFlagsFolder = SRegionProtectorMainFolder + "Flags/";
-    public static final String SRegionProtectorLangFolder = SRegionProtectorMainFolder + "Lang/";
+    public static final String MAIN_FOLDER = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
+    public static final String REGIONS_FOLDER = MAIN_FOLDER + "Regions/";
+    public static final String FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
+    public static final String LANG_FOLDER = MAIN_FOLDER + "Lang/";
 
     private static SRegionProtectorMain instance;
 
@@ -113,8 +114,8 @@ public final class SRegionProtectorMain extends PluginBase {
                     this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
                     break;
                 case MYSQL:
-                    //this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO mysql
+                    this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
+                    //this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO mysql
                     break;
                 case SQLite3:
                     this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
@@ -143,10 +144,10 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private boolean createDirectories() {
         return
-                this.createFolder(SRegionProtectorMainFolder) &&
-                        this.createFolder(SRegionProtectorRegionsFolder) &&
-                        this.createFolder(SRegionProtectorFlagsFolder) &&
-                        this.createFolder(SRegionProtectorLangFolder);
+                this.createFolder(MAIN_FOLDER) &&
+                        this.createFolder(REGIONS_FOLDER) &&
+                        this.createFolder(FLAGS_FOLDER) &&
+                        this.createFolder(LANG_FOLDER);
     }
 
     private boolean createFolder(String path) {

@@ -18,8 +18,8 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorLangFolder;
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorMainFolder;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.LANG_FOLDER;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.resourceExists;
 
@@ -36,8 +36,8 @@ public final class Messenger {
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
         String lang = null;
-        if (new File(SRegionProtectorMainFolder + "config.yml").exists()) {
-            Map<String, Object> cnf = new Config(SRegionProtectorMainFolder + "config.yml", Config.YAML).getAll();
+        if (new File(MAIN_FOLDER + "config.yml").exists()) {
+            Map<String, Object> cnf = new Config(MAIN_FOLDER + "config.yml", Config.YAML).getAll();
             if (cnf.containsKey("language") && !((String) cnf.get("language")).equalsIgnoreCase("default")) {
                 lang = (String) cnf.get("language");
             }
@@ -47,11 +47,11 @@ public final class Messenger {
         }
         if (!resourceExists(lang + ".yml", "resources/lang", SRegionProtectorMain.class)) lang = DEFAULT_LANGUAGE;
         this.language = lang;
-        copyResource(lang + ".yml", "resources/lang", SRegionProtectorLangFolder, SRegionProtectorMain.class);
+        copyResource(lang + ".yml", "resources/lang", LANG_FOLDER, SRegionProtectorMain.class);
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
-        this.messages = new Object2ObjectArrayMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(SRegionProtectorLangFolder + lang + ".yml")), HashMap.class));
+        this.messages = new Object2ObjectArrayMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(LANG_FOLDER + lang + ".yml")), HashMap.class));
         this.interfaz = Player.class.getDeclaredField("interfaz");
         this.interfaz.setAccessible(true);
         instance = this;

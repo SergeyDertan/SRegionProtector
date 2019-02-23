@@ -17,8 +17,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorFlagsFolder;
-import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.SRegionProtectorRegionsFolder;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.FLAGS_FOLDER;
+import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.REGIONS_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.DATA_TAG;
 
 public final class YAMLDataProvider extends DataProvider { //TODO ??
@@ -48,7 +48,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
 
     @Override
     public RegionDataObject loadRegion(String name) {
-        return Converter.toRegionDataObject(new Config(SRegionProtectorRegionsFolder + REGION_FILE_NAME.replace("{@region-name}", name), Config.YAML).getAll());
+        return Converter.toRegionDataObject(new Config(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", name), Config.YAML).getAll());
     }
 
     @Override
@@ -57,7 +57,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
         if (this.async) {
             AtomicInteger done = new AtomicInteger();
             List<List<RegionDataObject>> result = new ObjectArrayList<>();
-            Utils.sliceArray(new File(SRegionProtectorRegionsFolder).listFiles(), this.threads, false).forEach(s -> {
+            Utils.sliceArray(new File(REGIONS_FOLDER).listFiles(), this.threads, false).forEach(s -> {
                 List<RegionDataObject> res = new ObjectArrayList<>();
                 result.add(res);
                 this.executor.execute(() -> {
@@ -79,7 +79,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
         }
 
         List<RegionDataObject> list = new ObjectArrayList<>();
-        for (File file : new File(SRegionProtectorRegionsFolder).listFiles()) {
+        for (File file : new File(REGIONS_FOLDER).listFiles()) {
             if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
             if (o == null) {
@@ -94,14 +94,14 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     @Override
     @SuppressWarnings("unchecked")
     public FlagListDataObject loadFlags(String region) {
-        Config file = new Config(SRegionProtectorFlagsFolder + FLAG_LIST_FILE_NAME.replace("{@region-name}", region), Config.YAML);
+        Config file = new Config(FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region), Config.YAML);
         return Converter.toDataObject((Map<String, Map<String, Object>>) file.get(DATA_TAG));
     }
 
     @Override
     public synchronized void saveFlags(Region region) {
         synchronized (region.lock) {
-            Config file = new Config(SRegionProtectorFlagsFolder + FLAG_LIST_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
+            Config file = new Config(FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
             file.set(DATA_TAG, region.flagsToMap());
             file.save();
         }
@@ -111,7 +111,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     public synchronized void saveRegion(Region region) {
         try {
             synchronized (region.lock) {
-                Config file = new Config(SRegionProtectorRegionsFolder + REGION_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
+                Config file = new Config(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
                 file.set(DATA_TAG, region.toMap());
                 file.save();
                 this.saveFlags(region);
@@ -124,7 +124,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void removeRegion(String region) {
-        new File(SRegionProtectorRegionsFolder + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
-        new File(SRegionProtectorFlagsFolder + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
+        new File(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
+        new File(FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
     }
 }
