@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
@@ -11,6 +10,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
+import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
@@ -51,17 +51,12 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
                 this.messenger.sendMessage(sender, "command.list.usage");
                 return false;
             }
-            Chunk chunk = this.chunkManager.getChunk((long) ((Player) sender).x, (long) ((Player) sender).z, ((Player) sender).level.getName(), true, false);
-            if (chunk == null) {
-                this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
-                return false;
-            }
-            for (Region region : chunk.getRegions()) {
-                if (!region.intersectsWith(((Player) sender).boundingBox)) continue;
+            Region region = this.chunkManager.getRegion((Vector3) sender, ((Player) sender).level.getName());
+            if (region != null) {
                 this.showRegionInfo(sender, region);
-                return false;
+                return true;
             }
-            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "@region", "");
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", " {@region}", "");
             return false;
         }
         Region region = this.regionManager.getRegion(args[0]);

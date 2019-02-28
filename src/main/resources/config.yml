@@ -44,6 +44,8 @@ active-flags:
   ender-pearl: false
   explode-block-break: true
   liquid-flow: true
+  lightning-strike: true
+  fire: true
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

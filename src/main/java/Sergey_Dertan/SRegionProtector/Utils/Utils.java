@@ -204,7 +204,7 @@ public abstract class Utils {
         return value;
     }
 
-    public static <T> List<List<T>> sliceArray(T[] array, int pieces, boolean keepEmpty) { //TODO complete
+    public static <T> List<List<T>> sliceArray(T[] array, int pieces, boolean keepEmpty) {
         List<List<T>> result = new ObjectArrayList<>();
         for (int i = 0; i < pieces; ++i) {
             result.add(new ObjectArrayList<>());
@@ -218,8 +218,30 @@ public abstract class Utils {
             ++i;
         }
         if (!keepEmpty) {
-            result.removeIf(s -> s.size() == 0);
+            result.removeIf(List::isEmpty);
         }
         return result;
+    }
+
+    /**
+     * @return greater version string or empty string if they are equal
+     */
+    public static String compareVersions(String first, String second) {
+        if (first.equals(second)) return "";
+        String[] f = first.split("\\.");
+        String[] s = second.split("\\.");
+
+        String[] bigger = f.length >= s.length ? f : s;
+        String[] smaller = f.length < s.length ? f : s;
+
+        for (int i = 0; i < smaller.length; ++i) {
+            if (Integer.valueOf(smaller[i]) > Integer.valueOf(bigger[i])) {
+                return String.join(".", smaller);
+            } else if (Integer.valueOf(smaller[i]) < Integer.valueOf(bigger[i])) {
+                return String.join(".", bigger);
+            }
+            if (smaller.length == i + 1 && smaller.length < bigger.length) return String.join(".", bigger);
+        }
+        return null;
     }
 }

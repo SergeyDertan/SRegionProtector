@@ -135,3 +135,7 @@ permissions:
                 default: op
               sregionprotector.region.flag.liquid_flow:
                 default: op
+              sregionprotector.region.flag.fire:
+                default: op
+              sregionprotector.region.flag.lightning_strike:
+                default: op

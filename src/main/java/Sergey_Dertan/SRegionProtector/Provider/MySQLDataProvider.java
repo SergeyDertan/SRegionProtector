@@ -4,16 +4,12 @@ import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
-import cn.nukkit.Server;
-import cn.nukkit.scheduler.Task;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.MainLogger;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 
-import javax.jdo.JDOHelper;
 import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
 import javax.jdo.Transaction;
 import java.util.List;
 
@@ -78,26 +74,26 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
 
     @Override
     public boolean init() { //jdbc:mysql://127.0.0.1:3306/?user=root
-            PersistenceUnitMetaData pumd = new PersistenceUnitMetaData("dynamic-unit", "RESOURCE_LOCAL", null);
-            pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject");
-            pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.ChunkDataObject");
-            pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject");
-            pumd.setExcludeUnlistedClasses(true);
-            //setProperty("datanucleus.ConnectionDriverName","com.mysql.jdbc.Driver");
-           // pumd.addProperty("javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory"); //TODO
-            pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
-            pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
-            pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://127.0.0.1:3306/acc?useSSL=false"); //"jdbc:h2:mem:mypersistence"
-            pumd.addProperty("javax.jdo.option.ConnectionUserName", "root");
-            pumd.addProperty("javax.jdo.option.ConnectionPassword", "pass");
-            pumd.addProperty("datanucleus.autoCreateSchema", "true");
+        PersistenceUnitMetaData pumd = new PersistenceUnitMetaData("dynamic-unit", "RESOURCE_LOCAL", null);
+        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject");
+        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.ChunkDataObject");
+        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject");
+        pumd.setExcludeUnlistedClasses(true);
+        //setProperty("datanucleus.ConnectionDriverName","com.mysql.jdbc.Driver");
+        // pumd.addProperty("javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory"); //TODO
+        pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
+        pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
+        pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://127.0.0.1:3306/acc?useSSL=false"); //"jdbc:h2:mem:mypersistence"
+        pumd.addProperty("javax.jdo.option.ConnectionUserName", "root");
+        pumd.addProperty("javax.jdo.option.ConnectionPassword", "pass");
+        pumd.addProperty("datanucleus.autoCreateSchema", "true");
 
 
-                    MainLogger.getLogger().info("qqqwwweee");
-                    PersistenceManager pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();
-                    Transaction tr = pm.currentTransaction();
-                    pm.close();
-                    MainLogger.getLogger().info("qwe");
+        MainLogger.getLogger().info("qqqwwweee");
+        PersistenceManager pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();
+        Transaction tr = pm.currentTransaction();
+        pm.close();
+        MainLogger.getLogger().info("qwe");
         return false;
     }
 

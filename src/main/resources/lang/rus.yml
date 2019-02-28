@@ -1,6 +1,7 @@
 loading.init.start: "Инициализация SRegionProtector V_{@ver} от Sergey Dertan..."
 loading.init.folders: "Создание папок..."
 loading.init.settings: "Инициализация настроек..."
+loading.init.update-available: "Доступна новая версия SRegionProtector! {@ver}."
 loading.init.data-provider: "Инициализация поставщика данных..."
 loading.init.regions: "Инициализация регионов..."
 loading.init.chunks: "Инициализация чанков..."

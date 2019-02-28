@@ -41,9 +41,11 @@ public abstract class RegionFlags {
     public static final int FLAG_REDSTONE = 21;
     public static final int FLAG_ENDER_PEARL = 22;
     public static final int FLAG_EXPLODE_BLOCK_BREAK = 23;
-    public static final int FLAG_LIQUID_FLOW = 24; //lava & water spread
+    public static final int FLAG_LIGHTNING_STRIKE = 24;
+    public static final int FLAG_FIRE = 25;
+    public static final int FLAG_LIQUID_FLOW = 26; //lava & water spread
 
-    public static final int FLAG_AMOUNT = 25;
+    public static final int FLAG_AMOUNT = 27;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -77,6 +79,8 @@ public abstract class RegionFlags {
         defaults[FLAG_ENDER_PEARL] = new RegionFlag(flagsDefault[FLAG_ENDER_PEARL]);
         defaults[FLAG_EXPLODE_BLOCK_BREAK] = new RegionFlag(flagsDefault[FLAG_EXPLODE_BLOCK_BREAK]);
         defaults[FLAG_LIQUID_FLOW] = new RegionFlag(flagsDefault[FLAG_LIQUID_FLOW]);
+        defaults[FLAG_LIGHTNING_STRIKE] = new RegionFlag(flagsDefault[FLAG_LIGHTNING_STRIKE]);
+        defaults[FLAG_FIRE] = new RegionFlag(flagsDefault[FLAG_FIRE]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -105,6 +109,8 @@ public abstract class RegionFlags {
         permissions[FLAG_ENDER_PEARL] = pluginManager.getPermission("sregionprotector.region.flag.ender_pearl");
         permissions[FLAG_EXPLODE_BLOCK_BREAK] = pluginManager.getPermission("sregionprotector.region.flag.explode_block_break");
         permissions[FLAG_LIQUID_FLOW] = pluginManager.getPermission("sregionprotector.region.flag.liquid_flow");
+        permissions[FLAG_LIGHTNING_STRIKE] = pluginManager.getPermission("sregionprotector.region.flag.lightning_strike");
+        permissions[FLAG_FIRE] = pluginManager.getPermission("sregionprotector.region.flag.fire");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
@@ -169,6 +175,10 @@ public abstract class RegionFlags {
                 return "explode-block-break";
             case FLAG_LIQUID_FLOW:
                 return "liquid-flow";
+            case FLAG_FIRE:
+                return "fire";
+            case FLAG_LIGHTNING_STRIKE:
+                return "lightning-strike";
         }
     }
 
@@ -264,6 +274,13 @@ public abstract class RegionFlags {
             case "water_flow":
             case "waterflow":
                 return FLAG_LIQUID_FLOW;
+            case "fire":
+                return FLAG_FIRE;
+            case "lightning-strike":
+            case "lightning_strike":
+            case "lightningstrike":
+            case "lightning":
+                return FLAG_LIGHTNING_STRIKE;
         }
     }
 

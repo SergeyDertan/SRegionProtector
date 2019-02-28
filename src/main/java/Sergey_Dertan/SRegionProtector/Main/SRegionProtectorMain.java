@@ -33,7 +33,12 @@ import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
+
+import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 
 public final class SRegionProtectorMain extends PluginBase {
 
@@ -41,6 +46,8 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String REGIONS_FOLDER = MAIN_FOLDER + "Regions/";
     public static final String FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
     public static final String LANG_FOLDER = MAIN_FOLDER + "Lang/";
+
+    public static final String VERSION_URL = "https://raw.githubusercontent.com/SergeyDertan/SRegionProtector/mvn-repo/README.md";
 
     private static SRegionProtectorMain instance;
 
@@ -96,6 +103,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.gc();
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful", "@time", Long.toString(System.currentTimeMillis() - start)));
+
+        this.getServer().getScheduler().scheduleTask(this::checkUpdate, true);
 
         instance = this;
     }
@@ -343,6 +352,22 @@ public final class SRegionProtectorMain extends PluginBase {
         command = new LPos2Command(this.regionSelector, this.settings.lposMaxRadius);
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
+    }
+
+    private void checkUpdate() {
+        try {
+            URL oracle = new URL(VERSION_URL);
+            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+
+            String version = in.readLine();
+            in.close();
+
+            if (version.isEmpty()) return;
+            if (compareVersions(this.getDescription().getVersion(), version).equals(version)) {
+                this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", version));
+            }
+        } catch (Exception ignore) {
+        }
     }
 
     @Override

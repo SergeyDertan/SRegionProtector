@@ -13,17 +13,16 @@ import cn.nukkit.entity.item.EntityPotion;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.passive.EntityAnimal;
 import cn.nukkit.entity.passive.EntityWaterAnimal;
+import cn.nukkit.entity.weather.EntityLightning;
 import cn.nukkit.event.Event;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.block.BlockBreakEvent;
-import cn.nukkit.event.block.BlockPlaceEvent;
-import cn.nukkit.event.block.LeavesDecayEvent;
-import cn.nukkit.event.block.LiquidFlowEvent;
+import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.*;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
+import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 
@@ -93,10 +92,28 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), null, e, false, false);
     }
 
+    //lightning strike flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void lightningStrike(LightningStrikeEvent e) {
+        if (e.getLightning() instanceof EntityLightning) this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, ((Position) e.getLightning()), e);
+    }
+
+    //fire flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void blockIgnite(BlockIgniteEvent e) {
+        this.handleEvent(RegionFlags.FLAG_FIRE, e.getBlock(), e.getEntity() instanceof Player ? ((Player) e.getEntity()) : null, e, false, false);
+    }
+
+    //fire flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void blockBurn(BlockBurnEvent e) {
+        this.handleEvent(RegionFlags.FLAG_FIRE, e.getBlock(), e);
+    }
+
     //leaves decay flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void leavesDecay(LeavesDecayEvent e) {
-        this.handleEvent(RegionFlags.FLAG_LEAVES_DECAY, e.getBlock(), null, e);
+        this.handleEvent(RegionFlags.FLAG_LEAVES_DECAY, e.getBlock(), e);
     }
 
     //explode (creeper & tnt explode) & explode block break flags
@@ -106,7 +123,7 @@ public final class RegionEventsHandler implements Listener {
         if (e.isCancelled()) return;
         Iterator<Block> it = e.getBlockList().iterator();
         while (it.hasNext()) {
-            this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), null, e);
+            this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), e);
             if (e.isCancelled()) {
                 e.setCancelled(false);
                 it.remove();
@@ -162,7 +179,7 @@ public final class RegionEventsHandler implements Listener {
     //redstone flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void redstoneUpdate(RedstoneUpdateEvent e) {
-        this.handleEvent(RegionFlags.FLAG_REDSTONE, e.getBlock(), null, e);
+        this.handleEvent(RegionFlags.FLAG_REDSTONE, e.getBlock(), e);
     }
 
     //ender pearl flag
@@ -178,6 +195,10 @@ public final class RegionEventsHandler implements Listener {
         Block block = e.getSource();
         if (!(block instanceof BlockLava) && !(block instanceof BlockWater)) return;
         this.handleEvent(RegionFlags.FLAG_LIQUID_FLOW, e.getTo(), null, e, false, false, e.getSource());
+    }
+
+    private void handleEvent(int flag, Position pos, Event ev) {
+        this.handleEvent(flag, pos, null, ev);
     }
 
     private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 additionalPos) {

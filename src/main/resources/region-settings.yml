@@ -23,30 +23,26 @@ default-flags:
   ender-pearl: false
   explode-block-break: true
   liquid-flow: true
+  fire: false
+  lightning-strike: true
 need-message:
   move: false
   build: true
   interact: true
   use: true
   pvp: true
-  explode: false
   lighter: false
   magic-item-use: false
   heal: false
   invincible: false
   potion-launch: false
-  leaves-decay: false
   item_drop: true
   send_chat: true
   receive_chat: false
   health_regen: false
-  mob-damage: false
-  mob-spawn: false
   crops-destroy: true
-  redstone: false
   ender-pearl: true
-  explode-block-break: true
-  liquid-flow: false
+  fire: true
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks
