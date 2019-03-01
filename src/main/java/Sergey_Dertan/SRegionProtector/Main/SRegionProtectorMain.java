@@ -33,12 +33,10 @@ import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
-import java.net.URL;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
+import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
 
 public final class SRegionProtectorMain extends PluginBase {
 
@@ -354,17 +352,13 @@ public final class SRegionProtectorMain extends PluginBase {
         rg.registerCommand(command);
     }
 
+    @SuppressWarnings("ConstantConditions")
     private void checkUpdate() {
         try {
-            URL oracle = new URL(VERSION_URL);
-            BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
-
-            String version = in.readLine();
-            in.close();
-
-            if (version.isEmpty()) return;
-            if (compareVersions(this.getDescription().getVersion(), version).equals(version)) {
-                this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", version));
+            String ver = (String) httpGetRequestJson("https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest").get("tag_name");
+            if (ver.isEmpty()) return;
+            if (compareVersions(this.getDescription().getVersion(), ver).equals(ver)) {
+                this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", ver));
             }
         } catch (Exception ignore) {
         }
