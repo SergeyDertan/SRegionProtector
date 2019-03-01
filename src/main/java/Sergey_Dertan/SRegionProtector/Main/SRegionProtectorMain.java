@@ -45,7 +45,7 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
     public static final String LANG_FOLDER = MAIN_FOLDER + "Lang/";
 
-    public static final String VERSION_URL = "https://raw.githubusercontent.com/SergeyDertan/SRegionProtector/mvn-repo/README.md";
+    public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
 
     private static SRegionProtectorMain instance;
 
@@ -355,7 +355,7 @@ public final class SRegionProtectorMain extends PluginBase {
     @SuppressWarnings("ConstantConditions")
     private void checkUpdate() {
         try {
-            String ver = (String) httpGetRequestJson("https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest").get("tag_name");
+            String ver = (String) httpGetRequestJson(VERSION_URL).get("tag_name");
             if (ver.isEmpty()) return;
             if (compareVersions(this.getDescription().getVersion(), ver).equals(ver)) {
                 this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", ver));
