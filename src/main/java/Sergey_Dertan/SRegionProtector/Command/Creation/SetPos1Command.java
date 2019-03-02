@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class SetPos1Command extends SRegionProtectorCommand {
 
-    private RegionSelector selector;
+    private final RegionSelector selector;
 
     public SetPos1Command(RegionSelector selector) {
         super("pos1");

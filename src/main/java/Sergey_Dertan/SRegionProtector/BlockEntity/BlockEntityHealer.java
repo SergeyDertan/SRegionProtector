@@ -20,21 +20,21 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     public static int HEAL_AMOUNT;
 
     public static boolean FLAG_ENABLED;
-    private RegionManager regionManager;
-    private AxisAlignedBB bb;
-    private String region;
+    private final RegionManager regionManager;
+    private final AxisAlignedBB bb;
+    private final String region;
     private int delay;
 
     public BlockEntityHealer(FullChunk chunk, CompoundTag nbt) {
         super(chunk, nbt);
         this.region = nbt.getString(REGION_TAG);
         this.regionManager = SRegionProtectorMain.getInstance().getRegionManager();
+        this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
         if (!this.isBlockEntityValid()) {
             this.closed = true;
             return;
         }
         this.delay = HEAL_DELAY;
-        this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
     }
 
     public static CompoundTag getDefaultNBT(Vector3 pos, String region) {

@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class RemoveBordersCommand extends SRegionProtectorCommand {
 
-    private RegionSelector selector;
+    private final RegionSelector selector;
 
     public RemoveBordersCommand(RegionSelector selector) {
         super("rgremoveborders", "remove-borders");

@@ -35,12 +35,11 @@ public final class Region implements AxisAlignedBB {
 
     public final String name;
     public final String level;
-
+    private final Set<String> owners, members;
+    private final RegionFlag[] flags;
+    private final Set<Chunk> chunks;
     boolean needUpdate = false;
     private String creator;
-    private Set<String> owners, members;
-    private RegionFlag[] flags;
-    private Set<Chunk> chunks;
 
     public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
         this.minX = minX;

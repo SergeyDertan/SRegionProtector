@@ -15,8 +15,8 @@ import java.util.Map;
 
 public final class RegionSelectCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
-    private RegionSelector selector;
+    private final RegionManager regionManager;
+    private final RegionSelector selector;
 
     public RegionSelectCommand(RegionManager regionManager, RegionSelector selector) {
         super("rgselect", "select");

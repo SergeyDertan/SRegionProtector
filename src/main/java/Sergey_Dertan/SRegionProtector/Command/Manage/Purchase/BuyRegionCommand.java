@@ -13,8 +13,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 public final class BuyRegionCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
-    private AbstractEconomy economy;
+    private final RegionManager regionManager;
+    private final AbstractEconomy economy;
 
     public BuyRegionCommand(RegionManager regionManager, AbstractEconomy economy) {
         super("rgbuy", "buy");

@@ -13,7 +13,7 @@ import java.util.Map;
 
 public final class RemoveOwnerCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RemoveOwnerCommand(RegionManager regionManager) {
         super("rgremoveowner", "removeowner");

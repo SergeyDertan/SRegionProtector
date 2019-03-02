@@ -14,7 +14,7 @@ import java.util.Map;
 
 public final class RegionSellCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionSellCommand(RegionManager regionManager) {
         super("rgsell", "sell");

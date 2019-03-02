@@ -11,31 +11,35 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
 import java.util.Set;
 
 public final class RegionSelector {
 
     private final long sessionLifetime;
-    private Int2ObjectMap<SelectorSession> sessions;
-    private int borderBlock;
-    private Int2ObjectMap<Set<Vector3>> borders;
-    private Field interfaz;
-    private boolean async;
+    private final Int2ObjectMap<SelectorSession> sessions;
+    private final int borderBlock;
+    private final Int2ObjectMap<Set<Vector3>> borders;
+    private final Field interfaz;
+    private final boolean async;
 
     public RegionSelector(long sessionLifetime, Block borderBlock, boolean async) {
         this.sessions = new Int2ObjectArrayMap<>();
         this.borders = new Int2ObjectArrayMap<>();
         this.sessionLifetime = sessionLifetime;
         this.borderBlock = GlobalBlockPalette.getOrCreateRuntimeId(borderBlock.getId(), borderBlock.getDamage());
-        this.borders.defaultReturnValue(new ObjectArraySet<>());
+        this.borders.defaultReturnValue(Collections.emptySet());
         this.async = async;
+
+        Field interfaz = null;
         if (async) {
             try {
-                this.interfaz = Player.class.getDeclaredField("interfaz");
-                this.interfaz.setAccessible(true);
+                interfaz = Player.class.getDeclaredField("interfaz");
+                interfaz.setAccessible(true);
             } catch (NoSuchFieldException | SecurityException ignore) {
             }
         }
+        this.interfaz = interfaz;
     }
 
     public synchronized void removeSession(Player player) {
@@ -55,7 +59,7 @@ public final class RegionSelector {
         return this.sessions.containsKey(player.getLoaderId());
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "Duplicates"})
     public synchronized void showBorders(Player target, Vector3 pos1, Vector3 pos2) {
         int minX = (int) Math.min(pos1.x, pos2.x);
         int minY = (int) Math.min(pos1.y, pos2.y);

@@ -7,20 +7,20 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class RegionCommand extends SRegionProtectorCommand {
 
-    private Object2ObjectMap<String, Command> commands;
-    private Executor executor;
-    private boolean async;
+    private final Map<String, Command> commands;
+    private final Executor executor;
+    private final boolean async;
 
     public RegionCommand(boolean async, int threads) {
         super("region");
@@ -35,6 +35,8 @@ public final class RegionCommand extends SRegionProtectorCommand {
         if (async) {
             this.executor = Executors.newFixedThreadPool(threads == -1 ? Runtime.getRuntime().availableProcessors() : threads);
             this.messenger.setAsync();
+        } else {
+            this.executor = null;
         }
     }
 
@@ -110,5 +112,9 @@ public final class RegionCommand extends SRegionProtectorCommand {
     public void registerCommand(Command command) {
         this.commands.put(command.getName().replace("rg", "").replace("region", "").toLowerCase(), command);
         this.updateArguments();
+    }
+
+    public void shutdownExecutor() {
+        if (this.executor != null) ((ExecutorService) this.executor).shutdown();
     }
 }

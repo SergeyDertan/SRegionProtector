@@ -7,7 +7,7 @@ website: https://vk.com/sergey_dertan
 load: STARTUP
 prefix: '§eSRegionProtector§f'
 softdepend:
-- EconomyAPI
+  - EconomyAPI
 permissions:
   sregionprotector.*:
     default: false

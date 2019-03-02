@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.Server;
@@ -10,34 +11,30 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import it.unimi.dsi.fastutil.objects.ObjectIterator;
 
+import java.util.Iterator;
 import java.util.Set;
 
 public final class ChunkManager {
 
     private final Object lock = new Object();
-    private Object2ObjectArrayMap<String, Long2ObjectOpenHashMap<Chunk>> chunks;
-    private Logger logger;
-    private Messenger messenger;
+    private final Object2ObjectArrayMap<String, Long2ObjectOpenHashMap<Chunk>> chunks;
+    private final Logger logger;
+    private final Messenger messenger;
 
     public ChunkManager(Logger logger) {
         this.logger = logger;
         this.messenger = Messenger.getInstance();
 
-        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(this::removeEmptyChunks, 360 * 20, 360 * 20, true);
+        this.chunks = new Object2ObjectArrayMap<>();
     }
 
     public static long chunkHash(long x, long z) {
         return x << 32 | z & 4294967295L;
     }
 
-    public static long chunkHash(int x, int z) {
-        return chunkHash((long) x, (long) z);
-    }
-
     public void init() {
-        this.chunks = new Object2ObjectArrayMap<>();
+        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(SRegionProtectorMain.getInstance(), this::removeEmptyChunks, 360 * 20, 360 * 20, true);
     }
 
     public int getChunkAmount() {
@@ -49,14 +46,14 @@ public final class ChunkManager {
     public void removeEmptyChunks() {
         synchronized (this.lock) {
             int amount = 0;
-            ObjectIterator<Object2ObjectArrayMap.Entry<String, Long2ObjectOpenHashMap<Chunk>>> it = this.chunks.object2ObjectEntrySet().fastIterator();
+            Iterator<Object2ObjectArrayMap.Entry<String, Long2ObjectOpenHashMap<Chunk>>> it = this.chunks.object2ObjectEntrySet().fastIterator();
             while (it.hasNext()) {
                 Object2ObjectArrayMap.Entry<String, Long2ObjectOpenHashMap<Chunk>> level = it.next();
                 if (level.getValue().size() == 0) {
                     it.remove();
                     continue;
                 }
-                ObjectIterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
+                Iterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
                 while (chunks.hasNext()) {
                     Chunk chunk = chunks.next().getValue();
                     if (chunk.getRegions().size() != 0) continue;

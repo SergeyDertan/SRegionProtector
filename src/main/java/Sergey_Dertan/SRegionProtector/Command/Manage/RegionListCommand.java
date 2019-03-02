@@ -17,7 +17,7 @@ import static Sergey_Dertan.SRegionProtector.Region.RegionGroup.*;
 
 public final class RegionListCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionListCommand(RegionManager regionManager) {
         super("rglist", "list");

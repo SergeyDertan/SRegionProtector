@@ -20,7 +20,6 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import it.unimi.dsi.fastutil.objects.ObjectSet;
 
@@ -33,19 +32,23 @@ import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.fixMissing
 
 public final class RegionManager {
 
-    private DataProvider provider;
-    private Object2ObjectMap<String, Region> regions;
-    private Logger logger;
-    private ChunkManager chunkManager;
-    private Object2ObjectMap<String, ObjectSet<Region>> owners;
-    private Object2ObjectMap<String, ObjectSet<Region>> members;
-    private Messenger messenger;
+    private final DataProvider provider;
+    private final Map<String, Region> regions;
+    private final Logger logger;
+    private final ChunkManager chunkManager;
+    private final Map<String, ObjectSet<Region>> owners;
+    private final Map<String, ObjectSet<Region>> members;
+    private final Messenger messenger;
 
     public RegionManager(DataProvider provider, Logger logger, ChunkManager chunkManager) {
         this.provider = provider;
         this.logger = logger;
         this.chunkManager = chunkManager;
         this.messenger = Messenger.getInstance();
+
+        this.regions = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.owners = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        this.members = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
     }
 
     public Map<String, Region> getRegions() {
@@ -60,10 +63,6 @@ public final class RegionManager {
     }
 
     public void init() {
-        this.regions = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        this.owners = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        this.members = new Object2ObjectAVLTreeMap<>(String.CASE_INSENSITIVE_ORDER);
-
         List<RegionDataObject> regions = this.provider.loadRegionList();
         for (RegionDataObject rdo : regions) {
             String name = rdo.name;

@@ -9,7 +9,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class RegionSizeCommand extends SRegionProtectorCommand {
 
-    private RegionSelector selector;
+    private final RegionSelector selector;
 
     public RegionSizeCommand(RegionSelector selector) {
         super("rgsize", "size");

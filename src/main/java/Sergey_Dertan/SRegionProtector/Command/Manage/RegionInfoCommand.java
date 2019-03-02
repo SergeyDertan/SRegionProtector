@@ -19,11 +19,9 @@ import java.util.Map;
 
 public final class RegionInfoCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
-
-    private ChunkManager chunkManager;
-
-    private RegionSettings regionSettings;
+    private final RegionManager regionManager;
+    private final ChunkManager chunkManager;
+    private final RegionSettings regionSettings;
 
     public RegionInfoCommand(RegionManager regionManager, ChunkManager chunkManager, RegionSettings regionSettings) {
         super("rginfo", "info");

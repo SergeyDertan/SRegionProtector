@@ -83,7 +83,7 @@ public abstract class Utils {
     }
 
     public static boolean isValidEmailAddress(String email) {
-        String pattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
+        String pattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
         return Pattern.compile(pattern).matcher(email).matches();
     }
 
@@ -126,7 +126,7 @@ public abstract class Utils {
     /*---------------- serializers end ----------------*/
 
     /*---------------- resources ----------------*/
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws Exception {
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
@@ -157,13 +157,13 @@ public abstract class Utils {
     /**
      * for the messages copying
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "WhileLoopReplaceableByForEach"})
     public static boolean copyMapOfMaps(Map<String, Object> from, Map<String, Object> to) {
         boolean changed = false;
         if (from.size() > to.size()) changed = true;
         from.forEach(to::putIfAbsent);
         Iterator<Map.Entry<String, Object>> var1 = from.entrySet().iterator();
-        while (var1.hasNext()) {
+        while (var1.hasNext()) { //concurrency
             Map.Entry<String, Object> next = var1.next();
             if (next.getValue() instanceof Map) {
                 boolean c = copyMapOfMaps((Map<String, Object>) next.getValue(), (Map<String, Object>) to.get(next.getKey()));

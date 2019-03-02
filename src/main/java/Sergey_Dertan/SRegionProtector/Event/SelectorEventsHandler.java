@@ -18,7 +18,7 @@ import cn.nukkit.level.Position;
 
 public final class SelectorEventsHandler implements Listener {
 
-    private RegionSelector regionSelector;
+    private final RegionSelector regionSelector;
 
     public SelectorEventsHandler(RegionSelector selector) {
         this.regionSelector = selector;

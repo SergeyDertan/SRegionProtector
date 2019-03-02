@@ -10,7 +10,7 @@ public final class Chunk {
     public final Object lock = new Object();
     public final long x;
     public final long z;
-    private Set<Region> regions;
+    private final Set<Region> regions;
 
     public Chunk(long x, long z) {
         this.x = x;

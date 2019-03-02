@@ -15,7 +15,7 @@ import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_TELEP
 
 public final class RegionTeleportCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionTeleportCommand(RegionManager regionManager) {
         super("rgteleport", "teleport");

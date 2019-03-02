@@ -13,7 +13,7 @@ import java.util.Map;
 
 public final class RegionRemoveCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionRemoveCommand(RegionManager regionManager) {
         super("rgremove", "remove");

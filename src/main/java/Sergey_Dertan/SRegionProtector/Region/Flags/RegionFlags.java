@@ -53,6 +53,7 @@ public abstract class RegionFlags {
     private RegionFlags() {
     }
 
+    @SuppressWarnings("Duplicates") //TODO where is duplicates actually
     public static void init(boolean[] flagsDefault) {
         defaults[FLAG_BUILD] = new RegionFlag(flagsDefault[FLAG_BUILD]);
         defaults[FLAG_INTERACT] = new RegionFlag(flagsDefault[FLAG_INTERACT]);

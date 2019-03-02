@@ -9,8 +9,9 @@ import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 public final class LPos2Command extends SRegionProtectorCommand {
-    private RegionSelector selector;
-    private int maxRadius;
+
+    private final RegionSelector selector;
+    private final int maxRadius;
 
     public LPos2Command(RegionSelector selector, int maxRadius) {
         super("lpos2");

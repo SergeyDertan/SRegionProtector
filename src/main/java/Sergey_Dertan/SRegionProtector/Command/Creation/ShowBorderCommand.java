@@ -12,7 +12,7 @@ import java.util.Map;
 
 public final class ShowBorderCommand extends SRegionProtectorCommand {
 
-    private RegionSelector selector;
+    private final RegionSelector selector;
 
     public ShowBorderCommand(RegionSelector selector) {
         super("rgshowborder", "show-border");

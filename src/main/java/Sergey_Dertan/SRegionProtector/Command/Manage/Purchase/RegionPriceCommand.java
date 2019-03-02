@@ -11,7 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 public final class RegionPriceCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionPriceCommand(RegionManager regionManager) {
         super("rgprice", "price");

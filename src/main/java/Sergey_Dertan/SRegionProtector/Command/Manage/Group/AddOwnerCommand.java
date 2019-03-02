@@ -13,7 +13,7 @@ import java.util.Map;
 
 public final class AddOwnerCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public AddOwnerCommand(RegionManager regionManager) {
         super("rgaddowner", "addowner");

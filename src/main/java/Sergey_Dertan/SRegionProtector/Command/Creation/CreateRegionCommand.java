@@ -17,9 +17,9 @@ import java.util.Map;
 
 public final class CreateRegionCommand extends SRegionProtectorCommand {
 
-    private RegionSelector selector;
-    private RegionManager regionManager;
-    private RegionSettings regionSettings;
+    private final RegionSelector selector;
+    private final RegionManager regionManager;
+    private final RegionSettings regionSettings;
 
     public CreateRegionCommand(RegionSelector selector, RegionManager regionManager, RegionSettings regionSettings) {
         super("rgcreate", "create");

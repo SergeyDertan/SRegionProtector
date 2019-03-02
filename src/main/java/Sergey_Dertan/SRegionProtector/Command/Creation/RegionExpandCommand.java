@@ -16,7 +16,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
     public static final String EXPAND_UP = "up";
     public static final String EXPAND_DOWN = "down";
 
-    private RegionSelector selector;
+    private final RegionSelector selector;
 
     public RegionExpandCommand(RegionSelector selector) {
         super("rgexpand", "expand");

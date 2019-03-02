@@ -5,13 +5,13 @@ import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public final class SaveCommand extends SRegionProtectorCommand {
 
-    private SRegionProtectorMain pl;
-    private ExecutorService executor;
+    private final SRegionProtectorMain pl;
+    private final Executor executor;
 
     public SaveCommand(SRegionProtectorMain pl) {
         super("rgsave", "save");

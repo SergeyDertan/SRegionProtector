@@ -13,7 +13,7 @@ import java.util.Map;
 
 public final class RegionRemoveFromSaleCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionRemoveFromSaleCommand(RegionManager regionManager) {
         super("rgremovefromsell", "remove-from-sell");

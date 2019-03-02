@@ -88,7 +88,8 @@ public final class RegionEventsHandler implements Listener {
     //mob spawn flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entitySpawn(EntitySpawnEvent e) {
-        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal)) return;
+        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal))
+            return;
         this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), null, e, false, false);
     }
 
@@ -208,7 +209,8 @@ public final class RegionEventsHandler implements Listener {
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
             if (!region.getFlagState(flag)) continue;
-            if (!region.isVectorInside(pos) || (additionalPos != null && region.isVectorInside(additionalPos)) || (mustBeMember && (player != null && region.isLivesIn(player.getName())))) continue;
+            if (!region.isVectorInside(pos) || (additionalPos != null && region.isVectorInside(additionalPos)) || (mustBeMember && (player != null && region.isLivesIn(player.getName()))))
+                continue;
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");
             break;

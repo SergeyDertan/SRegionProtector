@@ -14,7 +14,7 @@ import java.util.Map;
 
 public final class RegionFlagCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public RegionFlagCommand(RegionManager regionManager) {
         super("rgflag", "flag");

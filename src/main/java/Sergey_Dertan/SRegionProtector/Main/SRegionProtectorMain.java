@@ -102,7 +102,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful", "@time", Long.toString(System.currentTimeMillis() - start)));
 
-        this.getServer().getScheduler().scheduleTask(this::checkUpdate, true);
+        this.getServer().getScheduler().scheduleTask(this, this::checkUpdate, true);
 
         instance = this;
     }
@@ -373,6 +373,7 @@ public final class SRegionProtectorMain extends PluginBase {
             }
             return;
         }
+        ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
         this.save(SaveType.DISABLING);
     }
 
@@ -392,6 +393,7 @@ public final class SRegionProtectorMain extends PluginBase {
         return this.settings;
     }
 
+    @SuppressWarnings("EmptyMethod")
     public void dataMigration() {
         //TODO
     }

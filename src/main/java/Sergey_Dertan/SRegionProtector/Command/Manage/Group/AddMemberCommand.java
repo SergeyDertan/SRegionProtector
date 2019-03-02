@@ -13,7 +13,7 @@ import java.util.Map;
 
 public final class AddMemberCommand extends SRegionProtectorCommand {
 
-    private RegionManager regionManager;
+    private final RegionManager regionManager;
 
     public AddMemberCommand(RegionManager regionManager) {
         super("rgaddmember", "addmember");
