@@ -67,10 +67,6 @@ public final class Region implements AxisAlignedBB {
         this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new String[0], new String[0], RegionFlags.getDefaultFlagList());
     }
 
-    public AxisAlignedBB clone() {
-        return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
-    }
-
     public RegionFlag[] getFlags() {
         return Utils.deepClone(Arrays.asList(this.flags)).toArray(new RegionFlag[0]);
     }
@@ -101,6 +97,12 @@ public final class Region implements AxisAlignedBB {
     void setCreator(String creator) {
         this.creator = creator;
         this.needUpdate = true;
+    }
+
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
+    @Override
+    public AxisAlignedBB clone() {
+        return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public boolean getFlagState(int id) {
@@ -266,7 +268,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     public AxisAlignedBB getBoundingBox() {
-        return this.clone();
+        return new SimpleAxisAlignedBB(this.minX, this.minY, this.minZ, this.maxX, this.maxY, this.maxZ);
     }
 
     public boolean isLivesIn(String target) {

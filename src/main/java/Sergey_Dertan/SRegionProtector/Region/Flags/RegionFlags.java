@@ -303,12 +303,11 @@ public abstract class RegionFlags {
         }
     }
 
-    public static RegionFlag[] fixMissingFlags(RegionFlag[] flags) {
+    public static void fixMissingFlags(RegionFlag[] flags) {
         for (int i = 0; i < FLAG_AMOUNT; ++i) {
             if (flags[i] != null) continue;
             flags[i] = defaults[i].clone();
         }
-        return flags;
     }
 
     public static boolean hasFlagPermission(Permissible target, int flag) {
