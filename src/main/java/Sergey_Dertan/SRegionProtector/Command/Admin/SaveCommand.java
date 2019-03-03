@@ -6,6 +6,7 @@ import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public final class SaveCommand extends SRegionProtectorCommand {
@@ -29,5 +30,9 @@ public final class SaveCommand extends SRegionProtectorCommand {
         }
         this.executor.execute(() -> this.pl.save(SRegionProtectorMain.SaveType.MANUAL, sender.getName()));
         return false;
+    }
+
+    public void shutdownExecutor() {
+        ((ExecutorService) this.executor).shutdown();
     }
 }

@@ -374,6 +374,7 @@ public final class SRegionProtectorMain extends PluginBase {
             return;
         }
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
+        ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
         this.save(SaveType.DISABLING);
     }
 
