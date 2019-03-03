@@ -54,7 +54,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
                 this.showRegionInfo(sender, region);
                 return true;
             }
-            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", " {@region}", "");
+            this.messenger.sendMessage(sender, "command.info.region-doesnt-exists", "{@region}", "");
             return false;
         }
         Region region = this.regionManager.getRegion(args[0]);
@@ -75,7 +75,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
         String size = Long.toString(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)));
         List<String> flags = new ObjectArrayList<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
-            if (!this.regionSettings.flagsStatus[i]) continue;
+            if (!this.regionSettings.flagsStatus[i] || !this.regionSettings.display[i]) continue;
             flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled")));
         }
         this.messenger.sendMessage(sender, "command.info.info",

@@ -25,6 +25,8 @@ default-flags:
   liquid-flow: true
   fire: false
   lightning-strike: true
+  chest-access: true
+  sleep: false
 need-message:
   move: false
   build: true
@@ -43,6 +45,8 @@ need-message:
   crops-destroy: true
   ender-pearl: true
   fire: true
+  chest-access: true
+  sleep: true
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

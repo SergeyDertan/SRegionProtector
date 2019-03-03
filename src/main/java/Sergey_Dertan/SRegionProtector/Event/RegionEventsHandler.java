@@ -55,7 +55,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_BUILD, e.getBlock(), e.getPlayer(), e);
     }
 
-    //interact, use & crops destroy flags
+    //interact, use, crops destroy & chest access flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
@@ -65,6 +65,10 @@ public final class RegionEventsHandler implements Listener {
             return;
         }
         Block block = e.getBlock();
+        if (block instanceof BlockChest || block instanceof BlockEnderChest) {
+            this.handleEvent(RegionFlags.FLAG_CHEST_ACCESS, block, e.getPlayer(), e);
+            return;
+        }
         if (block instanceof BlockFarmland) {
             this.handleEvent(RegionFlags.FLAG_CROPS_DESTROY, e.getBlock(), e.getPlayer(), e);
             return;
@@ -196,12 +200,18 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_ENDER_PEARL, e.getTo(), e.getPlayer(), e, true, true);
     }
 
-    //liquid flow event
+    //liquid flow flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void liquidFlow(LiquidFlowEvent e) {
         Block block = e.getSource();
         if (!(block instanceof BlockLava) && !(block instanceof BlockWater)) return;
         this.handleEvent(RegionFlags.FLAG_LIQUID_FLOW, e.getTo(), null, e, false, false, e.getSource());
+    }
+
+    //sleep flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void b(PlayerBedEnterEvent e) {
+        this.handleEvent(RegionFlags.FLAG_SLEEP, e.getBed(), e.getPlayer(), e);
     }
 
     private void handleEvent(int flag, Position pos, Event ev) {

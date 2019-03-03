@@ -139,3 +139,7 @@ permissions:
                 default: op
               sregionprotector.region.flag.lightning_strike:
                 default: op
+              sregionprotector.region.flag.chest_access:
+                default: op
+              sregionprotector.region.flag.sleep:
+                default: op

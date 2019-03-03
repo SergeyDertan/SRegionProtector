@@ -44,8 +44,10 @@ public abstract class RegionFlags {
     public static final int FLAG_LIGHTNING_STRIKE = 24;
     public static final int FLAG_FIRE = 25;
     public static final int FLAG_LIQUID_FLOW = 26; //lava & water spread
+    public static final int FLAG_CHEST_ACCESS = 27;
+    public static final int FLAG_SLEEP = 28;
 
-    public static final int FLAG_AMOUNT = 27;
+    public static final int FLAG_AMOUNT = 29;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -82,6 +84,8 @@ public abstract class RegionFlags {
         defaults[FLAG_LIQUID_FLOW] = new RegionFlag(flagsDefault[FLAG_LIQUID_FLOW]);
         defaults[FLAG_LIGHTNING_STRIKE] = new RegionFlag(flagsDefault[FLAG_LIGHTNING_STRIKE]);
         defaults[FLAG_FIRE] = new RegionFlag(flagsDefault[FLAG_FIRE]);
+        defaults[FLAG_CHEST_ACCESS] = new RegionFlag(flagsDefault[FLAG_CHEST_ACCESS]);
+        defaults[FLAG_SLEEP] = new RegionFlag(flagsDefault[FLAG_SLEEP]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -112,6 +116,8 @@ public abstract class RegionFlags {
         permissions[FLAG_LIQUID_FLOW] = pluginManager.getPermission("sregionprotector.region.flag.liquid_flow");
         permissions[FLAG_LIGHTNING_STRIKE] = pluginManager.getPermission("sregionprotector.region.flag.lightning_strike");
         permissions[FLAG_FIRE] = pluginManager.getPermission("sregionprotector.region.flag.fire");
+        permissions[FLAG_CHEST_ACCESS] = pluginManager.getPermission("sregionprotector.region.chest_access");
+        permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.sleep");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
@@ -180,6 +186,10 @@ public abstract class RegionFlags {
                 return "fire";
             case FLAG_LIGHTNING_STRIKE:
                 return "lightning-strike";
+            case FLAG_CHEST_ACCESS:
+                return "chest-access";
+            case FLAG_SLEEP:
+                return "sleep";
         }
     }
 
@@ -282,6 +292,12 @@ public abstract class RegionFlags {
             case "lightningstrike":
             case "lightning":
                 return FLAG_LIGHTNING_STRIKE;
+            case "chest-access":
+            case "chest_access":
+            case "chestaccess":
+                return FLAG_CHEST_ACCESS;
+            case "sleep":
+                return FLAG_SLEEP;
         }
     }
 

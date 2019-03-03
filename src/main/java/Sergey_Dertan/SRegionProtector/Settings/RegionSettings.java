@@ -14,11 +14,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
+
 public final class RegionSettings {
 
-    public final boolean[] flagsStatus = new boolean[RegionFlags.FLAG_AMOUNT];
-    public final boolean[] defaultFlags = new boolean[RegionFlags.FLAG_AMOUNT];
-    public final boolean[] needMessage = new boolean[RegionFlags.FLAG_AMOUNT];
+    public final boolean[] flagsStatus = new boolean[FLAG_AMOUNT];
+    public final boolean[] defaultFlags = new boolean[FLAG_AMOUNT];
+    public final boolean[] needMessage = new boolean[FLAG_AMOUNT]; //check if player will see the message
+
+    public final boolean[] display = new boolean[FLAG_AMOUNT]; //check if flag should be shown in the info command
 
     public final int maxRegionNameLength;
     public final int minRegionNameLength;
@@ -36,10 +40,20 @@ public final class RegionSettings {
         this.loadDefaultFlags(rgCnf);
         this.loadHealFlagSettings(rgCnf);
         this.loadMessages(rgCnf);
+        this.loadDisplaySettings(cnf);
         RegionFlags.init(this.defaultFlags);
 
         this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
         this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();
+    }
+
+    @SuppressWarnings("unchecked")
+    private void loadDisplaySettings(Map<String, Object> cnf) {
+        Arrays.fill(this.display, true);
+        for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) cnf.get("display")).entrySet()) {
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
+            this.display[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();
+        }
     }
 
     @SuppressWarnings("unchecked")
