@@ -52,7 +52,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    @SuppressWarnings({"unchecked", "ConstantConditions", "StatementWithEmptyBody"})
     public List<RegionDataObject> loadRegionList() {
         if (this.async) {
             AtomicInteger done = new AtomicInteger();
@@ -71,8 +71,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
                         }
                 );
             });
-            while (done.get() < result.size()) {
-            }
+            while (done.get() < result.size());
             List<RegionDataObject> list = new ObjectArrayList<>();
             result.forEach(list::addAll);
             return list;

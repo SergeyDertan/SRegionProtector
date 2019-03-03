@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class DataProvider {
 
-    protected Logger logger;
+    protected final Logger logger;
 
     public DataProvider(Logger logger) {
         this.logger = logger;

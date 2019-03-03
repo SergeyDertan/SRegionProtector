@@ -73,7 +73,7 @@ public final class RegionEventsHandler implements Listener {
             this.handleEvent(RegionFlags.FLAG_CROPS_DESTROY, e.getBlock(), e.getPlayer(), e);
             return;
         }
-        if (!(block instanceof BlockDoor) && !(block instanceof BlockTrapdoor) && !(block instanceof BlockButton) && !(block instanceof BlockFurnace) && !(block instanceof BlockChest) && !(block instanceof BlockBeacon) && !(block instanceof BlockHopper) && !(block instanceof BlockDispenser)) {
+        if (!(block instanceof BlockDoor) && !(block instanceof BlockTrapdoor) && !(block instanceof BlockButton) && !(block instanceof BlockFurnace) && !(block instanceof BlockBeacon) && !(block instanceof BlockHopper) && !(block instanceof BlockDispenser)) {
             return;
         }
         this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
