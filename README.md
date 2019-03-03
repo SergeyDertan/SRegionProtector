@@ -15,22 +15,22 @@ SRegionProtector is a nukkit plugin that allows players to protect their regions
 
 ```
 <repositories>
-        <repository>
-            <id>SRegionProtector-master</id>
-            <url>https://raw.github.com/SergeyDertan/SRegionProtector/mvn-repo/</url>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
-    <dependencies>
-        <dependency>
-            <groupId>sergeydertan.sregionprotector</groupId>
-            <artifactId>SRegionProtector</artifactId>
-            <version>LATEST</version>
-        </dependency>
-    </dependencies>
+    <repository>
+        <id>SRegionProtector-master</id>
+        <url>https://raw.github.com/SergeyDertan/SRegionProtector/mvn-repo/</url>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>always</updatePolicy>
+        </snapshots>
+    </repository>
+</repositories>
+<dependencies>
+    <dependency>
+        <groupId>sergeydertan.sregionprotector</groupId>
+        <artifactId>SRegionProtector</artifactId>
+        <version>LATEST</version>
+    </dependency>
+</dependencies>
 ```
 
 </details>
