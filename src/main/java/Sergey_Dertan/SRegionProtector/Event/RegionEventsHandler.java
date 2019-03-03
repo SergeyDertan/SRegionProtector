@@ -23,6 +23,7 @@ import cn.nukkit.event.entity.*;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
+import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 
@@ -59,13 +60,18 @@ public final class RegionEventsHandler implements Listener {
     public void playerInteract(PlayerInteractEvent e) {
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
         if (e.isCancelled()) return;
+        if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
+            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e);
+            return;
+        }
         Block block = e.getBlock();
         if (block instanceof BlockFarmland) {
             this.handleEvent(RegionFlags.FLAG_CROPS_DESTROY, e.getBlock(), e.getPlayer(), e);
             return;
         }
-        if (!(block instanceof BlockDoor) && !(block instanceof BlockTrapdoor) && !(block instanceof BlockButton) && !(block instanceof BlockFurnace) && !(block instanceof BlockChest) && !(block instanceof BlockBeacon) && !(block instanceof BlockHopper) && !(block instanceof BlockDispenser))
+        if (!(block instanceof BlockDoor) && !(block instanceof BlockTrapdoor) && !(block instanceof BlockButton) && !(block instanceof BlockFurnace) && !(block instanceof BlockChest) && !(block instanceof BlockBeacon) && !(block instanceof BlockHopper) && !(block instanceof BlockDispenser)) {
             return;
+        }
         this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
     }
 

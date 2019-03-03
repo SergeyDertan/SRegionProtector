@@ -35,6 +35,7 @@ public final class Region implements AxisAlignedBB {
 
     public final String name;
     public final String level;
+
     private final Set<String> owners, members;
     private final RegionFlag[] flags;
     private final Set<Chunk> chunks;
