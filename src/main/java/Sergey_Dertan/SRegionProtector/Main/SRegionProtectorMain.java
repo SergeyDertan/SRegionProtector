@@ -364,17 +364,22 @@ public final class SRegionProtectorMain extends PluginBase {
         }
     }
 
+    private void shutdownExecutors() {
+        ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
+        ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
+        if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
+    }
+
     @Override
     public void onDisable() {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
+        this.shutdownExecutors();
         if (this.forceShutdown) {
             if (this.messenger != null) {
                 this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));
             }
             return;
         }
-        ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
-        ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
         this.save(SaveType.DISABLING);
     }
 

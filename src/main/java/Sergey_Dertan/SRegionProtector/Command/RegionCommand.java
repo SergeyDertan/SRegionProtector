@@ -12,14 +12,14 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 public final class RegionCommand extends SRegionProtectorCommand {
 
     private final Map<String, Command> commands;
-    private final Executor executor;
+    private final ExecutorService executor;
     private final boolean async;
 
     public RegionCommand(boolean async, int threads) {
@@ -115,6 +115,12 @@ public final class RegionCommand extends SRegionProtectorCommand {
     }
 
     public void shutdownExecutor() {
-        if (this.executor != null) ((ExecutorService) this.executor).shutdown();
+        if (this.executor != null) {
+            this.executor.shutdown();
+            try {
+                this.executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+            } catch (InterruptedException ignore) {
+            }
+        }
     }
 }

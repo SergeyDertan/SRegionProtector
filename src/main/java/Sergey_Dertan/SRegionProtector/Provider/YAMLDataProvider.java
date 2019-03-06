@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.FLAGS_FOLDER;
@@ -27,9 +28,8 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     public static final String FLAG_LIST_FILE_NAME = "{@region-name}.yml";
 
     public final boolean async;
-
-    private ExecutorService executor;
-    private int threads;
+    public final int threads;
+    private final ExecutorService executor;
 
     public YAMLDataProvider(Logger logger, boolean async, int threads) {
         super(logger);
@@ -38,6 +38,9 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
             if (threads == -1) threads = Runtime.getRuntime().availableProcessors();
             this.executor = Executors.newFixedThreadPool(threads);
             this.threads = threads;
+        } else {
+            this.executor = null;
+            this.threads = 0;
         }
     }
 
@@ -71,7 +74,7 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
                         }
                 );
             });
-            while (done.get() < result.size());
+            while (done.get() < result.size()) ;
             List<RegionDataObject> list = new ObjectArrayList<>();
             result.forEach(list::addAll);
             return list;
@@ -125,5 +128,15 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
     public void removeRegion(String region) {
         new File(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
         new File(FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
+    }
+
+    public void shutdownExecutor() {
+        if (this.executor != null) {
+            this.executor.shutdown();
+            try {
+                this.executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
+            } catch (InterruptedException ignore) {
+            }
+        }
     }
 }
