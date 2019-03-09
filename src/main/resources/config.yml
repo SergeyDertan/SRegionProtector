@@ -10,6 +10,8 @@ async-commands-threads: -1
 
 lpos-max-radius: 250
 
+priority-system: false
+
 #multithreaded regions loading
 multithreaded-loading: true
 multithreaded-loading-threads: -1

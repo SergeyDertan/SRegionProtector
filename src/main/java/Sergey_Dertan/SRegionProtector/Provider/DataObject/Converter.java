@@ -26,7 +26,8 @@ public abstract class Converter {
                 region.maxX, region.maxY, region.maxZ,
                 region.name, region.level, region.getCreator(),
                 Utils.serializeStringArray(region.getOwners().toArray(new String[0])),
-                Utils.serializeStringArray(region.getMembers().toArray(new String[0]))
+                Utils.serializeStringArray(region.getMembers().toArray(new String[0])),
+                region.getPriority()
         );
     }
 
@@ -35,7 +36,8 @@ public abstract class Converter {
                 ((Number) data.get(MIN_X_TAG)).longValue(), ((Number) data.get(MIN_Y_TAG)).longValue(), ((Number) data.get(MIN_Z_TAG)).longValue(),
                 ((Number) data.get(MAX_X_TAG)).longValue(), ((Number) data.get(MAX_Y_TAG)).longValue(), ((Number) data.get(MAX_Z_TAG)).longValue(),
                 (String) data.get(NAME_TAG), (String) data.get(LEVEL_TAG), (String) data.get(CREATOR_TAG),
-                (String) data.get(OWNERS_TAG), (String) data.get(MEMBERS_TAG)
+                (String) data.get(OWNERS_TAG), (String) data.get(MEMBERS_TAG),
+                ((Number) data.getOrDefault(PRIORITY_TAG, 0)).intValue()
         );
     }
 
@@ -57,6 +59,7 @@ public abstract class Converter {
         return new Region(
                 dataObject.name, dataObject.creator,
                 dataObject.level,
+                dataObject.priority,
                 dataObject.minX, dataObject.minY, dataObject.minZ,
                 dataObject.maxX, dataObject.maxY, dataObject.maxZ,
                 Utils.deserializeStringArray(dataObject.owners),

@@ -42,7 +42,9 @@ public final class Region implements AxisAlignedBB {
     boolean needUpdate = false;
     private String creator;
 
-    public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
+    private int priority;
+
+    public Region(String name, String creator, String level, int priority, double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String[] owners, String[] members, RegionFlag[] flags) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -53,6 +55,8 @@ public final class Region implements AxisAlignedBB {
         this.name = name;
         this.creator = creator;
         this.level = level;
+
+        this.priority = priority;
 
         this.owners = new ObjectAVLTreeSet<>(String.CASE_INSENSITIVE_ORDER);
         this.owners.addAll(Arrays.asList(owners));
@@ -65,7 +69,18 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
-        this(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, new String[0], new String[0], RegionFlags.getDefaultFlagList());
+        this(name, creator, level, 0, minX, minY, minZ, maxX, maxY, maxZ, new String[0], new String[0], RegionFlags.getDefaultFlagList());
+    }
+
+    public int getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(int priority) {
+        synchronized (this.lock) {
+            this.priority = priority;
+            this.needUpdate = true;
+        }
     }
 
     public RegionFlag[] getFlags() {
@@ -201,32 +216,34 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Map<String, Object> toMap() throws RuntimeException {
-        Map<String, Object> arr = new Object2ObjectArrayMap<>();
+        Map<String, Object> data = new Object2ObjectArrayMap<>();
 
-        arr.put(NAME_TAG, this.name);
-        arr.put(CREATOR_TAG, this.creator);
+        data.put(NAME_TAG, this.name);
+        data.put(CREATOR_TAG, this.creator);
 
-        arr.put(LEVEL_TAG, this.level);
+        data.put(LEVEL_TAG, this.level);
 
-        arr.put(MIN_X_TAG, this.minX);
-        arr.put(MIN_Y_TAG, this.minY);
-        arr.put(MIN_Z_TAG, this.minZ);
+        data.put(MIN_X_TAG, this.minX);
+        data.put(MIN_Y_TAG, this.minY);
+        data.put(MIN_Z_TAG, this.minZ);
 
-        arr.put(MAX_X_TAG, this.maxX);
-        arr.put(MAX_Y_TAG, this.maxY);
-        arr.put(MAX_Z_TAG, this.maxZ);
+        data.put(MAX_X_TAG, this.maxX);
+        data.put(MAX_Y_TAG, this.maxY);
+        data.put(MAX_Z_TAG, this.maxZ);
+
+        data.put(PRIORITY_TAG, this.priority);
 
         String owners = Utils.serializeStringArray(this.owners.toArray(new String[]{}));
         String members = Utils.serializeStringArray(this.members.toArray(new String[]{}));
 
-        arr.put(OWNERS_TAG, owners);
-        arr.put(MEMBERS_TAG, members);
+        data.put(OWNERS_TAG, owners);
+        data.put(MEMBERS_TAG, members);
 
-        return arr;
+        return data;
     }
 
     public Map<String, Map<String, Object>> flagsToMap() {
-        Map<String, Map<String, Object>> flags = new Object2ObjectArrayMap<>();
+        Map<String, Map<String, Object>> data = new Object2ObjectArrayMap<>();
         for (int i = 0; i < this.flags.length; ++i) {
             String name = RegionFlags.getFlagName(i);
             if (name.isEmpty() || name.replace(" ", "").isEmpty()) continue;
@@ -247,10 +264,10 @@ public final class Region implements AxisAlignedBB {
                     flagData.put(PRICE_TAG, ((RegionSellFlag) this.flags[i]).price);
                     break;
             }
-            flags.put(name, flagData);
+            data.put(name, flagData);
         }
 
-        return flags;
+        return data;
     }
 
     @Override

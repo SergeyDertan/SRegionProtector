@@ -30,6 +30,8 @@ public final class Settings {
 
     public final int lposMaxRadius;
 
+    public final boolean prioritySystem;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
@@ -49,6 +51,8 @@ public final class Settings {
         this.dataLoadingThreads = ((Number) config.get("multithreaded-loading-threads")).intValue();
 
         this.lposMaxRadius = ((Number) config.get("lpos-max-radius")).intValue();
+
+        this.prioritySystem = (boolean) config.get("priority-system");
 
         String border = (String) config.get("border-block");
         int id;

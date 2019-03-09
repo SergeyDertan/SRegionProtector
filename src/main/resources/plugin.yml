@@ -68,6 +68,8 @@ permissions:
             default: true
           sregionprotector.command.lpos2:
             default: true
+          sregionprotector.command.set-priority:
+            default: op
       sregionprotector.region.*:
         default: op
         children:

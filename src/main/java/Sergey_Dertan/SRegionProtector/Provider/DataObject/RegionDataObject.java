@@ -30,11 +30,13 @@ public final class RegionDataObject {
     public String owners;
     @Persistent(table = "members")
     public String members;
+    @Persistent(table = "priority")
+    public int priority;
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
     private long id;
 
-    public RegionDataObject(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String name, String level, String creator, String owners, String members) {
+    public RegionDataObject(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String name, String level, String creator, String owners, String members, int priority) {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
@@ -47,9 +49,19 @@ public final class RegionDataObject {
         this.creator = creator;
         this.owners = owners;
         this.members = members;
+
+        this.priority = priority;
     }
 
     public RegionDataObject() {
+    }
+
+    public int getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     public long getId() {

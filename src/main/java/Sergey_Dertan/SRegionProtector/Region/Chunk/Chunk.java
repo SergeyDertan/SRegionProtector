@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 import java.util.Set;
@@ -15,7 +16,7 @@ public final class Chunk {
     public Chunk(long x, long z) {
         this.x = x;
         this.z = z;
-        this.regions = new ObjectArraySet<>();
+        this.regions = new ObjectAVLTreeSet<>((r, r2) -> r2.getPriority() - r.getPriority());
     }
 
     public Set<Region> getRegions() {

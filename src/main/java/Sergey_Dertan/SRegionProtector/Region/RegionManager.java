@@ -77,6 +77,8 @@ public final class RegionManager {
             double maxY = rdo.maxY;
             double maxZ = rdo.maxZ;
 
+            int priority = rdo.priority;
+
             String[] owners;
             String[] members;
 
@@ -98,7 +100,7 @@ public final class RegionManager {
                 fixMissingFlags(flagList);
             }
 
-            Region region = new Region(name, creator, level, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
+            Region region = new Region(name, creator, level, priority, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
 
             region.needUpdate = needUpdate;
 

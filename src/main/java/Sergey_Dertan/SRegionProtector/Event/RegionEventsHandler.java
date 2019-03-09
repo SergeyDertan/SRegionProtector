@@ -36,11 +36,13 @@ public final class RegionEventsHandler implements Listener {
     private final ChunkManager chunkManager;
     private final boolean[] flagsStatus; //check if flag enabled
     private final boolean[] needMessage; //check if flag requires a message
+    private final boolean prioritySystem;
 
-    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage) {
+    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
         this.needMessage = needMessage;
+        this.prioritySystem = prioritySystem;
     }
 
     //build flag
@@ -210,23 +212,21 @@ public final class RegionEventsHandler implements Listener {
 
     //sleep flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void b(PlayerBedEnterEvent e) {
+    public void playerBedEnter(PlayerBedEnterEvent e) {
         this.handleEvent(RegionFlags.FLAG_SLEEP, e.getBed(), e.getPlayer(), e);
     }
 
-    private void handleEvent(int flag, Position pos, Event ev) {
-        this.handleEvent(flag, pos, null, ev);
-    }
-
-    private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 additionalPos) {
+    private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 liquidSource) {
         if (!this.flagsStatus[flag]) return;
         if (checkPerm && (player != null && player.hasPermission("sregionprotector.admin"))) return;
         Chunk chunk = this.chunkManager.getChunk((long) pos.x >> 4, (long) pos.z >> 4, pos.level.getName(), false, false);
         if (chunk == null) return;
         for (Region region : chunk.getRegions()) {
-            if (!region.getFlagState(flag)) continue;
-            if (!region.isVectorInside(pos) || (additionalPos != null && region.isVectorInside(additionalPos)) || (mustBeMember && (player != null && region.isLivesIn(player.getName()))))
+            if (!region.isVectorInside(pos) || (liquidSource != null && region.isVectorInside(liquidSource)) || (mustBeMember && (player != null && region.isLivesIn(player.getName())))) {
                 continue;
+            }
+            if (!region.getFlagState(flag)) if (!this.prioritySystem) continue;
+
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");
             break;
@@ -239,5 +239,9 @@ public final class RegionEventsHandler implements Listener {
 
     private void handleEvent(int flag, Position pos, Player player, Event ev) {
         this.handleEvent(flag, pos, player, ev, true, true, null);
+    }
+
+    private void handleEvent(int flag, Position pos, Event ev) {
+        this.handleEvent(flag, pos, null, ev);
     }
 }

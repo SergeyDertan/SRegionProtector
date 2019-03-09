@@ -34,6 +34,7 @@ import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
 
 import java.io.File;
+import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
@@ -208,7 +209,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initEventsHandlers() {
-        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage), this);
+        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
     }
 
@@ -355,10 +356,13 @@ public final class SRegionProtectorMain extends PluginBase {
     @SuppressWarnings("ConstantConditions")
     private void checkUpdate() {
         try {
-            String ver = (String) httpGetRequestJson(VERSION_URL).get("tag_name");
+            Map<String, Object> response = httpGetRequestJson(VERSION_URL);
+            String ver = (String) response.get("tag_name");
+            String description = (String) response.get("name");
             if (ver.isEmpty()) return;
             if (compareVersions(this.getDescription().getVersion(), ver).equals(ver)) {
                 this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", ver));
+                this.getLogger().info(this.messenger.getMessage("loading.init.update-description", "@description", description));
             }
         } catch (Exception ignore) {
         }
