@@ -2,7 +2,7 @@ package Sergey_Dertan.SRegionProtector.Region.Flags.Flag;
 
 import Sergey_Dertan.SRegionProtector.Utils.Cloneable;
 
-public class RegionFlag extends Cloneable {
+public class RegionFlag implements Cloneable {
 
     public boolean state;
 
