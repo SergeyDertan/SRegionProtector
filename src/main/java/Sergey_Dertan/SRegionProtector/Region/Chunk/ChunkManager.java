@@ -10,6 +10,7 @@ import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 import java.util.Iterator;
@@ -48,12 +49,12 @@ public final class ChunkManager {
             int amount = 0;
             Iterator<Object2ObjectArrayMap.Entry<String, Long2ObjectOpenHashMap<Chunk>>> it = this.chunks.object2ObjectEntrySet().fastIterator();
             while (it.hasNext()) {
-                Object2ObjectArrayMap.Entry<String, Long2ObjectOpenHashMap<Chunk>> level = it.next();
+                Object2ObjectMap.Entry<String, Long2ObjectOpenHashMap<Chunk>> level = it.next();
                 if (level.getValue().size() == 0) {
                     it.remove();
                     continue;
                 }
-                Iterator<Long2ObjectOpenHashMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
+                Iterator<Long2ObjectMap.Entry<Chunk>> chunks = level.getValue().long2ObjectEntrySet().fastIterator();
                 while (chunks.hasNext()) {
                     Chunk chunk = chunks.next().getValue();
                     if (chunk.getRegions().size() != 0) continue;
@@ -107,7 +108,7 @@ public final class ChunkManager {
     }
 
     public Chunk getChunk(long x, long z, String levelId, boolean shiftRight, boolean create) {
-        Long2ObjectOpenHashMap<Chunk> levelChunks = this.chunks.get(levelId);
+        Long2ObjectMap<Chunk> levelChunks = this.chunks.get(levelId);
         if (levelChunks == null && !create) return null;
 
         if (shiftRight) {

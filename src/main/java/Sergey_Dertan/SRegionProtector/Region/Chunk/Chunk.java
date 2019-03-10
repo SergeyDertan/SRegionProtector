@@ -2,16 +2,18 @@ package Sergey_Dertan.SRegionProtector.Region.Chunk;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import it.unimi.dsi.fastutil.objects.ObjectAVLTreeSet;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
+import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 
 public final class Chunk {
 
     public final Object lock = new Object();
     public final long x;
     public final long z;
-    private final Set<Region> regions;
+    private final SortedSet<Region> regions;
 
     public Chunk(long x, long z) {
         this.x = x;
@@ -19,8 +21,15 @@ public final class Chunk {
         this.regions = new ObjectAVLTreeSet<>((r, r2) -> r2.getPriority() - r.getPriority());
     }
 
+    /**
+     * do not modify this without synchronization on
+     *
+     * @see Chunk#lock
+     * @see Chunk#addRegion(Region)
+     * @see Chunk#removeRegion(Region)
+     */
     public Set<Region> getRegions() {
-        return new ObjectArraySet<>(this.regions);
+        return this.regions;
     }
 
     public int getRegionsAmount() {
@@ -44,6 +53,14 @@ public final class Chunk {
     public void removeRegion(Region region) {
         synchronized (this.lock) {
             this.regions.remove(region);
+        }
+    }
+
+    public void updatePriorities() {
+        synchronized (this.lock) {
+            List<Region> list = new ObjectArrayList<>(this.regions);
+            this.regions.clear();
+            this.regions.addAll(list);
         }
     }
 

@@ -26,6 +26,7 @@ import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.utils.MainLogger;
 
 import java.util.Iterator;
 
@@ -225,7 +226,8 @@ public final class RegionEventsHandler implements Listener {
             if (!region.isVectorInside(pos) || (liquidSource != null && region.isVectorInside(liquidSource)) || (mustBeMember && (player != null && region.isLivesIn(player.getName())))) {
                 continue;
             }
-            if (!region.getFlagState(flag)) if (!this.prioritySystem) continue;
+            MainLogger.getLogger().info(region.name + " " + region.getPriority());
+            if (!region.getFlagState(flag)) if (this.prioritySystem) break;
 
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");

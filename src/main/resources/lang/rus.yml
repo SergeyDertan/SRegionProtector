@@ -183,7 +183,7 @@ command.removeowner.description: "удалить валдельца из рег�
 command.info.permission: "Недостаточно прав"
 command.info.usage: "Необходимые аргументы: [РЕГИОН]"
 command.info.region-doesnt-exists: "Регион {@region} не найден"
-command.info.info: "Название: {@region}\nМир: {@level}\nСоздатель: {@creator}\nВладельцы: {@owners}\nУчастники: {@members}\nФлаги: {@flags}\nРазмер: {@size}"
+command.info.info: "Название: {@region}\nПриоритет: {@priority}\nМир: {@level}\nСоздатель: {@creator}\nВладельцы: {@owners}\nУчастники: {@members}\nФлаги: {@flags}\nРазмер: {@size}"
 
 command.flag.permission: "Недостаточно прав"
 command.flag.usage: "Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ]"
@@ -227,6 +227,7 @@ command.set-priority.usage: "Необходимые аргументы: [РЕГ�
 command.set-priority.wrong-target: "Регион не найден"
 command.set-priority.success: "Приоритет региона {@region} установлен на {@priority}"
 command.set-priority.description: "установить приоритет региона"
+command.set-priority.warning: "однако система приоритетов отключена"
 
 command.save.description: "Ручное сохранение"
 command.save.permission: "Недостаточно прав"

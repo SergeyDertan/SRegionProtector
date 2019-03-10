@@ -351,6 +351,10 @@ public final class SRegionProtectorMain extends PluginBase {
         command = new LPos2Command(this.regionSelector, this.settings.lposMaxRadius);
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         rg.registerCommand(command);
+
+        command = new SetPriorityCommand(this.regionManager, this.settings.prioritySystem);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        rg.registerCommand(command);
     }
 
     @SuppressWarnings("ConstantConditions")

@@ -111,14 +111,16 @@ public final class RegionManager {
             for (String user : members) this.members.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
 
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ObjectArraySet<>()).add(region);
-        }
 
-        this.regions.values().forEach(s -> this.chunkManager.getRegionChunks(
-                new Vector3(s.minX, s.minY, s.minZ),
-                new Vector3(s.maxX, s.maxY, s.maxZ),
-                s.level,
-                true
-        ).forEach(c -> c.addRegion(s)));
+            this.chunkManager.getRegionChunks(
+                    new Vector3(minX, minY, minZ),
+                    new Vector3(maxX, maxY, maxZ),
+                    level, true
+            ).forEach(s -> {
+                s.addRegion(region);
+                region.addChunk(s);
+            });
+        }
 
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", Integer.toString(this.regions.size())));
         this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", Integer.toString(this.chunkManager.getChunkAmount())));

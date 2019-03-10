@@ -14,10 +14,12 @@ import java.util.Map;
 public final class SetPriorityCommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
+    private final boolean prioritySystem;
 
-    public SetPriorityCommand(RegionManager regionManager) {
+    public SetPriorityCommand(RegionManager regionManager, boolean prioritySystem) {
         super("rgsetpriority", "set-priority");
         this.regionManager = regionManager;
+        this.prioritySystem = prioritySystem;
 
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("rgsetpriority", new CommandParameter[]{
@@ -49,6 +51,7 @@ public final class SetPriorityCommand extends SRegionProtectorCommand {
         int priority = Integer.parseInt(args[1]);
         region.setPriority(priority);
         this.messenger.sendMessage(sender, "command.set-priority.success", new String[]{"@region", "@priority"}, new String[]{region.name, Integer.toString(priority)});
+        if (!this.prioritySystem) this.messenger.sendMessage(sender, "command.set-priority.warning");
         return true;
     }
 }

@@ -79,8 +79,8 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
             flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled")));
         }
         this.messenger.sendMessage(sender, "command.info.info",
-                new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags", "@size"},
-                new String[]{name, owner, level, owners, members, String.join(", ", flags), size}
+                new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags", "@size", "@priority"},
+                new String[]{name, owner, level, owners, members, String.join(", ", flags), size, Integer.toString(region.getPriority())}
         );
     }
 }

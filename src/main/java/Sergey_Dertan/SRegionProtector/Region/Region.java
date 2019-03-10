@@ -79,6 +79,7 @@ public final class Region implements AxisAlignedBB {
     public void setPriority(int priority) {
         synchronized (this.lock) {
             this.priority = priority;
+            this.chunks.forEach(Chunk::updatePriorities);
             this.needUpdate = true;
         }
     }

@@ -29,11 +29,15 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
         super(chunk, nbt);
         this.region = nbt.getString(REGION_TAG);
         this.regionManager = SRegionProtectorMain.getInstance().getRegionManager();
-        this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
+
         if (!this.isBlockEntityValid()) {
             this.closed = true;
+            this.bb = null;
             return;
         }
+
+        this.bb = this.regionManager.getRegion(this.region).getBoundingBox();
+
         this.delay = HEAL_DELAY;
     }
 
