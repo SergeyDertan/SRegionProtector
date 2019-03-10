@@ -6,14 +6,13 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.util.List;
 import java.util.Set;
-import java.util.SortedSet;
 
 public final class Chunk {
 
     public final Object lock = new Object();
     public final long x;
     public final long z;
-    private final SortedSet<Region> regions;
+    private final Set<Region> regions;
 
     public Chunk(long x, long z) {
         this.x = x;
@@ -22,7 +21,7 @@ public final class Chunk {
     }
 
     /**
-     * do not modify this without synchronization on
+     * do not modify this without synchronization on the lock
      *
      * @see Chunk#lock
      * @see Chunk#addRegion(Region)
