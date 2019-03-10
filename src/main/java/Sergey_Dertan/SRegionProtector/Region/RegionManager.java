@@ -21,7 +21,6 @@ import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
 
 import java.util.List;
 import java.util.Map;
@@ -36,8 +35,8 @@ public final class RegionManager {
     private final Map<String, Region> regions;
     private final Logger logger;
     private final ChunkManager chunkManager;
-    private final Map<String, ObjectSet<Region>> owners;
-    private final Map<String, ObjectSet<Region>> members;
+    private final Map<String, Set<Region>> owners;
+    private final Map<String, Set<Region>> members;
     private final Messenger messenger;
 
     public RegionManager(DataProvider provider, Logger logger, ChunkManager chunkManager) {
