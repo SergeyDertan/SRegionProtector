@@ -63,7 +63,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
         if (e.isCancelled()) return;
         if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
-            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e);
+            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e, false, true);
             return;
         }
         Block block = e.getBlock();
@@ -81,7 +81,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
     }
 
-    //pvp, mob damage & invincible flags
+    //pvp, mob damage, lightning strike & invincible flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityDamage(EntityDamageEvent e) {
         Entity ent = e.getEntity();
@@ -94,15 +94,22 @@ public final class RegionEventsHandler implements Listener {
             this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
         } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob) {
             this.handleEvent(RegionFlags.FLAG_MOB_DAMAGE, e.getEntity(), (Player) e.getEntity(), e, false, false);
+        } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityLightning) {
+            this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, e.getEntity(), e);
         }
     }
 
     //mob spawn flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entitySpawn(EntitySpawnEvent e) {
-        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal))
+        if (e.getEntity() instanceof EntityLightning) {
+            this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, e.getPosition(), e);
             return;
-        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), null, e, false, false);
+        }
+        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal)) {
+            return;
+        }
+        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), e);
     }
 
     //lightning strike flag

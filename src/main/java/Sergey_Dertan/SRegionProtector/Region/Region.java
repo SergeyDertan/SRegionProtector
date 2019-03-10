@@ -22,6 +22,13 @@ import java.util.Set;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
+/**
+ * Region manager taking care synchronization
+ * see usages of
+ *
+ * @see Region#lock
+ */
+
 public final class Region implements AxisAlignedBB {
 
     public final Object lock = new Object();
