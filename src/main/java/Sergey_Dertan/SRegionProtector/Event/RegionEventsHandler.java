@@ -99,17 +99,21 @@ public final class RegionEventsHandler implements Listener {
         }
     }
 
-    //mob spawn flag
+    //mob spawn & lightning strike flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entitySpawn(EntitySpawnEvent e) {
+        EmptyEvent ev = new EmptyEvent();
         if (e.getEntity() instanceof EntityLightning) {
-            this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, e.getPosition(), e);
+            this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, e.getPosition(), ev);
+            if (ev.isCancelled()) e.getEntity().close();
             return;
         }
         if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal)) {
             return;
         }
-        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), e);
+        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), ev);
+        if (ev.isCancelled()) e.getEntity().close();
+
     }
 
     //lightning strike flag
