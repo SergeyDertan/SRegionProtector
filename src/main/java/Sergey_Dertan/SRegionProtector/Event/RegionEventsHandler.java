@@ -63,7 +63,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
         if (e.isCancelled()) return;
         if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
-            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e, false, true);
+            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e, false, false);
             return;
         }
         Block block = e.getBlock();
@@ -189,7 +189,7 @@ public final class RegionEventsHandler implements Listener {
 
     //move flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    public void playerMove(PlayerMoveEvent e) { //player move
+    public void playerMove(PlayerMoveEvent e) {
         this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e, true, true);
     }
 
@@ -239,7 +239,9 @@ public final class RegionEventsHandler implements Listener {
             if (!region.getFlagState(flag)) if (this.prioritySystem) break;
 
             ev.setCancelled();
-            if (player != null && this.needMessage[flag]) Messenger.getInstance().sendMessage(player, "region.protected");
+            if (player != null && this.needMessage[flag]) {
+                Messenger.getInstance().sendMessage(player, "region.protected." + RegionFlags.getFlagName(flag));
+            }
             break;
         }
     }
