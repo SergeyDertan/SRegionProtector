@@ -11,6 +11,7 @@ import cn.nukkit.plugin.PluginManager;
 
 import java.util.Arrays;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class RegionFlags {
 
     /**

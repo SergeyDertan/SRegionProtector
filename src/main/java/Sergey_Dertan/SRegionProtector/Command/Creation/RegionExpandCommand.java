@@ -11,6 +11,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
 
+@SuppressWarnings("WeakerAccess")
 public final class RegionExpandCommand extends SRegionProtectorCommand {
 
     public static final String EXPAND_UP = "up";

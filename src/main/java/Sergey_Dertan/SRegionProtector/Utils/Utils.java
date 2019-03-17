@@ -18,6 +18,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Utils {
 
     private static final Random RANDOM = new SecureRandom();

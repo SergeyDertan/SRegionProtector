@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@SuppressWarnings("WeakerAccess")
 public final class Chunk {
 
     private static final Comparator<Region> regionComparator = (r, r2) -> r2.getPriority() - r.getPriority();

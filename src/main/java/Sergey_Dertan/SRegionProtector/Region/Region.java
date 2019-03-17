@@ -28,7 +28,7 @@ import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
  *
  * @see Region#lock
  */
-
+@SuppressWarnings("WeakerAccess")
 public final class Region implements AxisAlignedBB {
 
     public final Object lock = new Object();

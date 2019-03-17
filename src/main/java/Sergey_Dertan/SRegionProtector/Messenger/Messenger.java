@@ -23,6 +23,7 @@ import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLD
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.resourceExists;
 
+@SuppressWarnings("WeakerAccess")
 public final class Messenger {
 
     public static final String DEFAULT_LANGUAGE = "eng";

@@ -2,9 +2,11 @@ package Sergey_Dertan.SRegionProtector.Region.Selector;
 
 import cn.nukkit.level.Position;
 
+@SuppressWarnings("WeakerAccess")
 public final class SelectorSession {
 
     public static final long ACTION_TIMEOUT = 500L;
+
     private final long lifeTime;
     public long lastAction;
     public Position pos1, pos2;

@@ -16,6 +16,7 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import java.util.Iterator;
 import java.util.Set;
 
+@SuppressWarnings("WeakerAccess")
 public final class ChunkManager {
 
     private final Object lock = new Object();

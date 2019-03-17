@@ -16,9 +16,11 @@ import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 
+@SuppressWarnings("ALL")
 public final class RegionSettings {
 
     public final boolean[] flagsStatus = new boolean[FLAG_AMOUNT];
+    @SuppressWarnings("WeakerAccess")
     public final boolean[] defaultFlags = new boolean[FLAG_AMOUNT];
     public final boolean[] needMessage = new boolean[FLAG_AMOUNT]; //check if player will see the message
 

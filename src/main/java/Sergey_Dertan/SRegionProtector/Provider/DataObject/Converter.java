@@ -15,6 +15,7 @@ import java.util.Map;
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.*;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
+@SuppressWarnings("WeakerAccess")
 public abstract class Converter {
 
     private Converter() {

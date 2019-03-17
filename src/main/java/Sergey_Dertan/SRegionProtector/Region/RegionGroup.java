@@ -2,15 +2,13 @@ package Sergey_Dertan.SRegionProtector.Region;
 
 public enum RegionGroup {
 
-    CREATOR(0, "creator"),
-    OWNER(1, "owner"),
-    MEMBER(2, "member");
+    CREATOR("creator"),
+    OWNER("owner"),
+    MEMBER("member");
 
-    public final int id;
     public final String name;
 
-    RegionGroup(int id, String name) {
-        this.id = id;
+    RegionGroup(String name) {
         this.name = name;
     }
 
@@ -34,9 +32,5 @@ public enum RegionGroup {
 
     public String getName() {
         return this.name;
-    }
-
-    public int getId() {
-        return this.id;
     }
 }

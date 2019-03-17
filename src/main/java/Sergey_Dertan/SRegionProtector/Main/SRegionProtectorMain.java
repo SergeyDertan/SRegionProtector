@@ -39,6 +39,7 @@ import java.util.Map;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
 
+@SuppressWarnings("WeakerAccess")
 public final class SRegionProtectorMain extends PluginBase {
 
     public static final String MAIN_FOLDER = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
