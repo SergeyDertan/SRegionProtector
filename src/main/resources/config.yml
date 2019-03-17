@@ -5,7 +5,7 @@ provider: yaml
 #when enabled only /rg and /region commands will be shown
 hide-commands: false
 #when enabled /rg and /region commands will be executed asyncly
-async-commands: false
+async-commands: true
 async-commands-threads: -1
 
 lpos-max-radius: 250
