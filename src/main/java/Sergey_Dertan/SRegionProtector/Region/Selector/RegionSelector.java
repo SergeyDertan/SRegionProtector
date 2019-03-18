@@ -31,7 +31,6 @@ public final class RegionSelector {
         this.borders.defaultReturnValue(Collections.EMPTY_SET);
         this.sessionLifetime = sessionLifetime;
         this.borderBlock = GlobalBlockPalette.getOrCreateRuntimeId(borderBlock.getId(), borderBlock.getDamage());
-        this.borders.defaultReturnValue(Collections.emptySet());
         this.async = async;
 
         Field interfaz = null;
