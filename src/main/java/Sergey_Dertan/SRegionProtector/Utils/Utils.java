@@ -23,6 +23,7 @@ public abstract class Utils {
 
     private static final Random RANDOM = new SecureRandom();
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static final String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
     private static final String SALT = "AjzzdaASd341Fdsf";
     private static final int ITERATIONS = 10000; //TODO
     private static final int KEY_LENGTH = 256;
@@ -84,8 +85,7 @@ public abstract class Utils {
     }
 
     public static boolean isValidEmailAddress(String email) {
-        String pattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
-        return Pattern.compile(pattern).matcher(email).matches();
+        return Pattern.compile(emailPattern).matcher(email).matches();
     }
 
     /*---------------- serializers ----------------*/
@@ -243,6 +243,6 @@ public abstract class Utils {
             }
             if (smaller.length == i + 1 && smaller.length < bigger.length) return String.join(".", bigger);
         }
-        return null;
+        throw new RuntimeException("Unreachable code reached");
     }
 }
