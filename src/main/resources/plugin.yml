@@ -85,7 +85,9 @@ permissions:
           sregionprotector.region.flag.*:
             default: false
             children:
-              sregionprotector.region.flag.build:
+              sregionprotector.region.flag.place:
+                default: op
+              sregionprotector.region.flag.break:
                 default: op
               sregionprotector.region.flag.interact:
                 default: true

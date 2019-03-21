@@ -18,7 +18,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 import java.util.regex.Pattern;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class Utils {
 
     private static final Random RANDOM = new SecureRandom();
@@ -162,7 +162,12 @@ public abstract class Utils {
     public static boolean copyMapOfMaps(Map<String, Object> from, Map<String, Object> to) {
         boolean changed = false;
         if (from.size() > to.size()) changed = true;
-        from.forEach(to::putIfAbsent);
+        for (Map.Entry<String, Object> cp : from.entrySet()) {
+            if (!to.containsKey(cp.getKey())) {
+                changed = true;
+                to.put(cp.getKey(), cp.getValue());
+            }
+        }
         Iterator<Map.Entry<String, Object>> var1 = from.entrySet().iterator();
         while (var1.hasNext()) { //concurrency
             Map.Entry<String, Object> next = var1.next();

@@ -29,6 +29,7 @@ import cn.nukkit.math.Vector3;
 
 import java.util.Iterator;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class RegionEventsHandler implements Listener {
 
     //TODO check events performance
@@ -48,13 +49,13 @@ public final class RegionEventsHandler implements Listener {
     //build flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent e) {
-        this.handleEvent(RegionFlags.FLAG_BUILD, e.getBlock(), e.getPlayer(), e);
+        this.handleEvent(RegionFlags.FLAG_BREAK, e.getBlock(), e.getPlayer(), e);
     }
 
     //build flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void blockPlace(BlockPlaceEvent e) {
-        this.handleEvent(RegionFlags.FLAG_BUILD, e.getBlock(), e.getPlayer(), e);
+        this.handleEvent(RegionFlags.FLAG_PLACE, e.getBlock(), e.getPlayer(), e);
     }
 
     //interact, use, crops destroy & chest access flags

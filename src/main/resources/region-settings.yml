@@ -1,7 +1,8 @@
 help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
 default-flags:
   move: false
-  build: true
+  place: true
+  break: true
   interact: false
   use: true
   pvp: true
@@ -29,7 +30,8 @@ default-flags:
   sleep: false
 need-message:
   move: false
-  build: true
+  place: true
+  break: true
   interact: true
   use: true
   pvp: true

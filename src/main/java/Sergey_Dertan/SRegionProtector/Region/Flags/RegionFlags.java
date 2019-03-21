@@ -18,7 +18,8 @@ public abstract class RegionFlags {
      * https://github.com/SergeyDertan/SRegionProtector/wiki/Flags
      */
     public static final int FLAG_INVALID = -1;
-    public static final int FLAG_BUILD = 0;
+    public static final int FLAG_PLACE = 0;
+    public static final int FLAG_BREAK = 29;
     public static final int FLAG_INTERACT = 1;
     public static final int FLAG_USE = 2;
     public static final int FLAG_PVP = 3;
@@ -48,7 +49,7 @@ public abstract class RegionFlags {
     public static final int FLAG_CHEST_ACCESS = 27;
     public static final int FLAG_SLEEP = 28;
 
-    public static final int FLAG_AMOUNT = 29;
+    public static final int FLAG_AMOUNT = 30;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -58,7 +59,8 @@ public abstract class RegionFlags {
 
     @SuppressWarnings("Duplicates") //TODO where is duplicates actually
     public static void init(boolean[] flagsDefault) {
-        defaults[FLAG_BUILD] = new RegionFlag(flagsDefault[FLAG_BUILD]);
+        defaults[FLAG_PLACE] = new RegionFlag(flagsDefault[FLAG_PLACE]);
+        defaults[FLAG_BREAK] = new RegionFlag(flagsDefault[FLAG_BREAK]);
         defaults[FLAG_INTERACT] = new RegionFlag(flagsDefault[FLAG_INTERACT]);
         defaults[FLAG_USE] = new RegionFlag(flagsDefault[FLAG_USE]);
         defaults[FLAG_PVP] = new RegionFlag(flagsDefault[FLAG_PVP]);
@@ -90,7 +92,8 @@ public abstract class RegionFlags {
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
-        permissions[FLAG_BUILD] = pluginManager.getPermission("sregionprotector.region.flag.build");
+        permissions[FLAG_PLACE] = pluginManager.getPermission("sregionprotector.region.flag.place");
+        permissions[FLAG_BREAK] = pluginManager.getPermission("sregionprotector.region.flag.break");
         permissions[FLAG_INTERACT] = pluginManager.getPermission("sregionprotector.region.flag.interact");
         permissions[FLAG_USE] = pluginManager.getPermission("sregionprotector.region.flag.use");
         permissions[FLAG_PVP] = pluginManager.getPermission("sregionprotector.region.flag.pvp");
@@ -133,8 +136,10 @@ public abstract class RegionFlags {
         switch (flag) {
             default:
                 return "";
-            case FLAG_BUILD:
-                return "build";
+            case FLAG_PLACE:
+                return "place";
+            case FLAG_BREAK:
+                return "break";
             case FLAG_INTERACT:
                 return "interact";
             case FLAG_USE:
@@ -198,8 +203,10 @@ public abstract class RegionFlags {
         switch (name.toLowerCase()) {
             default:
                 return FLAG_INVALID;
-            case "build":
-                return FLAG_BUILD;
+            case "place":
+                return FLAG_PLACE;
+            case "break":
+                return FLAG_BREAK;
             case "interact":
                 return FLAG_INTERACT;
             case "use":

@@ -23,7 +23,8 @@ session-life-time: 120
 #disabling flags may increase performance
 #by default flags are disabled
 active-flags:
-  build: true
+  place: true
+  break: true
   interact: true
   use: true
   pvp: true

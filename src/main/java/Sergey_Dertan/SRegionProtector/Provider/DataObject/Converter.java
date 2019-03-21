@@ -101,6 +101,7 @@ public abstract class Converter {
         FlagListDataObject dataObject = new FlagListDataObject();
         boolean[] state = new boolean[RegionFlags.FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flag : data.entrySet()) {
+            if (getFlagId(flag.getKey()) == FLAG_INVALID) continue;
             state[getFlagId(flag.getKey())] = (boolean) flag.getValue().get(STATE_TAG);
             if (getFlagId(flag.getKey()) == FLAG_SELL) {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
