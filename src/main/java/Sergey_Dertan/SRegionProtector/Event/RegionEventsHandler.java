@@ -237,7 +237,13 @@ public final class RegionEventsHandler implements Listener {
             if (!region.isVectorInside(pos) || (liquidSource != null && region.isVectorInside(liquidSource)) || (mustBeMember && (player != null && region.isLivesIn(player.getName())))) {
                 continue;
             }
-            if (!region.getFlagState(flag)) if (this.prioritySystem) break;
+            if (!region.getFlagState(flag)) {
+                if (this.prioritySystem) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
 
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) {
