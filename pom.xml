@@ -31,7 +31,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.0.2</version>
+                        <version>3.1.1</version>
                         <configuration>
                             <outputDirectory>C:\Users\serge\Desktop\Nukkit\plugins</outputDirectory>
                         </configuration>
@@ -72,12 +72,6 @@
             <artifactId>economyapi</artifactId>
             <version>1.0.0</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.54</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
