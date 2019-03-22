@@ -26,6 +26,9 @@ import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.utils.MainLogger;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
 import java.util.Iterator;
 
@@ -39,11 +42,23 @@ public final class RegionEventsHandler implements Listener {
     private final boolean[] needMessage; //check if flag requires a message
     private final boolean prioritySystem;
 
+    private final Object2ObjectMap<Class, Boolean> isMonster; //TODO object2boolean
+    private final Class monster;
+
     public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
         this.needMessage = needMessage;
         this.prioritySystem = prioritySystem;
+
+        this.isMonster = new Object2ObjectArrayMap<>();
+
+        Class monster = null;
+        try {
+            monster = Class.forName("nukkitcoders.mobplugin.entities.monster.Monster");
+        } catch (ClassNotFoundException ignore) {
+        }
+        this.monster = monster;
     }
 
     //build flag
@@ -83,6 +98,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //pvp, mob damage, lightning strike & invincible flags
+    @SuppressWarnings("unchecked")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityDamage(EntityDamageEvent e) {
         Entity ent = e.getEntity();
@@ -91,9 +107,13 @@ public final class RegionEventsHandler implements Listener {
             this.handleEvent(RegionFlags.FLAG_INVINCIBLE, ent, (Player) ent, e, false, false);
             return;
         }
+
         if (((EntityDamageByEntityEvent) e).getDamager() instanceof Player) {
             this.handleEvent(RegionFlags.FLAG_PVP, ent, (Player) ((EntityDamageByEntityEvent) e).getDamager(), e, false, false);
-        } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob) {
+        } else if (
+                ((EntityDamageByEntityEvent) e).getDamager() instanceof EntityMob ||
+                        (this.monster != null && this.isMonster.computeIfAbsent(((EntityDamageByEntityEvent) e).getDamager().getClass(), (s) -> this.monster.isAssignableFrom(((EntityDamageByEntityEvent) e).getDamager().getClass())))
+        ) {
             this.handleEvent(RegionFlags.FLAG_MOB_DAMAGE, e.getEntity(), (Player) e.getEntity(), e, false, false);
         } else if (((EntityDamageByEntityEvent) e).getDamager() instanceof EntityLightning) {
             this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, e.getEntity(), e);
@@ -101,6 +121,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //mob spawn & lightning strike flags
+    @SuppressWarnings("unchecked")
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entitySpawn(EntitySpawnEvent e) {
         EmptyEvent ev = new EmptyEvent();
@@ -109,18 +130,21 @@ public final class RegionEventsHandler implements Listener {
             if (ev.isCancelled()) e.getEntity().close();
             return;
         }
-        if (!(e.getEntity() instanceof EntityMob) && !(e.getEntity() instanceof EntityAnimal) && !(e.getEntity() instanceof EntityWaterAnimal)) {
-            return;
+        if (e.getEntity() instanceof EntityMob ||
+                e.getEntity() instanceof EntityAnimal ||
+                e.getEntity() instanceof EntityWaterAnimal ||
+                (this.monster != null && this.isMonster.computeIfAbsent(e.getEntity().getClass(), (s) -> this.monster.isAssignableFrom(e.getEntity().getClass())))
+        ) {
+            this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), ev);
+            if (ev.isCancelled()) e.getEntity().close();
         }
-        this.handleEvent(RegionFlags.FLAG_MOB_SPAWN, e.getPosition(), ev);
-        if (ev.isCancelled()) e.getEntity().close();
-
     }
 
     //lightning strike flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void lightningStrike(LightningStrikeEvent e) {
-        if (e.getLightning() instanceof EntityLightning) this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, ((Position) e.getLightning()), e);
+        if (e.getLightning() instanceof EntityLightning)
+            this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, ((Position) e.getLightning()), e);
     }
 
     //fire flag
