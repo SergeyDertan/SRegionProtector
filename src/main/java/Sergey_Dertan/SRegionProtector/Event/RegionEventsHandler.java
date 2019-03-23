@@ -20,16 +20,18 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.*;
+import cn.nukkit.event.level.ChunkUnloadEvent;
+import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
-import cn.nukkit.utils.MainLogger;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 
+import java.util.Collection;
 import java.util.Iterator;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -61,13 +63,13 @@ public final class RegionEventsHandler implements Listener {
         this.monster = monster;
     }
 
-    //build flag
+    //break flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent e) {
         this.handleEvent(RegionFlags.FLAG_BREAK, e.getBlock(), e.getPlayer(), e);
     }
 
-    //build flag
+    //place flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void blockPlace(BlockPlaceEvent e) {
         this.handleEvent(RegionFlags.FLAG_PLACE, e.getBlock(), e.getPlayer(), e);
@@ -168,7 +170,7 @@ public final class RegionEventsHandler implements Listener {
     //explode (creeper & tnt explode) & explode block break flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityExplode(EntityExplodeEvent e) {
-        this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), null, e, false, false);
+        this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), null, e);
         if (e.isCancelled()) return;
         Iterator<Block> it = e.getBlockList().iterator();
         while (it.hasNext()) {
@@ -192,13 +194,13 @@ public final class RegionEventsHandler implements Listener {
     //send chat & receive chat flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerChat(PlayerChatEvent e) {
-        this.handleEvent(RegionFlags.FLAG_SEND_CHAT, e.getPlayer(), e.getPlayer(), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_SEND_CHAT, e.getPlayer(), e.getPlayer(), e);
         if (e.isCancelled()) return;
         Iterator<CommandSender> iterator = e.getRecipients().iterator();
         while (iterator.hasNext()) {
             CommandSender var1 = iterator.next();
             if (!(var1 instanceof Player)) return;
-            this.handleEvent(RegionFlags.FLAG_RECEIVE_CHAT, (Position) var1, (Player) var1, e, true, true);
+            this.handleEvent(RegionFlags.FLAG_RECEIVE_CHAT, (Position) var1, (Player) var1, e);
             if (e.isCancelled()) {
                 iterator.remove();
                 e.setCancelled(false);
@@ -209,20 +211,20 @@ public final class RegionEventsHandler implements Listener {
     //item drop flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerDropItem(PlayerDropItemEvent e) { //item drop
-        this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e);
     }
 
     //move flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerMove(PlayerMoveEvent e) {
-        this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e);
     }
 
     //health regen flag
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityRegainHealth(EntityRegainHealthEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
-        this.handleEvent(RegionFlags.FLAG_HEALTH_REGEN, e.getEntity(), (Player) e.getEntity(), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_HEALTH_REGEN, e.getEntity(), (Player) e.getEntity(), e);
     }
 
     //redstone flag
@@ -235,7 +237,7 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerTeleport(PlayerTeleportEvent e) {
         if (e.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) return;
-        this.handleEvent(RegionFlags.FLAG_ENDER_PEARL, e.getTo(), e.getPlayer(), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_ENDER_PEARL, e.getTo(), e.getPlayer(), e);
     }
 
     //liquid flow flag
@@ -250,6 +252,31 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerBedEnter(PlayerBedEnterEvent e) {
         this.handleEvent(RegionFlags.FLAG_SLEEP, e.getBed(), e.getPlayer(), e);
+    }
+
+    //chunk loader flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void chunkUnload(ChunkUnloadEvent e) {
+        if (!this.flagsStatus[RegionFlags.FLAG_CHUNK_LOADER]) return;
+        Chunk chunk = this.chunkManager.getChunk(e.getChunk().getX(), e.getChunk().getZ(), e.getLevel().getName(), false, false);
+        if (chunk == null) return;
+        for (Region region : chunk.getRegions()) {
+            if (!region.getFlagState(RegionFlags.FLAG_CHUNK_LOADER)) continue;
+            e.setCancelled();
+        }
+    }
+
+    //chunk loader event
+    @EventHandler(priority = EventPriority.HIGH)
+    public void levelLoad(LevelLoadEvent e) {
+        if (!this.flagsStatus[RegionFlags.FLAG_CHUNK_LOADER]) return;
+        Collection<Chunk> chunks = this.chunkManager.getLevelChunks(e.getLevel().getName());
+        for (Chunk chunk : chunks) {
+            for (Region region : chunk.getRegions()) {
+                if (!region.getFlagState(RegionFlags.FLAG_CHUNK_LOADER)) continue;
+                e.getLevel().loadChunk((int) chunk.x, (int) chunk.z);
+            }
+        }
     }
 
     private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 liquidSource) {

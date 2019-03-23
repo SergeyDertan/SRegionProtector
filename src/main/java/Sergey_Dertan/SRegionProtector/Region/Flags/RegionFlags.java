@@ -48,8 +48,9 @@ public abstract class RegionFlags {
     public static final int FLAG_LIQUID_FLOW = 26; //lava & water spread
     public static final int FLAG_CHEST_ACCESS = 27;
     public static final int FLAG_SLEEP = 28;
+    public static final int FLAG_CHUNK_LOADER = 30;
 
-    public static final int FLAG_AMOUNT = 30;
+    public static final int FLAG_AMOUNT = 31;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -89,6 +90,7 @@ public abstract class RegionFlags {
         defaults[FLAG_FIRE] = new RegionFlag(flagsDefault[FLAG_FIRE]);
         defaults[FLAG_CHEST_ACCESS] = new RegionFlag(flagsDefault[FLAG_CHEST_ACCESS]);
         defaults[FLAG_SLEEP] = new RegionFlag(flagsDefault[FLAG_SLEEP]);
+        defaults[FLAG_CHUNK_LOADER] = new RegionFlag(flagsDefault[FLAG_CHUNK_LOADER]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -120,12 +122,13 @@ public abstract class RegionFlags {
         permissions[FLAG_LIQUID_FLOW] = pluginManager.getPermission("sregionprotector.region.flag.liquid_flow");
         permissions[FLAG_LIGHTNING_STRIKE] = pluginManager.getPermission("sregionprotector.region.flag.lightning_strike");
         permissions[FLAG_FIRE] = pluginManager.getPermission("sregionprotector.region.flag.fire");
-        permissions[FLAG_CHEST_ACCESS] = pluginManager.getPermission("sregionprotector.region.chest_access");
-        permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.sleep");
+        permissions[FLAG_CHEST_ACCESS] = pluginManager.getPermission("sregionprotector.region.flag.chest_access");
+        permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.flag.sleep");
+        permissions[FLAG_CHUNK_LOADER] = pluginManager.getPermission("sregionprotector.region.flag.chunk_loader");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
-        return Utils.deepClone(Arrays.asList(defaults)).toArray(new RegionFlag[0]);
+        return Utils.deepClone(Arrays.asList(defaults)).toArray(new RegionFlag[FLAG_AMOUNT]);
     }
 
     public static Permission getFlagPermission(int flag) {
@@ -196,6 +199,8 @@ public abstract class RegionFlags {
                 return "chest-access";
             case FLAG_SLEEP:
                 return "sleep";
+            case FLAG_CHUNK_LOADER:
+                return "chunk-loader";
         }
     }
 
@@ -306,6 +311,10 @@ public abstract class RegionFlags {
                 return FLAG_CHEST_ACCESS;
             case "sleep":
                 return FLAG_SLEEP;
+            case "chunk-loader":
+            case "chunk_loader":
+            case "chunkloader":
+                return FLAG_CHUNK_LOADER;
         }
     }
 

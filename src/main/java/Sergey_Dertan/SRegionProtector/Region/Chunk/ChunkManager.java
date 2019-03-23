@@ -4,19 +4,20 @@ import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.Server;
+import cn.nukkit.math.AxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.objects.*;
 
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class ChunkManager {
 
     private final Object lock = new Object();
@@ -108,6 +109,42 @@ public final class ChunkManager {
         return null;
     }
 
+    public Region getRegion(AxisAlignedBB bb, String level) {
+        Set<Chunk> chunks = this.getRegionChunks(
+                new Vector3(bb.getMinX(), bb.getMinY(), bb.getMinZ()),
+                new Vector3(bb.getMaxX(), bb.getMaxY(), bb.getMaxZ()),
+                level
+        );
+
+        for (Chunk chunk : chunks) {
+            for (Region region : chunk.getRegions()) {
+                if (region.intersectsWith(bb)) return region;
+            }
+        }
+        return null;
+    }
+
+    public List<Region> getRegions(AxisAlignedBB bb, String level) {
+        Set<Chunk> chunks = this.getRegionChunks(
+                new Vector3(bb.getMinX(), bb.getMinY(), bb.getMinZ()),
+                new Vector3(bb.getMaxX(), bb.getMaxY(), bb.getMaxZ()),
+                level
+        );
+        List<Region> regions = new ObjectArrayList<>();
+        chunks.forEach(s ->
+                s.getRegions().forEach(r -> {
+                    if (r.intersectsWith(bb)) regions.add(r);
+                })
+        );
+        return regions;
+    }
+
+    public List<Region> getRegions(Vector3 pos, String level) {
+        Chunk chunk = this.getChunk((long) pos.x, (long) pos.z, level, true, false);
+        if (chunk == null) return Collections.emptyList();
+        return chunk.getRegions();
+    }
+
     public Chunk getChunk(long x, long z, String levelId, boolean shiftRight, boolean create) {
         Long2ObjectMap<Chunk> levelChunks = this.chunks.get(levelId);
         if (levelChunks == null && !create) return null;
@@ -134,5 +171,9 @@ public final class ChunkManager {
 
     public Chunk getChunk(long x, long z, String levelId) {
         return this.getChunk(x, z, levelId, false, true);
+    }
+
+    public ObjectCollection<Chunk> getLevelChunks(String level) {
+        return this.chunks.getOrDefault(level, new Long2ObjectOpenHashMap<>()).values();
     }
 }

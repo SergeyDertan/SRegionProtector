@@ -51,8 +51,10 @@ active-flags:
   fire: true
   chest-access: true
   sleep: true
+  chunk-loader: false
 display:
-  build: true
+  place: true
+  break: true
   interact: true
   use: true
   pvp: true
@@ -79,6 +81,7 @@ display:
   fire: true
   chest-access: true
   sleep: true
+  chunk-loader: true
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

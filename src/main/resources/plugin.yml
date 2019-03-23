@@ -147,3 +147,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.sleep:
                 default: op
+              sregionprotector.region.flag.chunk_loader:
+                default: op
