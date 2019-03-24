@@ -22,6 +22,7 @@ import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -287,16 +288,16 @@ public final class RegionManager {
         switch (group) {
             case CREATOR:
                 Set<Region> list = new ObjectArraySet<>();
-                for (Region region : this.owners.getOrDefault(player.getName(), new ObjectArraySet<>())) {
+                for (Region region : this.owners.getOrDefault(player.getName(), Collections.emptySet())) {
                     if (region.isCreator(player.getName())) list.add(region);
                 }
                 return list;
             case OWNER:
-                return new ObjectArraySet<>(this.owners.getOrDefault(player.getName(), new ObjectArraySet<>()));
+                return new ObjectArraySet<>(this.owners.getOrDefault(player.getName(), Collections.emptySet()));
             case MEMBER:
-                return new ObjectArraySet<>(this.members.getOrDefault(player.getName(), new ObjectArraySet<>()));
+                return new ObjectArraySet<>(this.members.getOrDefault(player.getName(), Collections.emptySet()));
             default:
-                return new ObjectArraySet<>();
+                return Collections.emptySet();
         }
     }
 
