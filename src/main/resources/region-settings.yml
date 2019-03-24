@@ -29,6 +29,7 @@ default-flags:
   chest-access: true
   sleep: false
   chunk-loader: false
+  smart-doors: true
 need-message:
   move: false
   place: true

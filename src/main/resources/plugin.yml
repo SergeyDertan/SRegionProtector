@@ -149,3 +149,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.chunk_loader:
                 default: op
+              sregionprotector.region.flag.smart_doors:
+                default: op

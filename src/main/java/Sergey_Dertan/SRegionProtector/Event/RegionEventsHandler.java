@@ -78,6 +78,12 @@ public final class RegionEventsHandler implements Listener {
     //interact, use, crops destroy & chest access flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
+        if (e.getBlock() instanceof BlockDoorIron) {
+            if (this.canInteractWith(RegionFlags.FLAG_SMART_DOORS, e.getBlock(), e.getPlayer())) {
+                ((BlockDoorIron) e.getBlock()).toggle(e.getPlayer());
+                return;
+            }
+        }
         this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
         if (e.isCancelled()) return;
         if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
@@ -277,6 +283,24 @@ public final class RegionEventsHandler implements Listener {
                 e.getLevel().loadChunk((int) chunk.x, (int) chunk.z);
             }
         }
+    }
+
+    private boolean canInteractWith(int flag, Position pos, Player player) {
+        if (!this.flagsStatus[flag]) return false;
+        Chunk chunk = this.chunkManager.getChunk((long) pos.x, (long) pos.z, pos.level.getName(), true, false);
+        if (chunk == null) return false;
+        for (Region region : chunk.getRegions()) {
+            if (!region.isVectorInside(pos)) continue;
+            if (!region.getFlagState(flag) || player.hasPermission("sregionprotector.admin") || !region.isLivesIn(player.getName())) {
+                if (this.prioritySystem) {
+                    return false;
+                } else {
+                    continue;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     private void handleEvent(int flag, Position pos, Player player, Event ev, boolean mustBeMember, boolean checkPerm, Vector3 liquidSource) {

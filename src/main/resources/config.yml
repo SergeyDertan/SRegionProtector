@@ -52,6 +52,7 @@ active-flags:
   chest-access: true
   sleep: true
   chunk-loader: false
+  smart-doors: true
 display:
   place: true
   break: true
@@ -82,6 +83,7 @@ display:
   chest-access: true
   sleep: true
   chunk-loader: true
+  smart-doors: true
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

@@ -49,8 +49,9 @@ public abstract class RegionFlags {
     public static final int FLAG_CHEST_ACCESS = 27;
     public static final int FLAG_SLEEP = 28;
     public static final int FLAG_CHUNK_LOADER = 30;
+    public static final int FLAG_SMART_DOORS = 31;
 
-    public static final int FLAG_AMOUNT = 31;
+    public static final int FLAG_AMOUNT = 32;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -91,6 +92,7 @@ public abstract class RegionFlags {
         defaults[FLAG_CHEST_ACCESS] = new RegionFlag(flagsDefault[FLAG_CHEST_ACCESS]);
         defaults[FLAG_SLEEP] = new RegionFlag(flagsDefault[FLAG_SLEEP]);
         defaults[FLAG_CHUNK_LOADER] = new RegionFlag(flagsDefault[FLAG_CHUNK_LOADER]);
+        defaults[FLAG_SMART_DOORS] = new RegionFlag(flagsDefault[FLAG_SMART_DOORS]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -125,6 +127,7 @@ public abstract class RegionFlags {
         permissions[FLAG_CHEST_ACCESS] = pluginManager.getPermission("sregionprotector.region.flag.chest_access");
         permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.flag.sleep");
         permissions[FLAG_CHUNK_LOADER] = pluginManager.getPermission("sregionprotector.region.flag.chunk_loader");
+        permissions[FLAG_SMART_DOORS] = pluginManager.getPermission("sregionprotector.region.flag.smart_doors");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
@@ -201,6 +204,8 @@ public abstract class RegionFlags {
                 return "sleep";
             case FLAG_CHUNK_LOADER:
                 return "chunk-loader";
+            case FLAG_SMART_DOORS:
+                return "smart-doors";
         }
     }
 
@@ -315,6 +320,10 @@ public abstract class RegionFlags {
             case "chunk_loader":
             case "chunkloader":
                 return FLAG_CHUNK_LOADER;
+            case "smart-doors":
+            case "smart_doors":
+            case "smartdoors":
+                return FLAG_SMART_DOORS;
         }
     }
 
