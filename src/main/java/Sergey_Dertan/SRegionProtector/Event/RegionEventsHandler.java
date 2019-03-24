@@ -27,6 +27,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
+import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
@@ -75,34 +76,89 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_PLACE, e.getBlock(), e.getPlayer(), e);
     }
 
-    //interact, use, crops destroy & chest access flags
+    //interact, use, crops destroy, chest access & smart doors flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
-        if (e.getBlock() instanceof BlockDoorIron) {
-            if (this.canInteractWith(RegionFlags.FLAG_SMART_DOORS, e.getBlock(), e.getPlayer())) {
-                ((BlockDoorIron) e.getBlock()).toggle(e.getPlayer());
+        Block block = e.getBlock();
+        if (block instanceof BlockDoor) {
+            if (this.canInteractWith(RegionFlags.FLAG_SMART_DOORS, block, e.getPlayer())) {
+                BlockDoor door = (BlockDoor) block;
+
+                int damage = door.getDamage();
+                boolean isUp = (damage & 8) > 0;
+                int up;
+                if (isUp) {
+                    up = damage;
+                } else {
+                    up = door.up().getDamage();
+                }
+                boolean isRight = (up & 1) > 0;
+
+                BlockFace second;
+                if (isRight) {
+                    if (isUp) {
+                        second = ((BlockDoor) door.down()).getBlockFace();
+                    } else {
+                        second = door.getBlockFace();
+                    }
+                } else {
+                    if (isUp) {
+                        second = ((BlockDoor) door.down()).getBlockFace();
+                    } else {
+                        second = door.getBlockFace();
+                    }
+                }
+
+                if (isRight) {
+                    switch (second) {
+                        case EAST:
+                            second = BlockFace.WEST;
+                            break;
+                        case WEST:
+                            second = BlockFace.EAST;
+                            break;
+                        case NORTH:
+                            second = BlockFace.SOUTH;
+                            break;
+                        case SOUTH:
+                            second = BlockFace.NORTH;
+                            break;
+                    }
+                }
+
+                BlockDoor pair = door.getSide(second) instanceof BlockDoor ? ((BlockDoor) door.getSide(second)) : null;
+
+                door.toggle(e.getPlayer());
+
+                if (pair != null && !pair.isTop(pair.getDamage())) {
+                    pair = ((BlockDoor) pair.up());
+                }
+                if (pair != null && ((pair.getDamage() & 1) > 0 == !isRight)) {
+                    pair.toggle(e.getPlayer());
+                }
+                e.setCancelled();
                 return;
             }
         }
-        this.handleEvent(RegionFlags.FLAG_INTERACT, e.getBlock(), e.getPlayer(), e);
+
+        this.handleEvent(RegionFlags.FLAG_INTERACT, block, e.getPlayer(), e);
         if (e.isCancelled()) return;
         if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
-            this.handleEvent(RegionFlags.FLAG_LIGHTER, e.getBlock(), e.getPlayer(), e, false, false);
+            this.handleEvent(RegionFlags.FLAG_LIGHTER, block, e.getPlayer(), e, false, false);
             return;
         }
-        Block block = e.getBlock();
         if (block instanceof BlockChest || block instanceof BlockEnderChest) {
             this.handleEvent(RegionFlags.FLAG_CHEST_ACCESS, block, e.getPlayer(), e);
             return;
         }
         if (block instanceof BlockFarmland) {
-            this.handleEvent(RegionFlags.FLAG_CROPS_DESTROY, e.getBlock(), e.getPlayer(), e);
+            this.handleEvent(RegionFlags.FLAG_CROPS_DESTROY, block, e.getPlayer(), e);
             return;
         }
-        if (!(block instanceof BlockDoor) && !(block instanceof BlockTrapdoor) && !(block instanceof BlockButton) && !(block instanceof BlockFurnace) && !(block instanceof BlockBeacon) && !(block instanceof BlockHopper) && !(block instanceof BlockDispenser)) {
+        if (block instanceof BlockDoor || block instanceof BlockTrapdoor || block instanceof BlockButton || block instanceof BlockFurnace || block instanceof BlockBeacon || block instanceof BlockHopper || block instanceof BlockDispenser) {
+            this.handleEvent(RegionFlags.FLAG_USE, block, e.getPlayer(), e);
             return;
         }
-        this.handleEvent(RegionFlags.FLAG_USE, e.getBlock(), e.getPlayer(), e);
     }
 
     //pvp, mob damage, lightning strike & invincible flags
@@ -291,13 +347,14 @@ public final class RegionEventsHandler implements Listener {
         if (chunk == null) return false;
         for (Region region : chunk.getRegions()) {
             if (!region.isVectorInside(pos)) continue;
-            if (!region.getFlagState(flag) || player.hasPermission("sregionprotector.admin") || !region.isLivesIn(player.getName())) {
+            if (!region.getFlagState(flag)) {
                 if (this.prioritySystem) {
                     return false;
                 } else {
                     continue;
                 }
             }
+            if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.admin")) return false;
             return true;
         }
         return false;
