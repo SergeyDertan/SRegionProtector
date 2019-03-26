@@ -59,6 +59,7 @@ public final class RegionSettings {
 
     @SuppressWarnings("unchecked")
     private void loadMessages(Map<String, Object> rgCnf) {
+        Arrays.fill(this.needMessage, false);
         for (Map.Entry<String, Boolean> flag : ((Map<String, Boolean>) rgCnf.get("need-message")).entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
             this.needMessage[RegionFlags.getFlagId(flag.getKey())] = flag.getValue();

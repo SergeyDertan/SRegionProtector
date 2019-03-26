@@ -6,7 +6,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>18.6</version>
+    <version>18.7</version>
     <name>SRegionProtector</name>
     <description>Flexible region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>

@@ -5,6 +5,7 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.Player;
 import cn.nukkit.block.*;
 import cn.nukkit.command.CommandSender;
@@ -64,9 +65,16 @@ public final class RegionEventsHandler implements Listener {
         this.monster = monster;
     }
 
-    //break flag
+    //break & minefarm flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent e) {
+        if (e.getBlock().getClass().getSimpleName().startsWith(Tags.BLOCK_ORE)) { //too much instanceof
+            this.handleEvent(RegionFlags.FLAG_MINEFARM, e.getBlock(), e.getPlayer(), e, false, false);
+            if (e.isCancelled()) {
+                e.setCancelled(false);
+                return;
+            }
+        }
         this.handleEvent(RegionFlags.FLAG_BREAK, e.getBlock(), e.getPlayer(), e);
     }
 
@@ -80,6 +88,8 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
         Block block = e.getBlock();
+        this.handleEvent(RegionFlags.FLAG_INTERACT, block, e.getPlayer(), e);
+        if (e.isCancelled()) return;
         if (block instanceof BlockDoor) {
             if (this.canInteractWith(RegionFlags.FLAG_SMART_DOORS, block, e.getPlayer())) {
                 BlockDoor door = (BlockDoor) block;
@@ -141,8 +151,6 @@ public final class RegionEventsHandler implements Listener {
             }
         }
 
-        this.handleEvent(RegionFlags.FLAG_INTERACT, block, e.getPlayer(), e);
-        if (e.isCancelled()) return;
         if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
             this.handleEvent(RegionFlags.FLAG_LIGHTER, block, e.getPlayer(), e, false, false);
             return;
@@ -237,7 +245,7 @@ public final class RegionEventsHandler implements Listener {
         Iterator<Block> it = e.getBlockList().iterator();
         while (it.hasNext()) {
             this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), e);
-            if (e.isCancelled()) {
+            if (it.hasNext()) {
                 e.setCancelled(false);
                 it.remove();
             }
@@ -354,8 +362,7 @@ public final class RegionEventsHandler implements Listener {
                     continue;
                 }
             }
-            if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.admin")) return false;
-            return true;
+            return region.isLivesIn(player.getName()) || player.hasPermission("sregionprotector.admin");
         }
         return false;
     }

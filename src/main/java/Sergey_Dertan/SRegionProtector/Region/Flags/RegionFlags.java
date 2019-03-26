@@ -50,8 +50,9 @@ public abstract class RegionFlags {
     public static final int FLAG_SLEEP = 28;
     public static final int FLAG_CHUNK_LOADER = 30;
     public static final int FLAG_SMART_DOORS = 31;
+    public static final int FLAG_MINEFARM = 32;
 
-    public static final int FLAG_AMOUNT = 32;
+    public static final int FLAG_AMOUNT = 33;
 
     private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -93,6 +94,7 @@ public abstract class RegionFlags {
         defaults[FLAG_SLEEP] = new RegionFlag(flagsDefault[FLAG_SLEEP]);
         defaults[FLAG_CHUNK_LOADER] = new RegionFlag(flagsDefault[FLAG_CHUNK_LOADER]);
         defaults[FLAG_SMART_DOORS] = new RegionFlag(flagsDefault[FLAG_SMART_DOORS]);
+        defaults[FLAG_MINEFARM] = new RegionFlag(flagsDefault[FLAG_MINEFARM]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -128,6 +130,7 @@ public abstract class RegionFlags {
         permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.flag.sleep");
         permissions[FLAG_CHUNK_LOADER] = pluginManager.getPermission("sregionprotector.region.flag.chunk_loader");
         permissions[FLAG_SMART_DOORS] = pluginManager.getPermission("sregionprotector.region.flag.smart_doors");
+        permissions[FLAG_MINEFARM] = pluginManager.getPermission("sregionprotector.region.flag.minefarm");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
@@ -206,6 +209,8 @@ public abstract class RegionFlags {
                 return "chunk-loader";
             case FLAG_SMART_DOORS:
                 return "smart-doors";
+            case FLAG_MINEFARM:
+                return "minefarm";
         }
     }
 
@@ -324,6 +329,8 @@ public abstract class RegionFlags {
             case "smart_doors":
             case "smartdoors":
                 return FLAG_SMART_DOORS;
+            case "minefarm":
+                return FLAG_MINEFARM;
         }
     }
 

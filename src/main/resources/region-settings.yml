@@ -30,6 +30,7 @@ default-flags:
   sleep: false
   chunk-loader: false
   smart-doors: true
+  minefarm: false
 need-message:
   move: false
   place: true
@@ -51,6 +52,7 @@ need-message:
   fire: true
   chest-access: true
   sleep: true
+  minefarm: false
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

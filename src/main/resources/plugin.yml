@@ -151,3 +151,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.smart_doors:
                 default: op
+              sregionprotector.region.flag.minefarm:
+                default: op

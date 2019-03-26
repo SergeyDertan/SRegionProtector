@@ -24,6 +24,7 @@ public abstract class Tags { //do I need this?
     public final static String REGION_TAG = "region";
     public final static String IS_MOVABLE_TAG = "isMovable";
     public final static String PRIORITY_TAG = "priority";
+    public final static String BLOCK_ORE = "BlockOre";
 
     private Tags() {
     }
