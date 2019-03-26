@@ -13,7 +13,6 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionRemoveFromSa
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionSellCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
-import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
 import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
@@ -28,6 +27,7 @@ import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import Sergey_Dertan.SRegionProtector.Settings.Settings;
 import cn.nukkit.Server;
 import cn.nukkit.blockentity.BlockEntity;
+import cn.nukkit.command.Command;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
@@ -59,6 +59,8 @@ public final class SRegionProtectorMain extends PluginBase {
     private ChunkManager chunkManager;
     private RegionSelector regionSelector;
     private Messenger messenger;
+
+    private RegionCommand mainCmd;
 
     public static SRegionProtectorMain getInstance() {
         return SRegionProtectorMain.instance;
@@ -245,120 +247,70 @@ public final class SRegionProtectorMain extends PluginBase {
         }
     }
 
+    private void registerCommand(Command command) {
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        this.mainCmd.registerCommand(command);
+    }
+
     private void initCommands() {
-        RegionCommand rg = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
-        this.getServer().getCommandMap().register(rg.getName(), rg);
+        this.mainCmd = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
+        this.getServer().getCommandMap().register(this.mainCmd.getName(), this.mainCmd);
 
-        SRegionProtectorCommand command;
+        this.registerCommand(new SetPos1Command(this.regionSelector));
 
-        command = new SetPos1Command(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new SetPos2Command(this.regionSelector));
 
-        command = new SetPos2Command(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings));
 
-        command = new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new GetWandCommand());
 
-        command = new GetWandCommand();
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionFlagCommand(this.regionManager));
 
-        command = new RegionFlagCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionInfoCommand(this.regionManager, this.chunkManager, this.settings.regionSettings));
 
-        command = new RegionInfoCommand(this.regionManager, this.chunkManager, this.settings.regionSettings);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionListCommand(this.regionManager));
 
-        command = new RegionListCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionRemoveCommand(this.regionManager));
 
-        command = new RegionRemoveCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionTeleportCommand(this.regionManager));
 
-        command = new RegionTeleportCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new AddMemberCommand(this.regionManager));
 
-        command = new AddMemberCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new AddOwnerCommand(this.regionManager));
 
-        command = new AddOwnerCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RemoveMemberCommand(this.regionManager));
 
-        command = new RemoveMemberCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RemoveOwnerCommand(this.regionManager));
 
-        command = new RemoveOwnerCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new SaveCommand(this));
 
-        command = new SaveCommand(this);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionSizeCommand(this.regionSelector));
 
-        command = new RegionSizeCommand(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new ShowBorderCommand(this.regionSelector));
 
-        command = new ShowBorderCommand(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionSelectCommand(this.regionManager, this.regionSelector));
 
-        command = new RegionSelectCommand(this.regionManager, this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RemoveBordersCommand(this.regionSelector));
 
-        command = new RemoveBordersCommand(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
-
-        command = new RegionExpandCommand(this.regionSelector);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionExpandCommand(this.regionSelector));
 
         AbstractEconomy economy = null;
         if (this.getServer().getPluginManager().getPlugin("EconomyAPI") != null) economy = new OneBoneEconomyAPI();
-        command = new BuyRegionCommand(this.regionManager, economy);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new BuyRegionCommand(this.regionManager, economy));
 
-        command = new RegionPriceCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionPriceCommand(this.regionManager));
 
-        command = new RegionSellCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionSellCommand(this.regionManager));
 
-        command = new RegionRemoveFromSaleCommand(this.regionManager);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new RegionRemoveFromSaleCommand(this.regionManager));
 
-        command = new LPos1Command(this.regionSelector, this.settings.lposMaxRadius);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new LPos1Command(this.regionSelector, this.settings.lposMaxRadius));
 
-        command = new LPos2Command(this.regionSelector, this.settings.lposMaxRadius);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new LPos2Command(this.regionSelector, this.settings.lposMaxRadius));
 
-        command = new SetPriorityCommand(this.regionManager, this.settings.prioritySystem);
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        rg.registerCommand(command);
+        this.registerCommand(new SetPriorityCommand(this.regionManager, this.settings.prioritySystem));
     }
 
-    @SuppressWarnings("ConstantConditions")
     private void checkUpdate() {
         try {
             Map<String, Object> response = httpGetRequestJson(VERSION_URL);
