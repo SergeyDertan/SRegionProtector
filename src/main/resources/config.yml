@@ -54,6 +54,7 @@ active-flags:
   chunk-loader: false
   smart-doors: true
   minefarm: true
+  fall-damage: true
 display:
   place: true
   break: true
@@ -86,6 +87,7 @@ display:
   chunk-loader: true
   smart-doors: true
   minefarm: true
+  fall-damage: true
 # permissions will be created during the plugin loading and have names sregionprotector.region.size.MAX_REGION_SIZE
 # for example, if you have
 # region-sizes:

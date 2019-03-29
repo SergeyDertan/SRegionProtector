@@ -153,3 +153,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.minefarm:
                 default: op
+              sregionprotector.region.flag.fall_damage:
+                default: op

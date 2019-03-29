@@ -50,6 +50,7 @@ region.protected.ender-pearl: "You can`t use enderpearl in this region"
 region.protected.chest-access: "You can`t use chests in this region"
 region.protected.sleep: "You can`t use bed in this region"
 region.protected.fire: "You can`t ignite blocks in this region"
+region.protected.fall_damage: "You can`t take fall damage in this region"
 
 region.flag.state.enabled: "enabled"
 region.flag.state.disabled: "disabled"

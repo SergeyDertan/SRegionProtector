@@ -175,6 +175,10 @@ public final class RegionEventsHandler implements Listener {
     public void entityDamage(EntityDamageEvent e) {
         Entity ent = e.getEntity();
         if (!(ent instanceof Player)) return;
+        if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+            this.handleEvent(RegionFlags.FLAG_FALL_DAMAGE, ent, ((Player) ent), e, false, false);
+            if (e.isCancelled()) return;
+        }
         if (!(e instanceof EntityDamageByEntityEvent)) {
             this.handleEvent(RegionFlags.FLAG_INVINCIBLE, ent, (Player) ent, e, false, false);
             return;

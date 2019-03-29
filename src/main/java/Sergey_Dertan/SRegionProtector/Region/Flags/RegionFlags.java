@@ -57,8 +57,9 @@ public abstract class RegionFlags {
     public static final int FLAG_CHUNK_LOADER = 30;
     public static final int FLAG_SMART_DOORS = 31;
     public static final int FLAG_MINEFARM = 32;
+    public static final int FLAG_FALL_DAMAGE = 33;
 
-    public static final int FLAG_AMOUNT = 33;
+    public static final int FLAG_AMOUNT = 34;
 
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -101,6 +102,7 @@ public abstract class RegionFlags {
         flagList.put(FLAG_CHUNK_LOADER, "chunk-loader");
         flagList.put(FLAG_SMART_DOORS, "smart-doors");
         flagList.put(FLAG_MINEFARM, "minefarm");
+        flagList.put(FLAG_FALL_DAMAGE, "fall-damage");
         flags = ImmutableBiMap.copyOf(flagList);
 
         Map<String, Integer> aAliases = new HashMap<>();
@@ -150,6 +152,7 @@ public abstract class RegionFlags {
         defaults[FLAG_CHUNK_LOADER] = new RegionFlag(flagsDefault[FLAG_CHUNK_LOADER]);
         defaults[FLAG_SMART_DOORS] = new RegionFlag(flagsDefault[FLAG_SMART_DOORS]);
         defaults[FLAG_MINEFARM] = new RegionFlag(flagsDefault[FLAG_MINEFARM]);
+        defaults[FLAG_FALL_DAMAGE] = new RegionFlag(flagsDefault[FLAG_FALL_DAMAGE]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
@@ -186,6 +189,7 @@ public abstract class RegionFlags {
         permissions[FLAG_CHUNK_LOADER] = pluginManager.getPermission("sregionprotector.region.flag.chunk_loader");
         permissions[FLAG_SMART_DOORS] = pluginManager.getPermission("sregionprotector.region.flag.smart_doors");
         permissions[FLAG_MINEFARM] = pluginManager.getPermission("sregionprotector.region.flag.minefarm");
+        permissions[FLAG_FALL_DAMAGE] = pluginManager.getPermission("sregionprotector.region.flag.fall_damage");
     }
 
     public static RegionFlag[] getDefaultFlagList() {
