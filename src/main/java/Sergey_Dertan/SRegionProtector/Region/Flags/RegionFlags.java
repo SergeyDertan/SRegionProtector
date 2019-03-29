@@ -8,8 +8,14 @@ import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
 import cn.nukkit.plugin.PluginManager;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
+import com.google.common.collect.ImmutableBiMap;
+import com.google.common.collect.ImmutableMap;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public abstract class RegionFlags {
@@ -54,8 +60,57 @@ public abstract class RegionFlags {
 
     public static final int FLAG_AMOUNT = 33;
 
-    private static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
-    private static final Permission[] permissions = new Permission[FLAG_AMOUNT];
+    public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
+    public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
+
+    public static final BiMap<Integer, String> flags;
+    public static final Map<String, Integer> aliases;
+
+    static {
+        BiMap<Integer, String> flagList = HashBiMap.create(FLAG_AMOUNT);
+        flagList.put(FLAG_PLACE, "place");
+        flagList.put(FLAG_BREAK, "break");
+        flagList.put(FLAG_INTERACT, "interact");
+        flagList.put(FLAG_USE, "use");
+        flagList.put(FLAG_PVP, "pvp");
+        flagList.put(FLAG_EXPLODE, "tnt");
+        flagList.put(FLAG_LIGHTER, "lighter");
+        flagList.put(FLAG_MAGIC_ITEM_USE, "magic-item");
+        flagList.put(FLAG_HEAL, "heal");
+        flagList.put(FLAG_INVINCIBLE, "invincible");
+        flagList.put(FLAG_TELEPORT, "teleport");
+        flagList.put(FLAG_SELL, "sell");
+        flagList.put(FLAG_POTION_LAUNCH, "potion-launch");
+        flagList.put(FLAG_MOVE, "move");
+        flagList.put(FLAG_LEAVES_DECAY, "leaves-decay");
+        flagList.put(FLAG_ITEM_DROP, "item-drop");
+        flagList.put(FLAG_SEND_CHAT, "send-chat");
+        flagList.put(FLAG_RECEIVE_CHAT, "receive-chat");
+        flagList.put(FLAG_HEALTH_REGEN, "health-regen");
+        flagList.put(FLAG_MOB_DAMAGE, "mob-damage");
+        flagList.put(FLAG_MOB_SPAWN, "mob-spawn");
+        flagList.put(FLAG_CROPS_DESTROY, "crops-destroy");
+        flagList.put(FLAG_REDSTONE, "redstone");
+        flagList.put(FLAG_ENDER_PEARL, "ender-pearl");
+        flagList.put(FLAG_EXPLODE_BLOCK_BREAK, "explode-block-break");
+        flagList.put(FLAG_LIQUID_FLOW, "liquid-flow");
+        flagList.put(FLAG_FIRE, "fire");
+        flagList.put(FLAG_LIGHTNING_STRIKE, "lightning-strike");
+        flagList.put(FLAG_CHEST_ACCESS, "chest-access");
+        flagList.put(FLAG_SLEEP, "sleep");
+        flagList.put(FLAG_CHUNK_LOADER, "chunk-loader");
+        flagList.put(FLAG_SMART_DOORS, "smart-doors");
+        flagList.put(FLAG_MINEFARM, "minefarm");
+        flags = ImmutableBiMap.copyOf(flagList);
+
+        Map<String, Integer> aAliases = new HashMap<>();
+        flagList.forEach((k, v) -> {
+            aAliases.put(v.replace("-", "_"), k);
+            aAliases.put(v.replace("-", ""), k);
+            aAliases.remove(v);
+        });
+        aliases = ImmutableMap.copyOf(aAliases);
+    }
 
     private RegionFlags() {
     }
@@ -142,196 +197,13 @@ public abstract class RegionFlags {
     }
 
     public static String getFlagName(int flag) {
-        switch (flag) {
-            default:
-                return "";
-            case FLAG_PLACE:
-                return "place";
-            case FLAG_BREAK:
-                return "break";
-            case FLAG_INTERACT:
-                return "interact";
-            case FLAG_USE:
-                return "use";
-            case FLAG_PVP:
-                return "pvp";
-            case FLAG_EXPLODE:
-                return "tnt";
-            case FLAG_LIGHTER:
-                return "lighter";
-            case FLAG_MAGIC_ITEM_USE:
-                return "magic-item";
-            case FLAG_HEAL:
-                return "heal";
-            case FLAG_INVINCIBLE:
-                return "invincible";
-            case FLAG_TELEPORT:
-                return "teleport";
-            case FLAG_SELL:
-                return "sell";
-            case FLAG_POTION_LAUNCH:
-                return "potion-launch";
-            case FLAG_MOVE:
-                return "move";
-            case FLAG_LEAVES_DECAY:
-                return "leaves-decay";
-            case FLAG_ITEM_DROP:
-                return "item-drop";
-            case FLAG_SEND_CHAT:
-                return "send_chat";
-            case FLAG_RECEIVE_CHAT:
-                return "receive-chat";
-            case FLAG_HEALTH_REGEN:
-                return "health-regen";
-            case FLAG_MOB_DAMAGE:
-                return "mob-damage";
-            case FLAG_MOB_SPAWN:
-                return "mob-spawn";
-            case FLAG_CROPS_DESTROY:
-                return "crops-destroy";
-            case FLAG_REDSTONE:
-                return "redstone";
-            case FLAG_ENDER_PEARL:
-                return "ender-pearl";
-            case FLAG_EXPLODE_BLOCK_BREAK:
-                return "explode-block-break";
-            case FLAG_LIQUID_FLOW:
-                return "liquid-flow";
-            case FLAG_FIRE:
-                return "fire";
-            case FLAG_LIGHTNING_STRIKE:
-                return "lightning-strike";
-            case FLAG_CHEST_ACCESS:
-                return "chest-access";
-            case FLAG_SLEEP:
-                return "sleep";
-            case FLAG_CHUNK_LOADER:
-                return "chunk-loader";
-            case FLAG_SMART_DOORS:
-                return "smart-doors";
-            case FLAG_MINEFARM:
-                return "minefarm";
-        }
+        return flags.get(flag);
     }
 
     public static int getFlagId(String name) {
-        switch (name.toLowerCase()) {
-            default:
-                return FLAG_INVALID;
-            case "place":
-                return FLAG_PLACE;
-            case "break":
-                return FLAG_BREAK;
-            case "interact":
-                return FLAG_INTERACT;
-            case "use":
-                return FLAG_USE;
-            case "pvp":
-                return FLAG_PVP;
-            case "tnt":
-                return FLAG_EXPLODE;
-            case "lighter":
-                return FLAG_LIGHTER;
-            case "magic_item":
-            case "magic-item":
-            case "magic_item_use":
-            case "magic-item-use":
-            case "magicitem":
-            case "magic":
-                return FLAG_MAGIC_ITEM_USE;
-            case "heal":
-                return FLAG_HEAL;
-            case "invincible":
-                return FLAG_INVINCIBLE;
-            case "teleport":
-            case "tp":
-                return FLAG_TELEPORT;
-            case "sell":
-                return FLAG_SELL;
-            case "potion_launch":
-            case "potion-launch":
-                return FLAG_POTION_LAUNCH;
-            case "move":
-                return FLAG_MOVE;
-            case "leave_decay":
-            case "leave-decay":
-            case "leaves-decay":
-            case "leaves_decay":
-            case "leavesdecay":
-            case "leavedecay":
-                return FLAG_LEAVES_DECAY;
-            case "item_drop":
-            case "itemdrop":
-            case "item-drop":
-                return FLAG_ITEM_DROP;
-            case "send-chat":
-            case "send_chat":
-            case "sendchat":
-                return FLAG_SEND_CHAT;
-            case "receive_chat":
-            case "receive-chat":
-            case "receivechat":
-                return FLAG_RECEIVE_CHAT;
-            case "health_regen":
-            case "health-regen":
-            case "healthregen":
-                return FLAG_HEALTH_REGEN;
-            case "mob-damage":
-            case "mob_damage":
-            case "mobdamage":
-                return FLAG_MOB_DAMAGE;
-            case "mob-spawn":
-            case "mob_spawn":
-            case "mobspawn":
-                return FLAG_MOB_SPAWN;
-            case "crops-destroy":
-            case "crops_destroy":
-            case "cropsdestroy":
-                return FLAG_CROPS_DESTROY;
-            case "redstone":
-                return FLAG_REDSTONE;
-            case "ender-pearl":
-            case "ender_pearl":
-            case "enderpearl":
-                return FLAG_ENDER_PEARL;
-            case "explode-block-break":
-            case "explode_block_break":
-            case "explodeblockbreak":
-                return FLAG_EXPLODE_BLOCK_BREAK;
-            case "liquid-flow":
-            case "liquid_flow":
-            case "liquidflow":
-            case "lava-flow":
-            case "lava_flow":
-            case "lavaflow":
-            case "water-flow":
-            case "water_flow":
-            case "waterflow":
-                return FLAG_LIQUID_FLOW;
-            case "fire":
-                return FLAG_FIRE;
-            case "lightning-strike":
-            case "lightning_strike":
-            case "lightningstrike":
-            case "lightning":
-                return FLAG_LIGHTNING_STRIKE;
-            case "chest-access":
-            case "chest_access":
-            case "chestaccess":
-                return FLAG_CHEST_ACCESS;
-            case "sleep":
-                return FLAG_SLEEP;
-            case "chunk-loader":
-            case "chunk_loader":
-            case "chunkloader":
-                return FLAG_CHUNK_LOADER;
-            case "smart-doors":
-            case "smart_doors":
-            case "smartdoors":
-                return FLAG_SMART_DOORS;
-            case "minefarm":
-                return FLAG_MINEFARM;
-        }
+        int id = flags.inverse().getOrDefault(name, FLAG_INVALID);
+        if (id == FLAG_INVALID) id = aliases.getOrDefault(name, FLAG_INVALID);
+        return id;
     }
 
     public static boolean getStateFromString(String state) {

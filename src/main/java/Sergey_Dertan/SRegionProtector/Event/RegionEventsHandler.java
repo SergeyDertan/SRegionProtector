@@ -47,7 +47,7 @@ public final class RegionEventsHandler implements Listener {
     private final boolean prioritySystem;
 
     private final Object2ObjectMap<Class, Boolean> isMonster; //TODO object2boolean
-    private final Class monster;
+    private final Class monster; //mobplugin
 
     public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
         this.chunkManager = chunkManager;
