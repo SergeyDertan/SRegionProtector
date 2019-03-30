@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Flags;
 
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
-import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
@@ -17,7 +16,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public abstract class RegionFlags {
 
     /**
@@ -117,42 +116,12 @@ public abstract class RegionFlags {
     private RegionFlags() {
     }
 
-    @SuppressWarnings("Duplicates") //TODO where is duplicates actually
     public static void init(boolean[] flagsDefault) {
-        defaults[FLAG_PLACE] = new RegionFlag(flagsDefault[FLAG_PLACE]);
-        defaults[FLAG_BREAK] = new RegionFlag(flagsDefault[FLAG_BREAK]);
-        defaults[FLAG_INTERACT] = new RegionFlag(flagsDefault[FLAG_INTERACT]);
-        defaults[FLAG_USE] = new RegionFlag(flagsDefault[FLAG_USE]);
-        defaults[FLAG_PVP] = new RegionFlag(flagsDefault[FLAG_PVP]);
-        defaults[FLAG_EXPLODE] = new RegionFlag(flagsDefault[FLAG_EXPLODE]);
-        defaults[FLAG_LIGHTER] = new RegionFlag(flagsDefault[FLAG_LIGHTER]);
-        defaults[FLAG_MAGIC_ITEM_USE] = new RegionFlag(flagsDefault[FLAG_MAGIC_ITEM_USE]);
-        defaults[FLAG_HEAL] = new RegionFlag(flagsDefault[FLAG_HEAL]);
-        defaults[FLAG_INVINCIBLE] = new RegionFlag(flagsDefault[FLAG_INVINCIBLE]);
+        for (int i = 0; i < FLAG_AMOUNT; ++i) {
+            defaults[i] = new RegionFlag(flagsDefault[i]);
+        }
         defaults[FLAG_TELEPORT] = new RegionTeleportFlag(flagsDefault[FLAG_TELEPORT]);
-        defaults[FLAG_SELL] = new RegionSellFlag(flagsDefault[FLAG_SELL]);
-        defaults[FLAG_POTION_LAUNCH] = new RegionFlag(flagsDefault[FLAG_POTION_LAUNCH]);
-        defaults[FLAG_MOVE] = new RegionFlag(flagsDefault[FLAG_MOVE]);
-        defaults[FLAG_LEAVES_DECAY] = new RegionFlag(flagsDefault[FLAG_LEAVES_DECAY]);
-        defaults[FLAG_ITEM_DROP] = new RegionFlag(flagsDefault[FLAG_ITEM_DROP]);
-        defaults[FLAG_SEND_CHAT] = new RegionFlag(flagsDefault[FLAG_SEND_CHAT]);
-        defaults[FLAG_RECEIVE_CHAT] = new RegionFlag(flagsDefault[FLAG_RECEIVE_CHAT]);
-        defaults[FLAG_HEALTH_REGEN] = new RegionFlag(flagsDefault[FLAG_HEALTH_REGEN]);
-        defaults[FLAG_MOB_DAMAGE] = new RegionFlag(flagsDefault[FLAG_MOB_DAMAGE]);
-        defaults[FLAG_MOB_SPAWN] = new RegionFlag(flagsDefault[FLAG_MOB_SPAWN]);
-        defaults[FLAG_CROPS_DESTROY] = new RegionFlag(flagsDefault[FLAG_CROPS_DESTROY]);
-        defaults[FLAG_REDSTONE] = new RegionFlag(flagsDefault[FLAG_REDSTONE]);
-        defaults[FLAG_ENDER_PEARL] = new RegionFlag(flagsDefault[FLAG_ENDER_PEARL]);
-        defaults[FLAG_EXPLODE_BLOCK_BREAK] = new RegionFlag(flagsDefault[FLAG_EXPLODE_BLOCK_BREAK]);
-        defaults[FLAG_LIQUID_FLOW] = new RegionFlag(flagsDefault[FLAG_LIQUID_FLOW]);
-        defaults[FLAG_LIGHTNING_STRIKE] = new RegionFlag(flagsDefault[FLAG_LIGHTNING_STRIKE]);
-        defaults[FLAG_FIRE] = new RegionFlag(flagsDefault[FLAG_FIRE]);
-        defaults[FLAG_CHEST_ACCESS] = new RegionFlag(flagsDefault[FLAG_CHEST_ACCESS]);
-        defaults[FLAG_SLEEP] = new RegionFlag(flagsDefault[FLAG_SLEEP]);
-        defaults[FLAG_CHUNK_LOADER] = new RegionFlag(flagsDefault[FLAG_CHUNK_LOADER]);
-        defaults[FLAG_SMART_DOORS] = new RegionFlag(flagsDefault[FLAG_SMART_DOORS]);
-        defaults[FLAG_MINEFARM] = new RegionFlag(flagsDefault[FLAG_MINEFARM]);
-        defaults[FLAG_FALL_DAMAGE] = new RegionFlag(flagsDefault[FLAG_FALL_DAMAGE]);
+        defaults[FLAG_SELL] = new RegionTeleportFlag(flagsDefault[FLAG_SELL]);
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
