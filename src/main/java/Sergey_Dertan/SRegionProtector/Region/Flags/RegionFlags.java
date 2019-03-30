@@ -125,40 +125,7 @@ public abstract class RegionFlags {
 
         PluginManager pluginManager = Server.getInstance().getPluginManager();
 
-        permissions[FLAG_PLACE] = pluginManager.getPermission("sregionprotector.region.flag.place");
-        permissions[FLAG_BREAK] = pluginManager.getPermission("sregionprotector.region.flag.break");
-        permissions[FLAG_INTERACT] = pluginManager.getPermission("sregionprotector.region.flag.interact");
-        permissions[FLAG_USE] = pluginManager.getPermission("sregionprotector.region.flag.use");
-        permissions[FLAG_PVP] = pluginManager.getPermission("sregionprotector.region.flag.pvp");
-        permissions[FLAG_EXPLODE] = pluginManager.getPermission("sregionprotector.region.flag.explode");
-        permissions[FLAG_LIGHTER] = pluginManager.getPermission("sregionprotector.region.flag.lighter");
-        permissions[FLAG_MAGIC_ITEM_USE] = pluginManager.getPermission("sregionprotector.region.flag.magic_item_use");
-        permissions[FLAG_HEAL] = pluginManager.getPermission("sregionprotector.region.flag.heal");
-        permissions[FLAG_INVINCIBLE] = pluginManager.getPermission("sregionprotector.region.flag.invincible");
-        permissions[FLAG_TELEPORT] = pluginManager.getPermission("sregionprotector.region.flag.teleport");
-        permissions[FLAG_SELL] = pluginManager.getPermission("sregionprotector.region.flag.sell");
-        permissions[FLAG_POTION_LAUNCH] = pluginManager.getPermission("sregionprotector.region.flag.potion_launch");
-        permissions[FLAG_MOVE] = pluginManager.getPermission("sregionprotector.region.flag.move");
-        permissions[FLAG_LEAVES_DECAY] = pluginManager.getPermission("sregionprotector.region.flag.leaves_decay");
-        permissions[FLAG_ITEM_DROP] = pluginManager.getPermission("sregionprotector.region.flag.item_drop");
-        permissions[FLAG_SEND_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.send_chat");
-        permissions[FLAG_RECEIVE_CHAT] = pluginManager.getPermission("sregionprotector.region.flag.receive_chat");
-        permissions[FLAG_HEALTH_REGEN] = pluginManager.getPermission("sregionprotector.region.flag.health_regen");
-        permissions[FLAG_MOB_DAMAGE] = pluginManager.getPermission("sregionprotector.region.flag.mob_damage");
-        permissions[FLAG_MOB_SPAWN] = pluginManager.getPermission("sregionprotector.region.flag.mob_spawn");
-        permissions[FLAG_CROPS_DESTROY] = pluginManager.getPermission("sregionprotector.region.flag.crops_destroy");
-        permissions[FLAG_REDSTONE] = pluginManager.getPermission("sregionprotector.region.flag.redstone");
-        permissions[FLAG_ENDER_PEARL] = pluginManager.getPermission("sregionprotector.region.flag.ender_pearl");
-        permissions[FLAG_EXPLODE_BLOCK_BREAK] = pluginManager.getPermission("sregionprotector.region.flag.explode_block_break");
-        permissions[FLAG_LIQUID_FLOW] = pluginManager.getPermission("sregionprotector.region.flag.liquid_flow");
-        permissions[FLAG_LIGHTNING_STRIKE] = pluginManager.getPermission("sregionprotector.region.flag.lightning_strike");
-        permissions[FLAG_FIRE] = pluginManager.getPermission("sregionprotector.region.flag.fire");
-        permissions[FLAG_CHEST_ACCESS] = pluginManager.getPermission("sregionprotector.region.flag.chest_access");
-        permissions[FLAG_SLEEP] = pluginManager.getPermission("sregionprotector.region.flag.sleep");
-        permissions[FLAG_CHUNK_LOADER] = pluginManager.getPermission("sregionprotector.region.flag.chunk_loader");
-        permissions[FLAG_SMART_DOORS] = pluginManager.getPermission("sregionprotector.region.flag.smart_doors");
-        permissions[FLAG_MINEFARM] = pluginManager.getPermission("sregionprotector.region.flag.minefarm");
-        permissions[FLAG_FALL_DAMAGE] = pluginManager.getPermission("sregionprotector.region.flag.fall_damage");
+        flags.forEach((k, v) -> permissions[k] = pluginManager.getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
     }
 
     public static RegionFlag[] getDefaultFlagList() {

@@ -99,7 +99,7 @@ permissions:
                 default: op
               sregionprotector.region.flag.lighter:
                 default: op
-              sregionprotector.region.flag.magic_item_use:
+              sregionprotector.region.flag.magic_item:
                 default: op
               sregionprotector.region.flag.heal:
                 default: op
