@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Region.Flags;
 
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
@@ -111,6 +112,10 @@ public abstract class RegionFlags {
             aAliases.remove(v);
         });
         aliases = ImmutableMap.copyOf(aAliases);
+
+        PluginManager pluginManager = Server.getInstance().getPluginManager();
+
+        flags.forEach((k, v) -> permissions[k] = pluginManager.getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
     }
 
     private RegionFlags() {
@@ -121,11 +126,7 @@ public abstract class RegionFlags {
             defaults[i] = new RegionFlag(flagsDefault[i]);
         }
         defaults[FLAG_TELEPORT] = new RegionTeleportFlag(flagsDefault[FLAG_TELEPORT]);
-        defaults[FLAG_SELL] = new RegionTeleportFlag(flagsDefault[FLAG_SELL]);
-
-        PluginManager pluginManager = Server.getInstance().getPluginManager();
-
-        flags.forEach((k, v) -> permissions[k] = pluginManager.getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
+        defaults[FLAG_SELL] = new RegionSellFlag(flagsDefault[FLAG_SELL]);
     }
 
     public static RegionFlag[] getDefaultFlagList() {

@@ -198,7 +198,7 @@ public final class RegionEventsHandler implements Listener {
 
     //mob spawn & lightning strike flags
     @SuppressWarnings("unchecked")
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH)
     public void entitySpawn(EntitySpawnEvent e) {
         EmptyEvent ev = new EmptyEvent();
         if (e.getEntity() instanceof EntityLightning) {
