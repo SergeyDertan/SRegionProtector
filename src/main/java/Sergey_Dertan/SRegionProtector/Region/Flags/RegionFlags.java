@@ -7,7 +7,6 @@ import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
 import cn.nukkit.permission.Permission;
-import cn.nukkit.plugin.PluginManager;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableBiMap;
@@ -113,9 +112,7 @@ public abstract class RegionFlags {
         });
         aliases = ImmutableMap.copyOf(aAliases);
 
-        PluginManager pluginManager = Server.getInstance().getPluginManager();
-
-        flags.forEach((k, v) -> permissions[k] = pluginManager.getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
+        flags.forEach((k, v) -> permissions[k] = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
     }
 
     private RegionFlags() {
