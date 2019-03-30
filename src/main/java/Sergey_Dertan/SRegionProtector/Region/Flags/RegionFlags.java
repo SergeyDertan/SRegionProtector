@@ -174,6 +174,7 @@ public abstract class RegionFlags {
     }
 
     public static int getFlagId(String name) {
+        name = name.toLowerCase();
         int id = flags.inverse().getOrDefault(name, FLAG_INVALID);
         if (id == FLAG_INVALID) id = aliases.getOrDefault(name, FLAG_INVALID);
         return id;
