@@ -52,8 +52,6 @@ region.protected.sleep: "Вы не можете использовать кро�
 region.protected.fire: "Вы не можете поджигать в этом регионе"
 region.protected.fall_damage: "Вы не можете получать урон от падения в этом регионе"
 
-region.flag.state.enabled: "вкл"
-region.flag.state.disabled: "выкл"
 region.selection.pos1: "Первая точка установлена"
 region.selection.pos2: "Вторая точка установлена"
 
@@ -205,13 +203,15 @@ command.info.region-doesnt-exists: "Регион {@region} не найден"
 command.info.info: "Название: {@region}\nПриоритет: {@priority}\nМир: {@level}\nСоздатель: {@creator}\nВладельцы: {@owners}\nУчастники: {@members}\nФлаги: {@flags}\nРазмер: {@size}"
 
 command.flag.permission: "Недостаточно прав"
+command.flag.wrong-state: "Значение флага может быть только \"allow\" или \"deny\""
 command.flag.usage: "Необходимые аргументы: [РЕГИОН] [ФЛАГ] [ЗНАЧЕНИЕ]"
 command.flag.sell: "Используйте /rg sell или /rg removefromsale"
 command.flag.region-doesnt-exists: "Регион {@region} не найден"
 command.flag.incorrect-flag: "Флаг не найден"
 command.flag.teleport-flag-in-game: "Только в игре"
 command.flag.teleport-should-be-in-region: "Позиция должна находится внутри региона"
-command.flag.flag-state-changed: "Значение флага {@flag} в регионе {@region} установлено на {@state}"
+command.flag.flag-enabled: "Флаг {@flag} в регионе {@region} включен"
+command.flag.flag-disabled: "Флаг {@flag} в регионе {@region} отключен"
 command.flag.description: "управление флагами региона"
 
 command.teleport.in-game: "Только в игре"

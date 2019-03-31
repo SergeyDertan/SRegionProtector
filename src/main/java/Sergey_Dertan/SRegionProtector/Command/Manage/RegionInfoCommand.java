@@ -41,12 +41,12 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
     @Override
     public boolean execute(CommandSender sender, String s, String[] args) {
         if (!this.testPermissionSilent(sender)) {
-            this.messenger.sendMessage(sender, "command.list.info");
+            this.messenger.sendMessage(sender, "command.info.permission");
             return false;
         }
         if (args.length < 1) {
             if (!(sender instanceof Player)) {
-                this.messenger.sendMessage(sender, "command.list.usage");
+                this.messenger.sendMessage(sender, "command.info.usage");
                 return false;
             }
             Region region = this.chunkManager.getRegion((Vector3) sender, ((Player) sender).level.getName());
@@ -76,7 +76,8 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
         List<String> flags = new ObjectArrayList<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
             if (!this.regionSettings.flagsStatus[i] || !this.regionSettings.display[i]) continue;
-            flags.add(RegionFlags.getFlagName(i) + ": " + (region.getFlagState(i) ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled")));
+            String ad = region.getFlagState(i) == RegionFlags.getStateFromString("allow", i) ? "allow" : "deny";
+            flags.add(RegionFlags.getFlagName(i) + ": " + ad);
         }
         this.messenger.sendMessage(sender, "command.info.info",
                 new String[]{"@region", "@creator", "@level", "@owners", "@members", "@flags", "@size", "@priority"},

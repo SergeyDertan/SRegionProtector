@@ -25,7 +25,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
                 {
                         new CommandParameter("region", CommandParamType.STRING, false),
                         new CommandParameter("flag", CommandParamType.STRING, false),
-                        new CommandParameter("state", false, new String[]{"true", "false"})
+                        new CommandParameter("state", false, new String[]{"allow", "deny"})
                 }
         );
         this.setCommandParameters(parameters);
@@ -45,6 +45,11 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
         int flag = RegionFlags.getFlagId(args[1]);
         if (flag == RegionFlags.FLAG_INVALID) {
             this.messenger.sendMessage(sender, "command.flag.incorrect-flag");
+            return false;
+        }
+
+        if (!args[2].equalsIgnoreCase("allow") && !args[2].equalsIgnoreCase("deny")) {
+            this.messenger.sendMessage(sender, "command.flag.wrong-state");
             return false;
         }
 
@@ -68,7 +73,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             return false;
         }
 
-        boolean state = RegionFlags.getStateFromString(args[2]);
+        boolean state = RegionFlags.getStateFromString(args[2], flag);
         if (flag == RegionFlags.FLAG_TELEPORT) {
             if (state) {
                 if (!(sender instanceof Player)) {
@@ -85,7 +90,7 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             }
         }
         region.setFlagState(flag, state);
-        this.messenger.sendMessage(sender, "command.flag.flag-state-changed", new String[]{"@region", "@flag", "@state"}, new String[]{region.name, args[1], (state ? this.messenger.getMessage("region.flag.state.enabled") : this.messenger.getMessage("region.flag.state.disabled"))});
+        this.messenger.sendMessage(sender, "command.flag.flag-" + (state ? "enabled" : "disabled"), new String[]{"@region", "@flag"}, new String[]{region.name, args[1]});
         return true;
     }
 }

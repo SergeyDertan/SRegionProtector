@@ -185,7 +185,7 @@ public abstract class Utils {
     }
 
     public static boolean resourceExists(String fileName, String folder, Class clazz) {
-        if (folder.charAt(folder.length() - 1) != '/') folder += '/';
+        if (!folder.endsWith("/")) folder += '/';
         return clazz.getClassLoader().getResource(folder + fileName) != null;
     }
 
@@ -211,6 +211,7 @@ public abstract class Utils {
         return value;
     }
 
+    //slices array into pieces with the same size
     public static <T> List<List<T>> sliceArray(T[] array, int pieces, boolean keepEmpty) {
         List<List<T>> result = new ObjectArrayList<>();
         for (int i = 0; i < pieces; ++i) {
