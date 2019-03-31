@@ -13,7 +13,10 @@ import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 public final class Settings {
 
     public final long selectorSessionLifetime;
+
     public final int autoSavePeriod;
+    public final boolean autoSave;
+
     public final Block borderBlock;
 
     public final boolean hideCommands;
@@ -40,7 +43,9 @@ public final class Settings {
         Map<String, Object> config = this.getConfig();
 
         this.selectorSessionLifetime = ((Number) config.get("session-life-time")).longValue() * 1000L;
+
         this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
+        this.autoSave = (boolean) config.get("auto-save");
 
         this.hideCommands = (boolean) config.get("hide-commands");
 

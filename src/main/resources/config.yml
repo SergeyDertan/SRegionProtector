@@ -110,3 +110,4 @@ region-amounts:
   - 3
 #in seconds
 auto-save-period: 60
+auto-save: true

@@ -9,7 +9,6 @@ import cn.nukkit.event.entity.EntitySpawnEvent;
  * @see RegionEventsHandler#entitySpawn(EntitySpawnEvent)
  * because EntitySpawnEvent can`t be cancelled
  */
-@SuppressWarnings("WeakerAccess")
 public final class EmptyEvent extends Event {
 
     private boolean isCancelled;

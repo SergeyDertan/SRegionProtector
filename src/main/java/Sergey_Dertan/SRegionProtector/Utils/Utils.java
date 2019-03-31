@@ -129,6 +129,7 @@ public abstract class Utils {
     /*---------------- resources ----------------*/
     @SuppressWarnings({"unchecked", "ConstantConditions"})
     public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws Exception {
+        //TODO remove useless
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
         File file = new File(targetFolder + fileName);

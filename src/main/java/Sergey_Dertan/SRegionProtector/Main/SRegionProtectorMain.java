@@ -142,6 +142,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initAutoSave() {
+        if (!this.settings.autoSave) return;
         this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, () -> this.save(SaveType.AUTO), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
     }
 

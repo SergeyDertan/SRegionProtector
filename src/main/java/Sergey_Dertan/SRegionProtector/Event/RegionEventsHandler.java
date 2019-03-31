@@ -151,7 +151,7 @@ public final class RegionEventsHandler implements Listener {
             }
         }
 
-        if (e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
+        if (e.getItem() != null && e.getItem().getId() == ItemID.FLINT_AND_STEEL) {
             this.handleEvent(RegionFlags.FLAG_LIGHTER, block, e.getPlayer(), e, false, false);
             return;
         }
