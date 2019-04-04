@@ -42,6 +42,7 @@ public final class SelectorEventsHandler implements Listener {
 
     private boolean selectPosition(Player player, Block pos, Item item) {
         if (pos instanceof BlockAir || !(item instanceof ItemAxeWood)) return false;
+        if (!player.hasPermission("sregionprotector.wand")) return false;
         SelectorSession session = this.regionSelector.getSession(player);
         if (!session.setNextPos(Position.fromObject(pos, pos.level))) return false;
         if (session.nextPos) {

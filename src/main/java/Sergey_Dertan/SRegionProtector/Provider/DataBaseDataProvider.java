@@ -8,7 +8,5 @@ public abstract class DataBaseDataProvider extends DataProvider {
         super(logger);
     }
 
-    public abstract boolean init();
-
     public abstract boolean checkConnection();
 }

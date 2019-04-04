@@ -28,7 +28,10 @@ import Sergey_Dertan.SRegionProtector.Settings.Settings;
 import cn.nukkit.Server;
 import cn.nukkit.blockentity.BlockEntity;
 import cn.nukkit.command.Command;
+import cn.nukkit.plugin.LibraryLoadException;
+import cn.nukkit.plugin.LibraryLoader;
 import cn.nukkit.plugin.PluginBase;
+import cn.nukkit.utils.MainLogger;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
@@ -79,6 +82,13 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.start", "@ver", this.getDescription().getVersion()));
 
+        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.libraries"));
+        if (!this.loadLibraries()) {
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
+            return;
+        }
+
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.settings"));
         if (!this.initSettings()) return;
 
@@ -126,7 +136,6 @@ public final class SRegionProtectorMain extends PluginBase {
                     break;
                 case MYSQL:
                     this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    //this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO mysql
                     break;
                 case SQLite3:
                     this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
@@ -210,6 +219,17 @@ public final class SRegionProtectorMain extends PluginBase {
     private void initChunks() {
         this.chunkManager = new ChunkManager(this.getLogger());
         this.chunkManager.init();
+    }
+
+    private boolean loadLibraries() {
+        try {
+            LibraryLoader.load("com.alibaba:fastjson:1.2.54");
+        } catch (LibraryLoadException e) {
+            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
+            MainLogger.getLogger().logException(e);
+            return false;
+        }
+        return true;
     }
 
     private void initEventsHandlers() {

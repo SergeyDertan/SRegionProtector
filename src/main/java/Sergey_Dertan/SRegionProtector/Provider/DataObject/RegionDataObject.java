@@ -5,32 +5,32 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable
+@PersistenceCapable(table = "region")
 public final class RegionDataObject {
 
-    @Persistent(table = "min-x")
+    @Persistent(name = "min-x")
     public double minX;
-    @Persistent(table = "min-y")
+    @Persistent(name = "min-y")
     public double minY;
-    @Persistent(table = "min-z")
+    @Persistent(name = "min-z")
     public double minZ;
-    @Persistent(table = "max-x")
+    @Persistent(name = "max-x")
     public double maxX;
-    @Persistent(table = "max-y")
+    @Persistent(name = "max-y")
     public double maxY;
-    @Persistent(table = "max-z")
+    @Persistent(name = "max-z")
     public double maxZ;
-    @Persistent(table = "name")
+    @Persistent(name = "name")
     public String name;
-    @Persistent(table = "level")
+    @Persistent(name = "level")
     public String level;
-    @Persistent(table = "creator")
+    @Persistent(name = "creator")
     public String creator;
-    @Persistent(table = "owners")
+    @Persistent(name = "owners")
     public String owners;
-    @Persistent(table = "members")
+    @Persistent(name = "members")
     public String members;
-    @Persistent(table = "priority")
+    @Persistent(name = "priority")
     public int priority;
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)

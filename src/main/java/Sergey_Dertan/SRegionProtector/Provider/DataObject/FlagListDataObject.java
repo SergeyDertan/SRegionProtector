@@ -5,14 +5,14 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable
+@PersistenceCapable(table = "flag_list")
 public final class FlagListDataObject {
 
-    @Persistent(table = "state")
+    @Persistent(name = "state")
     public String state; //serialized boolean array
-    @Persistent(table = "sell")
+    @Persistent(name = "sell")
     public long sellData; //region price
-    @Persistent(table = "teleport")
+    @Persistent(name = "teleport")
     public String teleportData; //json serialized Map<String, Object>
     @PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)

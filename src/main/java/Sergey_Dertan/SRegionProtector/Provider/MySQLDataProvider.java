@@ -1,48 +1,60 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
+import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
+import cn.nukkit.plugin.LibraryLoader;
 import cn.nukkit.utils.Logger;
-import cn.nukkit.utils.MainLogger;
+import cn.nukkit.utils.TextFormat;
+import com.mysql.jdbc.Driver;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Transaction;
-import java.util.List;
-
-//import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
-//import org.datanucleus.metadata.PersistenceUnitMetaData;
-/*import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
-import javax.jdo.Transaction;*/
+import javax.jdo.Transaction;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public final class MySQLDataProvider extends DataBaseDataProvider {
 
-    private MySQLSettings settings;
-    //private PersistenceManager pm;
+    private final MySQLSettings settings;
+    private PersistenceManager pm;
 
-    public MySQLDataProvider(Logger logger, MySQLSettings settings) {
+    public MySQLDataProvider(Logger logger, MySQLSettings settings) throws Exception {
         super(logger);
         this.settings = settings;
-        init();
+
+        this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.init.db-libraries"));
+        this.loadLibraries();
+
+        this.init();
+    }
+
+    private void loadLibraries() {
+        LibraryLoader.load("mysql:mysql-connector-java:8.0.15");
+        LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-m3");
+        LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m10");
+        LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:5.2.0-m3");
+        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:5.2.0-m3");
     }
 
     @Override
     public FlagListDataObject loadFlags(String region) {
-        //Query<FlagListDataObject> query = this.pm.newQuery(FlagListDataObject.class, "region = '" + region + "'");
-        //return query.executeResultList(FlagListDataObject.class).iterator().next();
-        return null;
+        Query<FlagListDataObject> query = this.pm.newQuery(FlagListDataObject.class, "region = '" + region + "'");
+        return query.executeResultList(FlagListDataObject.class).iterator().next();
     }
 
     @Override
     public List<RegionDataObject> loadRegionList() {
-        /*Query<RegionDataObject> query = this.pm.newQuery(RegionDataObject.class);
+        Query<RegionDataObject> query = this.pm.newQuery(RegionDataObject.class);
         Collection<RegionDataObject> result = query.executeResultList(RegionDataObject.class);
-        return new HashSet<>(result);*/
-        return null;
+        return new ArrayList<>(result);
     }
 
     @Override
@@ -53,18 +65,18 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
 
     @Override
     public void saveFlags(Region region) {
-        /*Transaction tr = this.pm.currentTransaction();
+        Transaction tr = this.pm.currentTransaction();
         tr.begin();
-        pm.makePersistent(Converter.toDataObject(region.getFlags()));
-        tr.commit();*/
+        this.pm.makePersistent(Converter.toDataObject(region.getFlags()));
+        tr.commit();
     }
 
     @Override
     public void saveRegion(Region region) {
-        /*Transaction tr = this.pm.currentTransaction();
+        Transaction tr = this.pm.currentTransaction();
         tr.begin();
-        pm.makePersistent(Converter.toDataObject(region));
-        tr.commit();*/
+        this.pm.makePersistent(Converter.toDataObject(region));
+        tr.commit();
     }
 
     @Override
@@ -72,29 +84,23 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
         return "MySQL";
     }
 
-    @Override
-    public boolean init() { //jdbc:mysql://127.0.0.1:3306/?user=root
+    public void init() throws Exception {
+        new FlagListDataObject(); //TODO
+        new RegionDataObject();
+
         PersistenceUnitMetaData pumd = new PersistenceUnitMetaData("dynamic-unit", "RESOURCE_LOCAL", null);
-        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject");
-        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.ChunkDataObject");
-        pumd.addClassName("Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject");
+        pumd.addClassName(RegionDataObject.class.getName());
+        pumd.addClassName(FlagListDataObject.class.getName());
         pumd.setExcludeUnlistedClasses(true);
-        //setProperty("datanucleus.ConnectionDriverName","com.mysql.jdbc.Driver");
-        // pumd.addProperty("javax.jdo.PersistenceManagerFactoryClass", "org.datanucleus.api.jdo.JDOPersistenceManagerFactory"); //TODO
-        pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
-        pumd.addProperty("javax.jdo.option.ConnectionDriverName", "com.mysql.jdbc.Driver");
-        pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://127.0.0.1:3306/acc?useSSL=false"); //"jdbc:h2:mem:mypersistence"
-        pumd.addProperty("javax.jdo.option.ConnectionUserName", "root");
-        pumd.addProperty("javax.jdo.option.ConnectionPassword", "pass");
+        pumd.addProperty("javax.jdo.option.ConnectionDriverName", Driver.class.getName());
+        pumd.addProperty("javax.jdo.option.ConnectionDriverName", Driver.class.getName());
+        pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://" + this.settings.address + ":" + this.settings.port + "/acc?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        pumd.addProperty("javax.jdo.option.ConnectionUserName", this.settings.user);
+        pumd.addProperty("javax.jdo.option.ConnectionPassword", this.settings.password);
         pumd.addProperty("datanucleus.autoCreateSchema", "true");
+        pumd.addProperty("datanucleus.schema.autoCreateTables", "true");
 
-
-        MainLogger.getLogger().info("qqqwwweee");
-        PersistenceManager pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();
-        Transaction tr = pm.currentTransaction();
-        pm.close();
-        MainLogger.getLogger().info("qwe");
-        return false;
+        this.pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();
     }
 
     @Override
