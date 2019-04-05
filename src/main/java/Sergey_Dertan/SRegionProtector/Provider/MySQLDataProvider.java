@@ -38,10 +38,10 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
 
     private void loadLibraries() {
         LibraryLoader.load("mysql:mysql-connector-java:8.0.15");
-        LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-m3");
-        LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m10");
-        LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:5.2.0-m3");
-        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:5.2.0-m3");
+        LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-release");
+        LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m11");
+        LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:5.2.0-release");
+        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:5.2.0-release");
     }
 
     @Override
