@@ -1,6 +1,5 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
-import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
@@ -10,7 +9,7 @@ import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
 import cn.nukkit.plugin.LibraryLoader;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
-import com.mysql.jdbc.Driver;
+import com.mysql.cj.jdbc.Driver;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 
@@ -97,7 +96,7 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
         pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://" + this.settings.address + ":" + this.settings.port + "/acc?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         pumd.addProperty("javax.jdo.option.ConnectionUserName", this.settings.user);
         pumd.addProperty("javax.jdo.option.ConnectionPassword", this.settings.password);
-        pumd.addProperty("datanucleus.autoCreateSchema", "true");
+        pumd.addProperty("datanucleus.autoCreateSchema", "false");
         pumd.addProperty("datanucleus.schema.autoCreateTables", "true");
 
         this.pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();

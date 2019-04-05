@@ -8,12 +8,14 @@ public final class MySQLSettings {
     public final int port;
     public final String user;
     public final String password;
+    public final String database;
 
     public MySQLSettings(Map<String, Object> data) {
         this.address = (String) data.get("address");
         this.port = ((Number) data.get("port")).intValue();
         this.user = (String) data.get("user");
         this.password = (String) data.get("password");
+        this.database = (String) data.get("database");
     }
 
     public int getPort() {
@@ -30,5 +32,9 @@ public final class MySQLSettings {
 
     public String getUser() {
         return this.user;
+    }
+
+    public String getDatabase() {
+        return this.database;
     }
 }
