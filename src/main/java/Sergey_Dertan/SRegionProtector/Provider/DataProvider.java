@@ -3,38 +3,38 @@ package Sergey_Dertan.SRegionProtector.Provider;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
 import Sergey_Dertan.SRegionProtector.Region.Region;
-import cn.nukkit.utils.Logger;
 
-import java.util.Collection;
 import java.util.List;
 
-public abstract class DataProvider {
+public interface DataProvider { //TODO unity flags and region info into one file
 
-    protected final Logger logger;
-
-    public DataProvider(Logger logger) {
-        this.logger = logger;
+    default void saveRegionList(Iterable<Region> regions) {
+        regions.forEach(this::save);
     }
 
-    public final synchronized void saveRegionList(Collection<Region> regions) {
-        regions.forEach(this::saveRegion);
+    void saveRegion(Region region);
+
+    default void save(Region region) {
+        this.saveRegion(region);
+        this.saveFlags(region);
     }
 
-    public abstract void saveRegion(Region region);
+    String getName();
 
-    public abstract String getName();
+    void saveFlags(Region region);
 
-    public abstract void saveFlags(Region region);
+    FlagListDataObject loadFlags(String region);
 
-    public abstract FlagListDataObject loadFlags(String region);
+    RegionDataObject loadRegion(String name);
 
-    public abstract List<RegionDataObject> loadRegionList();
+    List<RegionDataObject> loadRegionList();
 
-    public abstract RegionDataObject loadRegion(String name);
+    void removeRegion(Region region);
 
-    public abstract void removeRegion(String region);
+    void removeFlags(Region region);
 
-    public final void removeRegion(Region region) {
-        this.removeRegion(region.name);
+    default void remove(Region region) {
+        this.removeRegion(region);
+        this.removeFlags(region);
     }
 }

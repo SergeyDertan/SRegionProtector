@@ -86,7 +86,8 @@ public final class RegionManager {
                 owners = Utils.deserializeStringArray(rdo.owners);
                 members = Utils.deserializeStringArray(rdo.members);
             } catch (RuntimeException e) {
-                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", new String[]{"@region", "@err"}, new String[]{name, e.getMessage()}));
+                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", "@region", name));
+                this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
                 continue;
             }
 

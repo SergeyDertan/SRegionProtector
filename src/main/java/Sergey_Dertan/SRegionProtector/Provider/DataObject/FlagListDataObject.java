@@ -5,7 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(table = "flag_list")
+@PersistenceCapable(table = "srpflags")
 public final class FlagListDataObject {
 
     @Persistent(name = "state")
@@ -15,7 +15,7 @@ public final class FlagListDataObject {
     @Persistent(name = "teleport")
     public String teleportData; //json serialized Map<String, Object>
     @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private long id;
 
     public FlagListDataObject(String state, String teleport, long sell) {

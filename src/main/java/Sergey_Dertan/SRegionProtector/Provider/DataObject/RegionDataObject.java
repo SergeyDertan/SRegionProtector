@@ -5,7 +5,7 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(table = "region")
+@PersistenceCapable(table = "srpregions")
 public final class RegionDataObject {
 
     @Persistent(name = "min-x")
@@ -20,6 +20,7 @@ public final class RegionDataObject {
     public double maxY;
     @Persistent(name = "max-z")
     public double maxZ;
+    @PrimaryKey
     @Persistent(name = "name")
     public String name;
     @Persistent(name = "level")
@@ -32,9 +33,9 @@ public final class RegionDataObject {
     public String members;
     @Persistent(name = "priority")
     public int priority;
-    @PrimaryKey
-    @Persistent(valueStrategy = IdGeneratorStrategy.INCREMENT)
-    private long id;
+    /*@PrimaryKey
+    @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    private long id;*/
 
     public RegionDataObject(double minX, double minY, double minZ, double maxX, double maxY, double maxZ, String name, String level, String creator, String owners, String members, int priority) {
         this.minX = minX;
@@ -62,10 +63,6 @@ public final class RegionDataObject {
 
     public void setPriority(int priority) {
         this.priority = priority;
-    }
-
-    public long getId() {
-        return this.id;
     }
 
     public double getMaxX() {

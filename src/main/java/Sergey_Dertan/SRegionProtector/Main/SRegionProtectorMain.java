@@ -31,7 +31,6 @@ import cn.nukkit.command.Command;
 import cn.nukkit.plugin.LibraryLoadException;
 import cn.nukkit.plugin.LibraryLoader;
 import cn.nukkit.plugin.PluginBase;
-import cn.nukkit.utils.MainLogger;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
@@ -226,7 +225,7 @@ public final class SRegionProtectorMain extends PluginBase {
             LibraryLoader.load("com.alibaba:fastjson:1.2.54");
         } catch (LibraryLoadException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
-            MainLogger.getLogger().logException(e);
+            this.getLogger().alert(Utils.getExceptionMessage(e));
             return false;
         }
         return true;
@@ -379,6 +378,10 @@ public final class SRegionProtectorMain extends PluginBase {
 
     public Settings getSettings() {
         return this.settings;
+    }
+
+    public DataProvider getDataProvider() {
+        return this.provider;
     }
 
     @SuppressWarnings("EmptyMethod")

@@ -90,7 +90,7 @@ public abstract class Utils {
 
     /*---------------- serializers ----------------*/
 
-    public static String serializeStringArray(String[] arr) throws RuntimeException {
+    public static String serializeStringArray(String[] arr) {
         try (final ByteArrayOutputStream boas = new ByteArrayOutputStream(); final ObjectOutputStream oos = new ObjectOutputStream(boas)) {
             oos.writeObject(arr);
             return Base64.getEncoder().encodeToString(boas.toByteArray());
@@ -99,7 +99,7 @@ public abstract class Utils {
         }
     }
 
-    public static String[] deserializeStringArray(String data) throws RuntimeException {
+    public static String[] deserializeStringArray(String data) {
         try (final ByteArrayInputStream bias = new ByteArrayInputStream(Base64.getDecoder().decode(data)); final ObjectInputStream ois = new ObjectInputStream(bias)) {
             return (String[]) ois.readObject();
         } catch (IOException | ClassNotFoundException e) {

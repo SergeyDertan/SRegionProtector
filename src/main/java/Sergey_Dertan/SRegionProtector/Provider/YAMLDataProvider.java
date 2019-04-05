@@ -22,17 +22,20 @@ import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.FLAGS_FOL
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.REGIONS_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.DATA_TAG;
 
-public final class YAMLDataProvider extends DataProvider { //TODO ??
+public final class YAMLDataProvider implements DataProvider {
 
     public static final String REGION_FILE_NAME = "{@region-name}.yml";
     public static final String FLAG_LIST_FILE_NAME = "{@region-name}.yml";
 
     public final boolean async;
     public final int threads;
+
     private final ExecutorService executor;
+    private final Logger logger;
 
     public YAMLDataProvider(Logger logger, boolean async, int threads) {
-        super(logger);
+        this.logger = logger;
+
         this.async = async;
         if (async) {
             if (threads == -1) threads = Runtime.getRuntime().availableProcessors();
@@ -125,9 +128,14 @@ public final class YAMLDataProvider extends DataProvider { //TODO ??
 
     @Override
     @SuppressWarnings("ResultOfMethodCallIgnored")
-    public void removeRegion(String region) {
-        new File(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
-        new File(FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region)).delete();
+    public void removeRegion(Region region) {
+        new File(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
+    }
+
+    @Override
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public void removeFlags(Region region) {
+        new File(FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
     }
 
     public void shutdownExecutor() {

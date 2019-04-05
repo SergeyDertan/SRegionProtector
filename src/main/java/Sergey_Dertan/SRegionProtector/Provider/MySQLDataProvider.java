@@ -20,16 +20,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public final class MySQLDataProvider extends DataBaseDataProvider {
+public final class MySQLDataProvider implements DataProvider {
 
     private final MySQLSettings settings;
     private PersistenceManager pm;
 
-    public MySQLDataProvider(Logger logger, MySQLSettings settings) throws Exception {
-        super(logger);
+    public MySQLDataProvider(Logger logger, MySQLSettings settings) {
         this.settings = settings;
 
-        this.logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.init.db-libraries"));
+        logger.info(TextFormat.GREEN + Messenger.getInstance().getMessage("loading.init.db-libraries"));
         this.loadLibraries();
 
         this.init();
@@ -79,11 +78,19 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
     }
 
     @Override
+    public void removeRegion(Region region) {
+    }
+
+    @Override
+    public void removeFlags(Region region) {
+    }
+
+    @Override
     public String getName() {
         return "MySQL";
     }
 
-    public void init() throws Exception {
+    private void init() {
         new FlagListDataObject(); //TODO
         new RegionDataObject();
 
@@ -93,21 +100,12 @@ public final class MySQLDataProvider extends DataBaseDataProvider {
         pumd.setExcludeUnlistedClasses(true);
         pumd.addProperty("javax.jdo.option.ConnectionDriverName", Driver.class.getName());
         pumd.addProperty("javax.jdo.option.ConnectionDriverName", Driver.class.getName());
-        pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://" + this.settings.address + ":" + this.settings.port + "/acc?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
+        pumd.addProperty("javax.jdo.option.ConnectionURL", "jdbc:mysql://" + this.settings.address + ":" + this.settings.port + "/" + this.settings.database + "?useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         pumd.addProperty("javax.jdo.option.ConnectionUserName", this.settings.user);
         pumd.addProperty("javax.jdo.option.ConnectionPassword", this.settings.password);
-        pumd.addProperty("datanucleus.autoCreateSchema", "false");
+        pumd.addProperty("datanucleus.autoCreateSchema", "true");
         pumd.addProperty("datanucleus.schema.autoCreateTables", "true");
 
         this.pm = new JDOPersistenceManagerFactory(pumd, null).getPersistenceManager();
-    }
-
-    @Override
-    public boolean checkConnection() { //TODO
-        return false;
-    }
-
-    @Override
-    public void removeRegion(String region) {
     }
 }
