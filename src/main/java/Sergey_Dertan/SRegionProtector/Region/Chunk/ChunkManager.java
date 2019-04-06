@@ -10,12 +10,12 @@ import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.*;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import it.unimi.dsi.fastutil.objects.ObjectCollection;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class ChunkManager {
@@ -36,8 +36,9 @@ public final class ChunkManager {
         return x << 32 | z & 4294967295L;
     }
 
-    public void init() {
-        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(SRegionProtectorMain.getInstance(), this::removeEmptyChunks, 360 * 20, 360 * 20, true);
+    public void init(boolean emptyChunksAutoRemoving, int removePeriod) {
+        if (!emptyChunksAutoRemoving) return;
+        Server.getInstance().getScheduler().scheduleDelayedRepeatingTask(SRegionProtectorMain.getInstance(), this::removeEmptyChunks, removePeriod * 20, removePeriod * 20, true);
     }
 
     public int getChunkAmount() {
@@ -130,12 +131,9 @@ public final class ChunkManager {
                 new Vector3(bb.getMaxX(), bb.getMaxY(), bb.getMaxZ()),
                 level
         );
-        List<Region> regions = new ObjectArrayList<>();
-        chunks.forEach(s ->
-                s.getRegions().forEach(r -> {
-                    if (r.intersectsWith(bb)) regions.add(r);
-                })
-        );
+        List<Region> regions = new ArrayList<>();
+
+        chunks.forEach(chunk -> chunk.getRegions().stream().filter(region -> region.intersectsWith(bb)).forEach(regions::add));
         return regions;
     }
 

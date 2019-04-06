@@ -10,6 +10,8 @@ import cn.nukkit.command.data.CommandParameter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -51,7 +53,7 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.list.usage");
             return false;
         }
-        Set<Region> regions;
+        List<Region> regions;
         switch (type) {
             case CREATOR:
             default:
@@ -64,7 +66,7 @@ public final class RegionListCommand extends SRegionProtectorCommand {
                 regions = this.regionManager.getPlayersRegionList((Player) sender, MEMBER);
                 break;
         }
-        Set<String> list = new ObjectArraySet<>();
+        List<String> list = new ArrayList<>();
         regions.forEach(region -> list.add(region.name));
         switch (type) {
             case MEMBER:

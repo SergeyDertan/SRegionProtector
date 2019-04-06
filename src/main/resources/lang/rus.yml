@@ -15,8 +15,7 @@ loading.init.successful: "Инициализация SRegionProtector завер
 
 loading.error.folder: "Ошибка создании папки {@path}, отключение плагина..."
 loading.error.resource: "Ошибка копирования файла: {@err}, отключение плагина..."
-loading.error.regions: "Ошибка загрузки региона {@region}: {@err}"
-loading.error.chunks: "Ошика загрузки чанка x:{@x}, z:{@z}, мир:{@level}: {@err}"
+loading.error.regions: "Ошибка загрузки региона {@region}:"
 loading.error.fastjson: "Не удалось загрузить необходимую библиотеку: com.alibaba:fastjson:1.2.54"
 loading.error.data-provider-error: "Ошибка инициализации поставщика данных {@provider}: {@err}"
 
@@ -59,7 +58,7 @@ region.selection.pos1: "Первая точка установлена"
 region.selection.pos2: "Вторая точка установлена"
 
 command.region.permission: "Недостаточно прав"
-command.region.available-commands: 'Доступные команды: {@list}'
+command.region.available-commands: 'Доступные команды:'
 command.region.region.command-doesnt-exits: 'Команда {@name} не найдена'
 command.region.description: 'Команды SRegionProtector'
 
@@ -201,6 +200,8 @@ command.removeowner.cant-remove-owner: "Region creator cant be removed"
 command.removeowner.description: "удалить валдельца из региона"
 
 command.info.permission: "Недостаточно прав"
+command.info.description: "информация о регионе"
+command.info.region-permission: "Недостаточно прав для просмотра информации об этом регионе"
 command.info.usage: "Необходимые аргументы: [РЕГИОН]"
 command.info.region-doesnt-exists: "Регион {@region} не найден"
 command.info.info: "Название: {@region}\nПриоритет: {@priority}\nМир: {@level}\nСоздатель: {@creator}\nВладельцы: {@owners}\nУчастники: {@members}\nФлаги: {@flags}\nРазмер: {@size}"

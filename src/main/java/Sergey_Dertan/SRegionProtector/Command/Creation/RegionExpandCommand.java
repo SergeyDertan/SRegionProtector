@@ -54,7 +54,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.expand.usage");
             return false;
         }
-        int y = Integer.valueOf(args[0]);
+        int y = Integer.parseInt(args[0]);
         if (args[1].equalsIgnoreCase(EXPAND_UP)) {
             if (session.pos1.y > session.pos2.y) {
                 session.pos1.y += y;
@@ -71,6 +71,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.expand.up-or-down");
             return false;
         }
+        session.fixHeight();
         if (this.selector.hasBorders((Player) sender)) {
             this.selector.removeBorders((Player) sender);
             this.selector.showBorders((Player) sender, session.pos1, session.pos2);

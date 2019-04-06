@@ -72,7 +72,6 @@ public final class RegionSettings {
 
         BlockEntityHealer.HEAL_DELAY = this.healFlagHealDelay;
         BlockEntityHealer.HEAL_AMOUNT = this.healFlagHealAmount;
-        BlockEntityHealer.FLAG_ENABLED = this.flagsStatus[RegionFlags.FLAG_HEAL];
     }
 
     @SuppressWarnings("unchecked")

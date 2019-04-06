@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Selector;
 
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 
 @SuppressWarnings("WeakerAccess")
@@ -66,5 +67,17 @@ public final class SelectorSession {
         this.lastAction = System.currentTimeMillis();
         this.expirationTime = System.currentTimeMillis() + this.lifeTime;
         return true;
+    }
+
+    public void fixHeight() {
+        if (this.pos1.level.getDimension() == Level.DIMENSION_NETHER) {
+            if (this.pos1.y > 128) this.pos1.y = 128;
+            if (this.pos2.y > 128) this.pos2.y = 128;
+        } else {
+            if (this.pos1.y > 255) this.pos1.y = 255;
+            if (this.pos2.y > 255) this.pos2.y = 255;
+        }
+        if (this.pos1.y < 0) this.pos1.y = 0;
+        if (this.pos2.y < 0) this.pos2.y = 0;
     }
 }

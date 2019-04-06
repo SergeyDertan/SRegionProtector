@@ -30,7 +30,11 @@ public final class Messenger {
     private static Messenger instance;
     public final String language;
     private final Object2ObjectMap<String, String> messages;
-    private final Field interfaz; //async packets should be put directly to the interface due to cn.nukkit.event.server.DataPacketSendEvent
+    /**
+     * async packets should be put directly to the interface
+     * @see cn.nukkit.event.server.DataPacketSendEvent
+     */
+    private final Field interfaz;
     private boolean async;
 
     @SuppressWarnings("unchecked")

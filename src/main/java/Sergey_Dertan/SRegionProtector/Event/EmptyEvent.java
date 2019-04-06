@@ -9,7 +9,7 @@ import cn.nukkit.event.entity.EntitySpawnEvent;
  * @see RegionEventsHandler#entitySpawn(EntitySpawnEvent)
  * because EntitySpawnEvent can`t be cancelled
  */
-public final class EmptyEvent extends Event {
+final class EmptyEvent extends Event {
 
     private boolean isCancelled;
 

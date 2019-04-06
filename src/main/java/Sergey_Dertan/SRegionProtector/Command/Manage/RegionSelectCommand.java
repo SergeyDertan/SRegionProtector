@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
@@ -44,21 +45,21 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.select.usage");
             return false;
         }
-        Region rg = this.regionManager.getRegion(args[0]);
-        if (rg == null) {
+        Region region = this.regionManager.getRegion(args[0]);
+        if (region == null) {
             this.messenger.sendMessage(sender, "command.select.region-doesnt-exists", "@region", args[0]);
             return false;
         }
-        if (!rg.isLivesIn(sender.getName()) && !sender.hasPermission("sregionprotector.region.select-other")) {
+        if (!region.isLivesIn(sender.getName()) && !sender.hasPermission("sregionprotector.region.select-other") && !region.isSelling()) {
             this.messenger.sendMessage(sender, "command.select.permission");
             return false;
         }
-        if (!rg.level.equalsIgnoreCase(((Player) sender).level.getName())) {
+        if (!region.level.equalsIgnoreCase(((Player) sender).level.getName())) {
             this.messenger.sendMessage(sender, "command.select.different-worlds");
             return false;
         }
         this.messenger.sendMessage(sender, "command.select.success");
-        this.selector.showBorders((Player) sender, new Vector3(rg.minX, rg.minY, rg.minZ), new Vector3(rg.maxX, rg.maxY, rg.maxZ));
+        this.selector.showBorders((Player) sender, new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ));
         return false;
     }
 }

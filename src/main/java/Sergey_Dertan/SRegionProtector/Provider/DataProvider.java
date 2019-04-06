@@ -37,4 +37,25 @@ public interface DataProvider { //TODO unity flags and region info into one file
         this.removeRegion(region);
         this.removeFlags(region);
     }
+
+    enum Type {
+
+        YAML,
+        MYSQL,
+        SQLite3;
+
+        public static Type fromString(String name) {
+            switch (name.toLowerCase()) {
+                case "yaml":
+                case "yml":
+                    return YAML;
+                case "mysql":
+                    return MYSQL;
+                case "sqlite":
+                case "sqlite3":
+                    return SQLite3;
+            }
+            return null;
+        }
+    }
 }

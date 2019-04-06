@@ -92,7 +92,7 @@ public final class Region implements AxisAlignedBB {
     }
 
     public RegionFlag[] getFlags() {
-        return Utils.deepClone(Arrays.asList(this.flags)).toArray(new RegionFlag[RegionFlags.FLAG_AMOUNT]);
+        return Utils.deepClone(Arrays.asList(this.flags)).toArray(new RegionFlag[0]);
     }
 
     void clearUsers() {

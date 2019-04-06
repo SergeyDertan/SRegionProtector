@@ -10,6 +10,7 @@ import java.util.List;
 public final class Chunk {
 
     private static final Comparator<Region> regionComparator = (r, r2) -> r2.getPriority() - r.getPriority();
+
     public final Object lock = new Object();
     public final long x;
     public final long z;

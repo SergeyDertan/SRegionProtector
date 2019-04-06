@@ -105,19 +105,12 @@ public final class RegionEventsHandler implements Listener {
                 boolean isRight = (up & 1) > 0;
 
                 BlockFace second;
-                if (isRight) {
-                    if (isUp) {
-                        second = ((BlockDoor) door.down()).getBlockFace();
-                    } else {
-                        second = door.getBlockFace();
-                    }
+                if (isUp) {
+                    second = ((BlockDoor) door.down()).getBlockFace();
                 } else {
-                    if (isUp) {
-                        second = ((BlockDoor) door.down()).getBlockFace();
-                    } else {
-                        second = door.getBlockFace();
-                    }
+                    second = door.getBlockFace();
                 }
+
 
                 if (isRight) {
                     switch (second) {

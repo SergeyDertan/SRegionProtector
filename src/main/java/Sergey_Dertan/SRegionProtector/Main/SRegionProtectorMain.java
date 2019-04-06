@@ -72,21 +72,13 @@ public final class SRegionProtectorMain extends PluginBase {
     public void onEnable() {
         long start = System.currentTimeMillis();
 
-        if (!this.createDirectories()) {
-            this.forceShutdown = true;
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
+        if (!this.createDirectories()) return;
         if (!this.initMessenger()) return;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.start", "@ver", this.getDescription().getVersion()));
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.libraries"));
-        if (!this.loadLibraries()) {
-            this.forceShutdown = true;
-            this.getPluginLoader().disablePlugin(this);
-            return;
-        }
+        if (!this.loadLibraries()) return;
 
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.settings"));
         if (!this.initSettings()) return;
@@ -139,11 +131,12 @@ public final class SRegionProtectorMain extends PluginBase {
                 case SQLite3:
                     this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
             }
-            this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name));
+            this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name()));
             return true;
         } catch (Exception e) {
-            this.getLogger().info(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name}));
+            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name()}));
             this.forceShutdown = true;
+            this.getLogger().alert(Utils.getExceptionMessage(e));
             this.getPluginLoader().disablePlugin(this);
             return false;
         }
@@ -175,6 +168,7 @@ public final class SRegionProtectorMain extends PluginBase {
         if (!folder.exists() && !folder.mkdirs()) {
             this.forceShutdown = true;
             this.getLogger().warning(this.messenger.getMessage("loading.error.folder", "@path", path));
+            this.getPluginLoader().disablePlugin(this);
             return false;
         }
         return true;
@@ -217,7 +211,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private void initChunks() {
         this.chunkManager = new ChunkManager(this.getLogger());
-        this.chunkManager.init();
+        this.chunkManager.init(this.settings.emptyChunksRemoving, this.settings.emptyChunkRemovingPeriod);
     }
 
     private boolean loadLibraries() {
@@ -226,6 +220,8 @@ public final class SRegionProtectorMain extends PluginBase {
         } catch (LibraryLoadException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
             this.getLogger().alert(Utils.getExceptionMessage(e));
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
             return false;
         }
         return true;
@@ -387,6 +383,11 @@ public final class SRegionProtectorMain extends PluginBase {
     @SuppressWarnings("EmptyMethod")
     public void dataMigration() {
         //TODO
+    }
+
+    @Override
+    public File getFile() { //TODO remove
+        return super.getFile();
     }
 
     public enum SaveType {

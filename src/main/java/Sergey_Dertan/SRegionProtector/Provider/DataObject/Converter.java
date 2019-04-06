@@ -22,38 +22,62 @@ public abstract class Converter {
     }
 
     public static RegionDataObject toDataObject(Region region) {
-        return new RegionDataObject(
-                region.minX, region.minY, region.minZ,
-                region.maxX, region.maxY, region.maxZ,
-                region.name, region.level, region.getCreator(),
-                Utils.serializeStringArray(region.getOwners().toArray(new String[0])),
-                Utils.serializeStringArray(region.getMembers().toArray(new String[0])),
-                region.getPriority()
-        );
+        RegionDataObject dataObject = new RegionDataObject();
+
+        dataObject.name = region.name;
+
+        dataObject.minX = region.minX;
+        dataObject.minY = region.minY;
+        dataObject.minZ = region.minZ;
+        dataObject.maxX = region.maxX;
+        dataObject.maxY = region.maxY;
+        dataObject.maxZ = region.maxZ;
+
+        dataObject.creator = region.getCreator();
+        dataObject.level = region.level;
+
+        dataObject.owners = Utils.serializeStringArray(region.getOwners().toArray(new String[0]));
+        dataObject.members = Utils.serializeStringArray(region.getMembers().toArray(new String[0]));
+        dataObject.priority = region.getPriority();
+        return dataObject;
     }
 
     public static RegionDataObject toRegionDataObject(Map<String, Object> data) { //for the yaml data provider
-        return new RegionDataObject(
-                ((Number) data.get(MIN_X_TAG)).longValue(), ((Number) data.get(MIN_Y_TAG)).longValue(), ((Number) data.get(MIN_Z_TAG)).longValue(),
-                ((Number) data.get(MAX_X_TAG)).longValue(), ((Number) data.get(MAX_Y_TAG)).longValue(), ((Number) data.get(MAX_Z_TAG)).longValue(),
-                (String) data.get(NAME_TAG), (String) data.get(LEVEL_TAG), (String) data.get(CREATOR_TAG),
-                (String) data.get(OWNERS_TAG), (String) data.get(MEMBERS_TAG),
-                ((Number) data.getOrDefault(PRIORITY_TAG, 0)).intValue()
-        );
+        RegionDataObject dataObject = new RegionDataObject();
+
+        dataObject.minX = ((Number) data.get(MIN_X_TAG)).doubleValue();
+        dataObject.minY = ((Number) data.get(MIN_Y_TAG)).doubleValue();
+        dataObject.minZ = ((Number) data.get(MIN_Z_TAG)).doubleValue();
+        dataObject.maxX = ((Number) data.get(MAX_X_TAG)).doubleValue();
+        dataObject.maxY = ((Number) data.get(MAX_Y_TAG)).doubleValue();
+        dataObject.maxZ = ((Number) data.get(MAX_Z_TAG)).doubleValue();
+        dataObject.name = (String) data.get(NAME_TAG);
+        dataObject.level = (String) data.get(LEVEL_TAG);
+        dataObject.creator = (String) data.get(CREATOR_TAG);
+        dataObject.owners = (String) data.get(OWNERS_TAG);
+        dataObject.members = (String) data.get(MEMBERS_TAG);
+        dataObject.priority = ((Number) data.getOrDefault(PRIORITY_TAG, 0)).intValue();
+        return dataObject;
     }
 
-    public static FlagListDataObject toDataObject(RegionFlag[] flags) {
+    public static FlagListDataObject toDataObject(RegionFlag[] flags, String region) {
         boolean[] state = new boolean[flags.length];
         for (int i = 0; i < flags.length; ++i) {
             state[i] = flags[i].state;
         }
         RegionTeleportFlag tpFlag = (RegionTeleportFlag) flags[FLAG_TELEPORT];
         Map<String, Object> teleport = new HashMap<>();
-        teleport.put(X_TAG, tpFlag.position.x);
-        teleport.put(Y_TAG, tpFlag.position.y);
-        teleport.put(Z_TAG, tpFlag.position.z);
+        teleport.put(X_TAG, tpFlag.position != null ? tpFlag.position.x : 0);
+        teleport.put(Y_TAG, tpFlag.position != null ? tpFlag.position.z : 0);
+        teleport.put(Z_TAG, tpFlag.position != null ? tpFlag.position.y : 0);
         teleport.put(LEVEL_TAG, tpFlag.level);
-        return new FlagListDataObject(Utils.serializeBooleanArray(state), JSON.toJSONString(teleport), ((RegionSellFlag) flags[RegionFlags.FLAG_SELL]).price);
+
+        FlagListDataObject dataObject = new FlagListDataObject();
+        dataObject.state = Utils.serializeBooleanArray(state);
+        dataObject.teleportData = JSON.toJSONString(teleport);
+        dataObject.sellData = ((RegionSellFlag) flags[FLAG_SELL]).price;
+        dataObject.region = region;
+        return dataObject;
     }
 
     public static Region fromDataObject(RegionDataObject dataObject, RegionFlag[] flags) {

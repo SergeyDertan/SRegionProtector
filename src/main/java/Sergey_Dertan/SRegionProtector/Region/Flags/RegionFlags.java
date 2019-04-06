@@ -166,7 +166,7 @@ public abstract class RegionFlags {
     }
 
     public static RegionFlag[] getDefaultFlagList() {
-        return Utils.deepClone(Arrays.asList(defaults)).toArray(new RegionFlag[FLAG_AMOUNT]);
+        return Utils.deepClone(Arrays.asList(defaults)).toArray(new RegionFlag[0]);
     }
 
     public static Permission getFlagPermission(int flag) {

@@ -8,9 +8,10 @@ import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -27,24 +28,23 @@ public final class YAMLDataProvider implements DataProvider {
     public static final String REGION_FILE_NAME = "{@region-name}.yml";
     public static final String FLAG_LIST_FILE_NAME = "{@region-name}.yml";
 
-    public final boolean async;
+    public final boolean multithreadedDataLoading;
     public final int threads;
 
     private final ExecutorService executor;
     private final Logger logger;
 
-    public YAMLDataProvider(Logger logger, boolean async, int threads) {
+    public YAMLDataProvider(Logger logger, boolean multithreadedDataLoading, int threads) {
         this.logger = logger;
 
-        this.async = async;
-        if (async) {
+        this.multithreadedDataLoading = multithreadedDataLoading;
+        if (multithreadedDataLoading) {
             if (threads == -1) threads = Runtime.getRuntime().availableProcessors();
             this.executor = Executors.newFixedThreadPool(threads);
-            this.threads = threads;
         } else {
             this.executor = null;
-            this.threads = 0;
         }
+        this.threads = threads;
     }
 
     @Override
@@ -60,40 +60,34 @@ public final class YAMLDataProvider implements DataProvider {
     @Override
     @SuppressWarnings({"unchecked", "ConstantConditions", "StatementWithEmptyBody"})
     public List<RegionDataObject> loadRegionList() {
-        if (this.async) {
+        if (this.multithreadedDataLoading) {
             AtomicInteger done = new AtomicInteger();
-            List<List<RegionDataObject>> result = new ObjectArrayList<>();
+            List<List<RegionDataObject>> result = new ArrayList<>();
             Utils.sliceArray(new File(REGIONS_FOLDER).listFiles(), this.threads, false).forEach(s -> {
-                List<RegionDataObject> res = new ObjectArrayList<>();
+                List<RegionDataObject> res = new ArrayList<>();
                 result.add(res);
                 this.executor.execute(() -> {
-                            s.forEach(f -> {
-                                if (!f.isDirectory() && f.getName().endsWith(".yml")) {
-                                    Object o = new Config(f.getAbsolutePath(), Config.YAML).get("data");
-                                    if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
-                                }
+                            s.stream().filter(file -> !file.isDirectory() && file.getName().endsWith(".yml")).forEach(file -> {
+                                Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
+                                if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
                             });
                             done.incrementAndGet();
                         }
                 );
             });
             while (done.get() < result.size()) ;
-            List<RegionDataObject> list = new ObjectArrayList<>();
+            List<RegionDataObject> list = new ArrayList<>();
             result.forEach(list::addAll);
             return list;
         }
 
-        List<RegionDataObject> list = new ObjectArrayList<>();
-        for (File file : new File(REGIONS_FOLDER).listFiles()) {
-            if (file.isDirectory() || !file.getName().endsWith(".yml")) continue;
+        List<RegionDataObject> result = new ArrayList<>();
+
+        Arrays.stream(new File(REGIONS_FOLDER).listFiles()).filter(file -> !file.isDirectory() && file.getName().endsWith(".yml")).forEach(file -> {
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
-            if (o == null) {
-                this.logger.alert(TextFormat.RED + "Error while loading region from file " + file.getName()); //TODO message
-                continue;
-            }
-            list.add(Converter.toRegionDataObject((Map<String, Object>) o));
-        }
-        return list;
+            if (o != null) result.add(Converter.toRegionDataObject((Map<String, Object>) o));
+        });
+        return result;
     }
 
     @Override
@@ -104,7 +98,7 @@ public final class YAMLDataProvider implements DataProvider {
     }
 
     @Override
-    public synchronized void saveFlags(Region region) {
+    public void saveFlags(Region region) {
         synchronized (region.lock) {
             Config file = new Config(FLAGS_FOLDER + FLAG_LIST_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
             file.set(DATA_TAG, region.flagsToMap());
@@ -113,13 +107,12 @@ public final class YAMLDataProvider implements DataProvider {
     }
 
     @Override
-    public synchronized void saveRegion(Region region) {
+    public void saveRegion(Region region) {
         try {
             synchronized (region.lock) {
                 Config file = new Config(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name), Config.YAML);
                 file.set(DATA_TAG, region.toMap());
                 file.save();
-                this.saveFlags(region);
             }
         } catch (RuntimeException e) {
             this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.name + ": " + e.getMessage()); //TODO message

@@ -15,6 +15,9 @@ permissions:
       sregionprotector.admin:
         description: "Allows to editing all regions"
         default: op
+        children:
+          sregionprotector.info.other:
+            default: op
       sregionprotector.wand:
         default: true
       sregionprotector.command.*:

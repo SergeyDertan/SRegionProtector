@@ -22,10 +22,8 @@ import cn.nukkit.utils.TextFormat;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.fixMissingFlags;
@@ -196,7 +194,7 @@ public final class RegionManager {
             region.getChunks().forEach(chunk -> chunk.removeRegion(region));
 
             this.regions.remove(region.name);
-            this.provider.removeRegion(region);
+            this.provider.remove(region);
 
             if (region.getHealerBlockEntity() != null) region.getHealerBlockEntity().close();
         }
@@ -259,18 +257,17 @@ public final class RegionManager {
     }
 
     public synchronized void save(SRegionProtectorMain.SaveType saveType, String initiator) {
-        int amount = 0;
-        for (Region region : this.regions.values()) {
+        AtomicInteger amount = new AtomicInteger();
+        this.regions.values().stream().filter(region -> region.needUpdate).forEach(region -> {
             synchronized (region.lock) {
-                if (!region.needUpdate) continue;
-                this.provider.saveRegion(region);
+                this.provider.save(region);
                 region.needUpdate = false;
-                ++amount;
+                amount.incrementAndGet();
             }
-        }
+        });
         switch (saveType) {
             case AUTO:
-                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", Integer.toString(amount)));
+                this.logger.info(TextFormat.GREEN + this.messenger.getMessage("regions-auto-save", "@amount", amount.toString()));
                 break;
             case DISABLING:
                 this.logger.info(TextFormat.GREEN + this.messenger.getMessage("disabling.regions-saved", "@amount", Integer.toString(this.regions.size())));
@@ -285,20 +282,20 @@ public final class RegionManager {
         this.save(saveType, null);
     }
 
-    public synchronized Set<Region> getPlayersRegionList(Player player, RegionGroup group) {
+    public synchronized List<Region> getPlayersRegionList(Player player, RegionGroup group) {
         switch (group) {
             case CREATOR:
-                Set<Region> list = new ObjectArraySet<>();
+                List<Region> list = new ArrayList<>();
                 for (Region region : this.owners.getOrDefault(player.getName(), Collections.emptySet())) {
                     if (region.isCreator(player.getName())) list.add(region);
                 }
                 return list;
             case OWNER:
-                return new ObjectArraySet<>(this.owners.getOrDefault(player.getName(), Collections.emptySet()));
+                return new ArrayList<>(this.owners.getOrDefault(player.getName(), Collections.emptySet()));
             case MEMBER:
-                return new ObjectArraySet<>(this.members.getOrDefault(player.getName(), Collections.emptySet()));
+                return new ArrayList<>(this.members.getOrDefault(player.getName(), Collections.emptySet()));
             default:
-                return Collections.emptySet();
+                return Collections.emptyList();
         }
     }
 

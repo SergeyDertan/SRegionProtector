@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.BlockEntity;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.blockentity.BlockEntitySpawnable;
@@ -19,7 +20,6 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
     public static int HEAL_DELAY;
     public static int HEAL_AMOUNT;
 
-    public static boolean FLAG_ENABLED;
     private final RegionManager regionManager;
     private final AxisAlignedBB bb;
     private final String region;
@@ -91,7 +91,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     @Override
     public boolean onUpdate() {
-        if (!FLAG_ENABLED) return true;
+        if (!RegionFlags.getDefaultFlagState(RegionFlags.FLAG_HEAL)) return true;
         if (this.closed) return false;
         if (--this.delay > 0) return true;
         for (Entity entity : this.level.getNearbyEntities(this.bb)) {

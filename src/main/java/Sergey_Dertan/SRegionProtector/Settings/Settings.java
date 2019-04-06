@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
-import Sergey_Dertan.SRegionProtector.Provider.ProviderType;
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import cn.nukkit.block.Block;
 import cn.nukkit.utils.Config;
 
@@ -23,13 +23,16 @@ public final class Settings {
 
     public final MySQLSettings mySQLSettings;
     public final RegionSettings regionSettings;
-    public final ProviderType provider;
+    public final DataProvider.Type provider;
 
     public final boolean asyncCommands;
     public final int asyncCommandsThreads;
 
     public final boolean multithreadedDataLoading;
     public final int dataLoadingThreads;
+
+    public final boolean emptyChunksRemoving;
+    public final int emptyChunkRemovingPeriod;
 
     public final int lposMaxRadius;
 
@@ -46,6 +49,9 @@ public final class Settings {
 
         this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
         this.autoSave = (boolean) config.get("auto-save");
+
+        this.emptyChunkRemovingPeriod = ((Number) config.get("empty-chunks-removing-period")).intValue();
+        this.emptyChunksRemoving = ((boolean) config.get("empty-chunks-auto-removing"));
 
         this.hideCommands = (boolean) config.get("hide-commands");
 
@@ -71,7 +77,7 @@ public final class Settings {
         }
         this.borderBlock = Block.get(id, meta);
 
-        this.provider = ProviderType.fromString((String) config.get("provider"));
+        this.provider = DataProvider.Type.fromString((String) config.get("provider"));
 
         this.mySQLSettings = new MySQLSettings(new Config(MAIN_FOLDER + "mysql.yml", Config.YAML).getAll());
         this.regionSettings = new RegionSettings(config, new Config(MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());

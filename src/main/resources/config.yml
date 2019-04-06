@@ -111,3 +111,6 @@ region-amounts:
 #in seconds
 auto-save-period: 60
 auto-save: true
+#in seconds
+empty-chunks-removing-period: 360
+empty-chunks-auto-removing: true

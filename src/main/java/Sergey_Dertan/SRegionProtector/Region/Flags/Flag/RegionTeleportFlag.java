@@ -52,8 +52,9 @@ public final class RegionTeleportFlag extends RegionFlag {
 
     @Override
     public RegionTeleportFlag clone() {
-        if (this.position == null || this.level == null || this.level.isEmpty())
+        if (this.position == null || this.level == null || this.level.isEmpty()) {
             return new RegionTeleportFlag(this.state);
+        }
         return new RegionTeleportFlag(this.state, this.position.clone(), this.level);
     }
 }

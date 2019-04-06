@@ -67,6 +67,12 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
     }
 
     private void showRegionInfo(CommandSender sender, Region region) {
+        if (sender instanceof Player && !region.isSelling()) {
+            if (!region.isLivesIn(sender.getName()) && !sender.hasPermission("sregionprotector.info.other")) {
+                this.messenger.sendMessage(sender, "command.info.region-permission");
+                return;
+            }
+        }
         String name = region.name;
         String level = region.level;
         String owner = region.getCreator();

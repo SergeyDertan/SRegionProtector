@@ -7,8 +7,8 @@ import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +48,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
 
         CommandData customData = this.commandData.clone();
 
-        List<String> aliases = new ObjectArrayList<>();
+        List<String> aliases = new ArrayList<>();
         aliases.add("region");
         aliases.add("rg");
 
@@ -98,12 +98,9 @@ public final class RegionCommand extends SRegionProtectorCommand {
     private void updateArguments() {
         Map<String, CommandParameter[]> params = new Object2ObjectArrayMap<>();
         this.commands.forEach((k, v) -> {
-            List<CommandParameter> p = new ObjectArrayList<>();
+            List<CommandParameter> p = new ArrayList<>();
             p.add(new CommandParameter(k, false, new String[]{k}));
-            v.getCommandParameters().values().forEach(s -> {
-                List<CommandParameter> l = new ObjectArrayList<>(s);
-                p.addAll(l);
-            });
+            v.getCommandParameters().values().forEach(s -> p.addAll(Arrays.asList(s)));
             params.put(k, p.toArray(new CommandParameter[0]));
         });
         this.setCommandParameters(params);

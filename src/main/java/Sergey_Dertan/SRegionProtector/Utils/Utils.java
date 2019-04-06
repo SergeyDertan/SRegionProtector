@@ -74,7 +74,7 @@ public abstract class Utils {
     /*---------------- encryption end ----------------*/
 
     @SuppressWarnings("unchecked")
-    public static Map<String, Object> httpGetRequestJson(String url) throws Exception {
+    public static Map<String, Object> httpGetRequestJson(String url) throws IOException {
         java.net.HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
         connection.setRequestMethod("GET");
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -128,7 +128,7 @@ public abstract class Utils {
 
     /*---------------- resources ----------------*/
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws Exception {
+    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws IOException {
         //TODO remove useless
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
@@ -180,7 +180,7 @@ public abstract class Utils {
         return changed;
     }
 
-    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz) throws Exception {
+    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz) throws IOException {
         copyResource(fileName, sourceFolder, targetFolder, clazz, true);
     }
 
@@ -243,9 +243,9 @@ public abstract class Utils {
         String[] smaller = f.length < s.length ? f : s;
 
         for (int i = 0; i < smaller.length; ++i) {
-            if (Integer.valueOf(smaller[i]) > Integer.valueOf(bigger[i])) {
+            if (Integer.parseInt(smaller[i]) > Integer.parseInt(bigger[i])) {
                 return String.join(".", smaller);
-            } else if (Integer.valueOf(smaller[i]) < Integer.valueOf(bigger[i])) {
+            } else if (Integer.parseInt(smaller[i]) < Integer.parseInt(bigger[i])) {
                 return String.join(".", bigger);
             }
             if (smaller.length == i + 1 && smaller.length < bigger.length) return String.join(".", bigger);
