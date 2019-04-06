@@ -255,6 +255,12 @@ command.set-priority.warning: "But priority system is disabled"
 command.save.description: "Manual saving"
 command.save.permission: "You have no permission"
 
+command.migrate.description: "Copy region to another data provider"
+command.migrate.permission: "You have no permission"
+command.migrate.usage: "Required arguments: [SOURCE] [TARGET]"
+command.migrate.success: "Successfully transferred {@amount} regions from {@from} to {@to}"
+command.migrate.error: "Cannot transfer regions from {@from} to {@to}: {@err}"
+
 auto-save-start: "Starting auto save..."
 auto-save-success: "Auto save ended."
 

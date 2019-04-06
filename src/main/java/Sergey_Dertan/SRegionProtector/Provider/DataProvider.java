@@ -38,6 +38,8 @@ public interface DataProvider { //TODO unity flags and region info into one file
         this.removeFlags(region);
     }
 
+    Type getType();
+
     enum Type {
 
         YAML,

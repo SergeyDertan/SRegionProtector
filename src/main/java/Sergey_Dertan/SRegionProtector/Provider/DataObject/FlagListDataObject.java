@@ -27,8 +27,8 @@ public final class FlagListDataObject {
 
     /**
      * JSON serialized Map<String, Object>
-     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
      *
+     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
      * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag
      * @see Converter#toDataObject(RegionFlag[], String)
      */

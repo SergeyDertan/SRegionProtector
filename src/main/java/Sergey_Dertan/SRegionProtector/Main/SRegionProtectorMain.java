@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Main;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
+import Sergey_Dertan.SRegionProtector.Command.Admin.MigrateCommand;
 import Sergey_Dertan.SRegionProtector.Command.Admin.SaveCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
@@ -18,6 +19,7 @@ import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
+import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Provider.MySQLDataProvider;
 import Sergey_Dertan.SRegionProtector.Provider.YAMLDataProvider;
@@ -37,6 +39,7 @@ import cn.nukkit.utils.Utils;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
@@ -120,20 +123,10 @@ public final class SRegionProtectorMain extends PluginBase {
     @SuppressWarnings("ConstantConditions")
     private boolean initDataProvider() {
         try {
-            switch (this.settings.provider) {
-                default:
-                case YAML:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
-                    break;
-                case MYSQL:
-                    this.provider = new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
-                    break;
-                case SQLite3:
-                    this.provider = new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads); //TODO sqlite
-            }
+            this.provider = getProviderInstance(this.settings.provider);
             this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name()));
             return true;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name()}));
             this.forceShutdown = true;
             this.getLogger().alert(Utils.getExceptionMessage(e));
@@ -263,7 +256,7 @@ public final class SRegionProtectorMain extends PluginBase {
         }
     }
 
-    private void registerCommand(Command command) {
+    public void registerCommand(Command command) {
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
         this.mainCmd.registerCommand(command);
     }
@@ -325,6 +318,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.registerCommand(new LPos2Command(this.regionSelector, this.settings.lposMaxRadius));
 
         this.registerCommand(new SetPriorityCommand(this.regionManager, this.settings.prioritySystem));
+
+        this.registerCommand(new MigrateCommand(this));
     }
 
     private void checkUpdate() {
@@ -345,6 +340,21 @@ public final class SRegionProtectorMain extends PluginBase {
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
         ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
         if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
+    }
+
+    private DataProvider getProviderInstance(DataProvider.Type type) {
+        try {
+            switch (type) { //TODO SQLite
+                case YAML:
+                    return new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
+                case MYSQL:
+                    return new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
+                default:
+                    throw new RuntimeException("Unsupported provider " + type.name());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot instantiate provider " + type.name(), e);
+        }
     }
 
     @Override
@@ -380,14 +390,28 @@ public final class SRegionProtectorMain extends PluginBase {
         return this.provider;
     }
 
-    @SuppressWarnings("EmptyMethod")
-    public void dataMigration() {
-        //TODO
-    }
+    public int dataMigration(String from, String to) {
+        DataProvider.Type fromType = DataProvider.Type.fromString(from);
+        DataProvider.Type toType = DataProvider.Type.fromString(to);
+        if (fromType == null) {
+            throw new RuntimeException("Cannot find provider " + from);
+        }
+        if (toType == null) {
+            throw new RuntimeException("Cannot find provider " + to);
+        }
+        if (toType == fromType) {
+            throw new RuntimeException("The same provider");
+        }
+        DataProvider source = getProviderInstance(fromType);
+        DataProvider target = getProviderInstance(toType);
 
-    @Override
-    public File getFile() { //TODO remove
-        return super.getFile();
+        AtomicInteger amount = new AtomicInteger();
+
+        source.loadRegionList().forEach(regionDataObject -> {
+            target.save(Converter.fromDataObject(regionDataObject, source.loadFlags(regionDataObject.name)));
+            amount.incrementAndGet();
+        });
+        return amount.get();
     }
 
     public enum SaveType {

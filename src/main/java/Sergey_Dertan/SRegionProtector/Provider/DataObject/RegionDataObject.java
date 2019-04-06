@@ -34,12 +34,14 @@ public final class RegionDataObject {
     public String level;
 
     /**
+     * @see Sergey_Dertan.SRegionProtector.Region.Region#creator
      */
     @Persistent(name = "creator")
     public String creator;
 
     /**
      * serialized string array
+     *
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#serializeStringArray(String[])
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#deserializeStringArray(String)
      */
@@ -48,6 +50,7 @@ public final class RegionDataObject {
 
     /**
      * serialized string array
+     *
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#serializeStringArray(String[])
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#deserializeStringArray(String)
      */
@@ -55,6 +58,7 @@ public final class RegionDataObject {
     public String members;
 
     /**
+     * @see Sergey_Dertan.SRegionProtector.Region.Region#priority
      */
     @Persistent(name = "priority")
     public int priority;

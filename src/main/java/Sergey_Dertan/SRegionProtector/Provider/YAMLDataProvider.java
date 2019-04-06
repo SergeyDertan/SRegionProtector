@@ -140,4 +140,9 @@ public final class YAMLDataProvider implements DataProvider {
             }
         }
     }
+
+    @Override
+    public Type getType() {
+        return Type.YAML;
+    }
 }

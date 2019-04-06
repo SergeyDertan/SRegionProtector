@@ -126,4 +126,9 @@ public final class MySQLDataProvider implements DataProvider {
     public String getName() {
         return "MySQL";
     }
+
+    @Override
+    public Type getType() {
+        return Type.MYSQL;
+    }
 }
