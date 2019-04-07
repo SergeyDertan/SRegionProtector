@@ -8,6 +8,7 @@ import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
+import org.datanucleus.enhancement.Detachable;
 
 import java.io.File;
 import java.util.ArrayList;

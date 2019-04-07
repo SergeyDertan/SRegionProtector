@@ -104,8 +104,7 @@ public final class ChunkManager {
         Chunk chunk = this.getChunk(((long) pos.x), ((long) pos.z), levelId, true, false);
         if (chunk == null) return null;
         for (Region region : chunk.getRegions()) {
-            if (!region.isVectorInside(pos)) continue;
-            return region;
+            if (region.isVectorInside(pos)) return region;
         }
         return null;
     }
