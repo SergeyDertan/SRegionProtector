@@ -47,7 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.httpGetRequestJson;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class SRegionProtectorMain extends PluginBase {
 
     public static final String MAIN_FOLDER = Server.getInstance().getDataPath() + "Sergey_Dertan_Plugins/SRegionProtector/";
@@ -69,7 +69,7 @@ public final class SRegionProtectorMain extends PluginBase {
     private RegionSelector regionSelector;
     private Messenger messenger;
 
-    private RegionCommand mainCmd;
+    private RegionCommand mainCommand;
 
     public static SRegionProtectorMain getInstance() {
         return SRegionProtectorMain.instance;
@@ -124,7 +124,6 @@ public final class SRegionProtectorMain extends PluginBase {
         System.gc();
     }
 
-    @SuppressWarnings("ConstantConditions")
     private boolean initDataProvider() {
         try {
             this.provider = getProviderInstance(this.settings.provider);
@@ -212,7 +211,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.chunkManager.init(this.settings.emptyChunksRemoving, this.settings.emptyChunkRemovingPeriod);
     }
 
-
     private void initEventsHandlers() {
         this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
@@ -251,12 +249,12 @@ public final class SRegionProtectorMain extends PluginBase {
 
     public void registerCommand(Command command) {
         if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
-        this.mainCmd.registerCommand(command);
+        this.mainCommand.registerCommand(command);
     }
 
     private void initCommands() {
-        this.mainCmd = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
-        this.getServer().getCommandMap().register(this.mainCmd.getName(), this.mainCmd);
+        this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
+        this.getServer().getCommandMap().register(this.mainCommand.getName(), this.mainCommand);
 
         this.registerCommand(new SetPos1Command(this.regionSelector));
 
@@ -367,7 +365,7 @@ public final class SRegionProtectorMain extends PluginBase {
         if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
     }
 
-    private DataProvider getProviderInstance(DataProvider.Type type) {
+    public DataProvider getProviderInstance(DataProvider.Type type) {
         if (this.provider != null && this.provider.getType() == type) return this.provider;
         try {
             if (type == DataProvider.Type.UNSUPPORTED) {
@@ -422,6 +420,10 @@ public final class SRegionProtectorMain extends PluginBase {
         return this.regionSelector;
     }
 
+    public Messenger getMessenger() {
+        return this.messenger;
+    }
+
     public Settings getSettings() {
         return this.settings;
     }
@@ -430,6 +432,13 @@ public final class SRegionProtectorMain extends PluginBase {
         return this.provider;
     }
 
+    public RegionCommand getMainCommand() {
+        return this.mainCommand;
+    }
+
+    /**
+     * @return number of copied regions
+     */
     public int dataMigration(String from, String to) {
         DataProvider.Type fromType = DataProvider.Type.fromString(from);
         DataProvider.Type toType = DataProvider.Type.fromString(to);
