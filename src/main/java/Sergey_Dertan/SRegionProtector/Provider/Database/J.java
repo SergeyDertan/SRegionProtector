@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.Utils;
+package Sergey_Dertan.SRegionProtector.Provider.Database;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import org.datanucleus.api.jdo.JDOPersistenceManagerFactory;
@@ -7,9 +7,9 @@ import org.datanucleus.metadata.PersistenceUnitMetaData;
 
 import javax.jdo.JDOException;
 
-public class J extends JDOPersistenceManagerFactory {
+final class J extends JDOPersistenceManagerFactory { //TODO
 
-    public J(PersistenceUnitMetaData pumd) {
+    J(PersistenceUnitMetaData pumd) {
         super(pumd, null);
     }
 
@@ -35,4 +35,5 @@ public class J extends JDOPersistenceManagerFactory {
             this.nucleusContext.getMetaDataManager().setAllowMetaDataLoad(false);
         }
     }
+
 }

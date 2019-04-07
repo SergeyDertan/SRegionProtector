@@ -1,5 +1,5 @@
-user: root
+username: postgres
 password: ""
 address: localhost
-port: 3306
+port: 5432
 database: db

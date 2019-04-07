@@ -46,8 +46,10 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.list.usage");
             return false;
         }
-        RegionGroup type = RegionGroup.get(args[0]);
-        if (type == null) {
+        RegionGroup type;
+        try {
+            type = RegionGroup.valueOf(args[0].toUpperCase());
+        } catch (IllegalArgumentException | NullPointerException e) {
             this.messenger.sendMessage(sender, "command.list.usage");
             return false;
         }

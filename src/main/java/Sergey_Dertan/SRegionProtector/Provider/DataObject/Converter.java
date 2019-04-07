@@ -9,6 +9,7 @@ import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.math.Vector3;
 import com.alibaba.fastjson.JSON;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public abstract class Converter {
         dataObject.creator = region.getCreator();
         dataObject.level = region.level;
 
-        dataObject.owners = Utils.serializeStringArray(region.getOwners().toArray(new String[0]));
-        dataObject.members = Utils.serializeStringArray(region.getMembers().toArray(new String[0]));
+        dataObject.owners = JSON.toJSONString(region.getOwners());
+        dataObject.members = JSON.toJSONString(region.getMembers());
         dataObject.priority = region.getPriority();
         return dataObject;
     }
@@ -54,8 +55,8 @@ public abstract class Converter {
         dataObject.name = (String) data.get(NAME_TAG);
         dataObject.level = (String) data.get(LEVEL_TAG);
         dataObject.creator = (String) data.get(CREATOR_TAG);
-        dataObject.owners = (String) data.get(OWNERS_TAG);
-        dataObject.members = (String) data.get(MEMBERS_TAG);
+        dataObject.owners = JSON.toJSONString(Arrays.asList(Utils.deserializeStringArray(((String) data.get(OWNERS_TAG)))));
+        dataObject.members = JSON.toJSONString(Arrays.asList(Utils.deserializeStringArray(((String) data.get(MEMBERS_TAG)))));
         dataObject.priority = ((Number) data.getOrDefault(PRIORITY_TAG, 0)).intValue();
         return dataObject;
     }
@@ -73,7 +74,7 @@ public abstract class Converter {
         teleport.put(LEVEL_TAG, tpFlag.level);
 
         FlagListDataObject dataObject = new FlagListDataObject();
-        dataObject.state = Utils.serializeBooleanArray(state);
+        dataObject.state = JSON.toJSONString(state);
         dataObject.teleportData = JSON.toJSONString(teleport);
         dataObject.sellData = ((RegionSellFlag) flags[FLAG_SELL]).price;
         dataObject.region = region;
@@ -87,8 +88,8 @@ public abstract class Converter {
                 dataObject.priority,
                 dataObject.minX, dataObject.minY, dataObject.minZ,
                 dataObject.maxX, dataObject.maxY, dataObject.maxZ,
-                Utils.deserializeStringArray(dataObject.owners),
-                Utils.deserializeStringArray(dataObject.members),
+                JSON.parseArray(dataObject.owners, String.class).toArray(new String[0]),
+                JSON.parseArray(dataObject.members, String.class).toArray(new String[0]),
                 flags
         );
     }
@@ -100,7 +101,7 @@ public abstract class Converter {
     @SuppressWarnings("unchecked")
     public static RegionFlag[] fromDataObject(FlagListDataObject dataObject) {
         RegionFlag[] flags = new RegionFlag[RegionFlags.FLAG_AMOUNT];
-        boolean[] state = Utils.deserializeBooleanArray(dataObject.state);
+        Boolean[] state = JSON.parseArray(dataObject.state, Boolean.class).toArray(new Boolean[0]);
         Map<String, Object> teleportData = (Map<String, Object>) JSON.parse(dataObject.teleportData);
         for (int i = 0; i < state.length; ++i) {
             if (i == FLAG_TELEPORT) {
@@ -126,7 +127,7 @@ public abstract class Converter {
         boolean[] state = new boolean[RegionFlags.FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flag : data.entrySet()) {
             if (getFlagId(flag.getKey()) == FLAG_INVALID) continue;
-            state[getFlagId(flag.getKey())] = (boolean) flag.getValue().get(STATE_TAG);
+            state[getFlagId(flag.getKey())] = (Boolean) flag.getValue().get(STATE_TAG);
             if (getFlagId(flag.getKey()) == FLAG_SELL) {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
             }
@@ -140,7 +141,7 @@ public abstract class Converter {
                 dataObject.teleportData = JSON.toJSONString(teleport);
             }
         }
-        dataObject.state = Utils.serializeBooleanArray(state);
+        dataObject.state = JSON.toJSONString(state);
         return dataObject;
     }
 }

@@ -1,10 +1,12 @@
 package Sergey_Dertan.SRegionProtector.Provider.DataObject;
 
+import Sergey_Dertan.SRegionProtector.Region.Region;
+
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
-@PersistenceCapable(table = "srpregions")
+@PersistenceCapable(table = "srpregions", detachable = "true")
 public final class RegionDataObject {
 
     @Persistent(name = "min-x")
@@ -34,14 +36,15 @@ public final class RegionDataObject {
     public String level;
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Region#creator
+     * @see Region#getCreator()
      */
     @Persistent(name = "creator")
     public String creator;
 
     /**
-     * serialized string array
+     * JSON serialized Collection<String>
      *
+     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#serializeStringArray(String[])
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#deserializeStringArray(String)
      */
@@ -49,8 +52,9 @@ public final class RegionDataObject {
     public String owners;
 
     /**
-     * serialized string array
+     * JSON serialized Collection<String>
      *
+     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#serializeStringArray(String[])
      * @see Sergey_Dertan.SRegionProtector.Utils.Utils#deserializeStringArray(String)
      */
@@ -58,11 +62,24 @@ public final class RegionDataObject {
     public String members;
 
     /**
-     * @see Sergey_Dertan.SRegionProtector.Region.Region#priority
+     * @see Region#getPriority()
      */
     @Persistent(name = "priority")
     public int priority;
 
-    public RegionDataObject() {
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public void setMembers(String members) {
+        this.members = members;
+    }
+
+    public void setOwners(String owners) {
+        this.owners = owners;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

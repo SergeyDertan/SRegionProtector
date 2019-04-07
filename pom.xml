@@ -6,7 +6,7 @@
 
     <groupId>sergeydertan.sregionprotector</groupId>
     <artifactId>SRegionProtector</artifactId>
-    <version>18.9</version>
+    <version>19.0</version>
     <name>SRegionProtector</name>
     <description>Flexible region protection plugin for nukkit</description>
     <url>https://github.com/SergeyDertan/SRegionProtector</url>
@@ -89,7 +89,7 @@
             <groupId>org.datanucleus</groupId>
             <artifactId>javax.jdo</artifactId>
             <version>3.2.0-m11</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.datanucleus</groupId>
@@ -104,9 +104,21 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.27.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.datanucleus</groupId>
             <artifactId>datanucleus-rdbms</artifactId>
             <version>5.2.0-release</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -227,8 +239,20 @@
                 <filtering>false</filtering>
                 <includes>
                     <include>mysql.yml</include>
+                    <include>postgresql.yml</include>
+                    <include>sqlite.yml</include>
                     <include>config.yml</include>
                     <include>region-settings.yml</include>
+                </includes>
+            </resource>
+            <resource>
+                <targetPath>resources/db</targetPath>
+                <directory>${basedir}/src/main/resources/db</directory>
+                <filtering>false</filtering>
+                <includes>
+                    <include>mysql.yml</include>
+                    <include>postgresql.yml</include>
+                    <include>sqlite.yml</include>
                 </includes>
             </resource>
             <resource>

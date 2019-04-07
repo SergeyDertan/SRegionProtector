@@ -42,9 +42,17 @@ public interface DataProvider { //TODO unity flags and region info into one file
 
     enum Type {
 
-        YAML,
-        MYSQL,
-        SQLite3;
+        YAML(false),
+        MYSQL(true),
+        SQLite(true),
+        POSTGRESQL(true),
+        UNSUPPORTED(false);
+
+        public final boolean isDB;
+
+        Type(boolean isDB) {
+            this.isDB = isDB;
+        }
 
         public static Type fromString(String name) {
             switch (name.toLowerCase()) {
@@ -55,9 +63,12 @@ public interface DataProvider { //TODO unity flags and region info into one file
                     return MYSQL;
                 case "sqlite":
                 case "sqlite3":
-                    return SQLite3;
+                    return SQLite;
+                case "postgresql":
+                case "postgres":
+                    return POSTGRESQL;
             }
-            return null;
+            return UNSUPPORTED;
         }
     }
 }

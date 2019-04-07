@@ -19,9 +19,12 @@ import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
+import Sergey_Dertan.SRegionProtector.Provider.CloseableProvider;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
-import Sergey_Dertan.SRegionProtector.Provider.MySQLDataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.Database.MySQLDataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.Database.PostgreSQLDataProvider;
+import Sergey_Dertan.SRegionProtector.Provider.Database.SQLiteDataProvider;
 import Sergey_Dertan.SRegionProtector.Provider.YAMLDataProvider;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -51,6 +54,7 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String REGIONS_FOLDER = MAIN_FOLDER + "Regions/";
     public static final String FLAGS_FOLDER = MAIN_FOLDER + "Flags/";
     public static final String LANG_FOLDER = MAIN_FOLDER + "Lang/";
+    public static final String DB_FOLDER = MAIN_FOLDER + "DB/";
 
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
 
@@ -153,7 +157,8 @@ public final class SRegionProtectorMain extends PluginBase {
                 this.createFolder(MAIN_FOLDER) &&
                         this.createFolder(REGIONS_FOLDER) &&
                         this.createFolder(FLAGS_FOLDER) &&
-                        this.createFolder(LANG_FOLDER);
+                        this.createFolder(LANG_FOLDER) &&
+                        this.createFolder(DB_FOLDER);
     }
 
     private boolean createFolder(String path) {
@@ -207,18 +212,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.chunkManager.init(this.settings.emptyChunksRemoving, this.settings.emptyChunkRemovingPeriod);
     }
 
-    private boolean loadLibraries() {
-        try {
-            LibraryLoader.load("com.alibaba:fastjson:1.2.54");
-        } catch (LibraryLoadException e) {
-            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
-            this.getLogger().alert(Utils.getExceptionMessage(e));
-            this.forceShutdown = true;
-            this.getPluginLoader().disablePlugin(this);
-            return false;
-        }
-        return true;
-    }
 
     private void initEventsHandlers() {
         this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem), this);
@@ -336,6 +329,38 @@ public final class SRegionProtectorMain extends PluginBase {
         }
     }
 
+    private boolean loadLibraries() {
+        try {
+            LibraryLoader.load("com.alibaba:fastjson:1.2.54");
+            LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m11");
+            LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-release");
+        } catch (LibraryLoadException e) {
+            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
+            this.getLogger().alert(Utils.getExceptionMessage(e));
+            this.forceShutdown = true;
+            this.getPluginLoader().disablePlugin(this);
+            return false;
+        }
+        return true;
+    }
+
+    private void loadMySQLLibraries() {
+        LibraryLoader.load("mysql:mysql-connector-java:8.0.15");
+    }
+
+    private void loadDBLibraries() {
+        LibraryLoader.load("org.datanucleus:datanucleus-api-jdo:5.2.0-release");
+        LibraryLoader.load("org.datanucleus:datanucleus-rdbms:5.2.0-release");
+    }
+
+    private void loadSQLiteLibraries() {
+        LibraryLoader.load("org.xerial:sqlite-jdbc:3.27.2.1");
+    }
+
+    private void loadPostgreSQLLibraries() {
+        LibraryLoader.load("postgresql:postgresql:9.1-901-1.jdbc4");
+    }
+
     private void shutdownExecutors() {
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
         ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
@@ -343,12 +368,26 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private DataProvider getProviderInstance(DataProvider.Type type) {
+        if (this.provider != null && this.provider.getType() == type) return this.provider;
         try {
-            switch (type) { //TODO SQLite
+            if (type == DataProvider.Type.UNSUPPORTED) {
+                throw new RuntimeException("Null provider");
+            }
+            switch (type) {
                 case YAML:
                     return new YAMLDataProvider(this.getLogger(), this.settings.multithreadedDataLoading, this.settings.dataLoadingThreads);
                 case MYSQL:
-                    return new MySQLDataProvider(this.getLogger(), this.settings.mySQLSettings);
+                    this.loadMySQLLibraries();
+                    this.loadDBLibraries();
+                    return new MySQLDataProvider(this.settings.mySQLSettings);
+                case SQLite:
+                    this.loadSQLiteLibraries();
+                    this.loadDBLibraries();
+                    return new SQLiteDataProvider(this.settings.sqliteSettngs);
+                case POSTGRESQL:
+                    this.loadPostgreSQLLibraries();
+                    this.loadDBLibraries();
+                    return new PostgreSQLDataProvider(this.settings.postgreSQLSettings);
                 default:
                     throw new RuntimeException("Unsupported provider " + type.name());
             }
@@ -360,11 +399,12 @@ public final class SRegionProtectorMain extends PluginBase {
     @Override
     public void onDisable() {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
-        this.shutdownExecutors();
         if (this.forceShutdown) {
             if (this.messenger != null) {
                 this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));
             }
+            this.shutdownExecutors();
+            if (this.provider instanceof CloseableProvider) ((CloseableProvider) this.provider).close();
             return;
         }
         this.save(SaveType.DISABLING);
@@ -411,6 +451,9 @@ public final class SRegionProtectorMain extends PluginBase {
             target.save(Converter.fromDataObject(regionDataObject, source.loadFlags(regionDataObject.name)));
             amount.incrementAndGet();
         });
+
+        if (source != this.provider && source instanceof CloseableProvider) ((CloseableProvider) source).close();
+        if (target != this.provider && target instanceof CloseableProvider) ((CloseableProvider) target).close();
         return amount.get();
     }
 

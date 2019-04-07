@@ -11,7 +11,6 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
-import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
 import cn.nukkit.level.Level;
 import cn.nukkit.math.AxisAlignedBB;
@@ -19,6 +18,7 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
+import com.alibaba.fastjson.JSON;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
@@ -81,8 +81,8 @@ public final class RegionManager {
             String[] members;
 
             try {
-                owners = Utils.deserializeStringArray(rdo.owners);
-                members = Utils.deserializeStringArray(rdo.members);
+                owners = JSON.parseArray(rdo.owners, String.class).toArray(new String[0]);
+                members = JSON.parseArray(rdo.members, String.class).toArray(new String[0]);
             } catch (RuntimeException e) {
                 this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", "@region", name));
                 this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
