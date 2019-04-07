@@ -75,6 +75,8 @@ permissions:
             default: true
           sregionprotector.command.set-priority:
             default: op
+          sregionprotector.command.migrate:
+            default: op
       sregionprotector.region.*:
         default: op
         children:
