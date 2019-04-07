@@ -6,7 +6,6 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
-import java.util.List;
 
 @PersistenceCapable(table = "srpflags", detachable = "true")
 public final class FlagListDataObject {
