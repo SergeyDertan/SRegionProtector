@@ -16,7 +16,7 @@ permissions:
         description: "Allows to editing all regions"
         default: op
         children:
-          sregionprotector.info.other:
+          sregionprotector.update-notify:
             default: op
       sregionprotector.wand:
         default: true
@@ -80,6 +80,8 @@ permissions:
       sregionprotector.region.*:
         default: op
         children:
+          sregionprotector.info.other:
+            default: op
           #allows players to select regions they are not lives in
           sregionprotector.region.select-other:
             default: op

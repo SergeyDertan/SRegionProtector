@@ -16,6 +16,7 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
 import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
 import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
+import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
@@ -39,6 +40,7 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
+import javafx.util.Pair;
 
 import java.io.File;
 import java.util.Map;
@@ -57,10 +59,10 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String DB_FOLDER = MAIN_FOLDER + "DB/";
 
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
-
     private static SRegionProtectorMain instance;
-
     public boolean forceShutdown = false; //TODO
+
+    private Pair<String, String> updateInfo; //version | description
 
     private Settings settings;
     private DataProvider provider;
@@ -322,6 +324,10 @@ public final class SRegionProtectorMain extends PluginBase {
             if (compareVersions(this.getDescription().getVersion(), ver).equals(ver)) {
                 this.getLogger().info(this.messenger.getMessage("loading.init.update-available", "@ver", ver));
                 this.getLogger().info(this.messenger.getMessage("loading.init.update-description", "@description", description));
+
+                if (this.settings.updateNotifier) {
+                    this.getServer().getPluginManager().registerEvents(new NotifierEventHandler(ver, description), this);
+                }
             }
         } catch (Exception ignore) {
         }

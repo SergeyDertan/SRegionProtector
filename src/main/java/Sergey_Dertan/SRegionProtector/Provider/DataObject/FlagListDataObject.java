@@ -14,7 +14,6 @@ public final class FlagListDataObject {
      * JSON serialized boolean array
      *
      * @see com.alibaba.fastjson.JSON#toJSONString(Object)
-     * @see Sergey_Dertan.SRegionProtector.Utils.Utils#serializeBooleanArray(boolean[])
      */
     @Persistent(name = "state")
     public String state;

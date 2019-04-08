@@ -24,10 +24,12 @@ import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.fixMissingFlags;
 
+@SuppressWarnings("unused")
 public final class RegionManager {
 
     private final DataProvider provider;
@@ -285,11 +287,7 @@ public final class RegionManager {
     public synchronized List<Region> getPlayersRegionList(Player player, RegionGroup group) {
         switch (group) {
             case CREATOR:
-                List<Region> list = new ArrayList<>();
-                for (Region region : this.owners.getOrDefault(player.getName(), Collections.emptySet())) {
-                    if (region.isCreator(player.getName())) list.add(region);
-                }
-                return list;
+                return this.owners.getOrDefault(player.getName(), Collections.emptySet()).stream().filter(region -> region.isCreator(player.getName())).collect(Collectors.toList());
             case OWNER:
                 return new ArrayList<>(this.owners.getOrDefault(player.getName(), Collections.emptySet()));
             case MEMBER:

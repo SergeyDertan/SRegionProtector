@@ -12,6 +12,8 @@ lpos-max-radius: 250
 
 priority-system: false
 
+update-notifier: true
+
 #multithreaded regions loading
 multithreaded-loading: true
 multithreaded-loading-threads: -1

@@ -41,6 +41,8 @@ public final class Settings {
 
     public final boolean prioritySystem;
 
+    public final boolean updateNotifier;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
@@ -69,6 +71,8 @@ public final class Settings {
         this.lposMaxRadius = ((Number) config.get("lpos-max-radius")).intValue();
 
         this.prioritySystem = (boolean) config.get("priority-system");
+
+        this.updateNotifier = (boolean) config.get("update-notifier");
 
         String border = (String) config.get("border-block");
         int id;
