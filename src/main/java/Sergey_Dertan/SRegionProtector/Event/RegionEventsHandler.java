@@ -30,8 +30,8 @@ import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
+import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -46,7 +46,7 @@ public final class RegionEventsHandler implements Listener {
     private final boolean[] needMessage; //check if flag requires a message
     private final boolean prioritySystem;
 
-    private final Object2ObjectMap<Class, Boolean> isMonster; //TODO object2boolean
+    private final Object2BooleanMap<Class> isMonster;
     private final Class monster; //mobplugin
 
     public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
@@ -55,7 +55,7 @@ public final class RegionEventsHandler implements Listener {
         this.needMessage = needMessage;
         this.prioritySystem = prioritySystem;
 
-        this.isMonster = new Object2ObjectArrayMap<>();
+        this.isMonster = new Object2BooleanArrayMap<>();
 
         Class monster = null;
         try {
@@ -158,7 +158,6 @@ public final class RegionEventsHandler implements Listener {
         }
         if (block instanceof BlockDoor || block instanceof BlockTrapdoor || block instanceof BlockButton || block instanceof BlockFurnace || block instanceof BlockBeacon || block instanceof BlockHopper || block instanceof BlockDispenser) {
             this.handleEvent(RegionFlags.FLAG_USE, block, e.getPlayer(), e);
-            return;
         }
     }
 
