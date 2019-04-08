@@ -38,10 +38,10 @@ active-flags:
   potion-launch: true
   move: false
   leaves_decay: false
-  item_drop: false
-  send_chat: false
-  receive_chat: false
-  health_regen: false
+  item-drop: false
+  send-chat: false
+  receive-chat: false
+  health-regen: false
   mob-damage: false
   mob-spawn: false
   crops-destroy: true
@@ -71,10 +71,10 @@ display:
   potion-launch: true
   move: true
   leaves_decay: true
-  item_drop: true
-  send_chat: true
-  receive_chat: true
-  health_regen: true
+  item-drop: true
+  send-chat: true
+  receive-chat: true
+  health-regen: true
   mob-damage: true
   mob-spawn: true
   crops-destroy: true

@@ -13,10 +13,10 @@ default-flags:
   invincible: false
   potion-launch: false
   leaves-decay: false
-  item_drop: false
-  send_chat: false
-  receive_chat: false
-  health_regen: false
+  item-drop: false
+  send-chat: false
+  receive-chat: false
+  health-regen: false
   mob-damage: false
   mob-spawn: false
   crops-destroy: true
@@ -44,10 +44,10 @@ need-message:
   heal: false
   invincible: false
   potion-launch: false
-  item_drop: true
-  send_chat: true
-  receive_chat: false
-  health_regen: false
+  item-drop: true
+  send-chat: true
+  receive-chat: false
+  health-regen: false
   crops-destroy: true
   ender-pearl: true
   fire: true

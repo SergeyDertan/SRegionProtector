@@ -400,4 +400,25 @@ public final class RegionEventsHandler implements Listener {
     private void handleEvent(int flag, Position pos, Event ev) {
         this.handleEvent(flag, pos, null, ev);
     }
+
+    /**
+     * special for
+     *
+     * @see RegionEventsHandler#entitySpawn(EntitySpawnEvent)
+     * because EntitySpawnEvent can`t be cancelled
+     */
+    static final class EmptyEvent extends Event {
+
+        private boolean isCancelled;
+
+        @Override
+        public void setCancelled() {
+            this.isCancelled = true;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return this.isCancelled;
+        }
+    }
 }
