@@ -18,6 +18,8 @@ loading.error.regions: "Ошибка загрузки региона {@region}:"
 loading.error.fastjson: "Не удалось загрузить необходимую библиотеку: com.alibaba:fastjson:1.2.54"
 loading.error.data-provider-error: "Ошибка инициализации поставщика данных {@provider}: {@err}"
 
+provider.save-error-region: "Не удалось сохранить регион {@region}:"
+
 disabling.start: "Отключение SRegionProtector V_{@ver} от Sergey Dertan..."
 disabling.regions: "Сохранение регионов..."
 disabling.chunks: "Сохранение чанков..."

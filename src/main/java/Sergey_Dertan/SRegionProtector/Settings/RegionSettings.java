@@ -10,9 +10,8 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 
@@ -101,29 +100,63 @@ public final class RegionSettings {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("Duplicates")
     private void loadSizePermissions(Map<String, Object> cnf) {
         this.regionSize = new Long2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
-        for (Integer size : (List<Integer>) cnf.get("region-sizes")) {
-            Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks");
+        @SuppressWarnings("unchecked")
+        List<Integer> list = (List<Integer>) cnf.get("region-sizes");
+        list.sort(Comparator.comparingInt(Integer::intValue));
+        Map<String, Boolean> children = new HashMap<>();
+        List<Permission> permissions = new ArrayList<>();
+        for (Integer size : list) {
+            Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks", mainPerm.getDefault(), new HashMap<>(children));
             Server.getInstance().getPluginManager().addPermission(permission);
-            //mainPerm.addParent(mainPerm, true); //TODO test
             this.regionSize.put(size.longValue(), permission);
+            children.put(permission.getName(), true);
+            permissions.add(permission);
         }
+        try {
+            Field field = mainPerm.getClass().getDeclaredField("children");
+            boolean accessible = field.isAccessible();
+            if (!accessible) {
+                field.setAccessible(true);
+            }
+            field.set(mainPerm, children);
+            field.setAccessible(accessible);
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {
+        }
+        permissions.forEach(Permission::recalculatePermissibles);
         mainPerm.recalculatePermissibles();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings("Duplicates")
     private void loadAmountPermissions(Map<String, Object> cnf) {
         this.regionAmount = new Int2ObjectOpenHashMap<>();
         Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.amount.*");
-        for (Integer amount : (List<Integer>) cnf.get("region-amounts")) {
-            Permission permission = new Permission("sregionprotector.region.amount." + amount, "Allows to creating up to " + amount + " regions");
+        @SuppressWarnings("unchecked")
+        List<Integer> list = (List<Integer>) cnf.get("region-amounts");
+        list.sort(Comparator.comparingInt(Integer::intValue));
+        Map<String, Boolean> children = new HashMap<>();
+        List<Permission> permissions = new ArrayList<>();
+        for (Integer amount : list) {
+            Permission permission = new Permission("sregionprotector.region.amount." + amount, "Allows to creating up to " + amount + " regions", mainPerm.getDefault(), new HashMap<>(children));
             Server.getInstance().getPluginManager().addPermission(permission);
-            //mainPerm.addParent(mainPerm, true); //TODO test
             this.regionAmount.put((int) amount, permission);
+            children.put(permission.getName(), true);
+            permissions.add(permission);
         }
+        try {
+            Field field = mainPerm.getClass().getDeclaredField("children");
+            boolean accessible = field.isAccessible();
+            if (!accessible) {
+                field.setAccessible(true);
+            }
+            field.set(mainPerm, children);
+            field.setAccessible(accessible);
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {
+        }
+        permissions.forEach(Permission::recalculatePermissibles);
         mainPerm.recalculatePermissibles();
     }
 

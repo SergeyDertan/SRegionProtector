@@ -18,6 +18,8 @@ loading.error.regions: "Can`t load region {@region}:"
 loading.error.fastjson: "Cant load required library: com.alibaba:fastjson:1.2.54"
 loading.error.data-provider-error: "Error during initializing {@provider} data provider: {@err}"
 
+provider.save-error-region: "Can`t save region {@region}:"
+
 disabling.start: "Disabling SRegionProtector V_{@ver} by Sergey Dertan..."
 disabling.regions: "Saving regions..."
 disabling.chunks: "Saving chunks..."

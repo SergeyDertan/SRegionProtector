@@ -25,7 +25,7 @@ public abstract class Utils {
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final String emailPattern = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))$";
     private static final String SALT = "AjzzdaASd341Fdsf";
-    private static final int ITERATIONS = 10000; //TODO
+    private static final int ITERATIONS = 10000;
     private static final int KEY_LENGTH = 256;
 
     private Utils() {
@@ -64,7 +64,7 @@ public abstract class Utils {
 
     public static boolean verifyString(String string, String encryptedString, String salt) {
         String newSecurePassword = encryptString(string, salt);
-        return newSecurePassword.equalsIgnoreCase(encryptedString); //TODO ignore case
+        return newSecurePassword.equalsIgnoreCase(encryptedString);
     }
 
     public static boolean verifyString(String string, String encryptedString) {
@@ -145,19 +145,17 @@ public abstract class Utils {
         Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
 
         ConfigSection var4 = new ConfigSection(new LinkedHashMap<>(var3.getAll()));
-        boolean changed = copyMapOfMaps(var1, var4); //for messages updating;
+        boolean changed = copyMapOfMaps(var1, var4);
         if (changed) {
-            //TODO map of maps sort?
             LinkedHashMap<String, Object> var5 = new LinkedHashMap<>();
-            var4.entrySet().stream().sorted(Map.Entry.comparingByKey())
-                    .forEachOrdered(x -> var5.put(x.getKey(), x.getValue()));
+            var4.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(x -> var5.put(x.getKey(), x.getValue()));
             var3.setAll(var5);
             var3.save();
         }
     }
 
     /**
-     * for the messages copying
+     * recursive copy map of maps
      */
     @SuppressWarnings({"unchecked", "WhileLoopReplaceableByForEach"})
     public static boolean copyMapOfMaps(Map<String, Object> from, Map<String, Object> to) {
@@ -170,7 +168,7 @@ public abstract class Utils {
             }
         }
         Iterator<Map.Entry<String, Object>> var1 = from.entrySet().iterator();
-        while (var1.hasNext()) { //concurrency
+        while (var1.hasNext()) {
             Map.Entry<String, Object> next = var1.next();
             if (next.getValue() instanceof Map) {
                 boolean c = copyMapOfMaps((Map<String, Object>) next.getValue(), (Map<String, Object>) to.get(next.getKey()));

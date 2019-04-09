@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider;
 
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
@@ -23,6 +24,7 @@ import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.FLAGS_FOL
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.REGIONS_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.DATA_TAG;
 
+@SuppressWarnings("WeakerAccess")
 public final class YAMLDataProvider implements DataProvider {
 
     public static final String REGION_FILE_NAME = "{@region-name}.yml";
@@ -33,9 +35,11 @@ public final class YAMLDataProvider implements DataProvider {
 
     private final ExecutorService executor;
     private final Logger logger;
+    private final Messenger messenger;
 
     public YAMLDataProvider(Logger logger, boolean multithreadedDataLoading, int threads) {
         this.logger = logger;
+        this.messenger = Messenger.getInstance();
 
         this.multithreadedDataLoading = multithreadedDataLoading;
         if (multithreadedDataLoading) {
@@ -115,7 +119,8 @@ public final class YAMLDataProvider implements DataProvider {
                 file.save();
             }
         } catch (RuntimeException e) {
-            this.logger.warning(TextFormat.YELLOW + "Cant save region " + region.name + ": " + e.getMessage()); //TODO message
+            this.logger.warning(TextFormat.RED + this.messenger.getMessage("provider.save-error-region", "@region", region.name));
+            this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
         }
     }
 
