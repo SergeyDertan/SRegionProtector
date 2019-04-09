@@ -16,7 +16,7 @@ import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class RegionSettings {
 
     public final boolean[] flagsStatus = new boolean[FLAG_AMOUNT];
@@ -72,6 +72,7 @@ public final class RegionSettings {
 
         BlockEntityHealer.HEAL_DELAY = this.healFlagHealDelay;
         BlockEntityHealer.HEAL_AMOUNT = this.healFlagHealAmount;
+        BlockEntityHealer.FLAG_ENABLED = this.flagsStatus[RegionFlags.FLAG_HEAL];
     }
 
     @SuppressWarnings("unchecked")
@@ -84,8 +85,8 @@ public final class RegionSettings {
 
     public boolean hasSizePermission(Permissible target, long size) {
         if (target.hasPermission("sregionprotector.region.size.*")) return true;
-        for (Map.Entry<Long, Permission> perm : this.regionSize.long2ObjectEntrySet()) {
-            if (perm.getKey() < size) continue;
+        for (Long2ObjectMap.Entry<Permission> perm : this.regionSize.long2ObjectEntrySet()) {
+            if (perm.getLongKey() < size) continue;
             if (target.hasPermission(perm.getValue())) return true;
         }
         return false;
@@ -93,8 +94,8 @@ public final class RegionSettings {
 
     public boolean hasAmountPermission(Permissible target, int amount) {
         if (target.hasPermission("sregionprotector.region.amount.*")) return true;
-        for (Map.Entry<Integer, Permission> perm : this.regionAmount.int2ObjectEntrySet()) {
-            if (perm.getKey() < amount) continue;
+        for (Int2ObjectMap.Entry<Permission> perm : this.regionAmount.int2ObjectEntrySet()) {
+            if (perm.getIntKey() < amount) continue;
             if (target.hasPermission(perm.getValue())) return true;
         }
         return false;

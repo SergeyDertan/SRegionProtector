@@ -19,6 +19,7 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     public static int HEAL_DELAY;
     public static int HEAL_AMOUNT;
+    public static boolean FLAG_ENABLED;
 
     private final RegionManager regionManager;
     private final AxisAlignedBB bb;
