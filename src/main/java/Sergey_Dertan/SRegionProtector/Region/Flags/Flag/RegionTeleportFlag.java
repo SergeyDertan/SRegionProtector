@@ -5,6 +5,7 @@ import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 
+@SuppressWarnings("unused")
 public final class RegionTeleportFlag extends RegionFlag {
 
     public Vector3 position;

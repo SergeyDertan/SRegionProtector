@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface DataProvider { //TODO unity flags and region info into one file
 
     default void saveRegionList(Iterable<Region> regions) {

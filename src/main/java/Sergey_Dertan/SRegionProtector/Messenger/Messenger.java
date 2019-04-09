@@ -9,7 +9,6 @@ import cn.nukkit.network.protocol.TextPacket;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Utils;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -23,13 +22,13 @@ import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLD
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.resourceExists;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class Messenger {
 
     public static final String DEFAULT_LANGUAGE = "eng";
     private static Messenger instance;
     public final String language;
-    private final Object2ObjectMap<String, String> messages;
+    private final Map<String, String> messages;
     /**
      * async packets should be put directly to the interface
      *

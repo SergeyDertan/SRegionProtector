@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.Economy;
 
 import cn.nukkit.Player;
 
+@SuppressWarnings("unused")
 public interface AbstractEconomy {
 
     long getMoney(Player player);

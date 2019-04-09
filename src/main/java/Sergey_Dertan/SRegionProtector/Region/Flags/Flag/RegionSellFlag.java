@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Region.Flags.Flag;
 
+@SuppressWarnings("unused")
 public final class RegionSellFlag extends RegionFlag {
 
     public long price;
