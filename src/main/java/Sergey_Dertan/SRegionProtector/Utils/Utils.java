@@ -3,7 +3,6 @@ package Sergey_Dertan.SRegionProtector.Utils;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.ConfigSection;
 import com.google.gson.Gson;
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
@@ -31,7 +30,7 @@ public abstract class Utils {
     private Utils() {
     }
 
-    /*---------------- encryption ----------------*/
+    /*---------------- encryption -----------------*/
     public static String createSalt(int length) {
         StringBuilder returnValue = new StringBuilder(length);
         for (int i = 0; i < length; ++i) {
@@ -71,7 +70,7 @@ public abstract class Utils {
         return verifyString(string, encryptedString, SALT);
     }
 
-    /*---------------- encryption end ----------------*/
+    /*---------------- encryption end -------------*/
 
     @SuppressWarnings("unchecked")
     public static Map<String, Object> httpGetRequestJson(String url) throws IOException {
@@ -124,10 +123,10 @@ public abstract class Utils {
         return arr;
     }
 
-    /*---------------- serializers end ----------------*/
+    /*---------------- serializers end ------------*/
 
-    /*---------------- resources ----------------*/
-    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    /*---------------- resources ------------------*/
+    @SuppressWarnings("ConstantConditions")
     public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws IOException {
         //TODO remove useless
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
@@ -142,6 +141,7 @@ public abstract class Utils {
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
+        @SuppressWarnings("unchecked")
         Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
 
         ConfigSection var4 = new ConfigSection(new LinkedHashMap<>(var3.getAll()));
@@ -157,7 +157,7 @@ public abstract class Utils {
     /**
      * recursive copy map of maps
      */
-    @SuppressWarnings({"unchecked", "WhileLoopReplaceableByForEach"})
+    @SuppressWarnings("WhileLoopReplaceableByForEach")
     public static boolean copyMapOfMaps(Map<String, Object> from, Map<String, Object> to) {
         boolean changed = false;
         if (from.size() > to.size()) changed = true;
@@ -171,6 +171,7 @@ public abstract class Utils {
         while (var1.hasNext()) {
             Map.Entry<String, Object> next = var1.next();
             if (next.getValue() instanceof Map) {
+                @SuppressWarnings("unchecked")
                 boolean c = copyMapOfMaps((Map<String, Object>) next.getValue(), (Map<String, Object>) to.get(next.getKey()));
                 if (!changed) changed = c;
             }
@@ -187,7 +188,7 @@ public abstract class Utils {
         return clazz.getClassLoader().getResource(folder + fileName) != null;
     }
 
-    /*---------------- resources end ----------------*/
+    /*---------------- resources end --------------*/
 
     @SuppressWarnings("unchecked")
     public static <T extends Cloneable> Collection<T> deepClone(Collection<T> arr) {
@@ -211,9 +212,9 @@ public abstract class Utils {
 
     //slices array into pieces with the same size
     public static <T> List<List<T>> sliceArray(T[] array, int pieces, boolean keepEmpty) {
-        List<List<T>> result = new ObjectArrayList<>();
+        List<List<T>> result = new ArrayList<>();
         for (int i = 0; i < pieces; ++i) {
-            result.add(new ObjectArrayList<>());
+            result.add(new ArrayList<>());
         }
 
         int i = 0;

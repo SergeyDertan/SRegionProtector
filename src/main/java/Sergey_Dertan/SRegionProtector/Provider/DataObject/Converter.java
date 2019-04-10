@@ -98,10 +98,10 @@ public abstract class Converter {
         return fromDataObject(dataObject, fromDataObject(flagsDataObject));
     }
 
-    @SuppressWarnings("unchecked")
     public static RegionFlag[] fromDataObject(FlagListDataObject dataObject) {
         RegionFlag[] flags = new RegionFlag[RegionFlags.FLAG_AMOUNT];
         Boolean[] state = JSON.parseArray(dataObject.state, Boolean.class).toArray(new Boolean[0]);
+        @SuppressWarnings("unchecked")
         Map<String, Object> teleportData = (Map<String, Object>) JSON.parse(dataObject.teleportData);
         for (int i = 0; i < state.length; ++i) {
             if (i == FLAG_TELEPORT) {
@@ -121,7 +121,6 @@ public abstract class Converter {
         return flags;
     }
 
-    @SuppressWarnings("unchecked")
     public static FlagListDataObject toDataObject(Map<String, Map<String, Object>> data) { //for the yaml data provider
         FlagListDataObject dataObject = new FlagListDataObject();
         boolean[] state = new boolean[RegionFlags.FLAG_AMOUNT];
@@ -132,6 +131,7 @@ public abstract class Converter {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
             }
             if (getFlagId(flag.getKey()) == FLAG_TELEPORT) {
+                @SuppressWarnings("unchecked")
                 Map<String, Object> teleportData = (Map<String, Object>) flag.getValue().getOrDefault(POSITION_TAG, new HashMap<>());
                 Map<String, Object> teleport = new HashMap<>();
                 teleport.put(X_TAG, teleportData.getOrDefault(X_TAG, 0));

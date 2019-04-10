@@ -236,12 +236,12 @@ public final class RegionEventsHandler implements Listener {
     //explode (creeper & tnt explode) & explode block break flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityExplode(EntityExplodeEvent e) {
-        this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), null, e);
+        this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), e);
         if (e.isCancelled()) return;
         Iterator<Block> it = e.getBlockList().iterator();
         while (it.hasNext()) {
             this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), e);
-            if (it.hasNext()) {
+            if (e.isCancelled()) {
                 e.setCancelled(false);
                 it.remove();
             }

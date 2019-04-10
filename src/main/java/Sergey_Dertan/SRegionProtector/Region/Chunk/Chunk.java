@@ -22,9 +22,9 @@ public final class Chunk {
         this.regions = new ObjectArrayList<Region>() {
             @Override
             public boolean add(Region region) {
-                boolean result = super.add(region);
+                super.add(region);
                 this.sort(regionComparator);
-                return result;
+                return true;
             }
         };
     }

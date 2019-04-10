@@ -85,7 +85,7 @@ public final class RegionManager {
             try {
                 owners = JSON.parseArray(rdo.owners, String.class).toArray(new String[0]);
                 members = JSON.parseArray(rdo.members, String.class).toArray(new String[0]);
-            } catch (RuntimeException e) {
+            } catch (Exception e) {
                 this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", "@region", name));
                 this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
                 continue;
