@@ -28,6 +28,7 @@ import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.Position;
+import cn.nukkit.level.Sound;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
@@ -90,8 +91,14 @@ public final class RegionEventsHandler implements Listener {
         Block block = e.getBlock();
         this.handleEvent(RegionFlags.FLAG_INTERACT, block, e.getPlayer(), e);
         if (e.isCancelled()) return;
-        if (block instanceof BlockDoor) {
+        if (block instanceof BlockDoor || block instanceof BlockTrapdoorIron) {
             if (this.canInteractWith(RegionFlags.FLAG_SMART_DOORS, block, e.getPlayer())) {
+                if (block instanceof BlockTrapdoorIron) {
+                    block.setDamage(block.getDamage() ^ 0x08);
+                    block.level.setBlock(block, block, true);
+                    block.level.addSound(block, ((BlockTrapdoorIron) block).isOpen() ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+                    return;
+                }
                 BlockDoor door = (BlockDoor) block;
 
                 int damage = door.getDamage();
@@ -110,7 +117,6 @@ public final class RegionEventsHandler implements Listener {
                 } else {
                     second = door.getBlockFace();
                 }
-
 
                 if (isRight) {
                     switch (second) {
@@ -131,13 +137,17 @@ public final class RegionEventsHandler implements Listener {
 
                 BlockDoor pair = door.getSide(second) instanceof BlockDoor ? ((BlockDoor) door.getSide(second)) : null;
 
-                door.toggle(e.getPlayer());
+                if (door.toggle(e.getPlayer())) {
+                    door.level.addSound(door, door.isOpen() ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+                }
 
                 if (pair != null && !pair.isTop(pair.getDamage())) {
                     pair = ((BlockDoor) pair.up());
                 }
                 if (pair != null && ((pair.getDamage() & 1) > 0 == !isRight)) {
-                    pair.toggle(e.getPlayer());
+                    if (pair.toggle(e.getPlayer())) {
+                        pair.level.addSound(pair, pair.isOpen() ? Sound.RANDOM_DOOR_OPEN : Sound.RANDOM_DOOR_CLOSE);
+                    }
                 }
                 e.setCancelled();
                 return;
