@@ -81,7 +81,7 @@ public final class SelectorSession {
         if (this.pos2.y < 0) this.pos2.y = 0;
     }
 
-    public void expandUp(int y) {
+    public void expandUp(long y) {
         if (this.pos1.y > this.pos2.y) {
             this.pos1.y += y;
         } else {
@@ -89,7 +89,7 @@ public final class SelectorSession {
         }
     }
 
-    public void expandDown(int y) {
+    public void expandDown(long y) {
         if (this.pos1.y < this.pos2.y) {
             this.pos1.y -= y;
         } else {
@@ -97,7 +97,7 @@ public final class SelectorSession {
         }
     }
 
-    public void expandRadius(int l) {
+    public void expandRadius(long l) {
         if (this.pos1.x > this.pos2.x) {
             this.pos1.x += l;
             this.pos2.x -= l;

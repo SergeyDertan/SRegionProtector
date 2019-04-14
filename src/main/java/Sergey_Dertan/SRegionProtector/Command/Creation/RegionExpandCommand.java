@@ -55,7 +55,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.expand.usage");
             return false;
         }
-        int y = Integer.parseInt(args[0]);
+        long y = Long.parseLong(args[0]);
         if (args[1].equalsIgnoreCase(EXPAND_UP)) {
             session.expandUp(y);
         } else if (args[1].equalsIgnoreCase(EXPAND_DOWN)) {
