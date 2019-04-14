@@ -16,6 +16,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
 
     public static final String EXPAND_UP = "up";
     public static final String EXPAND_DOWN = "down";
+    public static final String EXPAND_RADIUS = "radius";
 
     private final RegionSelector selector;
 
@@ -26,7 +27,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("rgexpand", new CommandParameter[]{
                 new CommandParameter("amount", CommandParamType.INT, false),
-                new CommandParameter("up/down", false, new String[]{"up", "down"})
+                new CommandParameter("up/down/radius", false, new String[]{"up", "down", "radius"})
         });
         this.setCommandParameters(parameters);
     }
@@ -56,17 +57,11 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
         }
         int y = Integer.parseInt(args[0]);
         if (args[1].equalsIgnoreCase(EXPAND_UP)) {
-            if (session.pos1.y > session.pos2.y) {
-                session.pos1.y += y;
-            } else {
-                session.pos2.y += y;
-            }
+            session.expandUp(y);
         } else if (args[1].equalsIgnoreCase(EXPAND_DOWN)) {
-            if (session.pos1.y < session.pos2.y) {
-                session.pos1.y -= y;
-            } else {
-                session.pos2.y -= y;
-            }
+            session.expandDown(y);
+        } else if (args[1].equalsIgnoreCase(EXPAND_RADIUS)) {
+            session.expandRadius(y);
         } else {
             this.messenger.sendMessage(sender, "command.expand.up-or-down");
             return false;

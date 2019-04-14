@@ -169,7 +169,7 @@ command.expand.in-game: "In game only"
 command.expand.positions-required: "Select 2 positions first"
 command.expand.command.expand.positions-in-different-worlds: "Positions in different worlds"
 command.expand.success: "Region expanded, new size {@size} blocks"
-command.expand.up-or-down: "only UP or DOWN"
+command.expand.up-or-down: "only UP, DOWN or RADIUS"
 
 command.addmember.permission: "You have no permission"
 command.addmember.usage: "Required arguments: [REGION] [PLAYER]"

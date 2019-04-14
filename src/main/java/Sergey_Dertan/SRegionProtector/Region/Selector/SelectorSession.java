@@ -80,4 +80,46 @@ public final class SelectorSession {
         if (this.pos1.y < 0) this.pos1.y = 0;
         if (this.pos2.y < 0) this.pos2.y = 0;
     }
+
+    public void expandUp(int y) {
+        if (this.pos1.y > this.pos2.y) {
+            this.pos1.y += y;
+        } else {
+            this.pos2.y += y;
+        }
+    }
+
+    public void expandDown(int y) {
+        if (this.pos1.y < this.pos2.y) {
+            this.pos1.y -= y;
+        } else {
+            this.pos2.y -= y;
+        }
+    }
+
+    public void expandRadius(int l) {
+        if (this.pos1.x > this.pos2.x) {
+            this.pos1.x += l;
+            this.pos2.x -= l;
+        } else {
+            this.pos1.x -= l;
+            this.pos2.x += l;
+        }
+
+        if (this.pos1.y > this.pos2.y) {
+            this.pos1.y += l;
+            this.pos2.y -= l;
+        } else {
+            this.pos1.y -= l;
+            this.pos2.y += l;
+        }
+
+        if (this.pos1.z > this.pos2.z) {
+            this.pos1.z += l;
+            this.pos2.z -= l;
+        } else {
+            this.pos1.z -= l;
+            this.pos2.z += l;
+        }
+    }
 }

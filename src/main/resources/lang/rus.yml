@@ -104,7 +104,7 @@ command.expand.in-game: "Только в игре"
 command.expand.positions-required: "Сначала выделите 2 точки"
 command.expand.command.expand.positions-in-different-worlds: "Точки в разных мирах"
 command.expand.success: "Регион увеличен, новый размер {@size} блоков"
-command.expand.up-or-down: "только UP или DOWN"
+command.expand.up-or-down: "только UP, DOWN или RADIUS"
 
 command.show-border.description: "Показать границы выбранной территории"
 command.show-border.in-game: "Только в игре"
