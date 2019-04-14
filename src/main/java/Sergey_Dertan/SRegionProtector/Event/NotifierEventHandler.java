@@ -22,8 +22,8 @@ public final class NotifierEventHandler implements Listener {
     @EventHandler
     public void playerJoin(DataPacketReceiveEvent e) { //message wont be displayed while using PlayerJoinEvent
         if (e.getPacket() instanceof SetLocalPlayerAsInitializedPacket && e.getPlayer().hasPermission("sregionprotector.update-notify")) {
-            e.getPlayer().sendMessage(this.updateInfo.first);
-            e.getPlayer().sendMessage(this.updateInfo.second);
+            e.getPlayer().sendMessage(this.updateInfo.key);
+            e.getPlayer().sendMessage(this.updateInfo.value);
         }
     }
 }

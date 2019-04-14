@@ -342,7 +342,7 @@ public final class RegionEventsHandler implements Listener {
         }
     }
 
-    //chunk loader event
+    //chunk loader flag
     @EventHandler(priority = EventPriority.HIGH)
     public void levelLoad(LevelLoadEvent e) {
         if (!this.flagsStatus[RegionFlags.FLAG_CHUNK_LOADER]) return;
@@ -416,7 +416,7 @@ public final class RegionEventsHandler implements Listener {
      * @see RegionEventsHandler#entitySpawn(EntitySpawnEvent)
      * because EntitySpawnEvent can`t be cancelled
      */
-    static final class EmptyEvent extends Event {
+    private static final class EmptyEvent extends Event {
 
         private boolean isCancelled;
 

@@ -16,6 +16,7 @@ import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemAxeWood;
 import cn.nukkit.level.Position;
 
+@SuppressWarnings("unused")
 public final class SelectorEventsHandler implements Listener {
 
     private final RegionSelector regionSelector;
