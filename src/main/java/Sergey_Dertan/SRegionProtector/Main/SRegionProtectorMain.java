@@ -8,14 +8,15 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
+import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionPriceCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionRemoveFromSaleCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionSellCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
 import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
 import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
+import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
@@ -216,6 +217,7 @@ public final class SRegionProtectorMain extends PluginBase {
     private void initEventsHandlers() {
         this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
+        this.getServer().getPluginManager().registerEvents(new GUIEventsHandler(), this);
     }
 
     public void save(SaveType saveType) {
@@ -313,6 +315,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.registerCommand(new SetPriorityCommand(this.regionManager, this.settings.prioritySystem));
 
         this.registerCommand(new MigrateCommand(this));
+
+        this.registerCommand(new OpenGUICommand(this.regionManager, this.chunkManager));
     }
 
     private void checkUpdate() {

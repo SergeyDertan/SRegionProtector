@@ -65,8 +65,8 @@ public final class Messenger {
         return instance;
     }
 
-    public void setAsync() {
-        this.async = true;
+    public void setAsync(boolean async) {
+        this.async = async;
     }
 
     public String getLanguage() {

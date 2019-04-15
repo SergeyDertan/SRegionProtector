@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.GUI;
 
+import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.inventory.ContainerInventory;
 import cn.nukkit.inventory.Inventory;
 import cn.nukkit.inventory.InventoryHolder;
@@ -11,13 +12,16 @@ import java.util.Map;
 
 public final class GUIInventory extends ContainerInventory {
 
-    public GUIInventory(Holder holder, Map<Integer, Item> content) {
-        super(holder, InventoryType.CHEST, content);
+    public final Region region;
+
+    GUIInventory(Vector3 holder, Map<Integer, Item> content, Region region) {
+        super(new Holder(holder.x, holder.y, holder.z), InventoryType.CHEST, content);
+        this.region = region;
     }
 
-    public static final class Holder extends Vector3 implements InventoryHolder {
+    static final class Holder extends Vector3 implements InventoryHolder {
 
-        public Holder(double x, double y, double z) {
+        private Holder(double x, double y, double z) {
             super(x, y, z);
         }
 

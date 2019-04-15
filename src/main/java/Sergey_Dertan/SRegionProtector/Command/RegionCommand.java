@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
+import Sergey_Dertan.SRegionProtector.GUI.GUIManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
@@ -34,7 +35,8 @@ public final class RegionCommand extends SRegionProtectorCommand {
         this.async = async;
         if (async) {
             this.executor = Executors.newFixedThreadPool(threads == -1 ? Runtime.getRuntime().availableProcessors() : threads);
-            this.messenger.setAsync();
+            this.messenger.setAsync(true);
+            GUIManager.setAsync(true);
         } else {
             this.executor = null;
         }

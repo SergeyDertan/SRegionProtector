@@ -25,6 +25,17 @@ public abstract class Tags { //do I need this?
     public final static String IS_MOVABLE_TAG = "isMovable";
     public final static String PRIORITY_TAG = "priority";
     public final static String BLOCK_ORE = "BlockOre";
+    /**
+     * GUI
+     */
+    public final static String CUSTOM_NAME_TAG = "CustomName";
+    public final static String IS_GUI_ITEM_TAG = "gui-item";
+    public static final String OPEN_PAGE_TAG = "open-page";
+    public static final String CURRENT_PAGE_NAME_TAG = "current-page-name";
+    public static final String CURRENT_PAGE_NUMBER_TAG = "current-page-number";
+    public static final String NEXT_PAGE_TAG = "next-page";
+    public static final String PREVIOUS_PAGE_TAG = "next-page";
+    public static final String REFRESH_PAGE_TAG = "next-page";
 
     private Tags() {
     }
