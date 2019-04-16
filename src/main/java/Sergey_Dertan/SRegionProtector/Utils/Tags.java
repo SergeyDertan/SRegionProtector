@@ -34,8 +34,9 @@ public abstract class Tags { //do I need this?
     public static final String CURRENT_PAGE_NAME_TAG = "current-page-name";
     public static final String CURRENT_PAGE_NUMBER_TAG = "current-page-number";
     public static final String NEXT_PAGE_TAG = "next-page";
-    public static final String PREVIOUS_PAGE_TAG = "next-page";
-    public static final String REFRESH_PAGE_TAG = "next-page";
+    public static final String PREVIOUS_PAGE_TAG = "previous-page";
+    public static final String REFRESH_PAGE_TAG = "refresh-page";
+    public static final String FLAG_ID_TAG = "flag-id";
 
     private Tags() {
     }

@@ -13,7 +13,7 @@ import java.util.Map;
 public final class MainPage implements Page {
 
     @Override
-    public Map<Integer, Item> getItems(Region region) {
+    public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> items = new HashMap<>();
 
         Item item;
@@ -36,7 +36,7 @@ public final class MainPage implements Page {
 
         item = Item.get(ItemID.SKULL).setCustomName("Members");
         nbt = item.getNamedTag();
-        nbt.putString(Tags.OPEN_PAGE_TAG, ""); //TODO
+        nbt.putString(Tags.OPEN_PAGE_TAG, MEMBERS.getName());
         item.setNamedTag(nbt);
         items.put(2, item);
 
@@ -48,5 +48,10 @@ public final class MainPage implements Page {
 
         this.prepareItems(items.values());
         return items;
+    }
+
+    @Override
+    public String getName() {
+        return "main";
     }
 }

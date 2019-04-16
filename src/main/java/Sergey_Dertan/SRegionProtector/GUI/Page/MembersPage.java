@@ -11,17 +11,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 public final class MembersPage implements Page {
 
     @Override
-    public Map<Integer, Item> getItems(Region region) {
-        Map<Integer, Item> items = this.getListItems(region, 0);
-        this.addNavigators(items);
-        this.prepareItems(items.values());
-        return items;
-    }
-
-    private Map<Integer, Item> getListItems(Region region, int page) {
+    public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> list = new HashMap<>();
         AtomicInteger counter = new AtomicInteger(-1);
         region.getMembers().stream().skip(page * 18).limit(18).forEach(owner -> list.put(counter.incrementAndGet(), Item.get(ItemID.SKULL).setCustomName(owner).setLore("Click to remove")));
+        this.addNavigators(list);
+        this.prepareItems(list.values());
         return list;
     }
 

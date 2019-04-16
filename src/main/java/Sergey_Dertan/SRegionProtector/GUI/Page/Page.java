@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.GUI.Page;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -30,11 +31,11 @@ public interface Page {
         return null;
     }
 
-    Map<Integer, Item> getItems(Region region);
-
-    default String getName() {
-        return null;
+    default Map<Integer, Item> getItems(Region region) {
+        return this.getItems(region, 0);
     }
+
+    String getName();
 
     default void prepareItems(Collection<Item> items, int page) {
         for (Item item : items) {
@@ -64,5 +65,22 @@ public interface Page {
         nbt = new CompoundTag();
         nbt.putByte(Tags.NEXT_PAGE_TAG, 1);
         items.put(23, Item.get(ItemID.APPLE).setNamedTag(nbt).setCustomName("Next page")); //TODO item
+
+        nbt = new CompoundTag();
+        nbt.putString(Tags.OPEN_PAGE_TAG, MAIN.getName());
+        items.put(26, Item.get(ItemID.SLIMEBALL).setNamedTag(nbt).setCustomName("BACK"));
     }
+
+    /**
+     * @return true if update required
+     */
+    default boolean handle(Item item, Region region, Player player) {
+        return false;
+    }
+
+    default boolean hasPermission(Player player, Region region) {
+        return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
+    }
+
+    Map<Integer, Item> getItems(Region region, int page);
 }

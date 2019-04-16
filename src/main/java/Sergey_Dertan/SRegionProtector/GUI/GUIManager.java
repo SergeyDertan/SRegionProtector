@@ -25,6 +25,11 @@ import java.nio.ByteOrder;
 public abstract class GUIManager {
 
     private static final Int2ObjectMap<GUIInventory> inventories = new Int2ObjectArrayMap<>(); //loader id -> gui inventory
+    /**
+     * async packets should be put directly to the interface
+     *
+     * @see cn.nukkit.event.server.DataPacketSendEvent
+     */
     private static boolean async;
 
     private GUIManager() {
@@ -34,21 +39,43 @@ public abstract class GUIManager {
         Inventory inventory = inventories.get(player.getLoaderId());
         if (inventory == null) return;
         Region region = inventories.get(player.getLoaderId()).region;
-        if (!canOpenGUI(player, region)) {
+        if (!Page.MAIN.hasPermission(player, region)) {
             removeChest(player, (Vector3) inventories.remove(player.getLoaderId()).getHolder());
             return;
         }
         CompoundTag nbt = item.getNamedTag();
-
-        Page page = Page.getPage(nbt.getString(Tags.OPEN_PAGE_TAG));
+        Page page;
+        //navigators
+        page = Page.getPage(nbt.getString(Tags.CURRENT_PAGE_NAME_TAG));
+        if (page == null) return;
+        if (nbt.contains(Tags.REFRESH_PAGE_TAG)) {
+            inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
+            return;
+        }
+        if (nbt.contains(Tags.NEXT_PAGE_TAG)) {
+            int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) + 1;
+            inventory.setContents(page.getItems(region, pageNumber));
+            return;
+        }
+        if (nbt.contains(Tags.PREVIOUS_PAGE_TAG)) {
+            int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) - 1;
+            pageNumber = pageNumber < 0 ? 0 : pageNumber;
+            inventory.setContents(page.getItems(region, pageNumber));
+        }
+        //page link
+        page = Page.getPage(nbt.getString(Tags.OPEN_PAGE_TAG));
         if (page != null) {
             inventory.setContents(page.getItems(region));
             return;
         }
-    }
+        //page handler
+        page = Page.getPage(nbt.getString(Tags.CURRENT_PAGE_NAME_TAG));
+        if (page != null) {
+            if (page.handle(item, region, player)) {
+                inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
+            }
+        }
 
-    public static boolean canOpenGUI(Player player, Region region) {
-        return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
     }
 
     public static void setAsync(boolean async) {

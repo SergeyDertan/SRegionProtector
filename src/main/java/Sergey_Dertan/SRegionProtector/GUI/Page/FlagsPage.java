@@ -5,9 +5,14 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.nbt.tag.CompoundTag;
+import cn.nukkit.nbt.tag.IntTag;
+import cn.nukkit.nbt.tag.Tag;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,14 +22,7 @@ import java.util.stream.Collectors;
 public final class FlagsPage implements Page {
 
     @Override
-    public Map<Integer, Item> getItems(Region region) {
-        Map<Integer, Item> items = this.getListItems(region, 0);
-        this.addNavigators(items);
-        this.prepareItems(items.values());
-        return items;
-    }
-
-    private Map<Integer, Item> getListItems(Region region, int page) {
+    public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> list = new HashMap<>();
         int counter = 0;
         for (RegionFlag flag : Arrays.stream(region.getFlags()).skip(page * 18).limit(18).collect(Collectors.toList())) {
@@ -45,10 +43,25 @@ public final class FlagsPage implements Page {
                 }
             }
             item.setLore(lore[1] == null ? new String[]{lore[0]} : lore);
+            CompoundTag nbt = item.getNamedTag();
+            nbt.putInt(Tags.FLAG_ID_TAG, counter + page * 18);
             list.put(counter, item);
             ++counter;
         }
+        this.addNavigators(list);
+        this.prepareItems(list.values(), page);
         return list;
+    }
+
+    @Override
+    public boolean handle(Item item, Region region, Player player) {
+        Tag tag = item.getNamedTagEntry(Tags.FLAG_ID_TAG);
+        if (!(tag instanceof IntTag)) return false;
+        int flagId = ((IntTag) tag).data;
+        if (flagId == RegionFlags.FLAG_SELL || flagId == RegionFlags.FLAG_TELEPORT) return false;
+        if (!RegionFlags.hasFlagPermission(player, flagId)) return false;
+        region.setFlagState(flagId, !region.getFlagState(flagId));
+        return true;
     }
 
     @Override
