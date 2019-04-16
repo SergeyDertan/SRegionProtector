@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.GUI.Page;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
@@ -11,6 +12,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class MainPage implements Page {
+
+    MainPage() {
+    }
 
     @Override
     public Map<Integer, Item> getItems(Region region, int page) {
@@ -28,13 +32,13 @@ public final class MainPage implements Page {
         );
         items.put(0, item);
 
-        item = Item.get(ItemID.SKULL).setCustomName("Owners");
+        item = Item.get(ItemID.SKULL, 3).setCustomName("Owners");
         nbt = item.getNamedTag();
         nbt.putString(Tags.OPEN_PAGE_TAG, OWNERS.getName());
         item.setNamedTag(nbt);
         items.put(1, item);
 
-        item = Item.get(ItemID.SKULL).setCustomName("Members");
+        item = Item.get(ItemID.SKULL, 3).setCustomName("Members");
         nbt = item.getNamedTag();
         nbt.putString(Tags.OPEN_PAGE_TAG, MEMBERS.getName());
         item.setNamedTag(nbt);
@@ -53,5 +57,10 @@ public final class MainPage implements Page {
     @Override
     public String getName() {
         return "main";
+    }
+
+    @Override
+    public boolean hasPermission(Player player, Region region) {
+        return false;
     }
 }

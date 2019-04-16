@@ -1,27 +1,58 @@
 package Sergey_Dertan.SRegionProtector.GUI.Page;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.Region.RegionManager;
+import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import cn.nukkit.Player;
 import cn.nukkit.item.Item;
 import cn.nukkit.item.ItemID;
+import cn.nukkit.nbt.tag.CompoundTag;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public final class MembersPage implements Page {
+
+    private final RegionManager regionManager = SRegionProtectorMain.getInstance().getRegionManager();
+
+    MembersPage() {
+    }
 
     @Override
     public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> list = new HashMap<>();
-        AtomicInteger counter = new AtomicInteger(-1);
-        region.getMembers().stream().skip(page * 18).limit(18).forEach(owner -> list.put(counter.incrementAndGet(), Item.get(ItemID.SKULL).setCustomName(owner).setLore("Click to remove")));
+        int counter = 0;
+        for (String member : region.getMembers().stream().skip(page * 18).limit(18).collect(Collectors.toList())) {
+            Item item = Item.get(ItemID.SKULL, 3).setCustomName(member).setLore("Click to remove member");
+            CompoundTag nbt = item.getNamedTag();
+            nbt.putString(Tags.TARGET_NAME_TAG, member);
+            item.setNamedTag(nbt);
+            list.put(counter, item);
+            ++counter;
+        }
         this.addNavigators(list);
         this.prepareItems(list.values());
         return list;
     }
 
     @Override
+    public boolean handle(Item item, Region region, Player player) {
+        if (!this.hasPermission(player, region)) return false;
+        String target = item.getNamedTag().getString(Tags.TARGET_NAME_TAG);
+        if (target.isEmpty() || !region.isMember(target)) return false;
+        this.regionManager.removeMember(region, target);
+        return true;
+    }
+
+    @Override
     public String getName() {
-        return "owners";
+        return "members";
+    }
+
+    @Override
+    public boolean hasPermission(Player player, Region region) {
+        return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
     }
 }

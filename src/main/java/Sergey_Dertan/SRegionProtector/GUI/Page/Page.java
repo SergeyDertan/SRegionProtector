@@ -78,9 +78,7 @@ public interface Page {
         return false;
     }
 
-    default boolean hasPermission(Player player, Region region) {
-        return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
-    }
+    boolean hasPermission(Player player, Region region);
 
     Map<Integer, Item> getItems(Region region, int page);
 }

@@ -39,7 +39,7 @@ public abstract class GUIManager {
         Inventory inventory = inventories.get(player.getLoaderId());
         if (inventory == null) return;
         Region region = inventories.get(player.getLoaderId()).region;
-        if (!Page.MAIN.hasPermission(player, region)) {
+        if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
             removeChest(player, (Vector3) inventories.remove(player.getLoaderId()).getHolder());
             return;
         }
@@ -47,20 +47,22 @@ public abstract class GUIManager {
         Page page;
         //navigators
         page = Page.getPage(nbt.getString(Tags.CURRENT_PAGE_NAME_TAG));
-        if (page == null) return;
-        if (nbt.contains(Tags.REFRESH_PAGE_TAG)) {
-            inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
-            return;
-        }
-        if (nbt.contains(Tags.NEXT_PAGE_TAG)) {
-            int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) + 1;
-            inventory.setContents(page.getItems(region, pageNumber));
-            return;
-        }
-        if (nbt.contains(Tags.PREVIOUS_PAGE_TAG)) {
-            int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) - 1;
-            pageNumber = pageNumber < 0 ? 0 : pageNumber;
-            inventory.setContents(page.getItems(region, pageNumber));
+        if (page != null) {
+            if (nbt.contains(Tags.REFRESH_PAGE_TAG)) {
+                inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
+                return;
+            }
+            if (nbt.contains(Tags.NEXT_PAGE_TAG)) {
+                int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) + 1;
+                inventory.setContents(page.getItems(region, pageNumber));
+                return;
+            }
+            if (nbt.contains(Tags.PREVIOUS_PAGE_TAG)) {
+                int pageNumber = nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG) - 1;
+                pageNumber = pageNumber < 0 ? 0 : pageNumber;
+                inventory.setContents(page.getItems(region, pageNumber));
+                return;
+            }
         }
         //page link
         page = Page.getPage(nbt.getString(Tags.OPEN_PAGE_TAG));
@@ -75,7 +77,6 @@ public abstract class GUIManager {
                 inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
             }
         }
-
     }
 
     public static void setAsync(boolean async) {

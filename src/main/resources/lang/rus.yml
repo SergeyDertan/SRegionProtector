@@ -239,12 +239,18 @@ command.buy.success: "Вы купили регион {@region} за {@price} д�
 command.buy.cant-buy-your-self: "Вы не можете купить свой регион"
 command.buy.description: "купить регион"
 
-command.price.permission:  "Недостаточно прав"
+command.price.permission: "Недостаточно прав"
 command.price.usage: "Необходимые аргументы: [РЕГИОН]"
 command.price.doesnt-selling: "Этот регион не продается"
 command.price.success: "Регион {@region} стоит {@price} денег"
 command.price.description: "цена региона"
 command.price.wrong-target: "Регион не найден"
+
+command.gui.permission: "Недостаточно прав"
+command.gui.in-game: "Только в игре"
+command.gui.wrong-position: "В этой точке нет региона"
+command.gui.wrong-target: "Регион {@region} не найден"
+command.gui.description: "открыть gui"
 
 command.set-priority.permission:  "Недостаточно прав"
 command.set-priority.usage: "Необходимые аргументы: [РЕГИОН] [ПРИОРИТЕТ]"

@@ -77,6 +77,8 @@ permissions:
             default: op
           sregionprotector.command.migrate:
             default: op
+          sregionprotector.command.gui:
+            default: true
       sregionprotector.region.*:
         default: op
         children:

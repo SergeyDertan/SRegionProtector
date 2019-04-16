@@ -2,7 +2,6 @@ package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.GUI.GUIManager;
-import Sergey_Dertan.SRegionProtector.GUI.Page.Page;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -64,7 +63,7 @@ public final class OpenGUICommand extends SRegionProtectorCommand {
     }
 
     private void openGUI(Player player, Region region) {
-        if (!Page.MAIN.hasPermission(player, region)) {
+        if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
             this.messenger.sendMessage(player, "command.gui.permission");
             return;
         }

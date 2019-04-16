@@ -246,6 +246,12 @@ command.price.success: "Region {@region} costs {@price} money"
 command.price.description: "see region`s price"
 command.price.wrong-target: "Region doesnt exists"
 
+command.gui.permission:  "You have no permission"
+command.gui.in-game: "In game only"
+command.gui.wrong-position: "There is no region at this position"
+command.gui.wrong-target: "Region {@region} not found"
+command.gui.description: "open region gui"
+
 command.set-priority.permission:  "You have no permission"
 command.set-priority.usage: "Required arguments: [REGION] [PRIORITY]"
 command.set-priority.wrong-target: "Region doesn`t exists"
