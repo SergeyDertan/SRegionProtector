@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Provider.Database;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
-import Sergey_Dertan.SRegionProtector.Provider.CloseableProvider;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.FlagListDataObject;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.RegionDataObject;
@@ -17,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class DataBaseDataProvider implements DataProvider, CloseableProvider {
+public abstract class DataBaseDataProvider implements DataProvider {
 
     protected PersistenceManagerFactory factory;
     protected PersistenceManager pm;

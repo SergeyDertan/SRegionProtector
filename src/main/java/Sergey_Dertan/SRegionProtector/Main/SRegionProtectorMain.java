@@ -21,7 +21,6 @@ import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
-import Sergey_Dertan.SRegionProtector.Provider.CloseableProvider;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.Provider.Database.MySQLDataProvider;
@@ -412,7 +411,7 @@ public final class SRegionProtectorMain extends PluginBase {
                 this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));
             }
             this.shutdownExecutors();
-            if (this.provider instanceof CloseableProvider) ((CloseableProvider) this.provider).close();
+            this.provider.close();
             return;
         }
         this.save(SaveType.DISABLING);
@@ -471,8 +470,8 @@ public final class SRegionProtectorMain extends PluginBase {
             amount.incrementAndGet();
         });
 
-        if (source != this.provider && source instanceof CloseableProvider) ((CloseableProvider) source).close();
-        if (target != this.provider && target instanceof CloseableProvider) ((CloseableProvider) target).close();
+        if (source != this.provider) source.close();
+        if (target != this.provider) target.close();
         return amount.get();
     }
 

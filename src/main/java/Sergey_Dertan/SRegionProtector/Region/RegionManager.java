@@ -117,9 +117,9 @@ public final class RegionManager {
                     new Vector3(minX, minY, minZ),
                     new Vector3(maxX, maxY, maxZ),
                     level, true
-            ).forEach(s -> {
-                s.addRegion(region);
-                region.addChunk(s);
+            ).forEach(chunk -> {
+                chunk.addRegion(region);
+                region.addChunk(chunk);
             });
         }
 

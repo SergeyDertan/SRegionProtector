@@ -69,7 +69,7 @@ public final class RegionSelector {
         }
     }
 
-    @SuppressWarnings({"ConstantConditions", "Duplicates"})
+    @SuppressWarnings("Duplicates")
     public void showBorders(Player target, Vector3 pos1, Vector3 pos2) { //TODO simplify
         int minX = (int) Math.min(pos1.x, pos2.x);
         int minY = (int) Math.min(pos1.y, pos2.y);
@@ -83,8 +83,9 @@ public final class RegionSelector {
         SourceInterface interfaz = null;
         if (this.async) {
             try {
-                interfaz = this.async ? (SourceInterface) this.interfaz.get(target) : null;
-            } catch (IllegalAccessException ignore) {
+                interfaz = (SourceInterface) this.interfaz.get(target);
+            } catch (IllegalAccessException e) {
+                return;
             }
         }
 

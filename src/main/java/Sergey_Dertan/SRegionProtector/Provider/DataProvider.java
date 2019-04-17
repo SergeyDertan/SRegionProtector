@@ -41,19 +41,16 @@ public interface DataProvider { //TODO unity flags and region info into one file
 
     Type getType();
 
+    default void close() {
+    }
+
     enum Type {
 
-        YAML(false),
-        MYSQL(true),
-        SQLite(true),
-        POSTGRESQL(true),
-        UNSUPPORTED(false);
-
-        public final boolean isDB;
-
-        Type(boolean isDB) {
-            this.isDB = isDB;
-        }
+        YAML,
+        MYSQL,
+        SQLite,
+        POSTGRESQL,
+        UNSUPPORTED;
 
         public static Type fromString(String name) {
             switch (name.toLowerCase()) {
