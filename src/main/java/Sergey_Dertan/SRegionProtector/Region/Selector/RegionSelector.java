@@ -95,7 +95,7 @@ public final class RegionSelector {
                     pk.x = xt;
                     pk.y = yt;
                     pk.z = zt;
-                    pk.flags = UpdateBlockPacket.FLAG_NONE;
+                    pk.flags = UpdateBlockPacket.FLAG_ALL;
                     pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
@@ -116,7 +116,7 @@ public final class RegionSelector {
                     pk.x = zx;
                     pk.y = yd;
                     pk.z = zd;
-                    pk.flags = UpdateBlockPacket.FLAG_NONE;
+                    pk.flags = UpdateBlockPacket.FLAG_ALL;
                     pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
@@ -134,7 +134,7 @@ public final class RegionSelector {
                     pk.x = xd;
                     pk.y = yd;
                     pk.z = zx;
-                    pk.flags = UpdateBlockPacket.FLAG_NONE;
+                    pk.flags = UpdateBlockPacket.FLAG_ALL;
                     pk.blockRuntimeId = this.borderBlock;
                     if (this.async) {
                         interfaz.putPacket(target, pk);
@@ -179,7 +179,7 @@ public final class RegionSelector {
                     pk.x = (int) s.x;
                     pk.y = (int) s.y;
                     pk.z = (int) s.z;
-                    pk.flags = UpdateBlockPacket.FLAG_NONE;
+                    pk.flags = UpdateBlockPacket.FLAG_ALL;
                     pk.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(target.level.getBlockIdAt((int) s.x, (int) s.y, (int) s.z), target.level.getBlockDataAt((int) s.x, (int) s.y, (int) s.z));
                     inter.putPacket(target, pk);
                 });
