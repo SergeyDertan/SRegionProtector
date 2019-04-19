@@ -26,6 +26,7 @@ public final class OwnersPage implements Page {
         int counter = 0;
         for (String owner : region.getOwners().stream().skip(page * 18).limit(18).collect(Collectors.toList())) {
             Item item = Item.get(ItemID.SKULL, 3).setCustomName(owner).setLore("Click to remove owner");
+            @SuppressWarnings("Duplicates")
             CompoundTag nbt = item.getNamedTag();
             nbt.putString(Tags.TARGET_NAME_TAG, owner);
             item.setNamedTag(nbt);

@@ -50,6 +50,12 @@ public final class MainPage implements Page {
         item.setNamedTag(nbt);
         items.put(3, item);
 
+        item = Item.get(BlockID.TNT).setCustomName("Remove region");
+        nbt = item.getNamedTag();
+        nbt.putString(Tags.OPEN_PAGE_TAG, REMOVE_REGION.getName());
+        item.setNamedTag(nbt);
+        items.put(17, item);
+
         this.prepareItems(items.values());
         return items;
     }

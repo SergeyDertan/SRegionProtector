@@ -1,6 +1,8 @@
 package Sergey_Dertan.SRegionProtector.GUI;
 
 import Sergey_Dertan.SRegionProtector.GUI.Page.Page;
+import Sergey_Dertan.SRegionProtector.GUI.Page.RemoveRegionPage;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.Player;
@@ -74,6 +76,11 @@ public abstract class GUIManager {
         page = Page.getPage(nbt.getString(Tags.CURRENT_PAGE_NAME_TAG));
         if (page != null) {
             if (page.handle(item, region, player)) {
+                if (page instanceof RemoveRegionPage) {
+                    removeChest(player, ((Vector3) inventory.getHolder()));
+                    Messenger.getInstance().sendMessage(player, "command.remove.region-removed", "@region", region.name);
+                    return;
+                }
                 inventory.setContents(page.getItems(region, nbt.getInt(Tags.CURRENT_PAGE_NUMBER_TAG)));
             }
         }

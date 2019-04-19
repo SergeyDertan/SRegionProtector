@@ -38,6 +38,7 @@ public abstract class Tags { //do I need this?
     public static final String REFRESH_PAGE_TAG = "refresh-page";
     public static final String FLAG_ID_TAG = "flag-id";
     public static final String TARGET_NAME_TAG = "target";
+    public static final String REMOVE_REGION_TAG = "remove-region";
 
     private Tags() {
     }

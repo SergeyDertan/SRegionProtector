@@ -16,6 +16,7 @@ public interface Page {
     OwnersPage OWNERS = new OwnersPage();
     MembersPage MEMBERS = new MembersPage();
     FlagsPage FLAGS = new FlagsPage();
+    RemoveRegionPage REMOVE_REGION = new RemoveRegionPage();
 
     static Page getPage(String name) {
         switch (name.toLowerCase()) {
@@ -27,6 +28,8 @@ public interface Page {
                 return FLAGS;
             case "members":
                 return MEMBERS;
+            case "remove-region":
+                return REMOVE_REGION;
         }
         return null;
     }
