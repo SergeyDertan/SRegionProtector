@@ -5,6 +5,7 @@ import Sergey_Dertan.SRegionProtector.Region.Chunk.Chunk;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.Utils.Pair;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.Player;
 import cn.nukkit.block.*;
@@ -27,15 +28,16 @@ import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
+import cn.nukkit.level.EnumLevel;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
+import cn.nukkit.level.format.FullChunk;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class RegionEventsHandler implements Listener {
@@ -50,6 +52,9 @@ public final class RegionEventsHandler implements Listener {
     private final Object2BooleanMap<Class> isMonster;
     private final Class monster; //mobplugin
 
+    private final Pair<Vector3, Integer>[] portalBlocks;
+
+    @SuppressWarnings("unchecked")
     public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
@@ -64,6 +69,60 @@ public final class RegionEventsHandler implements Listener {
         } catch (ClassNotFoundException ignore) {
         }
         this.monster = monster;
+
+        this.portalBlocks = this.netherPortalBlocks();
+    }
+
+    /**
+     * @see BlockNetherPortal#spawnPortal(Position)
+     */
+    private Pair[] netherPortalBlocks() {
+        Map<Vector3, Integer> blocks = new HashMap<>();
+
+        blocks.put(new Vector3(1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(2), BlockID.OBSIDIAN);
+
+        //z=1
+        blocks.put(new Vector3(0, 0, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(1, 0, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(2, 0, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(3, 0, 1), BlockID.OBSIDIAN);
+        //z=2
+        blocks.put(new Vector3(1, 0, 2), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(2, 0, 2), BlockID.OBSIDIAN);
+        //z=1
+        //y=1
+        blocks.put(new Vector3(0, 1, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(1, 1, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(2, 1, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(3, 1, 1), BlockID.OBSIDIAN);
+        //y=2
+        //z=1
+        blocks.put(new Vector3(0, 2, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(1, 2, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(2, 2, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(3, 2, 1), BlockID.OBSIDIAN);
+        //y=3
+        blocks.put(new Vector3(0, 3, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(1, 3, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(2, 3, 1), BlockID.NETHER_PORTAL);
+        blocks.put(new Vector3(3, 3, 1), BlockID.OBSIDIAN);
+        //y=4
+        blocks.put(new Vector3(0, 4, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(1, 4, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(2, 4, 1), BlockID.OBSIDIAN);
+        blocks.put(new Vector3(3, 4, 1), BlockID.OBSIDIAN);
+
+        for (int x = -1; x < 4; x++) {
+            for (int y = 1; y < 4; y++) {
+                for (int z = -1; z < 3; z++) {
+                    blocks.putIfAbsent(new Vector3(x, y, z), BlockID.AIR);
+                }
+            }
+        }
+        List<Pair<Vector3, Integer>> blockss = new ArrayList<>();
+        blocks.forEach((k, v) -> blockss.add(new Pair<>(k, v)));
+        return blockss.toArray(new Pair[0]);
     }
 
     //break & minefarm flags
@@ -351,6 +410,40 @@ public final class RegionEventsHandler implements Listener {
             for (Region region : chunk.getRegions()) {
                 if (!region.getFlagState(RegionFlags.FLAG_CHUNK_LOADER)) continue;
                 e.getLevel().loadChunk((int) chunk.x, (int) chunk.z);
+            }
+        }
+    }
+
+    //prevent nether portal from spawning in region
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void entityPortalEnter(EntityPortalEnterEvent e) {
+        if (!this.flagsStatus[RegionFlags.FLAG_NETHER_PORTAL]) return;
+        if (e.getPortalType() != EntityPortalEnterEvent.PortalType.NETHER) return;
+        Position portal = EnumLevel.moveToNether(e.getEntity()).floor();
+        if (portal == null) return;
+
+        for (int x = -1; x < 2; x++) {
+            for (int z = -1; z < 2; z++) {
+                int chunkX = (portal.getFloorX() >> 4) + x;
+                int chunkZ = (portal.getFloorZ() >> 4) + z;
+                FullChunk chunk = portal.level.getChunk(chunkX, chunkZ, true);
+                if (chunk == null || !(chunk.isGenerated() || chunk.isPopulated())) {
+                    portal.level.generateChunk(chunkX, chunkZ, true);
+                }
+            }
+        }
+
+        for (Pair<Vector3, Integer> block : this.portalBlocks) {
+            Vector3 pos = portal.add(block.key).floor();
+            if (portal.level.getBlockIdAt((int) pos.x, (int) pos.y, (int) pos.z) != block.value) {
+                Region region = this.chunkManager.getRegion(pos, portal.level.getName());
+                if (region != null && region.getFlagState(RegionFlags.FLAG_NETHER_PORTAL)) {
+                    e.setCancelled();
+                    if (e.getEntity() instanceof Player) {
+                        Messenger.getInstance().sendMessage(((Player) e.getEntity()), "region.protected." + RegionFlags.getFlagName(RegionFlags.FLAG_NETHER_PORTAL));
+                    }
+                    break;
+                }
             }
         }
     }

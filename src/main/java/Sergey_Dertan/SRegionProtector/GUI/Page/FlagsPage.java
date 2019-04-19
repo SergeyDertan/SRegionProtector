@@ -49,6 +49,8 @@ public final class FlagsPage implements Page {
         this.flagToBlock[RegionFlags.FLAG_MINEFARM] = BlockID.DIAMOND_ORE;
         this.flagToBlock[RegionFlags.FLAG_POTION_LAUNCH] = ItemID.SPLASH_POTION;
         this.flagToBlock[RegionFlags.FLAG_HEAL] = ItemID.GOLDEN_APPLE;
+        this.flagToBlock[RegionFlags.FLAG_NETHER_PORTAL] = BlockID.NETHER_PORTAL;
+        this.flagToBlock[RegionFlags.FLAG_SELL] = ItemID.EMERALD;
     }
 
     @Override

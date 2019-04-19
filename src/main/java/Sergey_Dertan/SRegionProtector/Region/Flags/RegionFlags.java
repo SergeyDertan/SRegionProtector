@@ -14,6 +14,7 @@ import com.google.common.collect.ImmutableMap;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -57,8 +58,9 @@ public abstract class RegionFlags {
     public static final int FLAG_SMART_DOORS = 31;
     public static final int FLAG_MINEFARM = 32;
     public static final int FLAG_FALL_DAMAGE = 33;
+    public static final int FLAG_NETHER_PORTAL = 34;
 
-    public static final int FLAG_AMOUNT = 34;
+    public static final int FLAG_AMOUNT = 35;
 
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -103,6 +105,7 @@ public abstract class RegionFlags {
         flagList.put(FLAG_SMART_DOORS, "smart-doors");
         flagList.put(FLAG_MINEFARM, "minefarm");
         flagList.put(FLAG_FALL_DAMAGE, "fall-damage");
+        flagList.put(FLAG_NETHER_PORTAL, "nether-portal");
         flags = ImmutableBiMap.copyOf(flagList);
 
         Map<String, Integer> aAliases = new HashMap<>(FLAG_AMOUNT);
@@ -150,6 +153,7 @@ public abstract class RegionFlags {
         fState.put(FLAG_SMART_DOORS, false);
         fState.put(FLAG_MINEFARM, false);
         fState.put(FLAG_FALL_DAMAGE, false);
+        fState.put(FLAG_NETHER_PORTAL, true);
 
         state = ImmutableMap.copyOf(fState);
     }
@@ -190,10 +194,9 @@ public abstract class RegionFlags {
         throw new RuntimeException("Wrong state");
     }
 
-    public static void fixMissingFlags(RegionFlag[] flags) {
-        for (int i = 0; i < FLAG_AMOUNT; ++i) {
-            if (flags[i] != null) continue;
-            flags[i] = defaults[i].clone();
+    public static void fixMissingFlags(List<RegionFlag> flags) {
+        for (int i = flags.size(); i < FLAG_AMOUNT; ++i) {
+            flags.add(defaults[i].clone());
         }
     }
 

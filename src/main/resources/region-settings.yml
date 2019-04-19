@@ -32,6 +32,7 @@ default-flags:
   smart-doors: true
   minefarm: false
   fall-damage: false
+  nether-portal: true
 need-message:
   move: false
   place: true
@@ -55,6 +56,7 @@ need-message:
   sleep: true
   minefarm: false
   fall-damage: false
+  nether-portal: true
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

@@ -3,15 +3,12 @@ package Sergey_Dertan.SRegionProtector.Provider.DataObject;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
-import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.math.Vector3;
 import com.alibaba.fastjson.JSON;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.*;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
@@ -95,11 +92,11 @@ public abstract class Converter {
     }
 
     public static Region fromDataObject(RegionDataObject dataObject, FlagListDataObject flagsDataObject) {
-        return fromDataObject(dataObject, fromDataObject(flagsDataObject));
+        return fromDataObject(dataObject, fromDataObject(flagsDataObject).toArray(new RegionFlag[0]));
     }
 
-    public static RegionFlag[] fromDataObject(FlagListDataObject dataObject) {
-        RegionFlag[] flags = new RegionFlag[RegionFlags.FLAG_AMOUNT];
+    public static List<RegionFlag> fromDataObject(FlagListDataObject dataObject) {
+        List<RegionFlag> flags = new ArrayList<>();
         Boolean[] state = JSON.parseArray(dataObject.state, Boolean.class).toArray(new Boolean[0]);
         @SuppressWarnings("unchecked")
         Map<String, Object> teleportData = (Map<String, Object>) JSON.parse(dataObject.teleportData);
@@ -109,24 +106,24 @@ public abstract class Converter {
                 double y = ((Number) teleportData.get(Y_TAG)).doubleValue();
                 double z = ((Number) teleportData.get(Z_TAG)).doubleValue();
                 String level = (String) teleportData.get(LEVEL_TAG);
-                flags[i] = new RegionTeleportFlag(state[i], new Vector3(x, y, z), level);
+                flags.add(new RegionTeleportFlag(state[i], new Vector3(x, y, z), level));
                 continue;
             }
             if (i == FLAG_SELL) {
-                flags[i] = new RegionSellFlag(state[i], dataObject.sellData);
+                flags.add(new RegionSellFlag(state[i], dataObject.sellData));
                 continue;
             }
-            flags[i] = new RegionFlag(state[i]);
+            flags.add(new RegionFlag(state[i]));
         }
         return flags;
     }
 
     public static FlagListDataObject toDataObject(Map<String, Map<String, Object>> data) { //for the yaml data provider
         FlagListDataObject dataObject = new FlagListDataObject();
-        boolean[] state = new boolean[RegionFlags.FLAG_AMOUNT];
+        List<Boolean> state = new ArrayList<>();
         for (Map.Entry<String, Map<String, Object>> flag : data.entrySet()) {
             if (getFlagId(flag.getKey()) == FLAG_INVALID) continue;
-            state[getFlagId(flag.getKey())] = (Boolean) flag.getValue().get(STATE_TAG);
+            state.add(getFlagId(flag.getKey()), (Boolean) flag.getValue().get(STATE_TAG));
             if (getFlagId(flag.getKey()) == FLAG_SELL) {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
             }
@@ -141,7 +138,7 @@ public abstract class Converter {
                 dataObject.teleportData = JSON.toJSONString(teleport);
             }
         }
-        dataObject.state = JSON.toJSONString(state);
+        dataObject.state = JSON.toJSONString(state.toArray(new Boolean[0]));
         return dataObject;
     }
 }

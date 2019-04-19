@@ -57,6 +57,7 @@ active-flags:
   smart-doors: true
   minefarm: true
   fall-damage: true
+  nether-portal: true
 display:
   place: true
   break: true

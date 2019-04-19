@@ -93,15 +93,15 @@ public final class RegionManager {
 
             FlagListDataObject flags = this.provider.loadFlags(name);
 
-            RegionFlag[] flagList = Converter.fromDataObject(flags);
+            List<RegionFlag> flagList = Converter.fromDataObject(flags);
 
             boolean needUpdate = false;
-            if (flagList.length < FLAG_AMOUNT) {
+            if (flagList.size() < FLAG_AMOUNT) {
                 needUpdate = true;
                 fixMissingFlags(flagList);
             }
 
-            Region region = new Region(name, creator, level, priority, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList);
+            Region region = new Region(name, creator, level, priority, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList.toArray(new RegionFlag[0]));
 
             region.needUpdate = needUpdate;
 

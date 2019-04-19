@@ -161,8 +161,10 @@ permissions:
               sregionprotector.region.flag.chunk_loader:
                 default: op
               sregionprotector.region.flag.smart_doors:
-                default: op
+                default: true
               sregionprotector.region.flag.minefarm:
                 default: op
               sregionprotector.region.flag.fall_damage:
+                default: op
+              sregionprotector.region.flag.nether_portal:
                 default: op
