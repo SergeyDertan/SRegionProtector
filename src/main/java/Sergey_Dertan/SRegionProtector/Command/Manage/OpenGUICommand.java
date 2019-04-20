@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.GUI.GUIManager;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.GUIManager;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;

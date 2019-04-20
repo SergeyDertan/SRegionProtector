@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.GUI;
+package Sergey_Dertan.SRegionProtector.GUI.Chest;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.inventory.ContainerInventory;

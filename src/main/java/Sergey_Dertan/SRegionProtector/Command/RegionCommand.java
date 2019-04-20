@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
-import Sergey_Dertan.SRegionProtector.GUI.GUIManager;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.GUIManager;
 import cn.nukkit.Player;
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;

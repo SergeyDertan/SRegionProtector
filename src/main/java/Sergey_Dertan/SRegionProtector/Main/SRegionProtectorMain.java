@@ -205,7 +205,7 @@ public final class SRegionProtectorMain extends PluginBase {
     private void initRegions() {
         this.regionSelector = new RegionSelector(this.settings.selectorSessionLifetime, this.settings.borderBlock, this.settings.asyncCommands);
         this.regionManager = new RegionManager(this.provider, this.getLogger(), this.chunkManager);
-        this.regionManager.init();
+        this.regionManager.init(this.settings.regionSettings.saveNewFlags);
     }
 
     private void initChunks() {

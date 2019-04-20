@@ -1,7 +1,7 @@
-package Sergey_Dertan.SRegionProtector.GUI;
+package Sergey_Dertan.SRegionProtector.GUI.Chest;
 
-import Sergey_Dertan.SRegionProtector.GUI.Page.Page;
-import Sergey_Dertan.SRegionProtector.GUI.Page.RemoveRegionPage;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.Page.Page;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.Page.RemoveRegionPage;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;

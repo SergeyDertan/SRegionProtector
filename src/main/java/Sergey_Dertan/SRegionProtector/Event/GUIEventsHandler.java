@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Event;
 
-import Sergey_Dertan.SRegionProtector.GUI.GUIInventory;
-import Sergey_Dertan.SRegionProtector.GUI.GUIManager;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.GUIInventory;
+import Sergey_Dertan.SRegionProtector.GUI.Chest.GUIManager;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
