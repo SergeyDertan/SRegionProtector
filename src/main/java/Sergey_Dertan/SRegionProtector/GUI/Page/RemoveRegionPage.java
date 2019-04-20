@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.GUI.Page;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
@@ -27,13 +28,13 @@ public final class RemoveRegionPage implements Page {
         Item item;
         CompoundTag nbt;
 
-        item = Item.get(ItemID.EMERALD).setCustomName("Dont remove");
+        item = Item.get(ItemID.EMERALD).setCustomName(Messenger.getInstance().getMessage("gui.remove.cancel"));
         nbt = item.getNamedTag();
         nbt.putString(Tags.OPEN_PAGE_TAG, MAIN.getName());
         item.setNamedTag(nbt);
         items.put(12, item);
 
-        item = Item.get(BlockID.REDSTONE_BLOCK).setCustomName("Remove region");
+        item = Item.get(BlockID.REDSTONE_BLOCK).setCustomName(Messenger.getInstance().getMessage("gui.remove.apply"));
         nbt = item.getNamedTag();
         nbt.putByte(Tags.REMOVE_REGION_TAG, 1);
         item.setNamedTag(nbt);

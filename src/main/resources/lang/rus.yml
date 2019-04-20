@@ -278,3 +278,24 @@ manual-save-success: "Сохранение запущенное по иници�
 chunk-manager.empty-chunks-removed: "Удалено {@amount} пустых чанков."
 chunk-manager.chunks-auto-save: "{@amount} чанков автоматически сохранено."
 chunk-manager.chunks-manual-save: "{@amount} чанков было сохранено по инициативе {@initiator}."
+
+gui.main.region-description: "Мир: {@level}\nСоздатель: {@creator}\nПриоритет: {@priority}\nРазмер: {@size}"
+gui.main.region-description-item: "Регион '{@region}'"
+gui.main.go-to-owners: "Владельцы"
+gui.main.go-to-members: "Участники"
+gui.main.go-to-flags: "Флаги"
+gui.main.go-to-remove: "Удалить регион"
+
+gui.navigator.next-page: "Следующая страница"
+gui.navigator.previous-page: "Предыдущая страница"
+gui.navigator.refresh: "Обновить"
+gui.navigator.back: "Назад"
+
+gui.members.member-name: "{@member}"
+gui.members.member-lore: "Нажмите чтобы исключить"
+
+gui.owners.owner-name: "{@owner}"
+gui.owners.owner-lore: "Нажмите чтобы исключить"
+
+gui.remove.apply: "Удалить регион"
+gui.remove.cancel: "Не удалять"

@@ -278,3 +278,24 @@ manual-save-success: "Manual save started by {@initiator} ended."
 chunk-manager.empty-chunks-removed: "Removed {@amount} empty chunks."
 chunk-manager.chunks-auto-save: "{@amount} chunks was automatically saved."
 chunk-manager.chunks-manual-save: "{@amount} chunks was saved by {@initiator}."
+
+gui.main.region-description: "Level: {@level}\nCreator: {@creator}\nPriority: {@priority}\nSize: {@size}"
+gui.main.region-description-item: "Region '{@region}'"
+gui.main.go-to-owners: "Owners"
+gui.main.go-to-members: "Members"
+gui.main.go-to-flags: "Flags"
+gui.main.go-to-remove: "Remove region"
+
+gui.navigator.next-page: "Next page"
+gui.navigator.previous-page: "Previous page"
+gui.navigator.refresh: "Refresh"
+gui.navigator.back: "Back"
+
+gui.members.member-name: "{@member}"
+gui.members.member-lore: "Click to remove"
+
+gui.owners.owner-name: "{@owner}"
+gui.owners.owner-lore: "Click to remove"
+
+gui.remove.apply: "Remove region"
+gui.remove.cancel: "Dont remove"

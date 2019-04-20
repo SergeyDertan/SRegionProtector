@@ -55,7 +55,7 @@ public final class FlagsPage implements Page {
 
     @Override
     public Map<Integer, Item> getItems(Region region, int page) {
-        Map<Integer, Item> list = new HashMap<>();
+        Map<Integer, Item> list = new HashMap<>(NAVIGATORS_CACHE);
         int counter = 0;
         for (RegionFlag flag : Arrays.stream(region.getFlags()).skip(page * 18).limit(18).collect(Collectors.toList())) {
             int flagId = counter + page * 18;
@@ -81,7 +81,6 @@ public final class FlagsPage implements Page {
             list.put(counter, item);
             ++counter;
         }
-        this.addNavigators(list);
         this.prepareItems(list.values(), page);
         return list;
     }

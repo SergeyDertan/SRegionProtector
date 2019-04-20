@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.GUI.Page;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
@@ -22,10 +23,12 @@ public final class OwnersPage implements Page {
 
     @Override
     public Map<Integer, Item> getItems(Region region, int page) {
-        Map<Integer, Item> list = new HashMap<>();
+        Map<Integer, Item> list = new HashMap<>(NAVIGATORS_CACHE);
         int counter = 0;
         for (String owner : region.getOwners().stream().skip(page * 18).limit(18).collect(Collectors.toList())) {
-            Item item = Item.get(ItemID.SKULL, 3).setCustomName(owner).setLore("Click to remove owner");
+            Item item = Item.get(ItemID.SKULL, 3).
+                    setCustomName(Messenger.getInstance().getMessage("gui.owners.owner-name", "@owner", owner)).
+                    setLore(Messenger.getInstance().getMessage("gui.owners.owner-lore"));
             @SuppressWarnings("Duplicates")
             CompoundTag nbt = item.getNamedTag();
             nbt.putString(Tags.TARGET_NAME_TAG, owner);
@@ -33,7 +36,6 @@ public final class OwnersPage implements Page {
             list.put(counter, item);
             ++counter;
         }
-        this.addNavigators(list);
         this.prepareItems(list.values());
         return list;
     }

@@ -62,7 +62,7 @@ public final class RegionManager {
         return this.regions.containsKey(name);
     }
 
-    public void init() {
+    public void init(boolean saveNewFlags) {
         List<RegionDataObject> regions = this.provider.loadRegionList();
         for (RegionDataObject rdo : regions) {
             String name = rdo.name;
@@ -97,7 +97,7 @@ public final class RegionManager {
 
             boolean needUpdate = false;
             if (flagList.size() < FLAG_AMOUNT) {
-                needUpdate = true;
+                if (saveNewFlags) needUpdate = true;
                 fixMissingFlags(flagList);
             }
 

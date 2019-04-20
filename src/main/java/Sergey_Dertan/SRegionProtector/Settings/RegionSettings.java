@@ -24,6 +24,8 @@ public final class RegionSettings {
 
     public final boolean[] display = new boolean[FLAG_AMOUNT]; //check if flag should be shown in the info command
 
+    public final boolean saveNewFlags;
+
     public final int maxRegionNameLength;
     public final int minRegionNameLength;
 
@@ -42,6 +44,8 @@ public final class RegionSettings {
         this.loadMessages(rgCnf);
         this.loadDisplaySettings(cnf);
         RegionFlags.init(this.defaultFlags);
+
+        this.saveNewFlags = (boolean) cnf.get("save-new-flags");
 
         this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
         this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();

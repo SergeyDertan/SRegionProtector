@@ -117,3 +117,6 @@ auto-save: true
 #in seconds
 empty-chunks-removing-period: 360
 empty-chunks-auto-removing: true
+
+#if enabled all regions will be updated when new flag added
+save-new-flags: false
