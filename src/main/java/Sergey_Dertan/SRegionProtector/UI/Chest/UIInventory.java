@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.GUI.Chest;
+package Sergey_Dertan.SRegionProtector.UI.Chest;
 
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import cn.nukkit.inventory.ContainerInventory;
@@ -10,11 +10,11 @@ import cn.nukkit.math.Vector3;
 
 import java.util.Map;
 
-public final class GUIInventory extends ContainerInventory {
+public final class UIInventory extends ContainerInventory {
 
     public final Region region;
 
-    GUIInventory(Vector3 holder, Map<Integer, Item> content, Region region) {
+    UIInventory(Vector3 holder, Map<Integer, Item> content, Region region) {
         super(new Holder(holder.x, holder.y, holder.z), InventoryType.CHEST, content);
         this.region = region;
     }

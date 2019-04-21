@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.GUI.Chest.Page;
+package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;

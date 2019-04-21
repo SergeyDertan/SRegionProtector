@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
+import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import cn.nukkit.block.Block;
@@ -43,6 +44,8 @@ public final class Settings {
 
     public final boolean updateNotifier;
 
+    public final int uiType;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
@@ -73,6 +76,8 @@ public final class Settings {
         this.prioritySystem = (boolean) config.get("priority-system");
 
         this.updateNotifier = (boolean) config.get("update-notifier");
+
+        this.uiType = ((String) config.get("gui-type")).equalsIgnoreCase("chest") ? GUIEventsHandler.UI_TYPE_CHEST : GUIEventsHandler.UI_TYPE_FORM;
 
         String border = (String) config.get("border-block");
         int id;

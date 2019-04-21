@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.GUI.Chest.Page;
+package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
@@ -14,11 +14,11 @@ import java.util.Map;
 
 public interface Page {
 
-    OwnersPage OWNERS = new OwnersPage();
-    MembersPage MEMBERS = new MembersPage();
-    FlagsPage FLAGS = new FlagsPage();
-    RemoveRegionPage REMOVE_REGION = new RemoveRegionPage();
-    MainPage MAIN = new MainPage();
+    Page OWNERS = new OwnersPage();
+    Page MEMBERS = new MembersPage();
+    Page FLAGS = new FlagsPage();
+    Page REMOVE_REGION = new RemoveRegionPage();
+    Page MAIN = new MainPage();
 
     Map<Integer, Item> NAVIGATORS_CACHE = new HashMap<Integer, Item>() {{
         CompoundTag nbt;
@@ -68,7 +68,7 @@ public interface Page {
 
     default void prepareItem(Item item, int page) {
         CompoundTag nbt = item.hasCompoundTag() ? item.getNamedTag() : new CompoundTag();
-        nbt.putByte(Tags.IS_GUI_ITEM_TAG, 1);
+        nbt.putByte(Tags.IS_UI_ITEM_TAG, 1);
         nbt.putInt(Tags.CURRENT_PAGE_NUMBER_TAG, page);
         if (this.getName() != null) nbt.putString(Tags.CURRENT_PAGE_NAME_TAG, this.getName());
         item.setNamedTag(nbt);

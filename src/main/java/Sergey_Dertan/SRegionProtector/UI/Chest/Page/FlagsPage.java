@@ -1,4 +1,4 @@
-package Sergey_Dertan.SRegionProtector.GUI.Chest.Page;
+package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
@@ -66,7 +66,7 @@ public final class FlagsPage implements Page {
             item.setCustomName(name);
 
             String[] lore = new String[2];
-            lore[0] = "Value: " + (region.getFlagState(flagId) == RegionFlags.getStateFromString("allow", flagId) ? "allow" : "deny");
+            lore[0] = "Value: " + (flag.state == RegionFlags.getStateFromString("allow", flagId) ? "allow" : "deny");
             if (flag instanceof RegionSellFlag) {
                 lore[1] = "Price: " + ((RegionSellFlag) flag).price;
             } else if (flag instanceof RegionTeleportFlag) {

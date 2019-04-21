@@ -1,7 +1,7 @@
-package Sergey_Dertan.SRegionProtector.GUI.Chest;
+package Sergey_Dertan.SRegionProtector.UI.Chest;
 
-import Sergey_Dertan.SRegionProtector.GUI.Chest.Page.Page;
-import Sergey_Dertan.SRegionProtector.GUI.Chest.Page.RemoveRegionPage;
+import Sergey_Dertan.SRegionProtector.UI.Chest.Page.Page;
+import Sergey_Dertan.SRegionProtector.UI.Chest.Page.RemoveRegionPage;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 
-public abstract class GUIManager {
+public abstract class ChestUIManager {
 
-    private static final Int2ObjectMap<GUIInventory> inventories = new Int2ObjectArrayMap<>(); //loader id -> gui inventory
+    private static final Int2ObjectMap<UIInventory> inventories = new Int2ObjectArrayMap<>(); //loader id -> gui inventory
     /**
      * async packets should be put directly to the interface
      *
@@ -34,7 +34,7 @@ public abstract class GUIManager {
      */
     private static boolean async;
 
-    private GUIManager() {
+    private ChestUIManager() {
     }
 
     public static void handle(Player player, Item item) {
@@ -87,13 +87,13 @@ public abstract class GUIManager {
     }
 
     public static void setAsync(boolean async) {
-        GUIManager.async = async;
+        ChestUIManager.async = async;
     }
 
     public static void open(Player player, Region region) {
         Vector3 pos = sendFakeChest(player, region.name);
         if (pos == null) return;
-        GUIInventory inventory = new GUIInventory(pos, Page.MAIN.getItems(region), region);
+        UIInventory inventory = new UIInventory(pos, Page.MAIN.getItems(region), region);
         if (player.addWindow(inventory) == -1) {
             removeChest(player, pos);
         } else {

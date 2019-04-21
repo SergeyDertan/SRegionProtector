@@ -1,7 +1,8 @@
 package Sergey_Dertan.SRegionProtector.Command.Manage;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
-import Sergey_Dertan.SRegionProtector.GUI.Chest.GUIManager;
+import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
+import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
 import Sergey_Dertan.SRegionProtector.Region.Chunk.ChunkManager;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
@@ -18,12 +19,14 @@ public final class OpenGUICommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
     private final ChunkManager chunkManager;
+    private final int uiType;
 
-    public OpenGUICommand(RegionManager regionManager, ChunkManager chunkManager) {
+    public OpenGUICommand(RegionManager regionManager, ChunkManager chunkManager, int uiType) {
         super("rggui", "gui");
 
         this.regionManager = regionManager;
         this.chunkManager = chunkManager;
+        this.uiType = uiType;
 
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("guitarget", new CommandParameter[]
@@ -67,6 +70,10 @@ public final class OpenGUICommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(player, "command.gui.permission");
             return;
         }
-        GUIManager.open(player, region);
+        if (this.uiType == 0) { //TODO
+            ChestUIManager.open(player, region);
+        } else {
+            FormUIManager.open(player, region);
+        }
     }
 }

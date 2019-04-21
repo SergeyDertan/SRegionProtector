@@ -120,3 +120,5 @@ empty-chunks-auto-removing: true
 
 #if enabled all regions will be updated when new flag added
 save-new-flags: false
+#"chest" or "form"
+gui-type: "chest"
