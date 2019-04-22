@@ -260,7 +260,7 @@ public final class RegionManager {
 
     public synchronized void save(SRegionProtectorMain.SaveType saveType, String initiator) {
         AtomicInteger amount = new AtomicInteger();
-        this.regions.values().stream().filter(region -> region.needUpdate).forEach(region -> {
+        this.regions.values().stream().filter(Region::needUpdate).forEach(region -> {
             synchronized (region.lock) {
                 this.provider.save(region);
                 region.needUpdate = false;

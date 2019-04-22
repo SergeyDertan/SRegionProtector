@@ -67,11 +67,11 @@ public final class YAMLDataProvider implements DataProvider {
         if (this.multithreadedDataLoading) {
             AtomicInteger done = new AtomicInteger();
             List<List<RegionDataObject>> result = new ArrayList<>();
-            Utils.sliceArray(new File(REGIONS_FOLDER).listFiles(), this.threads, false).forEach(s -> {
+            Utils.sliceArray(new File(REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml")), this.threads, false).forEach(s -> {
                 List<RegionDataObject> res = new ArrayList<>();
                 result.add(res);
                 this.executor.execute(() -> {
-                            s.stream().filter(file -> !file.isDirectory() && file.getName().endsWith(".yml")).forEach(file -> {
+                    s.stream().filter(File::isFile).forEach(file -> {
                                 Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
                                 if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
                             });
@@ -87,7 +87,7 @@ public final class YAMLDataProvider implements DataProvider {
 
         List<RegionDataObject> result = new ArrayList<>();
 
-        Arrays.stream(new File(REGIONS_FOLDER).listFiles()).filter(file -> !file.isDirectory() && file.getName().endsWith(".yml")).forEach(file -> {
+        Arrays.stream(new File(REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml"))).filter(File::isFile).forEach(file -> {
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
             if (o != null) result.add(Converter.toRegionDataObject((Map<String, Object>) o));
         });

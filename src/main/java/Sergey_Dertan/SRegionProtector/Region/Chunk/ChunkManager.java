@@ -132,7 +132,7 @@ public final class ChunkManager {
         );
         List<Region> regions = new ArrayList<>();
 
-        chunks.forEach(chunk -> chunk.getRegions().stream().filter(region -> region.intersectsWith(bb)).forEach(regions::add));
+        chunks.forEach(chunk -> chunk.getRegions().stream().filter(bb::intersectsWith).forEach(regions::add));
         return regions;
     }
 

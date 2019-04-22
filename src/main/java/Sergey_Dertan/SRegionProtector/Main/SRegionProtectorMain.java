@@ -20,7 +20,6 @@ import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
-import Sergey_Dertan.SRegionProtector.UI.Form.Type.UIForm;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
@@ -120,9 +119,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getServer().getScheduler().scheduleTask(this, this::checkUpdate, true);
 
         instance = this;
-
-
-        UIForm.getInstance(UIForm.MAIN,regionManager.getRegion("qwe")); //TODO
     }
 
     private void gc() {

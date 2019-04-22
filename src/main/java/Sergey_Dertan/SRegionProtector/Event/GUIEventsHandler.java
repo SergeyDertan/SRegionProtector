@@ -1,7 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Event;
 
-import Sergey_Dertan.SRegionProtector.UI.Chest.UIInventory;
 import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
+import Sergey_Dertan.SRegionProtector.UI.Chest.UIInventory;
 import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Type.UIForm;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;

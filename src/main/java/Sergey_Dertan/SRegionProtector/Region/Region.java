@@ -316,6 +316,10 @@ public final class Region implements AxisAlignedBB {
         return (BlockEntityHealer) this.getHealerPosition().level.getBlockEntity(this.getHealerVector());
     }
 
+    public boolean needUpdate() {
+        return needUpdate;
+    }
+
     @Override
     public double getMaxX() {
         return this.maxX;

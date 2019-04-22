@@ -1,9 +1,9 @@
 package Sergey_Dertan.SRegionProtector.UI.Chest;
 
-import Sergey_Dertan.SRegionProtector.UI.Chest.Page.Page;
-import Sergey_Dertan.SRegionProtector.UI.Chest.Page.RemoveRegionPage;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Region;
+import Sergey_Dertan.SRegionProtector.UI.Chest.Page.Page;
+import Sergey_Dertan.SRegionProtector.UI.Chest.Page.RemoveRegionPage;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
