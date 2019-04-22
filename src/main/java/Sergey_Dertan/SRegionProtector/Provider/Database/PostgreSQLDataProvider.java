@@ -14,4 +14,9 @@ public final class PostgreSQLDataProvider extends DataBaseDataProvider {
         pumd.addProperty("javax.jdo.option.ConnectionPassword", settings.password);
         this.init(pumd);
     }
+
+    @Override
+    public Type getType() {
+        return Type.POSTGRESQL;
+    }
 }

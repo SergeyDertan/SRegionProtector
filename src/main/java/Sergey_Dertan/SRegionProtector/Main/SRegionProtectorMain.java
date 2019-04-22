@@ -40,7 +40,6 @@ import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.TextFormat;
 import cn.nukkit.utils.ThreadCache;
 import cn.nukkit.utils.Utils;
-import javafx.util.Pair;
 
 import java.io.File;
 import java.util.Map;
@@ -61,8 +60,6 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
     private static SRegionProtectorMain instance;
     public boolean forceShutdown = false; //TODO
-
-    private Pair<String, String> updateInfo; //version | description
 
     private Settings settings;
     private DataProvider provider;

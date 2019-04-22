@@ -123,16 +123,6 @@ public abstract class DataBaseDataProvider implements DataProvider {
     }
 
     @Override
-    public String getName() {
-        return "MySQL";
-    }
-
-    @Override
-    public Type getType() {
-        return Type.MYSQL;
-    }
-
-    @Override
     public void close() {
         this.pm.close();
         this.factory.close();

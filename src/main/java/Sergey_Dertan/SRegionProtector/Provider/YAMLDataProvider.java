@@ -52,11 +52,6 @@ public final class YAMLDataProvider implements DataProvider {
     }
 
     @Override
-    public String getName() {
-        return "YAML";
-    }
-
-    @Override
     public RegionDataObject loadRegion(String name) {
         return Converter.toRegionDataObject(new Config(REGIONS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", name), Config.YAML).getAll());
     }

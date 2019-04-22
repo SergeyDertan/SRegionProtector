@@ -20,8 +20,6 @@ public interface DataProvider { //TODO unity flags and region info into one file
         this.saveFlags(region);
     }
 
-    String getName();
-
     void saveFlags(Region region);
 
     FlagListDataObject loadFlags(String region);

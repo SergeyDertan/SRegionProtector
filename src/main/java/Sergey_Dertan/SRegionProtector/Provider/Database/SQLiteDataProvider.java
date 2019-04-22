@@ -19,4 +19,9 @@ public final class SQLiteDataProvider extends DataBaseDataProvider {
         pumd.addProperty("javax.jdo.option.ConnectionPassword", "");
         this.init(pumd);
     }
+
+    @Override
+    public Type getType() {
+        return Type.SQLite;
+    }
 }
