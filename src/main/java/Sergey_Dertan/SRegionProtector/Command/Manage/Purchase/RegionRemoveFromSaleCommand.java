@@ -45,7 +45,7 @@ public final class RegionRemoveFromSaleCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.remove-from-sell.wrong-target");
             return false;
         }
-        if (!region.isCreator(sender.getName())) {
+        if (!sender.hasPermission("sregionprotector.admin") && !region.isCreator(sender.getName())) {
             this.messenger.sendMessage(sender, "command.remove-from-sell.not-creator");
             return false;
         }

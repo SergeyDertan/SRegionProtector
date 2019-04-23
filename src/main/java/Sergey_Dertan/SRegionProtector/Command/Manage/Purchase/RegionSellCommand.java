@@ -47,7 +47,7 @@ public final class RegionSellCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.sell.wrong-target");
             return false;
         }
-        if (!region.isCreator(sender.getName())) {
+        if (!sender.hasPermission("sregionprotector.admin") && !region.isCreator(sender.getName())) {
             this.messenger.sendMessage(sender, "command.sell.not-creator");
             return false;
         }
@@ -56,7 +56,7 @@ public final class RegionSellCommand extends SRegionProtectorCommand {
             return false;
         }
         long price = Long.parseLong(args[1]);
-        if (price < 0L) {
+        if (price < 0) {
             this.messenger.sendMessage(sender, "command.sell.min-price");
             return false;
         }

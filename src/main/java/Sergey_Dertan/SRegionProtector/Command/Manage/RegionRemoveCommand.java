@@ -43,7 +43,7 @@ public final class RegionRemoveCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.remove.region-doesnt-exists", "@region", args[0]);
             return false;
         }
-        if (!sender.hasPermission("sregionprotector.admin") && (sender instanceof Player && !region.isOwner(sender.getName()))) {
+        if (!sender.hasPermission("sregionprotector.admin") && (sender instanceof Player && !region.isCreator(sender.getName()))) {
             this.messenger.sendMessage(sender, "command.remove.permission");
             return false;
         }
