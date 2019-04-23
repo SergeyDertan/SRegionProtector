@@ -125,7 +125,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private boolean initDataProvider() {
         try {
-            this.provider = getProviderInstance(this.settings.provider);
+            this.provider = this.getProviderInstance(this.settings.provider);
             this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name()));
             return true;
         } catch (RuntimeException e) {
@@ -147,7 +147,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initSessionsClearTask() {
-        this.getServer().getScheduler().scheduleRepeatingTask(this, () -> this.regionSelector.clear(), ((Number) this.settings.getConfig().get("select-session-clear-interval")).intValue() * 20, true);
+        this.getServer().getScheduler().scheduleRepeatingTask(this, () -> this.regionSelector.clear(), this.settings.selectorSessionClearInterval, true);
     }
 
     private boolean createDirectories() {
