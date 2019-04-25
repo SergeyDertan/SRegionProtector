@@ -67,6 +67,9 @@ public interface Page {
         items.forEach(item -> this.prepareItem(item, page));
     }
 
+    /**
+     * mark item as a UI item and add current page number and page name tags
+     */
     default void prepareItem(Item item, int page) {
         CompoundTag nbt = item.hasCompoundTag() ? item.getNamedTag() : new CompoundTag();
         nbt.putByte(Tags.IS_UI_ITEM_TAG, 1);
@@ -80,16 +83,25 @@ public interface Page {
     }
 
     /**
-     * @return true if update required
+     * @return true if page update required
      */
     default boolean handle(Item item, Region region, Player player) {
         return false;
     }
 
+    /**
+     * check if player has permission to do action (NOT to open page)
+     */
     boolean hasPermission(Player player, Region region);
 
+    /**
+     * @param region current selected region
+     * @return inventory items, see default pages for examples
+     */
     Map<Integer, Item> getItems(Region region, int page);
 
-    //icon which will be displayed in the main page
+    /**
+     * @return icon which will be displayed on the main page
+     */
     Item getIcon();
 }
