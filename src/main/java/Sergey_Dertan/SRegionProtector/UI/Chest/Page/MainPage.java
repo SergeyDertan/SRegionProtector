@@ -20,7 +20,7 @@ public final class MainPage implements Page {
     public Map<Integer, Item> getItems(Region region, int page) {
         if (icons.size() != PAGES.size()) {
             icons.clear();
-            int i = -1;
+            int i = 0;
             for (Page pg : PAGES.values()) {
                 if (pg instanceof MainPage) continue;
                 icons.put(++i, pg.getIcon());
