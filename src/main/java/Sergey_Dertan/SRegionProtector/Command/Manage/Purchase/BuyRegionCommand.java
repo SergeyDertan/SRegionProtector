@@ -23,7 +23,7 @@ public final class BuyRegionCommand extends SRegionProtectorCommand {
 
         Object2ObjectMap<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("rgbuy", new CommandParameter[]{
-                new CommandParameter("region", CommandParamType.TEXT, false),
+                new CommandParameter("region", CommandParamType.STRING, false),
                 new CommandParameter("price", CommandParamType.INT, false)
         });
         this.setCommandParameters(parameters);

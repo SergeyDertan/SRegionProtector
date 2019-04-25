@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
@@ -105,5 +106,14 @@ public final class FlagsPage implements Page {
     @Override
     public boolean hasPermission(Player player, Region region) {
         return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
+    }
+
+    @Override
+    public Item getIcon() {
+        Item item = Item.get(ItemID.BANNER).setCustomName(Messenger.getInstance().getMessage("gui.main.go-to-flags"));
+        CompoundTag nbt = item.getNamedTag();
+        nbt.putString(Tags.OPEN_PAGE_TAG, this.getName());
+        item.setNamedTag(nbt);
+        return item;
     }
 }

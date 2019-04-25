@@ -57,4 +57,13 @@ public final class MembersPage implements Page {
     public boolean hasPermission(Player player, Region region) {
         return player.hasPermission("sregionprotector.admin") || region.isOwner(player.getName(), true);
     }
+
+    @Override
+    public Item getIcon() {
+        Item item = Item.get(ItemID.SKULL, 3).setCustomName(Messenger.getInstance().getMessage("gui.main.go-to-members"));
+        CompoundTag nbt = item.getNamedTag();
+        nbt.putString(Tags.OPEN_PAGE_TAG, this.getName());
+        item.setNamedTag(nbt);
+        return item;
+    }
 }

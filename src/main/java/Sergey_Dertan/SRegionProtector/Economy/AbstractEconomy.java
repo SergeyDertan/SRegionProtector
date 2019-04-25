@@ -18,5 +18,4 @@ public interface AbstractEconomy {
     void reduceMoney(String player, long amount);
 
     void addMoney(String player, long amount);
-
 }

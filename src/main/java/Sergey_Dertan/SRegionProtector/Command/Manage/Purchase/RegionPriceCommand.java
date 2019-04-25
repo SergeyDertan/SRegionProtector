@@ -18,7 +18,7 @@ public final class RegionPriceCommand extends SRegionProtectorCommand {
         this.regionManager = regionManager;
 
         Object2ObjectMap<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
-        parameters.put("rgprice", new CommandParameter[]{new CommandParameter("region", CommandParamType.TEXT, false)});
+        parameters.put("rgprice", new CommandParameter[]{new CommandParameter("region", CommandParamType.STRING, false)});
         this.setCommandParameters(parameters);
     }
 

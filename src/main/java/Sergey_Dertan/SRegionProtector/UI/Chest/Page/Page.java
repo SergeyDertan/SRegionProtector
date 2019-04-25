@@ -20,6 +20,14 @@ public interface Page {
     Page REMOVE_REGION = new RemoveRegionPage();
     Page MAIN = new MainPage();
 
+    Map<String, Page> PAGES = new HashMap<String, Page>() {{
+        this.put(MAIN.getName(), MAIN);
+        this.put(OWNERS.getName(), OWNERS);
+        this.put(MEMBERS.getName(), MEMBERS);
+        this.put(FLAGS.getName(), FLAGS);
+        this.put(REMOVE_REGION.getName(), REMOVE_REGION);
+    }};
+
     Map<Integer, Item> NAVIGATORS_CACHE = new HashMap<Integer, Item>() {{
         CompoundTag nbt;
 
@@ -41,19 +49,12 @@ public interface Page {
     }};
 
     static Page getPage(String name) {
-        switch (name.toLowerCase()) {
-            case "main":
-                return MAIN;
-            case "owners":
-                return OWNERS;
-            case "flags":
-                return FLAGS;
-            case "members":
-                return MEMBERS;
-            case "remove-region":
-                return REMOVE_REGION;
-        }
-        return null;
+        return PAGES.get(name);
+    }
+
+    @SuppressWarnings("unused")
+    static void addPage(Page page) {
+        PAGES.put(page.getName(), page);
     }
 
     default Map<Integer, Item> getItems(Region region) {
@@ -88,4 +89,7 @@ public interface Page {
     boolean hasPermission(Player player, Region region);
 
     Map<Integer, Item> getItems(Region region, int page);
+
+    //icon which will be displayed in the main page
+    Item getIcon();
 }
