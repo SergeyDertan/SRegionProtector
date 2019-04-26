@@ -314,7 +314,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerCommand(new MigrateCommand(this));
 
-        this.registerCommand(new OpenGUICommand(this.regionManager, this.chunkManager, this.settings.uiType));
+        this.registerCommand(new OpenUICommand(this.regionManager, this.chunkManager, this.settings.uiType));
     }
 
     private void checkUpdate() {

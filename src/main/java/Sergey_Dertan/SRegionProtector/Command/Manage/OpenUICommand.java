@@ -15,13 +15,13 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
 
-public final class OpenGUICommand extends SRegionProtectorCommand {
+public final class OpenUICommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
     private final ChunkManager chunkManager;
     private final int uiType;
 
-    public OpenGUICommand(RegionManager regionManager, ChunkManager chunkManager, int uiType) {
+    public OpenUICommand(RegionManager regionManager, ChunkManager chunkManager, int uiType) {
         super("rggui", "gui");
 
         this.regionManager = regionManager;

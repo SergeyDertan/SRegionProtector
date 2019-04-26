@@ -4,9 +4,13 @@ import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.level.Position;
 import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
+
+import java.util.Map;
 
 public final class Pos2Command extends SRegionProtectorCommand {
 
@@ -16,7 +20,11 @@ public final class Pos2Command extends SRegionProtectorCommand {
         super("pos2");
         this.selector = selector;
 
-        this.setCommandParameters(new Object2ObjectArrayMap<>());
+        Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
+        parameters.put("target_pos2", new CommandParameter[]{
+                new CommandParameter("target", CommandParamType.POSITION, true)
+        });
+        this.setCommandParameters(parameters);
     }
 
     @Override
