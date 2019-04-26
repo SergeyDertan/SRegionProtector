@@ -220,8 +220,8 @@ public final class RegionManager {
         return this.checkOverlap(pos1, pos2, level, creator, checkSellFlag, null);
     }
 
-    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String player) {
-        return this.checkOverlap(pos1, pos2, level, player, false);
+    public boolean checkOverlap(Vector3 pos1, Vector3 pos2, String level, String creator) {
+        return this.checkOverlap(pos1, pos2, level, creator, false);
     }
 
     public synchronized void addMember(Region region, String target) {

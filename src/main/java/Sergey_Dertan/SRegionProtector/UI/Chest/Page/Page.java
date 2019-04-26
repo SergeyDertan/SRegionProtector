@@ -10,6 +10,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public interface Page {
@@ -20,7 +21,7 @@ public interface Page {
     Page REMOVE_REGION = new RemoveRegionPage();
     Page MAIN = new MainPage();
 
-    Map<String, Page> PAGES = new HashMap<String, Page>() {{
+    Map<String, Page> PAGES = new LinkedHashMap<String, Page>() {{
         this.put(MAIN.getName(), MAIN);
         this.put(OWNERS.getName(), OWNERS);
         this.put(MEMBERS.getName(), MEMBERS);
