@@ -53,6 +53,14 @@
             <id>onebone</id>
             <url>http://jenkins.onebone.me/plugin/repository/everything/</url>
         </repository>
+        <repository>
+            <id>SRegionProtector-master</id>
+            <url>https://raw.github.com/SergeyDertan/SRegionProtector/fastutil-lite/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
