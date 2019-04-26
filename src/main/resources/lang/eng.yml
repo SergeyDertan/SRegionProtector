@@ -79,11 +79,13 @@ command.lpos2.description: "set first position at the block you are looking at"
 command.pos1.in-game: "In game only"
 command.pos1.permission: "You have no permission"
 command.pos1.pos-set: "First pos set"
+command.pos1.wrong-coordinates: "Wrong coordinates"
 command.pos1.description: "set first position"
 
 command.pos2.in-game: "In game only"
 command.pos2.permission: "You have no permission"
 command.pos2.pos-set: "Second pos set"
+command.pos2.wrong-coordinates: "Wrong coordinates"
 command.pos2.description: "set second position"
 
 command.select.description: "Show region borders"

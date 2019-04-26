@@ -79,11 +79,13 @@ command.lpos2.description: "установить вторую точку гля�
 command.pos1.in-game: "Только в игре"
 command.pos1.permission: "Недостаточно прав"
 command.pos1.pos-set: "Первая точка установлена"
+command.pos1.wrong-coordinates: "Неверные координаты"
 command.pos1.description: "установить первую точку"
 
 command.pos2.in-game: "Только в игре"
 command.pos2.permission: "Недостаточно прав"
 command.pos2.pos-set: "Вторая точка установлена"
+command.pos2.wrong-coordinates: "Неверные координаты"
 command.pos2.description: "Установить вторую точку"
 
 command.select.description: "показать границы региона"

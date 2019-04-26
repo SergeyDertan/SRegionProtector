@@ -258,9 +258,9 @@ public final class SRegionProtectorMain extends PluginBase {
         this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
         this.getServer().getCommandMap().register(this.mainCommand.getName(), this.mainCommand);
 
-        this.registerCommand(new SetPos1Command(this.regionSelector));
+        this.registerCommand(new Pos1Command(this.regionSelector));
 
-        this.registerCommand(new SetPos2Command(this.regionSelector));
+        this.registerCommand(new Pos2Command(this.regionSelector));
 
         this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings));
 
