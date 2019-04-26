@@ -116,6 +116,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getServer().getScheduler().scheduleTask(this, this::checkUpdate, true);
 
         instance = this;
+
+        this.registerPlaceholders();
     }
 
     private void gc() {
@@ -369,6 +371,14 @@ public final class SRegionProtectorMain extends PluginBase {
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
         ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
         if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
+    }
+
+    private void registerPlaceholders() {
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null || this.getServer().getPluginManager().getPlugin("KotlinLib") == null) return;
+        try {
+            Class.forName("Sergey_Dertan.SRegionProtector.Utils.PlaceholdersLoader");
+        } catch (Exception ignore) {
+        }
     }
 
     public DataProvider getProviderInstance(DataProvider.Type type) {
