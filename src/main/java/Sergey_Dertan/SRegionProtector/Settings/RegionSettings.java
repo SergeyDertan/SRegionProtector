@@ -2,16 +2,11 @@ package Sergey_Dertan.SRegionProtector.Settings;
 
 import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
-import cn.nukkit.Server;
 import cn.nukkit.permission.Permissible;
-import cn.nukkit.permission.Permission;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import cn.nukkit.permission.PermissionAttachmentInfo;
 
-import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
 
@@ -28,16 +23,12 @@ public final class RegionSettings {
 
     public final int maxRegionNameLength;
     public final int minRegionNameLength;
-
+    public final int defaultAmount;
+    public final long defaultSize;
     public int healFlagHealDelay;
     public int healFlagHealAmount;
 
-    private Long2ObjectMap<Permission> regionSize;
-    private Int2ObjectMap<Permission> regionAmount;
-
     RegionSettings(Map<String, Object> cnf, Map<String, Object> rgCnf) {
-        this.loadSizePermissions(cnf);
-        this.loadAmountPermissions(cnf);
         this.loadFlagsStatuses(cnf);
         this.loadDefaultFlags(rgCnf);
         this.loadHealFlagSettings(rgCnf);
@@ -49,6 +40,9 @@ public final class RegionSettings {
 
         this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
         this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();
+
+        this.defaultAmount = ((Number) rgCnf.get("default-max-region-amount")).intValue();
+        this.defaultSize = ((Number) rgCnf.get("default-max-region-size")).longValue();
     }
 
     @SuppressWarnings("unchecked")
@@ -87,81 +81,31 @@ public final class RegionSettings {
     }
 
     public boolean hasSizePermission(Permissible target, long size) {
-        if (target.hasPermission("sregionprotector.region.size.*")) return true;
-        for (Long2ObjectMap.Entry<Permission> perm : this.regionSize.long2ObjectEntrySet()) {
-            if (perm.getLongKey() < size) continue;
-            if (target.hasPermission(perm.getValue())) return true;
+        if (size <= defaultSize || target.hasPermission("sregionprotector.region.size.*")) return true;
+
+        for (PermissionAttachmentInfo perm : target.getEffectivePermissions().values()) {
+            if (!perm.getPermission().startsWith("sregionprotector.region.size.")) continue;
+            try {
+                long max = Long.parseLong(perm.getPermission().replace("sregionprotector.region.size.", ""));
+                if (max >= size) return true;
+            } catch (NumberFormatException ignore) {
+            }
         }
         return false;
     }
 
     public boolean hasAmountPermission(Permissible target, int amount) {
-        if (target.hasPermission("sregionprotector.region.amount.*")) return true;
-        for (Int2ObjectMap.Entry<Permission> perm : this.regionAmount.int2ObjectEntrySet()) {
-            if (perm.getIntKey() < amount) continue;
-            if (target.hasPermission(perm.getValue())) return true;
+        if (amount <= defaultAmount || target.hasPermission("sregionprotector.region.amount.*")) return true;
+
+        for (PermissionAttachmentInfo perm : target.getEffectivePermissions().values()) {
+            if (!perm.getPermission().startsWith("sregionprotector.region.amount.")) continue;
+            try {
+                int max = Integer.parseInt(perm.getPermission().replace("sregionprotector.region.amount.", ""));
+                if (max >= amount) return true;
+            } catch (NumberFormatException ignore) {
+            }
         }
         return false;
-    }
-
-    @SuppressWarnings("Duplicates")
-    private void loadSizePermissions(Map<String, Object> cnf) {
-        this.regionSize = new Long2ObjectOpenHashMap<>();
-        Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.size.*");
-        @SuppressWarnings("unchecked")
-        List<Integer> list = (List<Integer>) cnf.get("region-sizes");
-        list.sort(Comparator.comparingInt(Integer::intValue));
-        Map<String, Boolean> children = new HashMap<>();
-        List<Permission> permissions = new ArrayList<>();
-        for (Integer size : list) {
-            Permission permission = new Permission("sregionprotector.region.size." + size, "Allows to creating regions with size up to " + size + " blocks", mainPerm.getDefault(), new HashMap<>(children));
-            Server.getInstance().getPluginManager().addPermission(permission);
-            this.regionSize.put(size.longValue(), permission);
-            children.put(permission.getName(), true);
-            permissions.add(permission);
-        }
-        try {
-            Field field = mainPerm.getClass().getDeclaredField("children");
-            boolean accessible = field.isAccessible();
-            if (!accessible) {
-                field.setAccessible(true);
-            }
-            field.set(mainPerm, children);
-            field.setAccessible(accessible);
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {
-        }
-        permissions.forEach(Permission::recalculatePermissibles);
-        mainPerm.recalculatePermissibles();
-    }
-
-    @SuppressWarnings("Duplicates")
-    private void loadAmountPermissions(Map<String, Object> cnf) {
-        this.regionAmount = new Int2ObjectOpenHashMap<>();
-        Permission mainPerm = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.amount.*");
-        @SuppressWarnings("unchecked")
-        List<Integer> list = (List<Integer>) cnf.get("region-amounts");
-        list.sort(Comparator.comparingInt(Integer::intValue));
-        Map<String, Boolean> children = new HashMap<>();
-        List<Permission> permissions = new ArrayList<>();
-        for (Integer amount : list) {
-            Permission permission = new Permission("sregionprotector.region.amount." + amount, "Allows to creating up to " + amount + " regions", mainPerm.getDefault(), new HashMap<>(children));
-            Server.getInstance().getPluginManager().addPermission(permission);
-            this.regionAmount.put((int) amount, permission);
-            children.put(permission.getName(), true);
-            permissions.add(permission);
-        }
-        try {
-            Field field = mainPerm.getClass().getDeclaredField("children");
-            boolean accessible = field.isAccessible();
-            if (!accessible) {
-                field.setAccessible(true);
-            }
-            field.set(mainPerm, children);
-            field.setAccessible(accessible);
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {
-        }
-        permissions.forEach(Permission::recalculatePermissibles);
-        mainPerm.recalculatePermissibles();
     }
 
     public boolean isFlagEnabled(int id) {
