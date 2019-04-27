@@ -48,7 +48,7 @@ public final class Pos2Command extends SRegionProtectorCommand {
                 return false;
             }
         } else {
-            this.selector.getSession((Player) sender).pos1 = ((Player) sender).getPosition();
+            this.selector.getSession((Player) sender).pos2 = ((Player) sender).getPosition();
         }
         this.messenger.sendMessage(sender, "command.pos2.pos-set");
         return false;
