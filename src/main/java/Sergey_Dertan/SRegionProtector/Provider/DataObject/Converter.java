@@ -7,14 +7,12 @@ import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.math.Vector3;
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 
 import java.util.*;
 
-import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.*;
 import static Sergey_Dertan.SRegionProtector.Utils.Tags.*;
 
-@SuppressWarnings("WeakerAccess")
 public abstract class Converter {
 
     private Converter() {
@@ -35,8 +33,8 @@ public abstract class Converter {
         dataObject.creator = region.getCreator();
         dataObject.level = region.level;
 
-        dataObject.owners = JSON.toJSONString(region.getOwners());
-        dataObject.members = JSON.toJSONString(region.getMembers());
+        dataObject.owners = new Gson().toJson(region.getOwners());
+        dataObject.members = new Gson().toJson(region.getMembers());
         dataObject.priority = region.getPriority();
         return dataObject;
     }
@@ -53,8 +51,8 @@ public abstract class Converter {
         dataObject.name = (String) data.get(NAME_TAG);
         dataObject.level = (String) data.get(LEVEL_TAG);
         dataObject.creator = (String) data.get(CREATOR_TAG);
-        dataObject.owners = JSON.toJSONString(Arrays.asList(Utils.deserializeStringArray(((String) data.get(OWNERS_TAG)))));
-        dataObject.members = JSON.toJSONString(Arrays.asList(Utils.deserializeStringArray(((String) data.get(MEMBERS_TAG)))));
+        dataObject.owners = new Gson().toJson(Arrays.asList(Utils.deserializeStringArray(((String) data.get(OWNERS_TAG)))));
+        dataObject.members = new Gson().toJson(Arrays.asList(Utils.deserializeStringArray(((String) data.get(MEMBERS_TAG)))));
         dataObject.priority = ((Number) data.getOrDefault(PRIORITY_TAG, 0)).intValue();
         return dataObject;
     }
@@ -64,7 +62,7 @@ public abstract class Converter {
         for (int i = 0; i < flags.length; ++i) {
             state[i] = flags[i].state;
         }
-        RegionTeleportFlag tpFlag = (RegionTeleportFlag) flags[FLAG_TELEPORT];
+        RegionTeleportFlag tpFlag = (RegionTeleportFlag) flags[RegionFlags.FLAG_TELEPORT];
         Map<String, Object> teleport = new HashMap<>();
         teleport.put(X_TAG, tpFlag.position != null ? tpFlag.position.x : 0);
         teleport.put(Y_TAG, tpFlag.position != null ? tpFlag.position.y : 0);
@@ -72,9 +70,9 @@ public abstract class Converter {
         teleport.put(LEVEL_TAG, tpFlag.level);
 
         FlagListDataObject dataObject = new FlagListDataObject();
-        dataObject.state = JSON.toJSONString(state);
-        dataObject.teleportData = JSON.toJSONString(teleport);
-        dataObject.sellData = ((RegionSellFlag) flags[FLAG_SELL]).price;
+        dataObject.state = new Gson().toJson(state);
+        dataObject.teleportData = new Gson().toJson(teleport);
+        dataObject.sellData = ((RegionSellFlag) flags[RegionFlags.FLAG_SELL]).price;
         dataObject.region = region;
         return dataObject;
     }
@@ -86,8 +84,8 @@ public abstract class Converter {
                 dataObject.priority,
                 dataObject.minX, dataObject.minY, dataObject.minZ,
                 dataObject.maxX, dataObject.maxY, dataObject.maxZ,
-                JSON.parseArray(dataObject.owners, String.class).toArray(new String[0]),
-                JSON.parseArray(dataObject.members, String.class).toArray(new String[0]),
+                new Gson().fromJson(dataObject.owners, String[].class),
+                new Gson().fromJson(dataObject.members, String[].class),
                 flags
         );
     }
@@ -98,11 +96,11 @@ public abstract class Converter {
 
     public static List<RegionFlag> fromDataObject(FlagListDataObject dataObject) {
         List<RegionFlag> flags = new ArrayList<>();
-        Boolean[] state = JSON.parseArray(dataObject.state, Boolean.class).toArray(new Boolean[0]);
+        boolean[] state = new Gson().fromJson(dataObject.state, boolean[].class);
         @SuppressWarnings("unchecked")
-        Map<String, Object> teleportData = (Map<String, Object>) JSON.parse(dataObject.teleportData);
+        Map<String, Object> teleportData = (Map<String, Object>) new Gson().fromJson(dataObject.teleportData, Map.class); //TODO
         for (int i = 0; i < state.length; ++i) {
-            if (i == FLAG_TELEPORT) {
+            if (i == RegionFlags.FLAG_TELEPORT) {
                 double x = ((Number) teleportData.get(X_TAG)).doubleValue();
                 double y = ((Number) teleportData.get(Y_TAG)).doubleValue();
                 double z = ((Number) teleportData.get(Z_TAG)).doubleValue();
@@ -110,7 +108,7 @@ public abstract class Converter {
                 flags.add(new RegionTeleportFlag(state[i], new Vector3(x, y, z), level));
                 continue;
             }
-            if (i == FLAG_SELL) {
+            if (i == RegionFlags.FLAG_SELL) {
                 flags.add(new RegionSellFlag(state[i], dataObject.sellData));
                 continue;
             }
@@ -123,12 +121,12 @@ public abstract class Converter {
         FlagListDataObject dataObject = new FlagListDataObject();
         List<Boolean> state = new ArrayList<>();
         for (Map.Entry<String, Map<String, Object>> flag : data.entrySet()) {
-            if (getFlagId(flag.getKey()) == FLAG_INVALID) continue;
-            state.add(getFlagId(flag.getKey()), (Boolean) flag.getValue().get(STATE_TAG));
-            if (getFlagId(flag.getKey()) == FLAG_SELL) {
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
+            state.add(RegionFlags.getFlagId(flag.getKey()), (Boolean) flag.getValue().get(STATE_TAG));
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_SELL) {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
             }
-            if (getFlagId(flag.getKey()) == FLAG_TELEPORT) {
+            if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_TELEPORT) {
                 @SuppressWarnings("unchecked")
                 Map<String, Object> teleportData = (Map<String, Object>) flag.getValue().getOrDefault(POSITION_TAG, new HashMap<>());
                 Map<String, Object> teleport = new HashMap<>();
@@ -136,10 +134,10 @@ public abstract class Converter {
                 teleport.put(Y_TAG, teleportData.getOrDefault(Y_TAG, 0));
                 teleport.put(Z_TAG, teleportData.getOrDefault(Z_TAG, 0));
                 teleport.put(LEVEL_TAG, teleportData.getOrDefault(LEVEL_TAG, ""));
-                dataObject.teleportData = JSON.toJSONString(teleport);
+                dataObject.teleportData = new Gson().toJson(teleport);
             }
         }
-        dataObject.state = JSON.toJSONString(state.toArray(new Boolean[0]));
+        dataObject.state = new Gson().toJson(state.toArray(new Boolean[0]));
         return dataObject;
     }
 }

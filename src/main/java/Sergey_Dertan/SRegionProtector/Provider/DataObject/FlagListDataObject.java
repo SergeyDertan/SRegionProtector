@@ -13,7 +13,7 @@ public final class FlagListDataObject {
     /**
      * JSON serialized boolean array
      *
-     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
+     * @see com.google.gson.Gson#toJson(Object)
      */
     @Persistent(name = "state")
     public String state;
@@ -29,7 +29,7 @@ public final class FlagListDataObject {
     /**
      * JSON serialized Map<String, Object>
      *
-     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
+     * @see com.google.gson.Gson#toJson(Object)
      * @see Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag
      * @see Converter#toDataObject(RegionFlag[], String)
      * @see Region#getTeleportFlagPos()

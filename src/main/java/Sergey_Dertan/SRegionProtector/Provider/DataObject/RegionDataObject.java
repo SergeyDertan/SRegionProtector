@@ -45,7 +45,7 @@ public final class RegionDataObject {
     /**
      * JSON serialized Collection<String>
      *
-     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
+     * @see com.google.gson.Gson#toJson(Object)
      * @see Converter#toDataObject(Region)
      * @see Converter#fromDataObject(RegionDataObject, RegionFlag[])
      */
@@ -55,7 +55,7 @@ public final class RegionDataObject {
     /**
      * JSON serialized Collection<String>
      *
-     * @see com.alibaba.fastjson.JSON#toJSONString(Object)
+     * @see com.google.gson.Gson#toJson(Object)
      * @see Converter#toDataObject(Region)
      * @see Converter#fromDataObject(RegionDataObject, RegionFlag[])
      */

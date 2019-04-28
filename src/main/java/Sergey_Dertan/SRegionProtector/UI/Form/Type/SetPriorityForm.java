@@ -12,7 +12,7 @@ final class SetPriorityForm extends FormWindowCustom implements UIForm {
 
     private final transient Region region;
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
     SetPriorityForm(Region region, String err) {
         super("Changing priority for " + region.name);
         this.region = region;

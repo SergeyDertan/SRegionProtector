@@ -12,7 +12,7 @@ final class SellRegionForm extends FormWindowCustom implements UIForm {
 
     private final transient Region region;
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "SameParameterValue"})
     SellRegionForm(Region region, String err) {
         super("Sell region " + region.name);
         this.region = region;

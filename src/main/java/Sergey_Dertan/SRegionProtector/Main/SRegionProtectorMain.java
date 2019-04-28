@@ -337,7 +337,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private boolean loadLibraries() {
         try {
-            LibraryLoader.load("com.alibaba:fastjson:1.2.54");
             LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m11");
             LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-release");
         } catch (LibraryLoadException e) {

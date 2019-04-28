@@ -18,7 +18,6 @@ import cn.nukkit.math.SimpleAxisAlignedBB;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.Logger;
 import cn.nukkit.utils.TextFormat;
-import com.alibaba.fastjson.JSON;
 import it.unimi.dsi.fastutil.objects.Object2ObjectAVLTreeMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 
@@ -27,7 +26,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.FLAG_AMOUNT;
-import static Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags.fixMissingFlags;
 
 @SuppressWarnings("unused")
 public final class RegionManager {
@@ -65,58 +63,40 @@ public final class RegionManager {
     public void init(boolean saveNewFlags) {
         List<RegionDataObject> regions = this.provider.loadRegionList();
         for (RegionDataObject rdo : regions) {
-            String name = rdo.name;
-            String creator = rdo.creator;
-            String level = rdo.level;
-
-            double minX = rdo.minX;
-            double minY = rdo.minY;
-            double minZ = rdo.minZ;
-
-            double maxX = rdo.maxX;
-            double maxY = rdo.maxY;
-            double maxZ = rdo.maxZ;
-
-            int priority = rdo.priority;
-
-            String[] owners;
-            String[] members;
-
-            try {
-                owners = JSON.parseArray(rdo.owners, String.class).toArray(new String[0]);
-                members = JSON.parseArray(rdo.members, String.class).toArray(new String[0]);
-            } catch (Exception e) {
-                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", "@region", name));
-                this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
-                continue;
-            }
-
-            FlagListDataObject flags = this.provider.loadFlags(name);
+            FlagListDataObject flags = this.provider.loadFlags(rdo.name);
 
             List<RegionFlag> flagList = Converter.fromDataObject(flags);
 
             boolean needUpdate = false;
             if (flagList.size() < FLAG_AMOUNT) {
                 if (saveNewFlags) needUpdate = true;
-                fixMissingFlags(flagList);
+                RegionFlags.fixMissingFlags(flagList);
             }
 
-            Region region = new Region(name, creator, level, priority, minX, minY, minZ, maxX, maxY, maxZ, owners, members, flagList.toArray(new RegionFlag[0]));
+            Region region;
+
+            try {
+                region = Converter.fromDataObject(rdo, flagList.toArray(new RegionFlag[0]));
+            } catch (Exception e) {
+                this.logger.warning(TextFormat.YELLOW + this.messenger.getMessage("loading.error.regions", "@region", rdo.name));
+                this.logger.warning(cn.nukkit.utils.Utils.getExceptionMessage(e));
+                continue;
+            }
 
             region.needUpdate = needUpdate;
 
-            this.regions.put(name, region);
+            this.regions.put(region.name, region);
 
-            for (String user : owners) this.owners.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
+            for (String user : region.getOwners()) this.owners.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
 
-            for (String user : members) this.members.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
+            for (String user : region.getMembers()) this.members.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
 
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ObjectArraySet<>()).add(region);
 
             this.chunkManager.getRegionChunks(
-                    new Vector3(minX, minY, minZ),
-                    new Vector3(maxX, maxY, maxZ),
-                    level, true
+                    new Vector3(region.minX, region.minY, region.minZ),
+                    new Vector3(region.maxX, region.maxY, region.maxZ),
+                    region.level, true
             ).forEach(chunk -> {
                 chunk.addRegion(region);
                 region.addChunk(chunk);

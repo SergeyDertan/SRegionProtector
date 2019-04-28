@@ -104,6 +104,7 @@ public final class Settings {
         this.regionSettings = new RegionSettings(config, new Config(MAIN_FOLDER + "region-settings.yml", Config.YAML).getAll());
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Map<String, Object> getConfig() {
         return new Config(MAIN_FOLDER + "config.yml", Config.YAML).getAll();
     }
