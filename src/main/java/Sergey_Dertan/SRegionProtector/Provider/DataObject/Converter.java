@@ -3,6 +3,7 @@ package Sergey_Dertan.SRegionProtector.Provider.DataObject;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionTeleportFlag;
+import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.math.Vector3;
@@ -66,8 +67,8 @@ public abstract class Converter {
         RegionTeleportFlag tpFlag = (RegionTeleportFlag) flags[FLAG_TELEPORT];
         Map<String, Object> teleport = new HashMap<>();
         teleport.put(X_TAG, tpFlag.position != null ? tpFlag.position.x : 0);
-        teleport.put(Y_TAG, tpFlag.position != null ? tpFlag.position.z : 0);
-        teleport.put(Z_TAG, tpFlag.position != null ? tpFlag.position.y : 0);
+        teleport.put(Y_TAG, tpFlag.position != null ? tpFlag.position.y : 0);
+        teleport.put(Z_TAG, tpFlag.position != null ? tpFlag.position.z : 0);
         teleport.put(LEVEL_TAG, tpFlag.level);
 
         FlagListDataObject dataObject = new FlagListDataObject();
