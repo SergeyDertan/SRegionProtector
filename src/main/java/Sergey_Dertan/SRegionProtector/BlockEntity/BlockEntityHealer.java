@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.BlockEntity;
 
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
+import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import cn.nukkit.Player;
 import cn.nukkit.blockentity.BlockEntitySpawnable;
@@ -92,8 +93,11 @@ public final class BlockEntityHealer extends BlockEntitySpawnable {
 
     @Override
     public boolean onUpdate() {
-        if (!RegionFlags.getDefaultFlagState(RegionFlags.FLAG_HEAL)) return true;
         if (this.closed) return false;
+        if (!FLAG_ENABLED) return true;
+        Region region = this.regionManager.getRegion(this.region);
+        if (region == null) return false;
+        if (!region.getFlagState(RegionFlags.FLAG_HEAL)) return true;
         if (--this.delay > 0) return true;
         for (Entity entity : this.level.getNearbyEntities(this.bb)) {
             if (!(entity instanceof Player)) continue;

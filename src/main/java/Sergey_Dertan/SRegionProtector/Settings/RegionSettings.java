@@ -19,13 +19,15 @@ public final class RegionSettings {
 
     public final boolean[] display = new boolean[FLAG_AMOUNT]; //check if flag should be shown in the info command
 
-    public final boolean saveNewFlags;
+    public final boolean saveNewFlags; //if true after adding new flag to the region it will be saved
 
     public final int maxRegionNameLength;
     public final int minRegionNameLength;
-    public final int defaultAmount;
-    public final long defaultSize;
-    public int healFlagHealDelay;
+
+    public final int defaultAmount; //max region amount which doesnt required any permission
+    public final long defaultSize; //max region size which doesnt required any permission
+
+    public int healFlagHealDelay; //in ticks, 1 second = 20 ticks
     public int healFlagHealAmount;
 
     RegionSettings(Map<String, Object> cnf, Map<String, Object> rgCnf) {
@@ -41,8 +43,8 @@ public final class RegionSettings {
         this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
         this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();
 
-        this.defaultAmount = ((Number) rgCnf.get("default-max-region-amount")).intValue();
-        this.defaultSize = ((Number) rgCnf.get("default-max-region-size")).longValue();
+        this.defaultAmount = ((Number) cnf.get("default-max-region-amount")).intValue();
+        this.defaultSize = ((Number) cnf.get("default-max-region-size")).longValue();
     }
 
     @SuppressWarnings("unchecked")

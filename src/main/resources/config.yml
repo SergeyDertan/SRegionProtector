@@ -94,7 +94,7 @@ display:
 # players need no permission to create regions with this size & amount
 # to let player create more regions with greater size give him permissions
 # "sregionprotector.region.size.DESIRED_MAX_SIZE", and
-#"sregionprotector.region.amount.DESIRED_MAX_AMOUNT"
+# "sregionprotector.region.amount.DESIRED_MAX_AMOUNT"
 default-max-region-size: 15000
 default-max-region-amount: 3
 #in seconds

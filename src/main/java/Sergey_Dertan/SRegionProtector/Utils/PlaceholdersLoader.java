@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import com.creeperface.nukkit.placeholderapi.api.PlaceholderAPI;
 
+//do not load this class if placeholder api isn`t installed
 public abstract class PlaceholdersLoader {
 
     static {
