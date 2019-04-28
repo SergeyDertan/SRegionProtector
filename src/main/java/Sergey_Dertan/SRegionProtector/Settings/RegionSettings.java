@@ -41,8 +41,8 @@ public final class RegionSettings {
         this.maxRegionNameLength = ((Number) rgCnf.get("max-region-name-length")).intValue();
         this.minRegionNameLength = ((Number) rgCnf.get("min-region-name-length")).intValue();
 
-        this.defaultAmount = ((Number) rgCnf.get("default-max-region-amount")).intValue();
-        this.defaultSize = ((Number) rgCnf.get("default-max-region-size")).longValue();
+        this.defaultAmount = ((Number) cnf.get("default-max-region-amount")).intValue();
+        this.defaultSize = ((Number) cnf.get("default-max-region-size")).longValue();
     }
 
     @SuppressWarnings("unchecked")
