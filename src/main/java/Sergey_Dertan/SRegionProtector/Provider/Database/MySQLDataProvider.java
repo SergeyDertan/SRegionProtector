@@ -4,7 +4,7 @@ import Sergey_Dertan.SRegionProtector.Settings.MySQLSettings;
 import com.mysql.cj.jdbc.Driver;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 
-public final class MySQLDataProvider extends DataBaseDataProvider {
+public final class MySQLDataProvider extends DatabaseDataProvider {
 
     public MySQLDataProvider(MySQLSettings settings) {
         PersistenceUnitMetaData pumd = new PersistenceUnitMetaData("dynamic-unit", "RESOURCE_LOCAL", null);

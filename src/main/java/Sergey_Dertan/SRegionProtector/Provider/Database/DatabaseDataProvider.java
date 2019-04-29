@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 @SuppressWarnings("WeakerAccess")
-public abstract class DataBaseDataProvider implements DataProvider {
+public abstract class DatabaseDataProvider implements DataProvider {
 
     protected PersistenceManagerFactory factory;
     protected PersistenceManager pm;

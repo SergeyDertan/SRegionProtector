@@ -4,7 +4,7 @@ import Sergey_Dertan.SRegionProtector.Settings.PostgreSQLSettings;
 import org.datanucleus.metadata.PersistenceUnitMetaData;
 import org.postgresql.Driver;
 
-public final class PostgreSQLDataProvider extends DataBaseDataProvider {
+public final class PostgreSQLDataProvider extends DatabaseDataProvider {
 
     public PostgreSQLDataProvider(PostgreSQLSettings settings) {
         PersistenceUnitMetaData pumd = new PersistenceUnitMetaData("dynamic-unit", "RESOURCE_LOCAL", null);

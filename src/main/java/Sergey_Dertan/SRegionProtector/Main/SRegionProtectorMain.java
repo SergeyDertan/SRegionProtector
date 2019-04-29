@@ -340,7 +340,7 @@ public final class SRegionProtectorMain extends PluginBase {
             LibraryLoader.load("org.datanucleus:javax.jdo:3.2.0-m11");
             LibraryLoader.load("org.datanucleus:datanucleus-core:5.2.0-release");
         } catch (LibraryLoadException e) {
-            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.fastjson"));
+            this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.library"));
             this.getLogger().alert(Utils.getExceptionMessage(e));
             this.forceShutdown = true;
             this.getPluginLoader().disablePlugin(this);

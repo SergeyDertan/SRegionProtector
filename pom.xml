@@ -246,9 +246,6 @@
                 <directory>${basedir}/src/main/resources</directory>
                 <filtering>false</filtering>
                 <includes>
-                    <include>mysql.yml</include>
-                    <include>postgresql.yml</include>
-                    <include>sqlite.yml</include>
                     <include>config.yml</include>
                     <include>region-settings.yml</include>
                 </includes>
