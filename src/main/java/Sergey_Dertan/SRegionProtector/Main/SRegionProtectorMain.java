@@ -213,7 +213,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initEventsHandlers() {
-        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem), this);
+        this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem, this.settings.protectedMessageType), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
         this.getServer().getPluginManager().registerEvents(new GUIEventsHandler(this.settings.uiType), this);
     }
