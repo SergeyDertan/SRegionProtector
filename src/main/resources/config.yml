@@ -91,6 +91,7 @@ display:
   smart-doors: true
   minefarm: true
   fall-damage: true
+  nether-portal: true
 # players need no permission to create regions with this size & amount
 # to let player create more regions with greater size give him permissions
 # "sregionprotector.region.size.DESIRED_MAX_SIZE", and

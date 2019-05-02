@@ -67,7 +67,7 @@ public abstract class RegionFlags {
 
     public static final BiMap<Integer, String> flags; //flags names
     public static final Map<String, Integer> aliases; //flags names aliases
-    public static final Map<Integer, Boolean> state; //true if "allow" means that flag should be disabled
+    public static final boolean[] state = new boolean[FLAG_AMOUNT]; //true if "allow" means that flag should be disabled
 
     static {
         BiMap<Integer, String> flagList = HashBiMap.create(FLAG_AMOUNT);
@@ -118,44 +118,15 @@ public abstract class RegionFlags {
 
         flags.forEach((k, v) -> permissions[k] = Server.getInstance().getPluginManager().getPermission("sregionprotector.region.flag." + v.replace("-", "_")));
 
-        Map<Integer, Boolean> fState = new HashMap<>(FLAG_AMOUNT);
-        fState.put(FLAG_PLACE, true);
-        fState.put(FLAG_BREAK, true);
-        fState.put(FLAG_INTERACT, true);
-        fState.put(FLAG_USE, true);
-        fState.put(FLAG_PVP, true);
-        fState.put(FLAG_EXPLODE, true);
-        fState.put(FLAG_LIGHTER, true);
-        fState.put(FLAG_MAGIC_ITEM_USE, true);
-        fState.put(FLAG_HEAL, false);
-        fState.put(FLAG_INVINCIBLE, false);
-        fState.put(FLAG_TELEPORT, false);
-        fState.put(FLAG_SELL, false);
-        fState.put(FLAG_POTION_LAUNCH, true);
-        fState.put(FLAG_MOVE, true);
-        fState.put(FLAG_LEAVES_DECAY, true);
-        fState.put(FLAG_ITEM_DROP, true);
-        fState.put(FLAG_SEND_CHAT, true);
-        fState.put(FLAG_RECEIVE_CHAT, true);
-        fState.put(FLAG_HEALTH_REGEN, true);
-        fState.put(FLAG_MOB_DAMAGE, true);
-        fState.put(FLAG_MOB_SPAWN, true);
-        fState.put(FLAG_CROPS_DESTROY, true);
-        fState.put(FLAG_REDSTONE, true);
-        fState.put(FLAG_ENDER_PEARL, true);
-        fState.put(FLAG_EXPLODE_BLOCK_BREAK, true);
-        fState.put(FLAG_LIQUID_FLOW, true);
-        fState.put(FLAG_FIRE, true);
-        fState.put(FLAG_LIGHTNING_STRIKE, true);
-        fState.put(FLAG_CHEST_ACCESS, true);
-        fState.put(FLAG_SLEEP, true);
-        fState.put(FLAG_CHUNK_LOADER, false);
-        fState.put(FLAG_SMART_DOORS, false);
-        fState.put(FLAG_MINEFARM, false);
-        fState.put(FLAG_FALL_DAMAGE, false);
-        fState.put(FLAG_NETHER_PORTAL, true);
-
-        state = ImmutableMap.copyOf(fState);
+        Arrays.fill(state, true);
+        state[FLAG_HEAL] = false;
+        state[FLAG_INVINCIBLE] = false;
+        state[FLAG_TELEPORT] = false;
+        state[FLAG_SELL] = false;
+        state[FLAG_CHUNK_LOADER] = false;
+        state[FLAG_SMART_DOORS] = false;
+        state[FLAG_MINEFARM] = false;
+        state[FLAG_FALL_DAMAGE] = false;
     }
 
     private RegionFlags() {
@@ -189,8 +160,8 @@ public abstract class RegionFlags {
     }
 
     public static boolean getStateFromString(String state, int flag) {
-        if (state.equalsIgnoreCase("allow")) return !RegionFlags.state.get(flag);
-        if (state.equalsIgnoreCase("deny")) return RegionFlags.state.get(flag);
+        if (state.equalsIgnoreCase("allow")) return !RegionFlags.state[flag];
+        if (state.equalsIgnoreCase("deny")) return RegionFlags.state[flag];
         throw new RuntimeException("Wrong state");
     }
 
