@@ -2,11 +2,13 @@ package Sergey_Dertan.SRegionProtector.Command.Admin;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import cn.nukkit.command.CommandSender;
-import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public final class MigrateCommand extends SRegionProtectorCommand {
@@ -17,9 +19,17 @@ public final class MigrateCommand extends SRegionProtectorCommand {
         super("rgmigrate", "migrate");
         this.main = main;
 
+        List<String> providers = new ArrayList<>();
+
+        for (DataProvider.Type type : DataProvider.Type.values()) {
+            providers.add(type.name().toLowerCase());
+        }
+
+        providers.remove(DataProvider.Type.UNSUPPORTED.name().toLowerCase());
+
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
-        parameters.put("srcprovider", new CommandParameter[]{new CommandParameter("from", CommandParamType.STRING, false)});
-        parameters.put("targetprovider", new CommandParameter[]{new CommandParameter("to", CommandParamType.STRING, false)});
+        parameters.put("srcprovider", new CommandParameter[]{new CommandParameter("from", false, providers.toArray(new String[0]))});
+        parameters.put("targetprovider", new CommandParameter[]{new CommandParameter("to", false, providers.toArray(new String[0]))});
         this.setCommandParameters(parameters);
     }
 

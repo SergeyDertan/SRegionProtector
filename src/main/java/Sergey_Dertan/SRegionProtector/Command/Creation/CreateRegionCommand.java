@@ -57,7 +57,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.create.usage");
             return false;
         }
-        if (name.length() < this.regionSettings.minRegionNameLength || name.length() > regionSettings.maxRegionNameLength || !name.matches("[a-zA-Z0-9]*")) {
+        if (name.length() < this.regionSettings.minRegionNameLength || name.length() > this.regionSettings.maxRegionNameLength || !name.matches("[a-zA-Z0-9]*")) {
             this.messenger.sendMessage(sender, "command.create.incorrect-name");
             return false;
         }
