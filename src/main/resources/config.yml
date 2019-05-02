@@ -108,3 +108,5 @@ empty-chunks-auto-removing: true
 save-new-flags: false
 #"chest" or "form"
 gui-type: "chest"
+
+max-borders-amount: 300

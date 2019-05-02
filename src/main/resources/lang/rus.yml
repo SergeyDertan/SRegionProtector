@@ -94,6 +94,7 @@ command.select.permission: "Недостаточно прав"
 command.select.usage: "Используйте /rgselect [РЕГИОН]"
 command.select.region-doesnt-exists: "Регион {@region} не найден"
 command.select.different-worlds: "Вы не в том мире, где расположен регион"
+command.select.too-long: "Нельзя отправить так много блоков"
 command.select.success: "Загрузка границ региона..."
 
 command.remove-borders.description: "убрать границы региона"
@@ -113,6 +114,7 @@ command.show-border.description: "Показать границы выбранн
 command.show-border.in-game: "Только в игре"
 command.show-border.permission: "Недостаточно прав"
 command.show-border.no-pos: "Сначала выделите 2 точки"
+command.show-border.too-long: "Нельзя отправить так много блоков"
 command.show-border.success: "Загрузка границ региона..."
 
 command.wand.wand-given: "Вы получили предмет для выделеная региона"

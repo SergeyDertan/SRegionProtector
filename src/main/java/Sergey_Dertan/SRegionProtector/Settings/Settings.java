@@ -48,6 +48,8 @@ public final class Settings {
 
     public final int selectorSessionClearInterval;
 
+    public final long maxBordersAmount;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
@@ -78,6 +80,8 @@ public final class Settings {
         this.prioritySystem = (boolean) config.get("priority-system");
 
         this.updateNotifier = (boolean) config.get("update-notifier");
+
+        this.maxBordersAmount = ((Number) config.get("max-borders-amount")).longValue();
 
         this.uiType = ((String) config.get("gui-type")).equalsIgnoreCase("chest") ? GUIEventsHandler.UI_TYPE_CHEST : GUIEventsHandler.UI_TYPE_FORM;
 

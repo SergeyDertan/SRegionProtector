@@ -6,6 +6,7 @@ import cn.nukkit.level.GlobalBlockPalette;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
+import cn.nukkit.utils.MainLogger;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -197,5 +198,18 @@ public final class RegionSelector {
 
     public void removeBorders(Player target) {
         this.removeBorders(target, true);
+    }
+
+    public long calculateEdgesLength(Vector3 pos1, Vector3 pos2) {
+        long size = (long) (4 *
+                (
+                        Math.abs(Math.max(pos1.x, pos2.x) - Math.min(pos1.x, pos2.x)) +
+                                Math.abs(Math.max(pos1.y, pos2.y) - Math.min(pos1.y, pos2.y)) +
+                                Math.abs(Math.max(pos1.z, pos2.z) - Math.min(pos1.z, pos2.z))
+                )
+        );
+        if (size < 0) return Long.MAX_VALUE;
+        MainLogger.getLogger().info(Long.toString(size)); //TODO
+        return size;
     }
 }

@@ -288,9 +288,9 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerCommand(new RegionSizeCommand(this.regionSelector));
 
-        this.registerCommand(new ShowBorderCommand(this.regionSelector));
+        this.registerCommand(new ShowBorderCommand(this.regionSelector, this.settings.maxBordersAmount));
 
-        this.registerCommand(new RegionSelectCommand(this.regionManager, this.regionSelector));
+        this.registerCommand(new RegionSelectCommand(this.regionManager, this.regionSelector, this.settings.maxBordersAmount));
 
         this.registerCommand(new RemoveBordersCommand(this.regionSelector));
 

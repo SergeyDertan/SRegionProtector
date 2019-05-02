@@ -17,11 +17,13 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
     private final RegionSelector selector;
+    private final long maxBordersAmount;
 
-    public RegionSelectCommand(RegionManager regionManager, RegionSelector selector) {
+    public RegionSelectCommand(RegionManager regionManager, RegionSelector selector, long maxBordersAmount) {
         super("rgselect", "select");
         this.regionManager = regionManager;
         this.selector = selector;
+        this.maxBordersAmount = maxBordersAmount;
 
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("rgselect", new CommandParameter[]{
@@ -55,6 +57,10 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
         }
         if (!region.level.equalsIgnoreCase(((Player) sender).level.getName())) {
             this.messenger.sendMessage(sender, "command.select.different-worlds");
+            return false;
+        }
+        if (this.selector.calculateEdgesLength(new Vector3(region.maxX, region.maxY, region.maxZ), new Vector3(region.minX, region.minY, region.minZ)) > this.maxBordersAmount) {
+            this.messenger.sendMessage(sender, "command.select.too-long");
             return false;
         }
         this.messenger.sendMessage(sender, "command.select.success");

@@ -13,10 +13,12 @@ import java.util.Map;
 public final class ShowBorderCommand extends SRegionProtectorCommand {
 
     private final RegionSelector selector;
+    private final long maxBordersAmount;
 
-    public ShowBorderCommand(RegionSelector selector) {
+    public ShowBorderCommand(RegionSelector selector, long maxBorders) {
         super("rgshowborder", "show-border");
         this.selector = selector;
+        this.maxBordersAmount = maxBorders;
 
         Map<String, CommandParameter[]> parameters = new HashMap<>();
         parameters.put("rgshowborder", new CommandParameter[0]);
@@ -40,6 +42,10 @@ public final class ShowBorderCommand extends SRegionProtectorCommand {
         SelectorSession session = this.selector.getSession((Player) sender);
         if (session.pos1.level != session.pos2.level) {
             this.messenger.sendMessage(sender, "command.show-border.positions-in-different-worlds");
+            return false;
+        }
+        if (this.selector.calculateEdgesLength(session.pos1, session.pos2) > this.maxBordersAmount) {
+            this.messenger.sendMessage(sender, "command.show-border.too-long");
             return false;
         }
         this.messenger.sendMessage(sender, "command.show-border.success");
