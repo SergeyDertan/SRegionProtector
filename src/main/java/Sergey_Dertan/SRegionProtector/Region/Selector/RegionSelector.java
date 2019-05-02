@@ -6,7 +6,6 @@ import cn.nukkit.level.GlobalBlockPalette;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
-import cn.nukkit.utils.MainLogger;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
@@ -209,7 +208,6 @@ public final class RegionSelector {
                 )
         );
         if (size < 0) return Long.MAX_VALUE;
-        MainLogger.getLogger().info(Long.toString(size)); //TODO
-        return size;
+        return size - 4;
     }
 }
