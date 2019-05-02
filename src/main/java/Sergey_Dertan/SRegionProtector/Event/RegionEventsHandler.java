@@ -54,12 +54,16 @@ public final class RegionEventsHandler implements Listener {
 
     private final Pair<Vector3, Integer>[] portalBlocks;
 
+    private final Messenger.MessageType protectedMessageType;
+
     @SuppressWarnings("unchecked")
-    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem) {
+    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem, Messenger.MessageType protectedMessageType) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
         this.needMessage = needMessage;
         this.prioritySystem = prioritySystem;
+
+        this.protectedMessageType = protectedMessageType;
 
         this.isMonster = new Object2BooleanArrayMap<>();
 
@@ -485,7 +489,7 @@ public final class RegionEventsHandler implements Listener {
 
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) {
-                Messenger.getInstance().sendMessage(player, "region.protected." + RegionFlags.getFlagName(flag));
+                Messenger.getInstance().sendMessage(player, "region.protected." + RegionFlags.getFlagName(flag), this.protectedMessageType);
             }
             break;
         }

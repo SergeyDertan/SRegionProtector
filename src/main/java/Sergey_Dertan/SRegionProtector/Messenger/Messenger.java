@@ -95,14 +95,14 @@ public final class Messenger {
         return this.getMessage(message, new String[0], new String[0]);
     }
 
-    public void sendMessage(CommandSender target, String message, String[] search, String[] replace) {
+    public void sendMessage(CommandSender target, String message, String[] search, String[] replace, MessageType type) {
         if (!this.async || !(target instanceof Player)) {
             target.sendMessage(this.getMessage(message, search, replace));
         } else {
             try {
                 SourceInterface interfaz = (SourceInterface) this.interfaz.get(target);
                 TextPacket pk = new TextPacket();
-                pk.type = 0;
+                pk.type = type.id;
                 pk.message = this.getMessage(message, search, replace);
                 interfaz.putPacket((Player) target, pk);
             } catch (IllegalAccessException ignore) {
@@ -110,11 +110,49 @@ public final class Messenger {
         }
     }
 
+    public void sendMessage(CommandSender target, String message, String[] search, String[] replace) {
+        this.sendMessage(target, message, search, replace, MessageType.MESSAGE);
+    }
+
     public void sendMessage(CommandSender target, String message, String search, String replace) {
-        this.sendMessage(target, message, new String[]{search}, new String[]{replace});
+        this.sendMessage(target, message, search, replace, MessageType.MESSAGE);
+    }
+
+    public void sendMessage(CommandSender target, String message, String search, String replace, MessageType messageType) {
+        this.sendMessage(target, message, new String[]{search}, new String[]{replace}, messageType);
     }
 
     public void sendMessage(CommandSender target, String message) {
-        this.sendMessage(target, message, new String[0], new String[0]);
+        this.sendMessage(target, message, MessageType.MESSAGE);
+    }
+
+    public void sendMessage(CommandSender target, String message, MessageType messageType) {
+        this.sendMessage(target, message, new String[0], new String[0], messageType);
+    }
+
+    public enum MessageType {
+        MESSAGE(TextPacket.TYPE_RAW),
+        TIP(TextPacket.TYPE_TIP),
+        POPUP(TextPacket.TYPE_POPUP);
+
+        public final byte id;
+
+        MessageType(byte id) {
+            this.id = id;
+        }
+
+        public static MessageType fromString(String name) {
+            switch (name.toLowerCase()) {
+                case "message":
+                case "msg":
+                default:
+                    return MESSAGE;
+                case "tip":
+                    return TIP;
+                case "pop":
+                case "popup":
+                    return POPUP;
+            }
+        }
     }
 }

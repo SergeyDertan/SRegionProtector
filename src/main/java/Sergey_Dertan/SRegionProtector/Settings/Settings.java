@@ -2,6 +2,7 @@ package Sergey_Dertan.SRegionProtector.Settings;
 
 import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
+import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import cn.nukkit.block.Block;
 import cn.nukkit.utils.Config;
@@ -13,8 +14,6 @@ import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLD
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
 
 public final class Settings {
-
-    public final long selectorSessionLifetime;
 
     public final int autoSavePeriod;
     public final boolean autoSave;
@@ -47,8 +46,11 @@ public final class Settings {
     public final int uiType;
 
     public final int selectorSessionClearInterval;
+    public final long selectorSessionLifetime;
 
     public final long maxBordersAmount;
+
+    public final Messenger.MessageType protectedMessageType;
 
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
@@ -60,6 +62,7 @@ public final class Settings {
         Map<String, Object> config = this.getConfig();
 
         this.selectorSessionLifetime = ((Number) config.get("session-life-time")).longValue() * 1000L;
+        this.selectorSessionClearInterval = ((Number) config.get("select-session-clear-interval")).intValue() * 20;
 
         this.autoSavePeriod = ((Number) config.get("auto-save-period")).intValue() * 20;
         this.autoSave = (boolean) config.get("auto-save");
@@ -85,7 +88,7 @@ public final class Settings {
 
         this.uiType = ((String) config.get("gui-type")).equalsIgnoreCase("chest") ? GUIEventsHandler.UI_TYPE_CHEST : GUIEventsHandler.UI_TYPE_FORM;
 
-        this.selectorSessionClearInterval = ((Number) config.get("select-session-clear-interval")).intValue() * 20;
+        this.protectedMessageType = Messenger.MessageType.fromString("protectd-message-type");
 
         String border = (String) config.get("border-block");
         int id;
