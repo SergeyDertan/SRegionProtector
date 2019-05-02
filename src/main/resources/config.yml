@@ -113,4 +113,4 @@ gui-type: "chest"
 max-borders-amount: 300
 
 # message(default), tip, popup
-protectd-message-type: "message"
+protected-message-type: "message"

@@ -88,7 +88,7 @@ public final class Settings {
 
         this.uiType = ((String) config.get("gui-type")).equalsIgnoreCase("chest") ? GUIEventsHandler.UI_TYPE_CHEST : GUIEventsHandler.UI_TYPE_FORM;
 
-        this.protectedMessageType = Messenger.MessageType.fromString("protectd-message-type");
+        this.protectedMessageType = Messenger.MessageType.fromString("protected-message-type");
 
         String border = (String) config.get("border-block");
         int id;
