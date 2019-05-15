@@ -59,8 +59,9 @@ public abstract class RegionFlags {
     public static final int FLAG_MINEFARM = 32;
     public static final int FLAG_FALL_DAMAGE = 33;
     public static final int FLAG_NETHER_PORTAL = 34;
+    public static final int FLAG_FRAME_ITEM_DROP = 35;
 
-    public static final int FLAG_AMOUNT = 35;
+    public static final int FLAG_AMOUNT = 36;
 
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
@@ -106,6 +107,7 @@ public abstract class RegionFlags {
         flagList.put(FLAG_MINEFARM, "minefarm");
         flagList.put(FLAG_FALL_DAMAGE, "fall-damage");
         flagList.put(FLAG_NETHER_PORTAL, "nether-portal");
+        flagList.put(FLAG_FRAME_ITEM_DROP, "frame-item-drop");
         flags = ImmutableBiMap.copyOf(flagList);
 
         Map<String, Integer> aAliases = new HashMap<>(FLAG_AMOUNT);

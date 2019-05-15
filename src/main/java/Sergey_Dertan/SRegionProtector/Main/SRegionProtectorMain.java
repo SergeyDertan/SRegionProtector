@@ -373,7 +373,8 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void registerPlaceholders() {
-        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null || this.getServer().getPluginManager().getPlugin("KotlinLib") == null) return;
+        if (this.getServer().getPluginManager().getPlugin("PlaceholderAPI") == null || this.getServer().getPluginManager().getPlugin("KotlinLib") == null)
+            return;
         try {
             Class.forName("Sergey_Dertan.SRegionProtector.Utils.PlaceholdersLoader");
         } catch (Exception ignore) {

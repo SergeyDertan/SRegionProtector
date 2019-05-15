@@ -418,6 +418,12 @@ public final class RegionEventsHandler implements Listener {
         }
     }
 
+    //frame item drop flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void itemFrameDropItem(ItemFrameDropItemEvent e) {
+        this.handleEvent(RegionFlags.FLAG_FRAME_ITEM_DROP, e.getBlock(), e.getPlayer(), e);
+    }
+
     //prevent nether portal from spawning in region
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void entityPortalEnter(EntityPortalEnterEvent e) {

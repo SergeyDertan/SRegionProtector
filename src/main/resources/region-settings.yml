@@ -33,6 +33,7 @@ default-flags:
   minefarm: false
   fall-damage: false
   nether-portal: true
+  frame-item-drop: true
 need-message:
   move: false
   place: true
@@ -57,6 +58,7 @@ need-message:
   minefarm: false
   fall-damage: false
   nether-portal: true
+  frame-item-drop: true
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

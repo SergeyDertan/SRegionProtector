@@ -52,6 +52,7 @@ public final class FlagsPage implements Page {
         this.flagToBlock[RegionFlags.FLAG_HEAL] = ItemID.GOLDEN_APPLE;
         this.flagToBlock[RegionFlags.FLAG_NETHER_PORTAL] = BlockID.NETHER_PORTAL;
         this.flagToBlock[RegionFlags.FLAG_SELL] = ItemID.EMERALD;
+        this.flagToBlock[RegionFlags.FLAG_FRAME_ITEM_DROP] = ItemID.ITEM_FRAME;
     }
 
     @Override

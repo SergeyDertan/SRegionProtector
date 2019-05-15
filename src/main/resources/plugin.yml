@@ -168,3 +168,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.nether_portal:
                 default: op
+              sregionprotector.region.flag.frame_item_drop:
+                default: op

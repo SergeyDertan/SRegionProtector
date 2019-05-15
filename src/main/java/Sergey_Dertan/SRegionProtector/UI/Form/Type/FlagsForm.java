@@ -42,6 +42,7 @@ final class FlagsForm extends FormWindowSimple implements UIForm {
         ICONS[RegionFlags.FLAG_SELL] = "textures/items/emerald.png";
         ICONS[RegionFlags.FLAG_SEND_CHAT] = "textures/ui/betaIcon.png";
         ICONS[RegionFlags.FLAG_RECEIVE_CHAT] = "textures/ui/betaIcon.png";
+        ICONS[RegionFlags.FLAG_FRAME_ITEM_DROP] = "textures/items/item_frame.png";
     }
 
     private final transient Region region;

@@ -87,9 +87,11 @@ public final class RegionManager {
 
             this.regions.put(region.name, region);
 
-            for (String user : region.getOwners()) this.owners.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
+            for (String user : region.getOwners())
+                this.owners.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
 
-            for (String user : region.getMembers()) this.members.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
+            for (String user : region.getMembers())
+                this.members.computeIfAbsent(user, (usr) -> new ObjectArraySet<>()).add(region);
 
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ObjectArraySet<>()).add(region);
 
