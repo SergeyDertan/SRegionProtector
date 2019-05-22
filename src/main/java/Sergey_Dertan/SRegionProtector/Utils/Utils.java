@@ -1,7 +1,6 @@
 package Sergey_Dertan.SRegionProtector.Utils;
 
 import cn.nukkit.utils.Config;
-import cn.nukkit.utils.ConfigSection;
 import com.google.gson.Gson;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
@@ -127,7 +126,7 @@ public abstract class Utils {
 
     /*---------------- resources ------------------*/
     @SuppressWarnings("ConstantConditions")
-    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents) throws IOException {
+    public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz, boolean fixMissingContents, boolean removeAbsent) throws IOException {
         //TODO remove useless
         if (sourceFolder.charAt(sourceFolder.length() - 1) != '/') sourceFolder += '/';
         if (targetFolder.charAt(targetFolder.length() - 1) != '/') targetFolder += '/';
@@ -142,10 +141,11 @@ public abstract class Utils {
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
         @SuppressWarnings("unchecked")
-        Map<String, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
+        Map<Object, Object> var1 = yaml.loadAs(clazz.getClassLoader().getResourceAsStream(sourceFolder + fileName), HashMap.class);
 
-        ConfigSection var4 = new ConfigSection(new LinkedHashMap<>(var3.getAll()));
-        boolean changed = copyMapOfMaps(var1, var4);
+        Map<String, Object> var4 = var3.getAll();
+        @SuppressWarnings("unchecked")
+        boolean changed = copyMapOfMaps(var1, (Map) var4, removeAbsent);
         if (changed) {
             LinkedHashMap<String, Object> var5 = new LinkedHashMap<>();
             var4.entrySet().stream().sorted(Map.Entry.comparingByKey()).forEachOrdered(x -> var5.put(x.getKey(), x.getValue()));
@@ -154,33 +154,45 @@ public abstract class Utils {
         }
     }
 
+    public static boolean copyMapOfMaps(Map<Object, Object> source, Map<Object, Object> target) {
+        return copyMapOfMaps(source, target, true);
+    }
+
     /**
-     * recursive copy map of maps
+     * recursive map copy
+     *
+     * @param removeAbsent if true will remove items which src doesn`t contain
+     * @return true if target map was changed
      */
-    @SuppressWarnings("WhileLoopReplaceableByForEach")
-    public static boolean copyMapOfMaps(Map<String, Object> from, Map<String, Object> to) {
+    public static boolean copyMapOfMaps(Map<Object, Object> source, Map<Object, Object> target, boolean removeAbsent) {
         boolean changed = false;
-        if (from.size() > to.size()) changed = true;
-        for (Map.Entry<String, Object> cp : from.entrySet()) {
-            if (!to.containsKey(cp.getKey())) {
+        for (Map.Entry it : source.entrySet()) {
+            if (!target.containsKey(it.getKey())) {
                 changed = true;
-                to.put(cp.getKey(), cp.getValue());
+                target.put(it.getKey(), it.getValue());
+            } else {
+                if (!it.getValue().getClass().isAssignableFrom(target.get(it.getKey()).getClass())) {
+                    if (it.getValue() instanceof Number) continue;
+                    changed = true;
+                    target.put(it.getKey(), it.getValue());
+                    continue;
+                }
+                if (it.getValue() instanceof Map) {
+                    @SuppressWarnings("unchecked")
+                    boolean c = copyMapOfMaps((Map<Object, Object>) it.getValue(), (Map<Object, Object>) target.get(it.getKey()), removeAbsent);
+                    if (c) changed = true;
+                }
             }
         }
-        Iterator<Map.Entry<String, Object>> var1 = from.entrySet().iterator();
-        while (var1.hasNext()) {
-            Map.Entry<String, Object> next = var1.next();
-            if (next.getValue() instanceof Map) {
-                @SuppressWarnings("unchecked")
-                boolean c = copyMapOfMaps((Map<String, Object>) next.getValue(), (Map<String, Object>) to.get(next.getKey()));
-                if (!changed) changed = c;
-            }
+        if (removeAbsent) {
+            boolean c = target.entrySet().removeIf(e -> !source.containsKey(e.getKey()));
+            if (c) changed = true;
         }
         return changed;
     }
 
     public static void copyResource(String fileName, String sourceFolder, String targetFolder, Class clazz) throws IOException {
-        copyResource(fileName, sourceFolder, targetFolder, clazz, true);
+        copyResource(fileName, sourceFolder, targetFolder, clazz, true, true);
     }
 
     public static boolean resourceExists(String fileName, String folder, Class clazz) {
