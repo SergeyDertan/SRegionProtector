@@ -53,6 +53,8 @@ public final class FlagsPage implements Page {
         this.flagToBlock[RegionFlags.FLAG_NETHER_PORTAL] = BlockID.NETHER_PORTAL;
         this.flagToBlock[RegionFlags.FLAG_SELL] = ItemID.EMERALD;
         this.flagToBlock[RegionFlags.FLAG_FRAME_ITEM_DROP] = ItemID.ITEM_FRAME;
+        this.flagToBlock[RegionFlags.FLAG_BUCKET_EMPTY] = ItemID.BUCKET;
+        this.flagToBlock[RegionFlags.FLAG_BUCKET_FILL] = ItemID.BUCKET;
     }
 
     @Override
@@ -61,7 +63,7 @@ public final class FlagsPage implements Page {
         int counter = 0;
         for (RegionFlag flag : Arrays.stream(region.getFlags()).skip(page * 18).limit(18).collect(Collectors.toList())) {
             int flagId = counter + page * 18;
-            Item item = Item.get(this.flagToBlock[flagId]);
+            Item item = Item.get(this.flagToBlock[flagId], flagId == RegionFlags.FLAG_BUCKET_FILL ? 8 : 0);
 
             String name = RegionFlags.getFlagName(flagId);
             name = name.substring(0, 1).toUpperCase() + name.substring(1);

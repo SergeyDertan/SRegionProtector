@@ -59,6 +59,8 @@ active-flags:
   fall-damage: true
   nether-portal: true
   frame-item-drop: true
+  bucket-empty: true
+  bucket-fill: true
 display:
   place: true
   break: true
@@ -94,6 +96,8 @@ display:
   fall-damage: true
   nether-portal: true
   frame-item-drop: true
+  bucket-empty: true
+  bucket-fill: true
 # players need no permission to create regions with this size & amount
 # to let player create more regions with greater size give him permissions
 # "sregionprotector.region.size.DESIRED_MAX_SIZE", and

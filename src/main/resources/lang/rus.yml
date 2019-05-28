@@ -56,6 +56,8 @@ region.protected.fire: "Вы не можете поджигать в этом р
 region.protected.fall-damage: "Вы не можете получать урон от падения в этом регионе"
 region.protected.nether-portal: "Портал не может быть создан в этом регионе"
 region.protected.frame-item-drop: "Вы не можете делать это в этом регионе"
+region.protected.bucket-empty: "Вы не можете выливать жидкости в этом регионе"
+region.protected.bucket-fill: "Вы не можете заполнять ведро в этом регионе"
 
 region.selection.pos1: "Первая точка установлена"
 region.selection.pos2: "Вторая точка установлена"

@@ -458,6 +458,18 @@ public final class RegionEventsHandler implements Listener {
         }
     }
 
+    //bucket empty flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void playerBucketEmpty(PlayerBucketEmptyEvent e) {
+        this.handleEvent(RegionFlags.FLAG_BUCKET_EMPTY, e.getBlockClicked(), e.getPlayer(), e);
+    }
+
+    //bucket fill flag
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    public void playerBucketFill(PlayerBucketFillEvent e) {
+        this.handleEvent(RegionFlags.FLAG_BUCKET_FILL, e.getBlockClicked(), e.getPlayer(), e);
+    }
+
     private boolean canInteractWith(int flag, Position pos, Player player) {
         if (!this.flagsStatus[flag]) return false;
         Chunk chunk = this.chunkManager.getChunk((long) pos.x, (long) pos.z, pos.level.getName(), true, false);

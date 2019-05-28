@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Form.Type;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.RegionFlags;
 import Sergey_Dertan.SRegionProtector.Region.Region;
@@ -13,6 +14,8 @@ import java.util.Arrays;
 final class FlagsForm extends FormWindowSimple implements UIForm {
 
     private static final transient String[] ICONS = new String[RegionFlags.FLAG_AMOUNT];
+    private static final transient boolean[] flagStatus = SRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
+    private static final transient boolean[] display = SRegionProtectorMain.getInstance().getSettings().regionSettings.display;
 
     static {
         Arrays.fill(ICONS, "textures/misc/missing_texture.png");
@@ -39,7 +42,6 @@ final class FlagsForm extends FormWindowSimple implements UIForm {
         ICONS[RegionFlags.FLAG_POTION_LAUNCH] = "textures/items/potion_bottle_splash_healthBoost.png";
         ICONS[RegionFlags.FLAG_HEAL] = "textures/ui/regeneration_effect.png";
         ICONS[RegionFlags.FLAG_NETHER_PORTAL] = "textures/ui/NetherPortal.png";
-        ICONS[RegionFlags.FLAG_SELL] = "textures/items/emerald.png";
         ICONS[RegionFlags.FLAG_SEND_CHAT] = "textures/ui/betaIcon.png";
         ICONS[RegionFlags.FLAG_RECEIVE_CHAT] = "textures/ui/betaIcon.png";
         ICONS[RegionFlags.FLAG_FRAME_ITEM_DROP] = "textures/items/item_frame.png";
@@ -55,12 +57,17 @@ final class FlagsForm extends FormWindowSimple implements UIForm {
             String str = RegionFlags.getFlagName(i).replace("-", " ") + ": ";
             str = str.concat(flag.state == RegionFlags.getStateFromString("allow", i) ? "allow" : "deny");
             Runnable beforeNext = null;
+            if (!display[i] || !flagStatus[i]) {
+                ++i;
+                continue;
+            }
             if (i != RegionFlags.FLAG_SELL && i != RegionFlags.FLAG_TELEPORT) {
                 int n = i;
                 beforeNext = () -> {
                     if (RegionFlags.hasFlagPermission(player, n)) region.setFlagState(n, !region.getFlagState(n));
                 };
             }
+
             ElementButtonImageData image = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, ICONS[i]);
             this.addButton(new Button(str, FlagsForm.class, region, player).setBeforeNext(beforeNext).setImage(image));
             ++i;

@@ -170,3 +170,7 @@ permissions:
                 default: op
               sregionprotector.region.flag.frame_item_drop:
                 default: op
+              sregionprotector.region.flag.bucket_empty:
+                default: op
+              sregionprotector.region.flag.bucket_fill:
+                default: op
