@@ -4,6 +4,7 @@ import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Chest.UIInventory;
 import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.Type.UIForm;
+import Sergey_Dertan.SRegionProtector.UI.UIType;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.Listener;
@@ -15,12 +16,9 @@ import cn.nukkit.inventory.transaction.action.InventoryAction;
 @SuppressWarnings("unused")
 public final class GUIEventsHandler implements Listener {
 
-    public static final int UI_TYPE_CHEST = 0;
-    public static final int UI_TYPE_FORM = 1;
+    private final UIType guiType;
 
-    private final int guiType;
-
-    public GUIEventsHandler(int guiType) {
+    public GUIEventsHandler(UIType guiType) {
         this.guiType = guiType;
     }
 
@@ -33,7 +31,7 @@ public final class GUIEventsHandler implements Listener {
     //form UI
     @EventHandler
     public void playerFormResponded(PlayerFormRespondedEvent e) {
-        if (this.guiType != UI_TYPE_FORM) return;
+        if (this.guiType != UIType.FORM) return;
         if (!(e.getWindow() instanceof UIForm) || e.wasClosed()) return;
         FormUIManager.handle(e.getPlayer(), (UIForm) e.getWindow());
     }
@@ -41,7 +39,7 @@ public final class GUIEventsHandler implements Listener {
     //chest UI
     @EventHandler
     public void inventoryTransaction(InventoryTransactionEvent e) {
-        if (this.guiType != UI_TYPE_CHEST) return;
+        if (this.guiType != UIType.CHEST) return;
         if (e.getTransaction().getInventories().stream().noneMatch(inventory -> inventory instanceof UIInventory)) {
             return;
         }

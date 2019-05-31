@@ -1,9 +1,9 @@
 package Sergey_Dertan.SRegionProtector.Settings;
 
-import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
+import Sergey_Dertan.SRegionProtector.UI.UIType;
 import cn.nukkit.block.Block;
 import cn.nukkit.utils.Config;
 
@@ -43,7 +43,7 @@ public final class Settings {
 
     public final boolean updateNotifier;
 
-    public final int uiType;
+    public final UIType uiType;
 
     public final int selectorSessionClearInterval;
     public final long selectorSessionLifetime;
@@ -86,7 +86,7 @@ public final class Settings {
 
         this.maxBordersAmount = ((Number) config.get("max-borders-amount")).longValue();
 
-        this.uiType = ((String) config.get("gui-type")).equalsIgnoreCase("chest") ? GUIEventsHandler.UI_TYPE_CHEST : GUIEventsHandler.UI_TYPE_FORM;
+        this.uiType = UIType.valueOf(((String) config.get("gui-type")).toUpperCase());
 
         this.protectedMessageType = Messenger.MessageType.fromString("protected-message-type");
 

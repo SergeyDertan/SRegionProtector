@@ -6,6 +6,7 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.UI.Chest.ChestUIManager;
 import Sergey_Dertan.SRegionProtector.UI.Form.FormUIManager;
+import Sergey_Dertan.SRegionProtector.UI.UIType;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
@@ -19,9 +20,9 @@ public final class OpenUICommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
     private final ChunkManager chunkManager;
-    private final int uiType;
+    private final UIType uiType;
 
-    public OpenUICommand(RegionManager regionManager, ChunkManager chunkManager, int uiType) {
+    public OpenUICommand(RegionManager regionManager, ChunkManager chunkManager, UIType uiType) {
         super("rggui", "gui");
 
         this.regionManager = regionManager;
@@ -70,7 +71,7 @@ public final class OpenUICommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(player, "command.gui.permission");
             return;
         }
-        if (this.uiType == 0) { //TODO
+        if (this.uiType == UIType.CHEST) {
             ChestUIManager.open(player, region);
         } else {
             FormUIManager.open(player, region);
