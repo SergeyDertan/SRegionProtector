@@ -1,5 +1,6 @@
 package Sergey_Dertan.SRegionProtector.UI.Chest.Page;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionFlag;
 import Sergey_Dertan.SRegionProtector.Region.Flags.Flag.RegionSellFlag;
@@ -16,6 +17,7 @@ import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.nbt.tag.IntTag;
 import cn.nukkit.nbt.tag.Tag;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,20 +63,18 @@ public final class FlagsPage implements Page {
     public Map<Integer, Item> getItems(Region region, int page) {
         Map<Integer, Item> list = new HashMap<>(NAVIGATORS_CACHE);
         int counter = 0;
-        for (RegionFlag flag : Arrays.stream(region.getFlags()).skip(page * 18).limit(18).collect(Collectors.toList())) {
-            int flagId = counter + page * 18;
+        for (FlagList.Flag flag : new FlagList(region).load(true).stream().skip(page * 18).limit(18).collect(Collectors.toList())) {
+            int flagId = flag.id;
             Item item = Item.get(this.flagToBlock[flagId], flagId == RegionFlags.FLAG_BUCKET_FILL ? 8 : 0);
 
-            String name = RegionFlags.getFlagName(flagId);
-            name = name.substring(0, 1).toUpperCase() + name.substring(1);
-            item.setCustomName(name);
+            item.setCustomName(flag.name);
 
             String[] lore = new String[2];
             lore[0] = "Value: " + (flag.state == RegionFlags.getStateFromString("allow", flagId) ? "allow" : "deny");
-            if (flag instanceof RegionSellFlag) {
-                lore[1] = "Price: " + ((RegionSellFlag) flag).price;
-            } else if (flag instanceof RegionTeleportFlag) {
-                Vector3 pos = ((RegionTeleportFlag) flag).position;
+            if (flag.id == RegionFlags.FLAG_SELL) {
+                lore[1] = "Price: " + ((RegionSellFlag) flag.flag).price;
+            } else if (flag.id == RegionFlags.FLAG_TELEPORT) {
+                Vector3 pos = ((RegionTeleportFlag) flag.flag).position;
                 if (pos != null) {
                     lore[1] = "x: " + Math.round(pos.x) + ", y: " + Math.round(pos.y) + ", z: " + Math.round(pos.z);
                 }
@@ -118,5 +118,55 @@ public final class FlagsPage implements Page {
         nbt.putString(Tags.OPEN_PAGE_TAG, this.getName());
         item.setNamedTag(nbt);
         return item;
+    }
+
+    public static final class FlagList extends ArrayList<FlagList.Flag> {
+
+        private static final boolean[] display = SRegionProtectorMain.getInstance().getSettings().regionSettings.display;
+        private static final boolean[] status = SRegionProtectorMain.getInstance().getSettings().regionSettings.flagsStatus;
+
+        public final Region region;
+
+        FlagList(Region region) {
+            super(RegionFlags.FLAG_AMOUNT);
+
+            this.region = region;
+        }
+
+        FlagList load(boolean skipHidden) {
+            this.clear();
+            int id = -1;
+            for (RegionFlag flag : region.getFlags()) {
+                ++id;
+                if (skipHidden && !display[id] || !status[id]) continue;
+                this.add(new Flag(id, flag));
+            }
+            return this;
+        }
+
+        FlagList load() {
+            return this.load(false);
+        }
+
+        FlagList removeHidden() {
+            this.removeIf(flag -> !display[flag.id] || !status[flag.id]);
+            return this;
+        }
+
+        private static final class Flag {
+
+            public final int id;
+            public final boolean state;
+            public final String name;
+            public final RegionFlag flag;
+
+            Flag(int id, RegionFlag flag) {
+                this.id = id;
+                this.state = flag.state;
+                this.flag = flag;
+                String name = RegionFlags.getFlagName(id);
+                this.name = (name.substring(0, 1).toUpperCase() + name.substring(1)).replace("-", " ");
+            }
+        }
     }
 }
