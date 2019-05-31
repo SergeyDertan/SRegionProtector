@@ -43,6 +43,9 @@ import cn.nukkit.utils.Utils;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static Sergey_Dertan.SRegionProtector.Utils.Utils.compareVersions;
@@ -58,7 +61,11 @@ public final class SRegionProtectorMain extends PluginBase {
     public static final String DB_FOLDER = MAIN_FOLDER + "DB/";
 
     public static final String VERSION_URL = "https://api.github.com/repos/SergeyDertan/SRegionProtector/releases/latest";
+
     private static SRegionProtectorMain instance;
+
+    private final ExecutorService save = Executors.newFixedThreadPool(1);
+
     public boolean forceShutdown = false; //TODO
 
     private Settings settings;
@@ -67,7 +74,6 @@ public final class SRegionProtectorMain extends PluginBase {
     private ChunkManager chunkManager;
     private RegionSelector regionSelector;
     private Messenger messenger;
-
     private RegionCommand mainCommand;
 
     public static SRegionProtectorMain getInstance() {
@@ -141,7 +147,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private void initAutoSave() {
         if (!this.settings.autoSave) return;
-        this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, () -> this.save(SaveType.AUTO), this.settings.autoSavePeriod, this.settings.autoSavePeriod, true);
+        this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, () -> this.asyncSave(SaveType.AUTO), this.settings.autoSavePeriod, this.settings.autoSavePeriod);
     }
 
     private void registerBlockEntities() {
@@ -218,7 +224,15 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getServer().getPluginManager().registerEvents(new GUIEventsHandler(this.settings.uiType), this);
     }
 
-    public void save(SaveType saveType) {
+    public synchronized void asyncSave(SaveType saveType, String initiator) {
+        this.save.execute(() -> this.save(saveType, initiator));
+    }
+
+    public synchronized void asyncSave(SaveType saveType) {
+        this.save.execute(() -> this.save(saveType, null));
+    }
+
+    public synchronized void save(SaveType saveType) {
         this.save(saveType, null);
     }
 
@@ -368,8 +382,12 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private void shutdownExecutors() {
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
-        ((SaveCommand) this.getServer().getCommandMap().getCommand("rgsave")).shutdownExecutor();
         if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
+        this.save.shutdown();
+        try {
+            this.save.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+        } catch (Exception ignore) {
+        }
     }
 
     private void registerPlaceholders() {
@@ -417,11 +435,11 @@ public final class SRegionProtectorMain extends PluginBase {
             if (this.messenger != null) {
                 this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));
             }
-            this.shutdownExecutors();
-            this.provider.close();
             return;
         }
         this.save(SaveType.DISABLING);
+        this.provider.close();
+        this.shutdownExecutors();
     }
 
     public RegionManager getRegionManager() {

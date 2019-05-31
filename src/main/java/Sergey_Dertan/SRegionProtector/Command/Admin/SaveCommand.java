@@ -5,19 +5,13 @@ import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.command.CommandSender;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
 public final class SaveCommand extends SRegionProtectorCommand {
 
     private final SRegionProtectorMain pl;
-    private final ExecutorService executor;
 
     public SaveCommand(SRegionProtectorMain pl) {
         super("rgsave", "save");
         this.pl = pl;
-        this.executor = Executors.newSingleThreadExecutor();
 
         this.setCommandParameters(new Object2ObjectArrayMap<>());
     }
@@ -28,15 +22,7 @@ public final class SaveCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "save.permission");
             return false;
         }
-        this.executor.execute(() -> this.pl.save(SRegionProtectorMain.SaveType.MANUAL, sender.getName()));
+        this.pl.asyncSave(SRegionProtectorMain.SaveType.MANUAL, sender.getName());
         return false;
-    }
-
-    public void shutdownExecutor() {
-        this.executor.shutdown();
-        try {
-            this.executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
-        } catch (InterruptedException ignore) {
-        }
     }
 }
