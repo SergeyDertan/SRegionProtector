@@ -15,6 +15,10 @@ public interface UIForm {
         try {
             List<Class<?>> parametersTypes = new ArrayList<>();
             for (Object obj : args) {
+                if (obj instanceof Player) {
+                    parametersTypes.add(Player.class);
+                    continue;
+                }
                 parametersTypes.add(obj.getClass());
             }
             return clazz.getDeclaredConstructor(parametersTypes.toArray(new Class<?>[0])).newInstance(args);
