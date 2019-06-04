@@ -118,5 +118,8 @@ gui-type: "chest"
 
 max-borders-amount: 300
 
+# angry villager particle when flag activated
+show-particle: true
+
 # message(default), tip, popup
 protected-message-type: "message"

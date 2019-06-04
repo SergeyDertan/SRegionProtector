@@ -32,8 +32,11 @@ import cn.nukkit.level.EnumLevel;
 import cn.nukkit.level.Position;
 import cn.nukkit.level.Sound;
 import cn.nukkit.level.format.FullChunk;
+import cn.nukkit.level.particle.AngryVillagerParticle;
+import cn.nukkit.level.particle.Particle;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
+import cn.nukkit.network.protocol.DataPacket;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 
@@ -48,6 +51,7 @@ public final class RegionEventsHandler implements Listener {
     private final boolean[] flagsStatus; //check if flag enabled
     private final boolean[] needMessage; //check if flag requires a message
     private final boolean prioritySystem;
+    private final boolean showParticle;
 
     private final Object2BooleanMap<Class> isMonster;
     private final Class monster; //mobplugin
@@ -57,11 +61,12 @@ public final class RegionEventsHandler implements Listener {
     private final Messenger.MessageType protectedMessageType;
 
     @SuppressWarnings("unchecked")
-    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem, Messenger.MessageType protectedMessageType) {
+    public RegionEventsHandler(ChunkManager chunkManager, boolean[] flagsStatus, boolean[] needMessage, boolean prioritySystem, Messenger.MessageType protectedMessageType, boolean particle) {
         this.chunkManager = chunkManager;
         this.flagsStatus = flagsStatus;
         this.needMessage = needMessage;
         this.prioritySystem = prioritySystem;
+        this.showParticle = particle;
 
         this.protectedMessageType = protectedMessageType;
 
@@ -505,6 +510,12 @@ public final class RegionEventsHandler implements Listener {
                 }
             }
 
+            if (this.showParticle && player != null) {
+                Particle particle = new AngryVillagerParticle(pos);
+                for (DataPacket pk : particle.encode()) {
+                    player.dataPacket(pk);
+                }
+            }
             ev.setCancelled();
             if (player != null && this.needMessage[flag]) {
                 Messenger.getInstance().sendMessage(player, "region.protected." + RegionFlags.getFlagName(flag), this.protectedMessageType);
