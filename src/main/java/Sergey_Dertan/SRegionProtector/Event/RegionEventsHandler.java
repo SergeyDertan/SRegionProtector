@@ -511,7 +511,11 @@ public final class RegionEventsHandler implements Listener {
             }
 
             if (this.showParticle && player != null) {
-                Particle particle = new AngryVillagerParticle(pos);
+                Vector3 pPos = pos;
+                if (pos.x % 1 + pos.y % 1 + pos.z % 1 == 0) {
+                    pPos = new Vector3(pos.x + 0.5, pos.y + 1.3, pos.z + 0.5);
+                }
+                Particle particle = new AngryVillagerParticle(pPos);
                 for (DataPacket pk : particle.encode()) {
                     player.dataPacket(pk);
                 }
