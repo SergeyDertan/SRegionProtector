@@ -12,6 +12,7 @@ import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableBiMap;
 import com.google.common.collect.ImmutableMap;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +32,7 @@ public abstract class RegionFlags {
     public static final int FLAG_PVP = 3;
     public static final int FLAG_EXPLODE = 4;
     public static final int FLAG_LIGHTER = 5;
-    public static final int FLAG_MAGIC_ITEM_USE = 6;
+    public static final int FLAG_MAGIC_ITEM = 6;
     public static final int FLAG_HEAL = 7;
     public static final int FLAG_INVINCIBLE = 8;
     public static final int FLAG_TELEPORT = 9;
@@ -74,44 +75,20 @@ public abstract class RegionFlags {
 
     static {
         BiMap<Integer, String> flagList = HashBiMap.create(FLAG_AMOUNT);
-        flagList.put(FLAG_PLACE, "place");
-        flagList.put(FLAG_BREAK, "break");
-        flagList.put(FLAG_INTERACT, "interact");
-        flagList.put(FLAG_USE, "use");
-        flagList.put(FLAG_PVP, "pvp");
-        flagList.put(FLAG_EXPLODE, "tnt");
-        flagList.put(FLAG_LIGHTER, "lighter");
-        flagList.put(FLAG_MAGIC_ITEM_USE, "magic-item");
-        flagList.put(FLAG_HEAL, "heal");
-        flagList.put(FLAG_INVINCIBLE, "invincible");
-        flagList.put(FLAG_TELEPORT, "teleport");
-        flagList.put(FLAG_SELL, "sell");
-        flagList.put(FLAG_POTION_LAUNCH, "potion-launch");
-        flagList.put(FLAG_MOVE, "move");
-        flagList.put(FLAG_LEAVES_DECAY, "leaves-decay");
-        flagList.put(FLAG_ITEM_DROP, "item-drop");
-        flagList.put(FLAG_SEND_CHAT, "send-chat");
-        flagList.put(FLAG_RECEIVE_CHAT, "receive-chat");
-        flagList.put(FLAG_HEALTH_REGEN, "health-regen");
-        flagList.put(FLAG_MOB_DAMAGE, "mob-damage");
-        flagList.put(FLAG_MOB_SPAWN, "mob-spawn");
-        flagList.put(FLAG_CROPS_DESTROY, "crops-destroy");
-        flagList.put(FLAG_REDSTONE, "redstone");
-        flagList.put(FLAG_ENDER_PEARL, "ender-pearl");
-        flagList.put(FLAG_EXPLODE_BLOCK_BREAK, "explode-block-break");
-        flagList.put(FLAG_LIQUID_FLOW, "liquid-flow");
-        flagList.put(FLAG_FIRE, "fire");
-        flagList.put(FLAG_LIGHTNING_STRIKE, "lightning-strike");
-        flagList.put(FLAG_CHEST_ACCESS, "chest-access");
-        flagList.put(FLAG_SLEEP, "sleep");
-        flagList.put(FLAG_CHUNK_LOADER, "chunk-loader");
-        flagList.put(FLAG_SMART_DOORS, "smart-doors");
-        flagList.put(FLAG_MINEFARM, "minefarm");
-        flagList.put(FLAG_FALL_DAMAGE, "fall-damage");
-        flagList.put(FLAG_NETHER_PORTAL, "nether-portal");
-        flagList.put(FLAG_FRAME_ITEM_DROP, "frame-item-drop");
-        flagList.put(FLAG_BUCKET_EMPTY, "bucket-empty");
-        flagList.put(FLAG_BUCKET_FILL, "bucket-fill");
+        for (Field field : RegionFlags.class.getDeclaredFields()) {
+            if (field.getType() != int.class || field.getName().equals("FLAG_AMOUNT") || field.getName().equals("FLAG_INVALID")) {
+                continue;
+            }
+            try {
+                flagList.put(
+                        field.getInt(null),
+                        field.getName().toLowerCase().replace("flag_", "").replace("_", "-")
+                );
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         flags = ImmutableBiMap.copyOf(flagList);
 
         Map<String, Integer> aAliases = new HashMap<>(FLAG_AMOUNT);

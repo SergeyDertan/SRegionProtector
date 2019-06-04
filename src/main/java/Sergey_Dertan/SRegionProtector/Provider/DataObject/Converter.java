@@ -119,10 +119,10 @@ public abstract class Converter {
 
     public static FlagListDataObject toDataObject(Map<String, Map<String, Object>> data) { //for the yaml data provider
         FlagListDataObject dataObject = new FlagListDataObject();
-        List<Boolean> state = new ArrayList<>();
+        boolean[] state = new boolean[RegionFlags.FLAG_AMOUNT];
         for (Map.Entry<String, Map<String, Object>> flag : data.entrySet()) {
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_INVALID) continue;
-            state.add(RegionFlags.getFlagId(flag.getKey()), (Boolean) flag.getValue().get(STATE_TAG));
+            state[RegionFlags.getFlagId(flag.getKey())] = (Boolean) flag.getValue().get(STATE_TAG);
             if (RegionFlags.getFlagId(flag.getKey()) == RegionFlags.FLAG_SELL) {
                 dataObject.sellData = ((Number) flag.getValue().getOrDefault(PRICE_TAG, -1L)).longValue();
             }
@@ -137,7 +137,7 @@ public abstract class Converter {
                 dataObject.teleportData = new Gson().toJson(teleport);
             }
         }
-        dataObject.state = new Gson().toJson(state.toArray(new Boolean[0]));
+        dataObject.state = new Gson().toJson(state);
         return dataObject;
     }
 }
