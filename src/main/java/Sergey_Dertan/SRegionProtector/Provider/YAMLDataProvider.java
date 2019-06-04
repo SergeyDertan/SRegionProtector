@@ -40,7 +40,7 @@ public final class YAMLDataProvider implements DataProvider {
         this.messenger = Messenger.getInstance();
 
         this.multithreadedDataLoading = multithreadedDataLoading;
-        this.threads = threads;
+        this.threads = threads == -1 ? Runtime.getRuntime().availableProcessors() : threads;
     }
 
     @Override
