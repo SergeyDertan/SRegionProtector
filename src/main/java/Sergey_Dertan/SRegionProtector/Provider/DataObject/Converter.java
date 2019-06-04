@@ -63,7 +63,7 @@ public abstract class Converter {
             state[i] = flags[i].state;
         }
         RegionTeleportFlag tpFlag = (RegionTeleportFlag) flags[RegionFlags.FLAG_TELEPORT];
-        Map<String, Object> teleport = new HashMap<>();
+        Map<String, Object> teleport = new HashMap<>(4);
         teleport.put(X_TAG, tpFlag.position != null ? tpFlag.position.x : 0);
         teleport.put(Y_TAG, tpFlag.position != null ? tpFlag.position.y : 0);
         teleport.put(Z_TAG, tpFlag.position != null ? tpFlag.position.z : 0);
@@ -95,10 +95,10 @@ public abstract class Converter {
     }
 
     public static List<RegionFlag> fromDataObject(FlagListDataObject dataObject) {
-        List<RegionFlag> flags = new ArrayList<>();
+        List<RegionFlag> flags = new ArrayList<>(RegionFlags.FLAG_AMOUNT);
         boolean[] state = new Gson().fromJson(dataObject.state, boolean[].class);
         @SuppressWarnings("unchecked")
-        Map<String, Object> teleportData = (Map<String, Object>) new Gson().fromJson(dataObject.teleportData, Map.class); //TODO
+        Map<String, Object> teleportData = (Map<String, Object>) new Gson().fromJson(dataObject.teleportData, Map.class);
         for (int i = 0; i < state.length; ++i) {
             if (i == RegionFlags.FLAG_TELEPORT) {
                 double x = ((Number) teleportData.get(X_TAG)).doubleValue();
