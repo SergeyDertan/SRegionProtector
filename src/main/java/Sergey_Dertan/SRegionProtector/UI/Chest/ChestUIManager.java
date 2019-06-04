@@ -5,6 +5,7 @@ import Sergey_Dertan.SRegionProtector.Region.Region;
 import Sergey_Dertan.SRegionProtector.UI.Chest.Page.Page;
 import Sergey_Dertan.SRegionProtector.UI.Chest.Page.RemoveRegionPage;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
+import Sergey_Dertan.SRegionProtector.Utils.Utils;
 import cn.nukkit.Player;
 import cn.nukkit.block.BlockID;
 import cn.nukkit.inventory.Inventory;
@@ -13,15 +14,12 @@ import cn.nukkit.level.GlobalBlockPalette;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.nbt.NBTIO;
 import cn.nukkit.nbt.tag.CompoundTag;
-import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.BlockEntityDataPacket;
-import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.network.protocol.UpdateBlockPacket;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.nio.ByteOrder;
 
 public abstract class ChestUIManager {
@@ -116,7 +114,7 @@ public abstract class ChestUIManager {
         pk1.dataLayer = 0;
         pk1.flags = UpdateBlockPacket.FLAG_NONE;
         pk1.blockRuntimeId = GlobalBlockPalette.getOrCreateRuntimeId(BlockID.CHEST, 0);
-        if (async && sendAsyncPacket(target, pk1)) {
+        if (async && !Utils.directDataPacket(target, pk1)) {
             return null;
         } else {
             target.dataPacket(pk1);
@@ -133,7 +131,7 @@ public abstract class ChestUIManager {
             pk2.namedTag = NBTIO.write(nbt, ByteOrder.LITTLE_ENDIAN, true);
         } catch (IOException ignore) {
         }
-        if (async && sendAsyncPacket(target, pk2)) {
+        if (async && !Utils.directDataPacket(target, pk2)) {
             return null;
         } else {
             target.dataPacket(pk2);
@@ -143,24 +141,5 @@ public abstract class ChestUIManager {
 
     private static void removeChest(Player target, Vector3 pos) {
         target.level.sendBlocks(new Player[]{target}, new Vector3[]{pos});
-    }
-
-    /**
-     * @return true if error occurred
-     */
-    private static boolean sendAsyncPacket(Player target, DataPacket pk) {
-        try {
-            Field field = target.getClass().getDeclaredField("interfaz");
-            boolean accessible = field.isAccessible();
-            if (!accessible) {
-                field.setAccessible(true);
-            }
-            SourceInterface interfaz = (SourceInterface) field.get(target);
-            interfaz.putPacket(target, pk);
-            field.setAccessible(accessible);
-            return false;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            return true;
-        }
     }
 }

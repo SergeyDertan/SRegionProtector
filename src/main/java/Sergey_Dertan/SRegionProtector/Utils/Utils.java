@@ -1,5 +1,8 @@
 package Sergey_Dertan.SRegionProtector.Utils;
 
+import cn.nukkit.Player;
+import cn.nukkit.network.SourceInterface;
+import cn.nukkit.network.protocol.DataPacket;
 import cn.nukkit.utils.Config;
 import com.google.gson.Gson;
 import org.yaml.snakeyaml.DumperOptions;
@@ -8,6 +11,7 @@ import org.yaml.snakeyaml.Yaml;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.NoSuchAlgorithmException;
@@ -262,5 +266,19 @@ public abstract class Utils {
             if (smaller.length == i + 1 && smaller.length < bigger.length) return String.join(".", bigger);
         }
         throw new RuntimeException("Unreachable code reached");
+    }
+
+    public static boolean directDataPacket(Player target, DataPacket pk) {
+        try {
+            Field interfaz = Player.class.getDeclaredField("interfaz");
+
+            boolean accessible = interfaz.isAccessible();
+            if (!accessible) interfaz.setAccessible(true);
+            ((SourceInterface) interfaz.get(target)).putPacket(target, pk);
+            interfaz.setAccessible(accessible);
+            return true;
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {
+            return false;
+        }
     }
 }

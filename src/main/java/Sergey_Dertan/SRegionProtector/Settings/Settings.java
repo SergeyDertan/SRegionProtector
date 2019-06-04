@@ -52,6 +52,8 @@ public final class Settings {
 
     public final Messenger.MessageType protectedMessageType;
 
+    public final boolean showParticle;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
@@ -83,6 +85,8 @@ public final class Settings {
         this.prioritySystem = (boolean) config.get("priority-system");
 
         this.updateNotifier = (boolean) config.get("update-notifier");
+
+        this.showParticle = (boolean) config.get("show-particle");
 
         this.maxBordersAmount = ((Number) config.get("max-borders-amount")).longValue();
 

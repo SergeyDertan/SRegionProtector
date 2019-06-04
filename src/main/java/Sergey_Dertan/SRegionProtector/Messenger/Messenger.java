@@ -4,7 +4,6 @@ import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
-import cn.nukkit.network.SourceInterface;
 import cn.nukkit.network.protocol.TextPacket;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.Utils;
@@ -13,14 +12,12 @@ import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.LANG_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.MAIN_FOLDER;
-import static Sergey_Dertan.SRegionProtector.Utils.Utils.copyResource;
-import static Sergey_Dertan.SRegionProtector.Utils.Utils.resourceExists;
+import static Sergey_Dertan.SRegionProtector.Utils.Utils.*;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class Messenger {
@@ -29,12 +26,7 @@ public final class Messenger {
     private static Messenger instance;
     public final String language;
     private final Map<String, String> messages;
-    /**
-     * async packets should be put directly to the interface
-     *
-     * @see cn.nukkit.event.server.DataPacketSendEvent
-     */
-    private final Field interfaz;
+
     private boolean async;
 
     @SuppressWarnings("unchecked")
@@ -56,8 +48,6 @@ public final class Messenger {
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         Yaml yaml = new Yaml(dumperOptions);
         this.messages = new Object2ObjectArrayMap<>((Map<String, String>) yaml.loadAs(Utils.readFile(new File(LANG_FOLDER + lang + ".yml")), HashMap.class));
-        this.interfaz = Player.class.getDeclaredField("interfaz");
-        this.interfaz.setAccessible(true);
         instance = this;
     }
 
@@ -99,14 +89,10 @@ public final class Messenger {
         if (!this.async || !(target instanceof Player)) {
             target.sendMessage(this.getMessage(message, search, replace));
         } else {
-            try {
-                SourceInterface interfaz = (SourceInterface) this.interfaz.get(target);
-                TextPacket pk = new TextPacket();
-                pk.type = type.id;
-                pk.message = this.getMessage(message, search, replace);
-                interfaz.putPacket((Player) target, pk);
-            } catch (IllegalAccessException ignore) {
-            }
+            TextPacket pk = new TextPacket();
+            pk.type = type.id;
+            pk.message = this.getMessage(message, search, replace);
+            directDataPacket((Player) target, pk);
         }
     }
 
