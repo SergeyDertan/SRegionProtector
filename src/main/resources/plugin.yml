@@ -79,6 +79,8 @@ permissions:
             default: op
           sregionprotector.command.gui:
             default: true
+          sregionprotector.command.copy-flags:
+            default: op
       sregionprotector.region.*:
         default: op
         children:

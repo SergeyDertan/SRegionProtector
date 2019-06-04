@@ -4,11 +4,11 @@ import Sergey_Dertan.SRegionProtector.BlockEntity.BlockEntityHealer;
 import Sergey_Dertan.SRegionProtector.Command.Admin.MigrateCommand;
 import Sergey_Dertan.SRegionProtector.Command.Admin.SaveCommand;
 import Sergey_Dertan.SRegionProtector.Command.Creation.*;
+import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.AddOwnerCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveMemberCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Group.RemoveOwnerCommand;
-import Sergey_Dertan.SRegionProtector.Command.Manage.*;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.BuyRegionCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionPriceCommand;
 import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionRemoveFromSaleCommand;
@@ -329,6 +329,8 @@ public final class SRegionProtectorMain extends PluginBase {
         this.registerCommand(new MigrateCommand(this));
 
         this.registerCommand(new OpenUICommand(this.regionManager, this.chunkManager, this.settings.uiType));
+
+        this.registerCommand(new CopyFlagsCommand(this.regionManager));
     }
 
     private void checkUpdate() {

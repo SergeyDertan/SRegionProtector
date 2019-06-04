@@ -260,6 +260,13 @@ command.gui.wrong-position: "В этой точке нет региона"
 command.gui.wrong-target: "Регион {@region} не найден"
 command.gui.description: "открыть gui"
 
+command.copy-flags.permission:  "Недостаточно прав"
+command.copy-flags.usage: "Необходимые аргументы: [ИСТОЧНИК] [ЦЕЛЬ]"
+command.copy-flags.invalid-source: "Источник не найден"
+command.copy-flags.invalid-target: "Цель не найдена"
+command.copy-flags.success: "Успешно скопированы флаги с {@source} в {@target}"
+command.copy-flags.description: "скопировать флаги одного региона в другой"
+
 command.set-priority.permission:  "Недостаточно прав"
 command.set-priority.usage: "Необходимые аргументы: [РЕГИОН] [ПРИОРИТЕТ]"
 command.set-priority.wrong-target: "Регион не найден"
