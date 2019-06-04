@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.FLAGS_FOLDER;
 import static Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain.REGIONS_FOLDER;
@@ -33,7 +32,6 @@ public final class YAMLDataProvider implements DataProvider {
     public final boolean multithreadedDataLoading;
     public final int threads;
 
-    private final ExecutorService executor;
     private final Logger logger;
     private final Messenger messenger;
 
@@ -42,12 +40,6 @@ public final class YAMLDataProvider implements DataProvider {
         this.messenger = Messenger.getInstance();
 
         this.multithreadedDataLoading = multithreadedDataLoading;
-        if (multithreadedDataLoading) {
-            if (threads == -1) threads = Runtime.getRuntime().availableProcessors();
-            this.executor = Executors.newFixedThreadPool(threads);
-        } else {
-            this.executor = null;
-        }
         this.threads = threads;
     }
 
@@ -57,24 +49,27 @@ public final class YAMLDataProvider implements DataProvider {
     }
 
     @Override
-    @SuppressWarnings({"unchecked", "ConstantConditions", "StatementWithEmptyBody"})
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
     public List<RegionDataObject> loadRegionList() {
         if (this.multithreadedDataLoading) {
-            AtomicInteger done = new AtomicInteger();
+            ExecutorService executor = Executors.newFixedThreadPool(this.threads);
             List<List<RegionDataObject>> result = new ArrayList<>();
             Utils.sliceArray(new File(REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml")), this.threads, false).forEach(s -> {
                 List<RegionDataObject> res = new ArrayList<>();
                 result.add(res);
-                this.executor.execute(() -> {
-                    s.stream().filter(File::isFile).forEach(file -> {
-                                Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
-                                if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
-                            });
-                            done.incrementAndGet();
-                        }
+                executor.execute(() ->
+                        s.stream().filter(File::isFile).forEach(file -> {
+                            Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
+                            if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
+                        })
                 );
             });
-            while (done.get() < result.size()) ;
+            executor.shutdown();
+            try {
+                executor.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
             List<RegionDataObject> list = new ArrayList<>();
             result.forEach(list::addAll);
             return list;
@@ -129,16 +124,6 @@ public final class YAMLDataProvider implements DataProvider {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     public void removeFlags(Region region) {
         new File(FLAGS_FOLDER + REGION_FILE_NAME.replace("{@region-name}", region.name)).delete();
-    }
-
-    public void shutdownExecutor() {
-        if (this.executor != null) {
-            this.executor.shutdown();
-            try {
-                this.executor.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
-            } catch (InterruptedException ignore) {
-            }
-        }
     }
 
     @Override

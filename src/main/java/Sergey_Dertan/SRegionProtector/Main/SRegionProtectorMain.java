@@ -382,7 +382,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
     private void shutdownExecutors() {
         ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
-        if (this.provider instanceof YAMLDataProvider) ((YAMLDataProvider) this.provider).shutdownExecutor();
         this.save.shutdown();
         try {
             this.save.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
