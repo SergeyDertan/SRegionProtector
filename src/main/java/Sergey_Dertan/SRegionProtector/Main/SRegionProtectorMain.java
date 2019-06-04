@@ -381,7 +381,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void shutdownExecutors() {
-        ((RegionCommand) this.getServer().getCommandMap().getCommand("region")).shutdownExecutor();
+        this.mainCommand.shutdownExecutor();
         this.save.shutdown();
         try {
             this.save.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
