@@ -9,7 +9,7 @@ import cn.nukkit.form.window.FormWindowSimple;
 final class MainForm extends FormWindowSimple implements UIForm {
 
     private static final transient ElementButtonImageData priorityImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/move.png");
-    private static final transient ElementButtonImageData unknownImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/misc/missing_texture.png");
+    private static final transient ElementButtonImageData unknownImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_member_star.png");
     private static final transient ElementButtonImageData removeImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/storage/trash.png");
     private static final transient ElementButtonImageData ownersImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_op_crown.png");
     private static final transient ElementButtonImageData flagsImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/settings/toggle_on_hover.png");
