@@ -64,7 +64,7 @@ region.selection.pos2: "Вторая точка установлена"
 
 command.region.permission: "Недостаточно прав"
 command.region.available-commands: 'Доступные команды:'
-command.region.region.command-doesnt-exits: 'Команда {@name} не найдена'
+command.region.command-doesnt-exists: 'Команда {@name} не найдена'
 command.region.description: 'Команды SRegionProtector'
 
 command.lpos1.in-game: "Только в игре"
