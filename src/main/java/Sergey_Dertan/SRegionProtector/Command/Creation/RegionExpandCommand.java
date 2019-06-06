@@ -39,7 +39,7 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             return false;
         }
         if (!this.testPermissionSilent(sender)) {
-            this.messenger.sendMessage(sender, "command.expand.in-game");
+            this.messenger.sendMessage(sender, "command.expand.permission");
             return false;
         }
         if (!this.selector.sessionExists((Player) sender)) {
@@ -47,6 +47,10 @@ public final class RegionExpandCommand extends SRegionProtectorCommand {
             return false;
         }
         SelectorSession session = this.selector.getSession((Player) sender);
+        if (session.pos1 == null || session.pos2 == null) {
+            this.messenger.sendMessage(sender, "command.expand.positions-required");
+            return false;
+        }
         if (session.pos1.level != session.pos2.level) {
             this.messenger.sendMessage(sender, "command.expand.positions-in-different-worlds");
             return false;
