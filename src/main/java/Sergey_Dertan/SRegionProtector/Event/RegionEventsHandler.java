@@ -153,7 +153,7 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_PLACE, e.getBlock(), e.getPlayer(), e);
     }
 
-    //interact, use, crops destroy, chest access & smart doors flags
+    //interact, lighter, use, crops destroy, chest access & smart doors flags
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
         Block block = e.getBlock();
