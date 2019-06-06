@@ -109,7 +109,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.commands"));
         this.initCommands();
 
-        this.registerBlockEntities();
+        this.registerBlockEntity();
 
         this.initAutoSave();
 
@@ -150,7 +150,7 @@ public final class SRegionProtectorMain extends PluginBase {
         this.getServer().getScheduler().scheduleDelayedRepeatingTask(this, () -> this.asyncSave(SaveType.AUTO), this.settings.autoSavePeriod, this.settings.autoSavePeriod);
     }
 
-    private void registerBlockEntities() {
+    private void registerBlockEntity() {
         BlockEntity.registerBlockEntity(BlockEntityHealer.BLOCK_ENTITY_HEALER, BlockEntityHealer.class);
     }
 
