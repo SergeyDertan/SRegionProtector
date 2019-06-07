@@ -352,7 +352,7 @@ public final class Region implements AxisAlignedBB {
 
     public double getSize() {
         double x = Math.abs(this.maxX - this.minX) + 1;
-        double y = Math.abs(this.maxY- this.minY) + 1;
+        double y = Math.abs(this.maxY - this.minY) + 1;
         double z = Math.abs(this.maxZ - this.minZ) + 1;
         return x * y * z;
     }
