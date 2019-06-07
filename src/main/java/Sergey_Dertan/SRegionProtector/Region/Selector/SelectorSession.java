@@ -49,7 +49,7 @@ public final class SelectorSession {
         long maxY = (long) Math.max(this.pos1.y, this.pos2.y);
         long maxZ = (long) Math.max(this.pos1.z, this.pos2.z);
 
-        long size = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+        long size = ((maxX - minX) + 1) * ((maxY - minY) + 1) * ((maxZ - minZ) + 1);
 
         if (size < 0L) return Long.MAX_VALUE;
 
