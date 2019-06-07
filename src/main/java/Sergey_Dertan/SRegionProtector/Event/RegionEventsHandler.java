@@ -407,6 +407,7 @@ public final class RegionEventsHandler implements Listener {
         for (Region region : chunk.getRegions()) {
             if (!region.getFlagState(RegionFlags.FLAG_CHUNK_LOADER)) continue;
             e.setCancelled();
+            break;
         }
     }
 
