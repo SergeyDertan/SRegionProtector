@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static Sergey_Dertan.SRegionProtector.Region.RegionGroup.*;
-
 public final class RegionListCommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
@@ -53,19 +51,7 @@ public final class RegionListCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.list.usage");
             return false;
         }
-        List<Region> regions;
-        switch (type) {
-            case CREATOR:
-            default:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, CREATOR);
-                break;
-            case OWNER:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, OWNER);
-                break;
-            case MEMBER:
-                regions = this.regionManager.getPlayersRegionList((Player) sender, MEMBER);
-                break;
-        }
+        List<Region> regions = this.regionManager.getPlayersRegionList((Player) sender, type);
         List<String> list = new ArrayList<>();
         regions.forEach(region -> list.add(region.name));
         switch (type) {
