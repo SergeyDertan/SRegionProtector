@@ -37,7 +37,6 @@ import cn.nukkit.level.particle.Particle;
 import cn.nukkit.math.BlockFace;
 import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.DataPacket;
-import cn.nukkit.utils.MainLogger;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
 
@@ -186,9 +185,6 @@ public final class RegionEventsHandler implements Listener {
                 } else {
                     second = door.getBlockFace();
                 }
-
-                MainLogger.getLogger().info(isRight ? "r" : "non");
-                MainLogger.getLogger().info(second.name());
 
                 if (isRight) {
                     switch (second) {
