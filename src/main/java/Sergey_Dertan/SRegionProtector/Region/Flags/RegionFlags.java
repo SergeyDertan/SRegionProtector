@@ -110,6 +110,7 @@ public abstract class RegionFlags {
         state[FLAG_SMART_DOORS] = false;
         state[FLAG_MINEFARM] = false;
         state[FLAG_FALL_DAMAGE] = false;
+        state[FLAG_EXPLODE_BLOCK_BREAK] = false;
     }
 
     private RegionFlags() {
