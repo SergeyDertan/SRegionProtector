@@ -43,10 +43,14 @@ public final class Region implements AxisAlignedBB {
     public final String name;
     public final String level;
 
+    public final long size;
+
     private final Set<String> owners, members;
     private final RegionFlag[] flags;
     private final Set<Chunk> chunks;
+
     boolean needUpdate = false;
+
     private String creator;
 
     private int priority;
@@ -55,9 +59,9 @@ public final class Region implements AxisAlignedBB {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
-        this.maxX = maxX;
-        this.maxY = maxY;
-        this.maxZ = maxZ;
+        this.maxX = maxX + 1;
+        this.maxY = maxY + 1;
+        this.maxZ = maxZ + 1;
 
         this.name = name;
         this.creator = creator;
@@ -73,6 +77,12 @@ public final class Region implements AxisAlignedBB {
 
         this.flags = flags;
         this.chunks = new ObjectArraySet<>();
+
+        double x = Math.abs(this.maxX - this.minX);
+        double y = Math.abs(this.maxY - this.minY);
+        double z = Math.abs(this.maxZ - this.minZ);
+
+        this.size = (long) (x * y * z);
     }
 
     public Region(String name, String creator, String level, double minX, double minY, double minZ, double maxX, double maxY, double maxZ) {
@@ -235,9 +245,9 @@ public final class Region implements AxisAlignedBB {
         data.put(MIN_Y_TAG, this.minY);
         data.put(MIN_Z_TAG, this.minZ);
 
-        data.put(MAX_X_TAG, this.maxX);
-        data.put(MAX_Y_TAG, this.maxY);
-        data.put(MAX_Z_TAG, this.maxZ);
+        data.put(MAX_X_TAG, this.maxX - 1);
+        data.put(MAX_Y_TAG, this.maxY - 1);
+        data.put(MAX_Z_TAG, this.maxZ - 1);
 
         data.put(PRIORITY_TAG, this.priority);
 
@@ -306,9 +316,9 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Vector3 getHealerVector() {
-        double x = this.minX + (this.maxX - this.minX) / 2D;
-        double y = this.minY + (this.maxY - this.minY) / 2D;
-        double z = this.minZ + (this.maxZ - this.minZ) / 2D;
+        double x = this.minX + (this.maxX - 1 - this.minX) / 2D;
+        double y = this.minY + (this.maxY - 1 - this.minY) / 2D;
+        double z = this.minZ + (this.maxZ - 1 - this.minZ) / 2D;
         return new Vector3(x, y, z);
     }
 
@@ -348,5 +358,17 @@ public final class Region implements AxisAlignedBB {
     @Override
     public double getMinZ() {
         return this.minZ;
+    }
+
+    public long getSize() {
+        return this.size;
+    }
+
+    public Vector3 getMin() {
+        return new Vector3(this.minX, this.minY, this.minZ);
+    }
+
+    public Vector3 getMax() {
+        return new Vector3(this.maxX, this.maxY, this.maxZ);
     }
 }

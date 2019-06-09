@@ -45,9 +45,9 @@ public final class SelectorSession {
         long minY = (long) Math.min(this.pos1.y, this.pos2.y);
         long minZ = (long) Math.min(this.pos1.z, this.pos2.z);
 
-        long maxX = (long) Math.max(this.pos1.x, this.pos2.x);
-        long maxY = (long) Math.max(this.pos1.y, this.pos2.y);
-        long maxZ = (long) Math.max(this.pos1.z, this.pos2.z);
+        long maxX = (long) Math.max(this.pos1.x, this.pos2.x) + 1;
+        long maxY = (long) Math.max(this.pos1.y, this.pos2.y) + 1;
+        long maxZ = (long) Math.max(this.pos1.z, this.pos2.z) + 1;
 
         long size = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
 

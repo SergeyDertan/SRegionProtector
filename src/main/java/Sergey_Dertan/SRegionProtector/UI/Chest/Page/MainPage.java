@@ -41,7 +41,7 @@ public final class MainPage implements Page {
                         region.level,
                         region.getCreator(),
                         Integer.toString(region.getPriority()),
-                        Long.toString(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)))
+                        Long.toString(region.size)
                 }
         ));
         items.put(0, item);

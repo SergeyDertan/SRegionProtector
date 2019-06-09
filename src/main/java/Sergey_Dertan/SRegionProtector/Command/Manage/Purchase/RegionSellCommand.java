@@ -7,7 +7,6 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
@@ -51,7 +50,7 @@ public final class RegionSellCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.sell.not-creator");
             return false;
         }
-        if (this.regionManager.checkOverlap(new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ), region.level, "", false, region)) {
+        if (this.regionManager.checkOverlap(region.getMin(), region.getMax(), region.level, "", false, region)) {
             this.messenger.sendMessage(sender, "command.sell.overlap");
             return false;
         }

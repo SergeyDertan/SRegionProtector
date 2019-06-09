@@ -96,8 +96,8 @@ public final class RegionManager {
             this.owners.computeIfAbsent(region.getCreator(), (usr) -> new ObjectArraySet<>()).add(region);
 
             this.chunkManager.getRegionChunks(
-                    new Vector3(region.minX, region.minY, region.minZ),
-                    new Vector3(region.maxX, region.maxY, region.maxZ),
+                    region.getMin(),
+                    region.getMax(),
                     region.level, true
             ).forEach(chunk -> {
                 chunk.addRegion(region);

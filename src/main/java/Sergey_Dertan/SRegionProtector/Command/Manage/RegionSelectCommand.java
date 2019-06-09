@@ -8,7 +8,6 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.command.data.CommandParamType;
 import cn.nukkit.command.data.CommandParameter;
-import cn.nukkit.math.Vector3;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 
 import java.util.Map;
@@ -59,12 +58,12 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.select.different-worlds");
             return false;
         }
-        if (this.selector.calculateEdgesLength(new Vector3(region.maxX, region.maxY, region.maxZ), new Vector3(region.minX, region.minY, region.minZ)) > this.maxBordersAmount) {
+        if (this.selector.calculateEdgesLength(region.getMin(), region.getMax()) > this.maxBordersAmount) {
             this.messenger.sendMessage(sender, "command.select.too-long");
             return false;
         }
         this.messenger.sendMessage(sender, "command.select.success");
-        this.selector.showBorders((Player) sender, new Vector3(region.minX, region.minY, region.minZ), new Vector3(region.maxX, region.maxY, region.maxZ));
+        this.selector.showBorders((Player) sender, region.getMin(), region.getMax().add(-1, -1, -1));
         return false;
     }
 }

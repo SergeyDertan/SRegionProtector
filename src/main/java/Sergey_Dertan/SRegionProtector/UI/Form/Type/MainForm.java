@@ -22,7 +22,7 @@ final class MainForm extends FormWindowSimple implements UIForm {
                 "Level: " + region.level + "\n" +
                         "Creator: " + region.getCreator() + "\n" +
                         "Priority: " + region.getPriority() + "\n" +
-                        "Size: " + Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ))
+                        "Size: " + region.size
         );
         this.region = region;
 

@@ -26,9 +26,9 @@ public abstract class Converter {
         dataObject.minX = region.minX;
         dataObject.minY = region.minY;
         dataObject.minZ = region.minZ;
-        dataObject.maxX = region.maxX;
-        dataObject.maxY = region.maxY;
-        dataObject.maxZ = region.maxZ;
+        dataObject.maxX = region.maxX - 1;
+        dataObject.maxY = region.maxY - 1;
+        dataObject.maxZ = region.maxZ - 1;
 
         dataObject.creator = region.getCreator();
         dataObject.level = region.level;

@@ -78,7 +78,7 @@ public final class RegionInfoCommand extends SRegionProtectorCommand {
         String owner = region.getCreator();
         String owners = String.join(", ", region.getOwners());
         String members = String.join(", ", region.getMembers());
-        String size = Long.toString(Math.round((region.maxX - region.minX) * (region.maxY - region.minY) * (region.maxZ - region.minZ)));
+        String size = Long.toString(region.size);
         List<String> flags = new ObjectArrayList<>();
         for (int i = 0; i < RegionFlags.FLAG_AMOUNT; ++i) {
             if (!this.regionSettings.flagsStatus[i] || !this.regionSettings.display[i]) continue;
