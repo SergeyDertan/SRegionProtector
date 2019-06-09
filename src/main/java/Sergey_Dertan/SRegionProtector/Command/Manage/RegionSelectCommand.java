@@ -63,7 +63,7 @@ public final class RegionSelectCommand extends SRegionProtectorCommand {
             return false;
         }
         this.messenger.sendMessage(sender, "command.select.success");
-        this.selector.showBorders((Player) sender, region.getMin(), region.getMax().add(-1, -1, -1));
+        this.selector.showBorders((Player) sender, region.getMin(), region.getMax());
         return false;
     }
 }

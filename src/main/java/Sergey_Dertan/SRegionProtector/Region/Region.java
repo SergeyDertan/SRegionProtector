@@ -59,9 +59,9 @@ public final class Region implements AxisAlignedBB {
         this.minX = minX;
         this.minY = minY;
         this.minZ = minZ;
-        this.maxX = maxX + 1;
-        this.maxY = maxY + 1;
-        this.maxZ = maxZ + 1;
+        this.maxX = maxX;
+        this.maxY = maxY;
+        this.maxZ = maxZ;
 
         this.name = name;
         this.creator = creator;
@@ -245,9 +245,9 @@ public final class Region implements AxisAlignedBB {
         data.put(MIN_Y_TAG, this.minY);
         data.put(MIN_Z_TAG, this.minZ);
 
-        data.put(MAX_X_TAG, this.maxX - 1);
-        data.put(MAX_Y_TAG, this.maxY - 1);
-        data.put(MAX_Z_TAG, this.maxZ - 1);
+        data.put(MAX_X_TAG, this.maxX);
+        data.put(MAX_Y_TAG, this.maxY);
+        data.put(MAX_Z_TAG, this.maxZ);
 
         data.put(PRIORITY_TAG, this.priority);
 
@@ -316,9 +316,9 @@ public final class Region implements AxisAlignedBB {
     }
 
     public Vector3 getHealerVector() {
-        double x = this.minX + (this.maxX - 1 - this.minX) / 2D;
-        double y = this.minY + (this.maxY - 1 - this.minY) / 2D;
-        double z = this.minZ + (this.maxZ - 1 - this.minZ) / 2D;
+        double x = this.minX + (this.maxX - this.minX) / 2D;
+        double y = this.minY + (this.maxY - this.minY) / 2D;
+        double z = this.minZ + (this.maxZ - this.minZ) / 2D;
         return new Vector3(x, y, z);
     }
 
