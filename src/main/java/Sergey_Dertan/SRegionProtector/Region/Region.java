@@ -78,9 +78,9 @@ public final class Region implements AxisAlignedBB {
         this.flags = flags;
         this.chunks = new ObjectArraySet<>();
 
-        double x = Math.abs(this.maxX - this.minX);
-        double y = Math.abs(this.maxY - this.minY);
-        double z = Math.abs(this.maxZ - this.minZ);
+        double x = Math.abs(this.maxX - this.minX) + 1;
+        double y = Math.abs(this.maxY - this.minY) + 1;
+        double z = Math.abs(this.maxZ - this.minZ) + 1;
 
         this.size = (long) (x * y * z);
     }
