@@ -9,7 +9,7 @@ import cn.nukkit.form.window.FormWindowSimple;
 final class MainForm extends FormWindowSimple implements UIForm {
 
     private static final transient ElementButtonImageData priorityImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/move.png");
-    private static final transient ElementButtonImageData unknownImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_member_star.png");
+    private static final transient ElementButtonImageData membersImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_member_star.png");
     private static final transient ElementButtonImageData removeImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/storage/trash.png");
     private static final transient ElementButtonImageData ownersImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_op_crown.png");
     private static final transient ElementButtonImageData flagsImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/settings/toggle_on_hover.png");
@@ -27,7 +27,7 @@ final class MainForm extends FormWindowSimple implements UIForm {
         this.region = region;
 
         this.addButton(new Button("Owners", OwnersForm.class, region, player).setImage(ownersImage));
-        this.addButton(new Button("Members", MembersForm.class, region, player).setImage(unknownImage));
+        this.addButton(new Button("Members", MembersForm.class, region, player).setImage(membersImage));
         this.addButton(new Button("Flags", FlagsForm.class, region, player).setImage(flagsImage));
         if (player.hasPermission("sregionprotector.admin") || this.region.isCreator(player.getName())) {
             this.addButton(new Button("Sell region", SellRegionForm.class, region).setImage(sellImage));
