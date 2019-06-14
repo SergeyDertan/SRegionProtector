@@ -11,13 +11,7 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.inventory.InventoryCloseEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.player.PlayerFormRespondedEvent;
-import cn.nukkit.event.server.DataPacketReceiveEvent;
-import cn.nukkit.event.server.DataPacketSendEvent;
 import cn.nukkit.inventory.transaction.action.InventoryAction;
-import cn.nukkit.network.protocol.DataPacket;
-import cn.nukkit.network.protocol.ModalFormRequestPacket;
-import cn.nukkit.network.protocol.ModalFormResponsePacket;
-import cn.nukkit.utils.MainLogger;
 
 @SuppressWarnings("unused")
 public final class GUIEventsHandler implements Listener {
@@ -59,28 +53,6 @@ public final class GUIEventsHandler implements Listener {
                 ChestUIManager.handle(e.getTransaction().getSource(), action.getTargetItem());
                 return;
             }
-        }
-    }
-
-    @EventHandler
-    public void datapk(DataPacketSendEvent e) {
-        DataPacket pk = e.getPacket();
-
-        if (pk instanceof ModalFormRequestPacket) {
-            MainLogger.getLogger().info("request:" + ((ModalFormRequestPacket) pk).data);
-        } else if (pk instanceof ModalFormResponsePacket) {
-            MainLogger.getLogger().info("response:" + ((ModalFormResponsePacket) pk).data);
-        }
-    }
-
-    @EventHandler
-    public void datapkw(DataPacketReceiveEvent e) {
-        DataPacket pk = e.getPacket();
-
-        if (pk instanceof ModalFormRequestPacket) {
-            MainLogger.getLogger().info("request:" + ((ModalFormRequestPacket) pk).data);
-        } else if (pk instanceof ModalFormResponsePacket) {
-            MainLogger.getLogger().info("response:" + ((ModalFormResponsePacket) pk).data);
         }
     }
 }
