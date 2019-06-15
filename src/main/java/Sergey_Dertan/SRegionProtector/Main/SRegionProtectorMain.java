@@ -280,7 +280,7 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerCommand(new GetWandCommand());
 
-        this.registerCommand(new RegionFlagCommand(this.regionManager));
+        this.registerCommand(new RegionFlagCommand(this.regionManager, this.settings.regionSettings.flagsStatus));
 
         this.registerCommand(new RegionInfoCommand(this.regionManager, this.chunkManager, this.settings.regionSettings));
 
