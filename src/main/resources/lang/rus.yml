@@ -225,6 +225,7 @@ command.flag.teleport-flag-in-game: "Только в игре"
 command.flag.teleport-should-be-in-region: "Позиция должна находится внутри региона"
 command.flag.flag-enabled: "Флаг {@flag} в регионе {@region} включен"
 command.flag.flag-disabled: "Флаг {@flag} в регионе {@region} отключен"
+command.flag.disabled-warning: "Данный флаг отключен глобально в config.yml"
 command.flag.description: "управление флагами региона"
 
 command.teleport.in-game: "Только в игре"

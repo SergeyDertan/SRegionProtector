@@ -15,10 +15,12 @@ import java.util.Map;
 public final class RegionFlagCommand extends SRegionProtectorCommand {
 
     private final RegionManager regionManager;
+    private final boolean[] flagStatus;
 
-    public RegionFlagCommand(RegionManager regionManager) {
+    public RegionFlagCommand(RegionManager regionManager, boolean[] flagStatus) {
         super("rgflag", "flag");
         this.regionManager = regionManager;
+        this.flagStatus = flagStatus;
 
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("flagdata", new CommandParameter[]
@@ -90,6 +92,9 @@ public final class RegionFlagCommand extends SRegionProtectorCommand {
             }
         }
         region.setFlagState(flag, state);
+        if (!this.flagStatus[flag]) {
+            this.messenger.sendMessage(sender, "command.flag.disabled-warning");
+        }
         this.messenger.sendMessage(sender, "command.flag.flag-" + (state ? "enabled" : "disabled"), new String[]{"@region", "@flag"}, new String[]{region.name, args[1]});
         return true;
     }
