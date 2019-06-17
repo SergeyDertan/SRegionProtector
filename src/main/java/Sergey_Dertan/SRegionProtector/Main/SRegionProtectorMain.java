@@ -82,31 +82,21 @@ public final class SRegionProtectorMain extends PluginBase {
 
     @Override
     public void onEnable() {
-        long start = System.currentTimeMillis();
-
         if (!this.createDirectories()) return;
         if (!this.initMessenger()) return;
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.start", "@ver", this.getDescription().getVersion()));
-
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.libraries"));
         if (!this.loadLibraries()) return;
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.settings"));
         if (!this.initSettings()) return;
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider"));
         if (!this.initDataProvider()) return;
 
         this.initChunks();
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.regions"));
         this.initRegions();
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.events-handlers"));
         this.initEventsHandlers();
 
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.commands"));
         this.initCommands();
 
         this.registerBlockEntity();
@@ -116,8 +106,6 @@ public final class SRegionProtectorMain extends PluginBase {
         this.initSessionsClearTask();
 
         this.gc();
-
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.successful", "@time", Long.toString(System.currentTimeMillis() - start)));
 
         this.getServer().getScheduler().scheduleTask(this, this::checkUpdate, true);
 
@@ -134,7 +122,7 @@ public final class SRegionProtectorMain extends PluginBase {
     private boolean initDataProvider() {
         try {
             this.provider = this.getProviderInstance(this.settings.provider);
-            this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.data-provider", "@name", this.settings.provider.name()));
+            this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("loading.init.data-provider-type", "@type", this.settings.provider.name()));
             return true;
         } catch (RuntimeException e) {
             this.getLogger().alert(TextFormat.RED + this.messenger.getMessage("loading.error.data-provider-error", new String[]{"@err", "@provider"}, new String[]{e.getMessage(), this.settings.provider.name()}));
@@ -249,18 +237,6 @@ public final class SRegionProtectorMain extends PluginBase {
                 break;
         }
         this.regionManager.save(saveType, initiator);
-        this.gc();
-        switch (saveType) {
-            case AUTO:
-                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("auto-save-success"));
-                break;
-            case MANUAL:
-                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("manual-save-success", "@initiator", initiator));
-                break;
-            case DISABLING:
-                this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.successful"));
-                break;
-        }
     }
 
     public void registerCommand(Command command) {
@@ -431,7 +407,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
     @Override
     public void onDisable() {
-        this.getLogger().info(TextFormat.GREEN + this.messenger.getMessage("disabling.start", "@ver", this.getDescription().getVersion()));
         if (this.forceShutdown) {
             if (this.messenger != null) {
                 this.getLogger().info(TextFormat.RED + this.messenger.getMessage("disabling.error"));

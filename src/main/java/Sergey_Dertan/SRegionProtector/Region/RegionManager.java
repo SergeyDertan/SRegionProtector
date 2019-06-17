@@ -105,8 +105,7 @@ public final class RegionManager {
             });
         }
 
-        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.regions.success", "@count", Integer.toString(this.regions.size())));
-        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.chunks.success", "@count", Integer.toString(this.chunkManager.getChunkAmount())));
+        this.logger.info(TextFormat.GREEN + this.messenger.getMessage("loading.success", new String[]{"@regions", "@chunks"}, new String[]{Integer.toString(this.regions.size()), Integer.toString(this.chunkManager.getChunkAmount())}));
     }
 
     public synchronized Region createRegion(String name, String creator, Vector3 pos1, Vector3 pos2, Level level) {
