@@ -105,7 +105,7 @@ display:
 default-max-region-size: 15000
 default-max-region-amount: 3
 #in seconds
-auto-save-period: 60
+auto-save-period: 360
 auto-save: true
 #in seconds
 empty-chunks-removing-period: 360
