@@ -1,9 +1,11 @@
 package Sergey_Dertan.SRegionProtector.Command;
 
+import Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import cn.nukkit.command.Command;
+import cn.nukkit.command.PluginIdentifiableCommand;
 
-public abstract class SRegionProtectorCommand extends Command {
+public abstract class SRegionProtectorCommand extends Command implements PluginIdentifiableCommand {
 
     protected final Messenger messenger;
 
@@ -21,5 +23,10 @@ public abstract class SRegionProtectorCommand extends Command {
 
     public SRegionProtectorCommand(String name, String mp) {
         this(name, mp, mp);
+    }
+
+    @Override
+    public SRegionProtectorMain getPlugin() {
+        return SRegionProtectorMain.getInstance();
     }
 }
