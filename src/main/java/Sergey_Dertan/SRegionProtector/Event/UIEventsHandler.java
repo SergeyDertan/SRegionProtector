@@ -14,12 +14,12 @@ import cn.nukkit.event.player.PlayerFormRespondedEvent;
 import cn.nukkit.inventory.transaction.action.InventoryAction;
 
 @SuppressWarnings("unused")
-public final class GUIEventsHandler implements Listener {
+public final class UIEventsHandler implements Listener {
 
-    private final UIType guiType;
+    private final UIType uiType;
 
-    public GUIEventsHandler(UIType guiType) {
-        this.guiType = guiType;
+    public UIEventsHandler(UIType uiType) {
+        this.uiType = uiType;
     }
 
     //remove fake chest, chest UI
@@ -31,7 +31,7 @@ public final class GUIEventsHandler implements Listener {
     //form UI
     @EventHandler
     public void playerFormResponded(PlayerFormRespondedEvent e) {
-        if (this.guiType != UIType.FORM) return;
+        if (this.uiType != UIType.FORM) return;
         if (!(e.getWindow() instanceof UIForm) || e.wasClosed()) return;
         FormUIManager.handle(e.getPlayer(), (UIForm) e.getWindow());
     }
@@ -39,7 +39,7 @@ public final class GUIEventsHandler implements Listener {
     //chest UI
     @EventHandler
     public void inventoryTransaction(InventoryTransactionEvent e) {
-        if (this.guiType != UIType.CHEST) return;
+        if (this.uiType != UIType.CHEST) return;
         if (e.getTransaction().getInventories().stream().noneMatch(inventory -> inventory instanceof UIInventory)) {
             return;
         }

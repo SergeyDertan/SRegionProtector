@@ -54,19 +54,19 @@ public final class OpenUICommand extends SRegionProtectorCommand {
                 this.messenger.sendMessage(sender, "command.gui.wrong-position");
                 return false;
             }
-            this.openGUI((Player) sender, region);
+            this.openUI((Player) sender, region);
         } else {
             Region region = this.regionManager.getRegion(args[0]);
             if (region == null) {
                 this.messenger.sendMessage(sender, "command.gui.wrong-target", "@region", args[0]);
                 return false;
             }
-            this.openGUI((Player) sender, region);
+            this.openUI((Player) sender, region);
         }
         return true;
     }
 
-    private void openGUI(Player player, Region region) {
+    private void openUI(Player player, Region region) {
         if (!region.isLivesIn(player.getName()) && !player.hasPermission("sregionprotector.info.other") && !player.hasPermission("sregionprotector.admin")) {
             this.messenger.sendMessage(player, "command.gui.permission");
             return;

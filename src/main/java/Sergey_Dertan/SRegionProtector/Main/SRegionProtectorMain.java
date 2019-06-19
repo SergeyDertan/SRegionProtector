@@ -16,10 +16,10 @@ import Sergey_Dertan.SRegionProtector.Command.Manage.Purchase.RegionSellCommand;
 import Sergey_Dertan.SRegionProtector.Command.RegionCommand;
 import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
 import Sergey_Dertan.SRegionProtector.Economy.OneBoneEconomyAPI;
-import Sergey_Dertan.SRegionProtector.Event.GUIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.NotifierEventHandler;
 import Sergey_Dertan.SRegionProtector.Event.RegionEventsHandler;
 import Sergey_Dertan.SRegionProtector.Event.SelectorEventsHandler;
+import Sergey_Dertan.SRegionProtector.Event.UIEventsHandler;
 import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataObject.Converter;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
@@ -209,7 +209,7 @@ public final class SRegionProtectorMain extends PluginBase {
     private void initEventsHandlers() {
         this.getServer().getPluginManager().registerEvents(new RegionEventsHandler(this.chunkManager, this.settings.regionSettings.flagsStatus, this.settings.regionSettings.needMessage, this.settings.prioritySystem, this.settings.protectedMessageType, this.settings.showParticle), this);
         this.getServer().getPluginManager().registerEvents(new SelectorEventsHandler(this.regionSelector), this);
-        this.getServer().getPluginManager().registerEvents(new GUIEventsHandler(this.settings.uiType), this);
+        this.getServer().getPluginManager().registerEvents(new UIEventsHandler(this.settings.uiType), this);
     }
 
     public synchronized void asyncSave(SaveType saveType, String initiator) {
