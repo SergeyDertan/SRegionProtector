@@ -240,13 +240,13 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     public void registerCommand(Command command) {
-        if (!this.settings.hideCommands) this.getServer().getCommandMap().register(command.getName(), command);
+        if (!this.settings.hideCommands) this.getServer().getCommandMap().register("sregionprotector", command);
         this.mainCommand.registerCommand(command);
     }
 
     private void initCommands() {
         this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
-        this.getServer().getCommandMap().register(this.mainCommand.getName(), this.mainCommand);
+        this.getServer().getCommandMap().register("sregionprotector", this.mainCommand);
 
         this.registerCommand(new Pos1Command(this.regionSelector));
 
