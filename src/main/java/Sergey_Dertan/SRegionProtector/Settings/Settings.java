@@ -5,6 +5,7 @@ import Sergey_Dertan.SRegionProtector.Messenger.Messenger;
 import Sergey_Dertan.SRegionProtector.Provider.DataProvider;
 import Sergey_Dertan.SRegionProtector.UI.UIType;
 import cn.nukkit.block.Block;
+import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
 
 import java.util.Map;
@@ -53,6 +54,8 @@ public final class Settings {
     public final Messenger.MessageType protectedMessageType;
 
     public final boolean showParticle;
+
+    public final Item wandItem;
 
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
@@ -107,6 +110,24 @@ public final class Settings {
         this.borderBlock = Block.get(id, meta);
 
         this.provider = DataProvider.Type.fromString((String) config.get("provider"));
+
+        Object wand = config.get("wand-item");
+        if (wand instanceof String) {
+            if (border.split(":").length == 2) {
+                id = Integer.parseInt(border.split(":")[0]);
+                meta = Integer.parseInt(border.split(":")[1]);
+            } else {
+                id = Integer.parseInt(border);
+                meta = 0;
+            }
+        } else if (wand instanceof Number) {
+            meta = 0;
+            id = ((Number) wand).intValue();
+        } else {
+            throw new RuntimeException("Wrong wand item");
+        }
+
+        this.wandItem = Item.get(id, meta);
 
         this.mySQLSettings = new MySQLSettings(new Config(DB_FOLDER + "mysql.yml", Config.YAML).getAll());
         this.postgreSQLSettings = new PostgreSQLSettings(new Config(DB_FOLDER + "postgresql.yml", Config.YAML).getAll());

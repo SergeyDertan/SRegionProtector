@@ -13,16 +13,17 @@ import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.item.Item;
-import cn.nukkit.item.ItemAxeWood;
 import cn.nukkit.level.Position;
 
 @SuppressWarnings("unused")
 public final class SelectorEventsHandler implements Listener {
 
     private final RegionSelector regionSelector;
+    private final Item wandItem;
 
-    public SelectorEventsHandler(RegionSelector selector) {
+    public SelectorEventsHandler(RegionSelector selector, Item wandItem) {
         this.regionSelector = selector;
+        this.wandItem = wandItem;
     }
 
     @EventHandler
@@ -42,7 +43,7 @@ public final class SelectorEventsHandler implements Listener {
     }
 
     private boolean selectPosition(Player player, Block pos, Item item) {
-        if (pos instanceof BlockAir || !(item instanceof ItemAxeWood)) return false;
+        if (item == null || pos instanceof BlockAir || !item.equals(this.wandItem, true, false)) return false;
         if (!player.hasPermission("sregionprotector.wand")) return false;
         SelectorSession session = this.regionSelector.getSession(player);
         if (!session.setNextPos(Position.fromObject(pos, pos.level))) return false;

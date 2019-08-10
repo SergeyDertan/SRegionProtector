@@ -14,6 +14,8 @@ priority-system: false
 
 update-notifier: true
 
+wand-item: "271:0"
+
 #multithreaded regions loading
 multithreaded-loading: true
 multithreaded-loading-threads: -1
