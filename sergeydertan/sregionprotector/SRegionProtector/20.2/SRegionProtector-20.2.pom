@@ -4,7 +4,7 @@
   <groupId>sergeydertan.sregionprotector</groupId>
   <artifactId>SRegionProtector</artifactId>
   <name>SRegionProtector</name>
-  <version>19.5</version>
+  <version>20.2</version>
   <description>Flexible region protection plugin for nukkit</description>
   <url>https://github.com/SergeyDertan/SRegionProtector</url>
   <issueManagement>
@@ -40,9 +40,6 @@
         <targetPath>resources</targetPath>
         <directory>${basedir}/src/main/resources</directory>
         <includes>
-          <include>mysql.yml</include>
-          <include>postgresql.yml</include>
-          <include>sqlite.yml</include>
           <include>config.yml</include>
           <include>region-settings.yml</include>
         </includes>
@@ -183,24 +180,25 @@
       <id>onebone</id>
       <url>http://jenkins.onebone.me/plugin/repository/everything/</url>
     </repository>
+    <repository>
+      <snapshots>
+        <updatePolicy>always</updatePolicy>
+      </snapshots>
+      <id>SRegionProtector-master</id>
+      <url>https://raw.github.com/SergeyDertan/SRegionProtector/fastutil-lite/</url>
+    </repository>
   </repositories>
   <dependencies>
     <dependency>
       <groupId>cn.nukkit</groupId>
       <artifactId>nukkit</artifactId>
-      <version>LATEST</version>
+      <version>1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>me.onebone</groupId>
       <artifactId>economyapi</artifactId>
       <version>LATEST</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.alibaba</groupId>
-      <artifactId>fastjson</artifactId>
-      <version>1.2.54</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -273,9 +271,9 @@
   </distributionManagement>
   <properties>
     <java.version>1.8</java.version>
-    <github.global.server>github</github.global.server>
-    <github.maven-plugin>0.12</github.maven-plugin>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <github.maven-plugin>0.12</github.maven-plugin>
+    <github.global.server>github</github.global.server>
   </properties>
 </project>
 
