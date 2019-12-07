@@ -192,7 +192,7 @@
     <dependency>
       <groupId>cn.nukkit</groupId>
       <artifactId>nukkit</artifactId>
-      <version>LATEST</version>
+      <version>1.0-SNAPSHOT</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -271,9 +271,9 @@
   </distributionManagement>
   <properties>
     <java.version>1.8</java.version>
-    <github.global.server>github</github.global.server>
-    <github.maven-plugin>0.12</github.maven-plugin>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <github.maven-plugin>0.12</github.maven-plugin>
+    <github.global.server>github</github.global.server>
   </properties>
 </project>
 

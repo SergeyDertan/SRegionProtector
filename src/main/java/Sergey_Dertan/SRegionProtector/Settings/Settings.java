@@ -7,6 +7,7 @@ import Sergey_Dertan.SRegionProtector.UI.UIType;
 import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
+import cn.nukkit.utils.MainLogger;
 
 import java.util.Map;
 
@@ -113,11 +114,11 @@ public final class Settings {
 
         Object wand = config.get("wand-item");
         if (wand instanceof String) {
-            if (border.split(":").length == 2) {
-                id = Integer.parseInt(border.split(":")[0]);
-                meta = Integer.parseInt(border.split(":")[1]);
+            if (((String) wand).split(":").length == 2) {
+                id = Integer.parseInt(((String) wand).split(":")[0]);
+                meta = Integer.parseInt(((String) wand).split(":")[1]);
             } else {
-                id = Integer.parseInt(border);
+                id = Integer.parseInt(((String) wand));
                 meta = 0;
             }
         } else if (wand instanceof Number) {
