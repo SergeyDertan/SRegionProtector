@@ -63,7 +63,13 @@ public final class RegionManager {
     public void init(boolean saveNewFlags) {
         List<RegionDataObject> regions = this.provider.loadRegionList();
         for (RegionDataObject rdo : regions) {
-            FlagListDataObject flags = this.provider.loadFlags(rdo.name);
+            FlagListDataObject flags;
+            try {
+                flags = this.provider.loadFlags(rdo.name);
+            } catch (Exception e) {
+                this.logger.warning("Error loading flags for region " + rdo.name, e); //TODO message
+                continue;
+            }
 
             List<RegionFlag> flagList = Converter.fromDataObject(flags);
 

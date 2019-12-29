@@ -4,7 +4,7 @@
   <groupId>sergeydertan.sregionprotector</groupId>
   <artifactId>SRegionProtector</artifactId>
   <name>SRegionProtector</name>
-  <version>20.1</version>
+  <version>20.2</version>
   <description>Flexible region protection plugin for nukkit</description>
   <url>https://github.com/SergeyDertan/SRegionProtector</url>
   <issueManagement>
@@ -271,9 +271,9 @@
   </distributionManagement>
   <properties>
     <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <github.maven-plugin>0.12</github.maven-plugin>
     <github.global.server>github</github.global.server>
+    <github.maven-plugin>0.12</github.maven-plugin>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 </project>
 

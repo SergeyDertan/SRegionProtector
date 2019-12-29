@@ -60,7 +60,11 @@ public final class YAMLDataProvider implements DataProvider {
                 executor.execute(() ->
                         s.stream().filter(File::isFile).forEach(file -> {
                             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
-                            if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
+                            try {
+                                if (o != null) res.add(Converter.toRegionDataObject((Map<String, Object>) o));
+                            } catch (Exception e) {
+                                this.logger.warning("Error loading region from file " + file.getName(), e); //TODO message
+                            }
                         })
                 );
             });
@@ -79,7 +83,11 @@ public final class YAMLDataProvider implements DataProvider {
 
         Arrays.stream(new File(REGIONS_FOLDER).listFiles((dir, name) -> name.endsWith(".yml"))).filter(File::isFile).forEach(file -> {
             Object o = new Config(file.getAbsolutePath(), Config.YAML).get("data");
-            if (o != null) result.add(Converter.toRegionDataObject((Map<String, Object>) o));
+            try {
+                if (o != null) result.add(Converter.toRegionDataObject((Map<String, Object>) o));
+            } catch (Exception e) {
+                this.logger.warning("Error loading region from file " + file.getName(), e); //TODO message
+            }
         });
         return result;
     }
