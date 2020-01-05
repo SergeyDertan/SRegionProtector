@@ -242,7 +242,7 @@ public final class SRegionProtectorMain extends PluginBase {
     public void registerCommand(Command command) {
         this.mainCommand.registerCommand(command);
         if (!this.settings.hideCommands) {
-            if (command instanceof GetWandCommand && (getServer().getCommandMap().getCommand("wand") != null || getServer().getCommandMap().getCommand("/wand") == null)) return;
+            if (command instanceof GetWandCommand && (getServer().getCommandMap().getCommand("wand") != null || getServer().getCommandMap().getCommand("/wand") != null)) return;
             this.getServer().getCommandMap().register("sregionprotector", command);
         }
     }
