@@ -8,6 +8,7 @@ load: STARTUP
 prefix: '§eSRegionProtector§f'
 softdepend:
   - EconomyAPI
+  - FastAsyncWorldEdit
 permissions:
   sregionprotector.*:
     default: false
