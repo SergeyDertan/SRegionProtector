@@ -135,7 +135,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //break & minefarm flags
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void blockBreak(BlockBreakEvent e) {
         if (e.getBlock().getClass().getSimpleName().startsWith(Tags.BLOCK_ORE)) { //too much instanceof
             this.handleEvent(RegionFlags.FLAG_MINEFARM, e.getBlock(), e.getPlayer(), e, false, false);
@@ -148,13 +148,13 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //place flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void blockPlace(BlockPlaceEvent e) {
         this.handleEvent(RegionFlags.FLAG_PLACE, e.getBlock(), e.getPlayer(), e);
     }
 
     //interact, lighter, use, crops destroy, chest access & smart doors flags
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerInteract(PlayerInteractEvent e) {
         Block block = e.getBlock();
         this.handleEvent(RegionFlags.FLAG_INTERACT, block, e.getPlayer(), e);
@@ -241,7 +241,7 @@ public final class RegionEventsHandler implements Listener {
 
     //pvp, mob damage, lightning strike & invincible flags
     @SuppressWarnings("unchecked")
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void entityDamage(EntityDamageEvent e) {
         Entity ent = e.getEntity();
         if (!(ent instanceof Player)) return;
@@ -268,7 +268,7 @@ public final class RegionEventsHandler implements Listener {
 
     //mob spawn & lightning strike flags
     @SuppressWarnings("unchecked")
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void entitySpawn(EntitySpawnEvent e) {
         EmptyEvent ev = new EmptyEvent();
         if (e.getEntity() instanceof EntityLightning) {
@@ -287,32 +287,32 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //lightning strike flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void lightningStrike(LightningStrikeEvent e) {
         if (e.getLightning() instanceof EntityLightning)
             this.handleEvent(RegionFlags.FLAG_LIGHTNING_STRIKE, ((Position) e.getLightning()), e);
     }
 
     //fire flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void blockIgnite(BlockIgniteEvent e) {
         this.handleEvent(RegionFlags.FLAG_FIRE, e.getBlock(), e.getEntity() instanceof Player ? ((Player) e.getEntity()) : null, e, false, false);
     }
 
     //fire flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void blockBurn(BlockBurnEvent e) {
         this.handleEvent(RegionFlags.FLAG_FIRE, e.getBlock(), e);
     }
 
     //leaves decay flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void leavesDecay(LeavesDecayEvent e) {
         this.handleEvent(RegionFlags.FLAG_LEAVES_DECAY, e.getBlock(), e);
     }
 
     //explode (creeper & tnt explode) & explode block break flags
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void entityExplode(EntityExplodeEvent e) {
         this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), e);
         if (e.isCancelled()) return;
@@ -327,7 +327,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //potion launch flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void projectileLaunch(ProjectileLaunchEvent e) {
         if (!(e.getEntity() instanceof EntityPotion)) return;
         Player source = null;
@@ -336,7 +336,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //send chat & receive chat flags
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerChat(PlayerChatEvent e) {
         this.handleEvent(RegionFlags.FLAG_SEND_CHAT, e.getPlayer(), e.getPlayer(), e);
         if (e.isCancelled()) return;
@@ -353,39 +353,39 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //item drop flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerDropItem(PlayerDropItemEvent e) {
         this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e);
     }
 
     //move flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerMove(PlayerMoveEvent e) {
         this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e);
     }
 
     //health regen flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void entityRegainHealth(EntityRegainHealthEvent e) {
         if (!(e.getEntity() instanceof Player)) return;
         this.handleEvent(RegionFlags.FLAG_HEALTH_REGEN, e.getEntity(), (Player) e.getEntity(), e);
     }
 
     //redstone flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void redstoneUpdate(RedstoneUpdateEvent e) {
         this.handleEvent(RegionFlags.FLAG_REDSTONE, e.getBlock(), e);
     }
 
     //ender pearl flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerTeleport(PlayerTeleportEvent e) {
         if (e.getCause() != PlayerTeleportEvent.TeleportCause.ENDER_PEARL) return;
         this.handleEvent(RegionFlags.FLAG_ENDER_PEARL, e.getTo(), e.getPlayer(), e);
     }
 
     //liquid flow flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void liquidFlow(LiquidFlowEvent e) {
         Block block = e.getSource();
         if (!(block instanceof BlockLava) && !(block instanceof BlockWater)) return;
@@ -393,13 +393,13 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //sleep flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerBedEnter(PlayerBedEnterEvent e) {
         this.handleEvent(RegionFlags.FLAG_SLEEP, e.getBed(), e.getPlayer(), e);
     }
 
     //chunk loader flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void chunkUnload(ChunkUnloadEvent e) {
         if (!this.flagsStatus[RegionFlags.FLAG_CHUNK_LOADER]) return;
         Chunk chunk = this.chunkManager.getChunk(e.getChunk().getX(), e.getChunk().getZ(), e.getLevel().getName(), false, false);
@@ -412,7 +412,7 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //chunk loader flag
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOW)
     public void levelLoad(LevelLoadEvent e) {
         if (!this.flagsStatus[RegionFlags.FLAG_CHUNK_LOADER]) return;
         Collection<Chunk> chunks = this.chunkManager.getLevelChunks(e.getLevel().getName());
@@ -425,13 +425,13 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //frame item drop flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void itemFrameDropItem(ItemFrameDropItemEvent e) {
         this.handleEvent(RegionFlags.FLAG_FRAME_ITEM_DROP, e.getBlock(), e.getPlayer(), e);
     }
 
     //prevent nether portal from spawning in region
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void entityPortalEnter(EntityPortalEnterEvent e) {
         if (!this.flagsStatus[RegionFlags.FLAG_NETHER_PORTAL]) return;
         if (e.getPortalType() != EntityPortalEnterEvent.PortalType.NETHER) return;
@@ -471,13 +471,13 @@ public final class RegionEventsHandler implements Listener {
     }
 
     //bucket empty flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerBucketEmpty(PlayerBucketEmptyEvent e) {
         this.handleEvent(RegionFlags.FLAG_BUCKET_EMPTY, e.getBlockClicked(), e.getPlayer(), e);
     }
 
     //bucket fill flag
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerBucketFill(PlayerBucketFillEvent e) {
         this.handleEvent(RegionFlags.FLAG_BUCKET_FILL, e.getBlockClicked(), e.getPlayer(), e);
     }
