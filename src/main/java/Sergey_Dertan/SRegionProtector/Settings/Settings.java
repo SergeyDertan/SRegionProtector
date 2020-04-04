@@ -58,6 +58,9 @@ public final class Settings {
 
     public final Item wandItem;
 
+    public final boolean regionCreationPrice;
+    public final double pricePerBlock;
+
     public Settings() throws Exception {
         copyResource("config.yml", "resources/", MAIN_FOLDER, SRegionProtectorMain.class);
         copyResource("mysql.yml", "resources/db", DB_FOLDER, SRegionProtectorMain.class);
@@ -97,6 +100,9 @@ public final class Settings {
         this.uiType = UIType.valueOf(((String) config.get("gui-type")).toUpperCase());
 
         this.protectedMessageType = Messenger.MessageType.fromString("protected-message-type");
+
+        this.regionCreationPrice = (boolean) config.get("region-creation-price");
+        this.pricePerBlock = ((Number) config.get("price-per-block")).doubleValue();
 
         String border = (String) config.get("border-block");
         int id;

@@ -138,6 +138,7 @@ command.create.too-big: "Region is too big"
 command.create.too-many: "You cant create more regions"
 command.create.regions-overlap: "Regions overlap"
 command.create.region-created: "Region created"
+command.create.not-enough-money: "You need {@need} money to create region"
 command.create.usage: "Required arguments: [NAME]"
 command.create.descripton: "create region"
 

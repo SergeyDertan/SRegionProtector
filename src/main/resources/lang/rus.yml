@@ -146,6 +146,7 @@ command.create.too-big: "Регион слишком большой"
 command.create.too-many: "Вы не можете создать больше регионов"
 command.create.regions-overlap: "Регионы пересекается"
 command.create.region-created: "Регион с названием {@region} создан"
+command.create.not-enough-money: "Вам нужно {@need} денег для создания региона"
 command.create.usage: "Необходимые аргументы: [РЕГИОН]"
 command.create.description: "Создать регион"
 

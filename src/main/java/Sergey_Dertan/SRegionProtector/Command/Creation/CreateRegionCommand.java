@@ -1,6 +1,7 @@
 package Sergey_Dertan.SRegionProtector.Command.Creation;
 
 import Sergey_Dertan.SRegionProtector.Command.SRegionProtectorCommand;
+import Sergey_Dertan.SRegionProtector.Economy.AbstractEconomy;
 import Sergey_Dertan.SRegionProtector.Region.RegionGroup;
 import Sergey_Dertan.SRegionProtector.Region.RegionManager;
 import Sergey_Dertan.SRegionProtector.Region.Selector.RegionSelector;
@@ -20,12 +21,16 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
     private final RegionSelector selector;
     private final RegionManager regionManager;
     private final RegionSettings regionSettings;
+    private final AbstractEconomy economy;
+    private final double pricePerBlock;
 
-    public CreateRegionCommand(RegionSelector selector, RegionManager regionManager, RegionSettings regionSettings) {
+    public CreateRegionCommand(RegionSelector selector, RegionManager regionManager, RegionSettings regionSettings, AbstractEconomy economy, double pricePerBlock) {
         super("rgcreate", "create");
         this.selector = selector;
         this.regionManager = regionManager;
         this.regionSettings = regionSettings;
+        this.economy = economy;
+        this.pricePerBlock = pricePerBlock;
 
         Map<String, CommandParameter[]> parameters = new Object2ObjectArrayMap<>();
         parameters.put("rgname", new CommandParameter[]{new CommandParameter("region", CommandParamType.STRING, false)});
@@ -88,10 +93,19 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.create.regions-overlap");
             return false;
         }
+        double price = 0;
+        if (this.economy != null) {
+            price = this.pricePerBlock * session.calculateRegionSize();
+            if (this.economy.getMoney(((Player) sender)) < price) {
+                this.messenger.sendMessage(sender, "command.create.not-enough-money", "@need", Double.toString(price));
+                return false;
+            }
+        }
         if (this.regionManager.createRegion(name, sender.getName(), pos1, pos2, pos1.level) == null) {
             this.messenger.sendMessage(sender, "command.create.region-exists");
             return false;
         }
+        if (this.economy != null) this.economy.reduceMoney(((Player) sender), ((long) price));
         this.messenger.sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }

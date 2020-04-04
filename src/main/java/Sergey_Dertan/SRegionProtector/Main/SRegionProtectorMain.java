@@ -242,7 +242,8 @@ public final class SRegionProtectorMain extends PluginBase {
     public void registerCommand(Command command) {
         this.mainCommand.registerCommand(command);
         if (!this.settings.hideCommands) {
-            if (command instanceof GetWandCommand && (getServer().getCommandMap().getCommand("wand") != null || getServer().getCommandMap().getCommand("/wand") != null)) return;
+            if (command instanceof GetWandCommand && (getServer().getCommandMap().getCommand("wand") != null || getServer().getCommandMap().getCommand("/wand") != null))
+                return;
             this.getServer().getCommandMap().register("sregionprotector", command);
         }
     }
@@ -251,11 +252,14 @@ public final class SRegionProtectorMain extends PluginBase {
         this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
         this.getServer().getCommandMap().register("sregionprotector", this.mainCommand);
 
+        AbstractEconomy economy = null;
+        if (this.getServer().getPluginManager().getPlugin("EconomyAPI") != null) economy = new OneBoneEconomyAPI();
+
         this.registerCommand(new Pos1Command(this.regionSelector));
 
         this.registerCommand(new Pos2Command(this.regionSelector));
 
-        this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings));
+        this.registerCommand(new CreateRegionCommand(this.regionSelector, this.regionManager, this.settings.regionSettings, this.settings.regionCreationPrice ? economy : null, this.settings.pricePerBlock));
 
         this.registerCommand(new GetWandCommand());
 
@@ -289,8 +293,6 @@ public final class SRegionProtectorMain extends PluginBase {
 
         this.registerCommand(new RegionExpandCommand(this.regionSelector));
 
-        AbstractEconomy economy = null;
-        if (this.getServer().getPluginManager().getPlugin("EconomyAPI") != null) economy = new OneBoneEconomyAPI();
         this.registerCommand(new BuyRegionCommand(this.regionManager, economy));
 
         this.registerCommand(new RegionPriceCommand(this.regionManager));
