@@ -435,7 +435,13 @@ public final class RegionEventsHandler implements Listener {
     public void entityPortalEnter(EntityPortalEnterEvent e) {
         if (!this.flagsStatus[RegionFlags.FLAG_NETHER_PORTAL]) return;
         if (e.getPortalType() != EntityPortalEnterEvent.PortalType.NETHER) return;
-        Position portal = EnumLevel.moveToNether(e.getEntity()).floor();
+        Position portal;
+        try {
+            portal = EnumLevel.moveToNether(e.getEntity()).floor();
+        } catch (IllegalArgumentException ex) {
+            return;
+        }
+
         if (portal == null) return;
 
         for (int x = -1; x < 2; x++) {
