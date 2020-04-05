@@ -173,7 +173,7 @@ command.addmember.already-member: "Player {@target} already member of {@region}"
 command.addmember.member-added: "Player {@target} added to {@region} as member"
 command.addmember.description: "add member to region"
 
-command.removemember.permission: "You dont permission"
+command.removemember.permission: "You dont have permission"
 command.removemember.usage: "Required arguments: [REGION] [PLAYER]"
 command.removemember.region-doesnt-exists: "Region doesnt {@region} exists"
 command.removemember.not-a-member: "Player {@target} not a member of {@region}"
