@@ -61,9 +61,9 @@ command.lpos1.description: "set first position at the block you are looking at"
 
 command.lpos2.in-game: "In game only"
 command.lpos2.permission: "You have no permission"
-command.lpos2.success: "First pos set"
+command.lpos2.success: "Second pos set"
 command.lpos2.fail: "Couldn`t find block in radius {@radius}"
-command.lpos2.description: "set first position at the block you are looking at"
+command.lpos2.description: "set second position at the block you are looking at"
 
 command.pos1.in-game: "In game only"
 command.pos1.permission: "You have no permission"
