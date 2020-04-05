@@ -281,7 +281,7 @@ chunk-manager.empty-chunks-removed: "Removed {@amount} empty chunks."
 chunk-manager.chunks-auto-save: "{@amount} chunks was automatically saved."
 chunk-manager.chunks-manual-save: "{@amount} chunks was saved by {@initiator}."
 
-gui.main.region-description: "Level: {@level}\nCreator: {@creator}\nPriority: {@priority}\nSize: {@size}"
+gui.main.region-description: "World: {@level}\nCreator: {@creator}\nPriority: {@priority}\nSize: {@size}"
 gui.main.region-description-item: "Region '{@region}'"
 gui.main.go-to-owners: "Owners"
 gui.main.go-to-members: "Members"
