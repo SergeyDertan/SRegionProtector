@@ -184,7 +184,7 @@ command.addowner.permission: "You dont have permission"
 command.addowner.usage: "Required arguments: [REGION] [PLAYER]"
 command.addowner.region-doesnt-exists: "Region doesnt exists"
 command.addowner.already-owner: "Player {@target} already owner of {@region}"
-command.addowner.owner-added: "Player {@target} now a member of {@region}"
+command.addowner.owner-added: "Player {@target} now a owner of {@region}"
 command.addowner.description: "add owner to region"
 
 command.removeowner.permission: "You have no permission"
