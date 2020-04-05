@@ -232,7 +232,7 @@ command.buy.no-economy: "None of supported economy plugins found"
 command.buy.no-money: "Not enough money"
 command.buy.wrong-price: "You must repeat region price"
 command.buy.success: "You bought region {@region} for {@price} money"
-command.buy.cant-buy-your-self: "You cant buy you`r region"
+command.buy.cant-buy-your-self: "You cant buy your region"
 command.buy.description: "buy region"
 
 command.price.permission:  "You have no permission"
