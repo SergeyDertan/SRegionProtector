@@ -5,7 +5,7 @@ loading.success: "Loaded {@regions} regions and {@chunks} chunks"
 
 loading.error.library: "Can`t load library, disabling plugin..."
 loading.error.folder: "Can`t create folder {@path}, disabling plugin..."
-loading.error.resource: "Can`t copy resource resource: {@err}, disabling plugin..."
+loading.error.resource: "Can`t copy resource: {@err}, disabling plugin..."
 loading.error.regions: "Can`t load region {@region}:"
 loading.error.data-provider-error: "Error during initializing {@provider} data provider: {@err}"
 
