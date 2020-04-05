@@ -1,10 +1,11 @@
 help-link: "If u need help with plugin u can visit wiki https://github.com/SergeyDertan/SRegionProtector/wiki or contact me in telegram https://t.me/sergeydertan"
 # default means that plugin will use server`s default language
+# Supported Languages: eng(English), rus(Русский), kor(한국어)
 language: "default"
 provider: yaml
-#when enabled only /rg and /region commands will be shown
+# when enabled only /rg and /region commands will be shown
 hide-commands: false
-#when enabled /rg and /region commands will be executed asyncly
+# when enabled /rg and /region commands will be executed asyncly
 async-commands: true
 async-commands-threads: -1
 
@@ -19,16 +20,16 @@ price-per-block: 1
 
 wand-item: "271:0"
 
-#multithreaded regions loading
+# multithreaded regions loading
 multithreaded-loading: true
 multithreaded-loading-threads: -1
 # "20", "20:2"
 border-block: "20"
-#1 second = 20 ticks
+# 1 second = 20 ticks
 select-session-clear-interval: 20
 session-life-time: 120
-#disabling flags may increase performance
-#by default flags are disabled
+# disabling flags may increase performance
+# by default flags are disabled
 active-flags:
   place: true
   break: true
@@ -109,16 +110,16 @@ display:
 # "sregionprotector.region.amount.DESIRED_MAX_AMOUNT"
 default-max-region-size: 15000
 default-max-region-amount: 3
-#in seconds
+# in seconds
 auto-save-period: 360
 auto-save: true
-#in seconds
+# in seconds
 empty-chunks-removing-period: 360
 empty-chunks-auto-removing: true
 
-#if enabled all regions will be updated when new flag added
+# if enabled all regions will be updated when new flag added
 save-new-flags: false
-#"chest" or "form"
+# "chest" or "form"
 gui-type: "chest"
 
 max-borders-amount: 300
