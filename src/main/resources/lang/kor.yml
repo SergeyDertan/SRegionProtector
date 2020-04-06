@@ -5,7 +5,7 @@ loading.success: "{@regions}개의 region과 {@chunks}개의 청크가 불러와
 
 loading.error.library: "라이브버리를 불러올 수 없습니다, 플러그인 비활성화 중..."
 loading.error.folder: "새 폴더를 만들 수 없습니다. {@path} 플러그인 비활성화 중..."
-loading.error.resource: "리소스를 복제할 수 없습니다. 리소스: {@err}. 플러그인 비활성화 중..."
+loading.error.resource: "리소스를 복제할 수 없습니다: {@err}, 플러그인 비활성화 중..."
 loading.error.regions: "region {@region}을(를) 불러올 수 없습니다:"
 loading.error.data-provider-error: "{@provider} 데이터 제공자를 초기화 중 오류가 발생하였습니다: {@err}"
 
