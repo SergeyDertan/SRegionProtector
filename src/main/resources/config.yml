@@ -47,6 +47,7 @@ active-flags:
   item-drop: false
   send-chat: false
   receive-chat: false
+  teleport: true
   health-regen: false
   mob-damage: false
   mob-spawn: false
@@ -76,6 +77,7 @@ display:
   explode: true
   lighter: true
   magic-item-use: true
+  teleport: true
   heal: true
   invincible: true
   potion-launch: true
