@@ -94,7 +94,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             return false;
         }
         double price = 0;
-        if (this.economy != null) {
+        if (this.economy != null && !sender.hasPermission("sregionprotector.region.priceless-creation")) {
             price = this.pricePerBlock * session.calculateRegionSize();
             if (this.economy.getMoney(((Player) sender)) < price) {
                 this.messenger.sendMessage(sender, "command.create.not-enough-money", "@need", Double.toString(price));
@@ -105,7 +105,7 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.create.region-exists");
             return false;
         }
-        if (this.economy != null) this.economy.reduceMoney(((Player) sender), ((long) price));
+        if (this.economy != null&&!sender.hasPermission("sregionprotector.region.priceless-creation")) this.economy.reduceMoney(((Player) sender), ((long) price));
         this.messenger.sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }

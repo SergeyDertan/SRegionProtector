@@ -93,6 +93,9 @@ permissions:
           sregionprotector.region.size.*:
             description: "Allows to creating regions with any size"
             default: op
+          sregionprotector.region.priceless-creation:
+            description: "Allows to creating regions without paying"
+            default: op
           sregionprotector.region.amount.*:
             description: "Allows to creating any amount of regions"
             default: op
