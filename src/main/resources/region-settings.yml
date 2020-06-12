@@ -16,6 +16,7 @@ default-flags:
   item-drop: false
   send-chat: false
   receive-chat: false
+  teleport: true
   health-regen: false
   mob-damage: false
   mob-spawn: false
@@ -51,6 +52,7 @@ need-message:
   item-drop: true
   send-chat: true
   receive-chat: false
+  teleport: true
   health-regen: false
   crops-destroy: true
   ender-pearl: true
