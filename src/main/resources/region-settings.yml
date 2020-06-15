@@ -37,6 +37,7 @@ default-flags:
   frame-item-drop: true
   bucket-empty: true
   bucket-fill: true
+  block-fall: true
 need-message:
   move: false
   place: true

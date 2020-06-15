@@ -147,6 +147,30 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_BREAK, e.getBlock(), e.getPlayer(), e);
     }
 
+    //block fall event (sand, gravel etc)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void blockFall(BlockFallEvent e) {
+        //TODO hardcode?
+        if (!this.flagsStatus[RegionFlags.FLAG_BLOCK_FALL]) return;
+        Block block = e.getBlock();
+
+        Chunk chunk = chunkManager.getChunk((long) block.x >> 4, (long) block.z >> 4, block.level.getName(), false, false);
+        if (chunk == null) return;
+
+        Vector3 target = block.add(0, -1);
+        for (Region region : chunk.getRegions()) {
+            if (!region.isVectorInside(target)) continue;
+            if (!region.getFlagState(RegionFlags.FLAG_BLOCK_FALL)) {
+                if (this.prioritySystem) {
+                    break;
+                } else {
+                    continue;
+                }
+            }
+            e.setCancelled();
+        }
+    }
+
     //place flag
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void blockPlace(BlockPlaceEvent e) {

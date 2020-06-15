@@ -180,3 +180,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.bucket_fill:
                 default: op
+              sregionprotector.region.flag.block_fall:
+                default: op

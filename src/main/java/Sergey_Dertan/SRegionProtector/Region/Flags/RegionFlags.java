@@ -63,8 +63,9 @@ public abstract class RegionFlags {
     public static final int FLAG_FRAME_ITEM_DROP = 35;
     public static final int FLAG_BUCKET_EMPTY = 36;
     public static final int FLAG_BUCKET_FILL = 37;
+    public static final int FLAG_BLOCK_FALL = 38;
 
-    public static final int FLAG_AMOUNT = 38;
+    public static final int FLAG_AMOUNT = 39;
 
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
