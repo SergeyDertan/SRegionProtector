@@ -73,6 +73,7 @@ active-flags:
   bucket-fill: true
   block-fall: true
   minecart-destroy: true
+  hopper: true
 display:
   place: true
   break: true

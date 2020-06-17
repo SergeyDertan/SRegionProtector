@@ -39,6 +39,7 @@ default-flags:
   bucket-fill: true
   block-fall: true
   minecart-destroy: true
+  hopper: false
 need-message:
   move: false
   place: true

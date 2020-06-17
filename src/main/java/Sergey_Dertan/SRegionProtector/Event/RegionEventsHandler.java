@@ -9,6 +9,7 @@ import Sergey_Dertan.SRegionProtector.Utils.Pair;
 import Sergey_Dertan.SRegionProtector.Utils.Tags;
 import cn.nukkit.Player;
 import cn.nukkit.block.*;
+import cn.nukkit.blockentity.BlockEntityHopper;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityMinecartAbstract;
@@ -23,6 +24,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.*;
 import cn.nukkit.event.entity.*;
+import cn.nukkit.event.inventory.InventoryMoveItemEvent;
 import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.event.player.*;
@@ -41,6 +43,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.network.protocol.DataPacket;
 import it.unimi.dsi.fastutil.objects.Object2BooleanArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2BooleanMap;
+import javafx.geometry.Pos;
 
 import java.util.*;
 
@@ -516,7 +519,14 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void vehicleDamage(VehicleDamageEvent e) {
         if (!(e.getVehicle() instanceof EntityMinecartAbstract)) return;
-        this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), e.getAttacker() instanceof Player?(Player)e.getAttacker():null, e, true, true);
+        this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), e.getAttacker() instanceof Player ? (Player) e.getAttacker() : null, e, true, true);
+    }
+
+    //hopper flag
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void inventoryMoveItem(InventoryMoveItemEvent e) {
+        if (!(e.getSource() instanceof BlockEntityHopper)) return;
+        this.handleEvent(RegionFlags.FLAG_HOPPER, ((Position) e.getSource()), e);
     }
 
     private boolean canInteractWith(int flag, Position pos, Player player) {

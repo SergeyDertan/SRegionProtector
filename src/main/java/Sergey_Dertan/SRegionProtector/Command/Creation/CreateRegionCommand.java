@@ -105,7 +105,8 @@ public final class CreateRegionCommand extends SRegionProtectorCommand {
             this.messenger.sendMessage(sender, "command.create.region-exists");
             return false;
         }
-        if (this.economy != null&&!sender.hasPermission("sregionprotector.region.priceless-creation")) this.economy.reduceMoney(((Player) sender), ((long) price));
+        if (this.economy != null && !sender.hasPermission("sregionprotector.region.priceless-creation"))
+            this.economy.reduceMoney(((Player) sender), ((long) price));
         this.messenger.sendMessage(sender, "command.create.region-created", "@region", name);
         return true;
     }

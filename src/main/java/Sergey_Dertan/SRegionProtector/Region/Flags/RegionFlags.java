@@ -65,8 +65,9 @@ public abstract class RegionFlags {
     public static final int FLAG_BUCKET_FILL = 37;
     public static final int FLAG_BLOCK_FALL = 38;
     public static final int FLAG_MINECART_DESTROY = 39;
+    public static final int FLAG_HOPPER = 40;
 
-    public static final int FLAG_AMOUNT = 40;
+    public static final int FLAG_AMOUNT = 41;
 
     public static final RegionFlag[] defaults = new RegionFlag[FLAG_AMOUNT];
     public static final Permission[] permissions = new Permission[FLAG_AMOUNT];
