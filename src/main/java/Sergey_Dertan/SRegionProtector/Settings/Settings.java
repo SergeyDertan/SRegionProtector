@@ -7,7 +7,6 @@ import Sergey_Dertan.SRegionProtector.UI.UIType;
 import cn.nukkit.block.Block;
 import cn.nukkit.item.Item;
 import cn.nukkit.utils.Config;
-import cn.nukkit.utils.MainLogger;
 
 import java.util.Map;
 
@@ -32,6 +31,8 @@ public final class Settings {
 
     public final boolean asyncCommands;
     public final int asyncCommandsThreads;
+
+    public final boolean withNemisys;
 
     public final boolean multithreadedDataLoading;
     public final int dataLoadingThreads;
@@ -83,6 +84,8 @@ public final class Settings {
 
         this.asyncCommands = (boolean) config.get("async-commands");
         this.asyncCommandsThreads = ((Number) config.getOrDefault("async-commands-threads", -1)).intValue();
+
+        this.withNemisys = (boolean) config.get("with-nemisys");
 
         this.multithreadedDataLoading = (boolean) config.get("multithreaded-loading");
         this.dataLoadingThreads = ((Number) config.get("multithreaded-loading-threads")).intValue();

@@ -249,7 +249,7 @@ public final class SRegionProtectorMain extends PluginBase {
     }
 
     private void initCommands() {
-        this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads);
+        this.mainCommand = new RegionCommand(this.settings.asyncCommands, this.settings.asyncCommandsThreads,this.settings.withNemisys);
         this.getServer().getCommandMap().register("sregionprotector", this.mainCommand);
 
         AbstractEconomy economy = null;

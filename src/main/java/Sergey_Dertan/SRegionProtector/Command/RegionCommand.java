@@ -23,7 +23,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
     private final ExecutorService executor;
     private final boolean async;
 
-    public RegionCommand(boolean async, int threads) {
+    public RegionCommand(boolean async, int threads, boolean withNemisys) {
         super("region");
 
         this.setAliases(new String[]{"rg"});
@@ -35,6 +35,7 @@ public final class RegionCommand extends SRegionProtectorCommand {
             this.executor = Executors.newFixedThreadPool(threads == -1 ? Runtime.getRuntime().availableProcessors() : threads);
             this.messenger.setAsync(true);
             ChestUIManager.setAsync(true);
+            this.messenger.setWithNemisys(withNemisys);
         } else {
             this.executor = null;
         }

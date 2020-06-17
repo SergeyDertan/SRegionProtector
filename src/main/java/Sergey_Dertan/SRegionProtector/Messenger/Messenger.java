@@ -28,6 +28,7 @@ public final class Messenger {
     private final Map<String, String> messages;
 
     private boolean async;
+    private boolean withNemisys;
 
     @SuppressWarnings("unchecked")
     public Messenger() throws Exception {
@@ -59,6 +60,10 @@ public final class Messenger {
         this.async = async;
     }
 
+    public void setWithNemisys(boolean withNemisys) {
+        this.withNemisys = withNemisys;
+    }
+
     public String getLanguage() {
         return this.language;
     }
@@ -86,7 +91,7 @@ public final class Messenger {
     }
 
     public void sendMessage(CommandSender target, String message, String[] search, String[] replace, MessageType type) {
-        if (!this.async || !(target instanceof Player)) {
+        if (!this.async || !(target instanceof Player) || this.withNemisys) {
             target.sendMessage(this.getMessage(message, search, replace));
         } else {
             TextPacket pk = new TextPacket();

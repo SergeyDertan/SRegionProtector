@@ -9,6 +9,9 @@ hide-commands: false
 async-commands: true
 async-commands-threads: -1
 
+#Set this to true if you are using nemisys to avoid errors
+with-nemisys: false
+
 lpos-max-radius: 250
 
 priority-system: false
