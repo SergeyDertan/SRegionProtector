@@ -516,8 +516,7 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void vehicleDamage(VehicleDamageEvent e) {
         if (!(e.getVehicle() instanceof EntityMinecartAbstract)) return;
-        if (!(e.getAttacker() instanceof Player)) return;
-        this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), ((Player) e.getAttacker()), e, true, true);
+        this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), e.getAttacker() instanceof Player?(Player)e.getAttacker():null, e, true, true);
     }
 
     private boolean canInteractWith(int flag, Position pos, Player player) {
