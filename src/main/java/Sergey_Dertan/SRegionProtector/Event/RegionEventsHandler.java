@@ -340,7 +340,9 @@ public final class RegionEventsHandler implements Listener {
     public void entityExplode(EntityExplodeEvent e) {
         this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), e);
         if (e.isCancelled()) return;
-        Iterator<Block> it = e.getBlockList().iterator();
+        List<Block> affectedBlocks=e.getBlockList();
+
+        Iterator<Block> it = affectedBlocks.iterator();
         while (it.hasNext()) {
             this.handleEvent(RegionFlags.FLAG_EXPLODE_BLOCK_BREAK, it.next(), e);
             if (e.isCancelled()) {
@@ -348,6 +350,8 @@ public final class RegionEventsHandler implements Listener {
                 it.remove();
             }
         }
+
+        e.setBlockList(affectedBlocks);
     }
 
     //potion launch flag
