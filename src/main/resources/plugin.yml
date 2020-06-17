@@ -182,3 +182,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.block_fall:
                 default: op
+              sregionprotector.region.flag.minecart_destroy:
+                default: op

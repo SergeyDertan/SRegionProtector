@@ -11,6 +11,7 @@ import cn.nukkit.Player;
 import cn.nukkit.block.*;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
+import cn.nukkit.entity.item.EntityMinecartAbstract;
 import cn.nukkit.entity.item.EntityPotion;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.passive.EntityAnimal;
@@ -26,6 +27,7 @@ import cn.nukkit.event.level.ChunkUnloadEvent;
 import cn.nukkit.event.level.LevelLoadEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.event.redstone.RedstoneUpdateEvent;
+import cn.nukkit.event.vehicle.VehicleDamageEvent;
 import cn.nukkit.event.weather.LightningStrikeEvent;
 import cn.nukkit.item.ItemID;
 import cn.nukkit.level.EnumLevel;
@@ -340,7 +342,7 @@ public final class RegionEventsHandler implements Listener {
     public void entityExplode(EntityExplodeEvent e) {
         this.handleEvent(RegionFlags.FLAG_EXPLODE, e.getPosition(), e);
         if (e.isCancelled()) return;
-        List<Block> affectedBlocks=e.getBlockList();
+        List<Block> affectedBlocks = e.getBlockList();
 
         Iterator<Block> it = affectedBlocks.iterator();
         while (it.hasNext()) {
@@ -508,6 +510,14 @@ public final class RegionEventsHandler implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerBucketFill(PlayerBucketFillEvent e) {
         this.handleEvent(RegionFlags.FLAG_BUCKET_FILL, e.getBlockClicked(), e.getPlayer(), e);
+    }
+
+    //minecart destroy
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void vehicleDamage(VehicleDamageEvent e) {
+        if (!(e.getVehicle() instanceof EntityMinecartAbstract)) return;
+        if (!(e.getAttacker() instanceof Player)) return;
+        this.handleEvent(RegionFlags.FLAG_MINECART_DESTROY, e.getVehicle(), ((Player) e.getAttacker()), e, true, true);
     }
 
     private boolean canInteractWith(int flag, Position pos, Player player) {
