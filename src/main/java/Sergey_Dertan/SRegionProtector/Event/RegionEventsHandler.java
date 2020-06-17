@@ -13,6 +13,7 @@ import cn.nukkit.blockentity.BlockEntityHopper;
 import cn.nukkit.command.CommandSender;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.item.EntityMinecartAbstract;
+import cn.nukkit.entity.item.EntityMinecartHopper;
 import cn.nukkit.entity.item.EntityPotion;
 import cn.nukkit.entity.mob.EntityMob;
 import cn.nukkit.entity.passive.EntityAnimal;
@@ -525,7 +526,7 @@ public final class RegionEventsHandler implements Listener {
     //hopper flag
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void inventoryMoveItem(InventoryMoveItemEvent e) {
-        if (!(e.getSource() instanceof BlockEntityHopper)) return;
+        if (!(e.getSource() instanceof BlockEntityHopper)&&!(e.getSource() instanceof EntityMinecartHopper)) return;
         this.handleEvent(RegionFlags.FLAG_HOPPER, ((Position) e.getSource()), e);
     }
 
