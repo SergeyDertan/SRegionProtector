@@ -4,7 +4,7 @@
   <groupId>sergeydertan.sregionprotector</groupId>
   <artifactId>SRegionProtector</artifactId>
   <name>SRegionProtector</name>
-  <version>20.2</version>
+  <version>20.3</version>
   <description>Flexible region protection plugin for nukkit</description>
   <url>https://github.com/SergeyDertan/SRegionProtector</url>
   <issueManagement>
@@ -151,18 +151,6 @@
           <plugin>
             <artifactId>maven-jar-plugin</artifactId>
             <version>3.1.1</version>
-            <executions>
-              <execution>
-                <id>default-jar</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <outputDirectory>C:\Users\serge\Desktop\Nukkit\plugins</outputDirectory>
-                </configuration>
-              </execution>
-            </executions>
             <configuration>
               <outputDirectory>C:\Users\serge\Desktop\Nukkit\plugins</outputDirectory>
             </configuration>
@@ -271,9 +259,9 @@
   </distributionManagement>
   <properties>
     <java.version>1.8</java.version>
-    <github.global.server>github</github.global.server>
-    <github.maven-plugin>0.12</github.maven-plugin>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <github.maven-plugin>0.12</github.maven-plugin>
+    <github.global.server>github</github.global.server>
   </properties>
 </project>
 
