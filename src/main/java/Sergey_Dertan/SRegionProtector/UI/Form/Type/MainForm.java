@@ -10,10 +10,10 @@ final class MainForm extends FormWindowSimple implements UIForm {
 
     private static final transient ElementButtonImageData priorityImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/move.png");
     private static final transient ElementButtonImageData membersImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_member_star.png");
-    private static final transient ElementButtonImageData removeImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/storage/trash.png");
+    private static final transient ElementButtonImageData removeImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/trash.png");
     private static final transient ElementButtonImageData ownersImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/permissions_op_crown.png");
-    private static final transient ElementButtonImageData flagsImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/settings/toggle_on_hover.png");
-    private static final transient ElementButtonImageData sellImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/gui/newgui/MCoin.png");
+    private static final transient ElementButtonImageData flagsImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/common-classic_toggle_checked_state.png");
+    private static final transient ElementButtonImageData sellImage = new ElementButtonImageData(ElementButtonImageData.IMAGE_DATA_TYPE_PATH, "textures/ui/MCoin.png");
 
     private final transient Region region;
 

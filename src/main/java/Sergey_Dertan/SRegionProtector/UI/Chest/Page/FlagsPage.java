@@ -57,6 +57,11 @@ public final class FlagsPage implements Page {
         this.flagToBlock[RegionFlags.FLAG_FRAME_ITEM_DROP] = ItemID.ITEM_FRAME;
         this.flagToBlock[RegionFlags.FLAG_BUCKET_EMPTY] = ItemID.BUCKET;
         this.flagToBlock[RegionFlags.FLAG_BUCKET_FILL] = ItemID.BUCKET;
+        this.flagToBlock[RegionFlags.FLAG_TELEPORT] = ItemID.ENDER_PEARL;
+        this.flagToBlock[RegionFlags.FLAG_BLOCK_FALL] = BlockID.SAND;
+        this.flagToBlock[RegionFlags.FLAG_MINECART_DESTROY] = ItemID.MINECART;
+        this.flagToBlock[RegionFlags.FLAG_HOPPER] = ItemID.HOPPER;
+
     }
 
     @Override

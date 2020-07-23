@@ -49,6 +49,10 @@ final class FlagsForm extends FormWindowSimple implements UIForm {
         ICONS[RegionFlags.FLAG_BUCKET_EMPTY] = "textures/items/bucket_empty.png";
         ICONS[RegionFlags.FLAG_BUCKET_FILL] = "textures/items/bucket_water.png";
         ICONS[RegionFlags.FLAG_INVINCIBLE] = "textures/ui/fire_resistance_effect.png";
+        ICONS[RegionFlags.FLAG_HOPPER] = "textures/items/hopper.png";
+        ICONS[RegionFlags.FLAG_MINECART_DESTROY] = "textures/items/minecart_normal.png";
+        ICONS[RegionFlags.FLAG_TELEPORT] = "textures/items/ender_pearl.png";
+        ICONS[RegionFlags.FLAG_INTERACT] = "textures/ui/permissions_visitor_hand_hover.png";
     }
 
     private final transient Region region;
