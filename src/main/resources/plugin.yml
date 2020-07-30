@@ -3,7 +3,7 @@ main: Sergey_Dertan.SRegionProtector.Main.SRegionProtectorMain
 api: [1.0.0]
 version: "${pom.version}"
 author: Sergey_Dertan
-website: https://vk.com/sergey_dertan
+website: http://t.me/Sergey57ss
 load: STARTUP
 prefix: '§eSRegionProtector§f'
 softdepend:
