@@ -74,6 +74,7 @@ active-flags:
   block-fall: true
   minecart-destroy: true
   hopper: true
+  entry: true
 display:
   place: true
   break: true
@@ -114,6 +115,7 @@ display:
   bucket-fill: true
   block-fall: true
   minecart-destroy: true
+  entry: true
 # players need no permission to create regions with this size & amount
 # to let player create more regions with greater size give him permissions
 # "sregionprotector.region.size.DESIRED_MAX_SIZE", and

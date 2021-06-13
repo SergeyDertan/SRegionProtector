@@ -391,10 +391,15 @@ public final class RegionEventsHandler implements Listener {
         this.handleEvent(RegionFlags.FLAG_ITEM_DROP, e.getPlayer(), e.getPlayer(), e);
     }
 
-    //move flag
+    //move & entry flags
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void playerMove(PlayerMoveEvent e) {
         this.handleEvent(RegionFlags.FLAG_MOVE, e.getTo(), e.getPlayer(), e);
+        if (e.isCancelled()) return;
+        this.handleEvent(RegionFlags.FLAG_ENTRY, e.getTo(), e.getPlayer(), e);
+        if (!e.isCancelled()) return;
+        e.setCancelled();
+        //e.getPlayer().teleportImmediate();
     }
 
     //health regen flag
@@ -525,7 +530,7 @@ public final class RegionEventsHandler implements Listener {
     //hopper flag
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void inventoryMoveItem(InventoryMoveItemEvent e) {
-        if (!(e.getSource() instanceof BlockEntityHopper)&&!(e.getSource() instanceof EntityMinecartHopper)) return;
+        if (!(e.getSource() instanceof BlockEntityHopper) && !(e.getSource() instanceof EntityMinecartHopper)) return;
         this.handleEvent(RegionFlags.FLAG_HOPPER, ((Position) e.getSource()), e);
     }
 

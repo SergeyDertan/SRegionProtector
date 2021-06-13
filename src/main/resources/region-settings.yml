@@ -41,6 +41,7 @@ default-flags:
   block-fall: true
   minecart-destroy: true
   hopper: false
+  entry: false
 need-message:
   move: false
   place: true
@@ -70,6 +71,7 @@ need-message:
   bucket-empty: true
   bucket-fill: true
   minecart-destroy: true
+  entry: true
 max-region-name-length: 10
 min-region-name-length: 3
 # 1 second = 20 ticks

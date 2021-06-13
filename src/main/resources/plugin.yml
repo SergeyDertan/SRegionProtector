@@ -186,3 +186,5 @@ permissions:
                 default: op
               sregionprotector.region.flag.hopper:
                 default: op
+              sregionprotector.region.flag.entry:
+                default: op

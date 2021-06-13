@@ -13,38 +13,43 @@ public abstract class PlaceholdersLoader {
         PlaceholderAPI papi = PlaceholderAPI.getInstance();
         SRegionProtectorMain main = SRegionProtectorMain.getInstance();
 
-        papi.visitorSensitivePlaceholder("srp_current_region", (pl, params) -> {
-            Region region = main.getChunkManager().getRegion(pl, pl.level.getName());
+        papi.builder("srp_current_region", String.class).visitorLoader(entry -> {
+            Region region = main.getChunkManager().getRegion(entry.getPlayer(), entry.getPlayer().level.getName());
             return region == null ? "" : region.name;
-        });
+        }).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_region_amount_creator", (pl, params) -> main.getRegionManager().getPlayerRegionAmount(pl, RegionGroup.CREATOR));
+        papi.builder("srp_region_amount_creator", String.class).visitorLoader(entry ->
+                String.valueOf(main.getRegionManager().getPlayerRegionAmount(entry.getPlayer(), RegionGroup.CREATOR))
+        ).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_region_amount_owner", (pl, params) -> main.getRegionManager().getPlayerRegionAmount(pl, RegionGroup.OWNER));
+        papi.builder("srp_region_amount_owner", String.class).visitorLoader(entry ->
+                String.valueOf(main.getRegionManager().getPlayerRegionAmount(entry.getPlayer(), RegionGroup.OWNER))
+        ).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_region_amount_member", (pl, params) -> main.getRegionManager().getPlayerRegionAmount(pl, RegionGroup.MEMBER));
+        papi.builder("srp_region_amount_member", String.class).visitorLoader(entry ->
+                String.valueOf(main.getRegionManager().getPlayerRegionAmount(entry.getPlayer(), RegionGroup.MEMBER))
+        ).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_region_is_selling", (pl, params) -> {
-            Region region = main.getChunkManager().getRegion(pl, pl.level.getName());
-            return region != null && region.isSelling();
-        });
+        papi.builder("srp_region_is_selling", String.class).visitorLoader(entry -> {
+            Region region = main.getChunkManager().getRegion(entry.getPlayer(), entry.getPlayer().level.getName());
+            return String.valueOf(region != null && region.isSelling());
+        }).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_region_price", (pl, params) -> {
-            Region region = main.getChunkManager().getRegion(pl, pl.level.getName());
-            return region == null ? -1L : region.getSellFlagPrice();
-        });
+        papi.builder("srp_region_price", String.class).visitorLoader(entry -> {
+            Region region = main.getChunkManager().getRegion(entry.getPlayer(), entry.getPlayer().level.getName());
+            return String.valueOf(region == null ? -1L : region.getSellFlagPrice());
+        }).autoUpdate(false).build();
 
-        papi.visitorSensitivePlaceholder("srp_flag_state", (pl, params) -> {
-
-            Region region = main.getChunkManager().getRegion(pl, pl.level.getName());
+        papi.builder("srp_flag_state", String.class).visitorLoader(entry -> {
+            Region region = main.getChunkManager().getRegion(entry.getPlayer(), entry.getPlayer().level.getName());
             int flag = RegionFlags.FLAG_INVALID;
-            String name = params.single();
+            String name = entry.getParameters().single().getValue();
             if (name != null && !name.isEmpty()) {
                 flag = RegionFlags.getFlagId(name);
             }
             if (flag == RegionFlags.FLAG_INVALID || region == null) return "";
             return region.getFlagState(flag) == RegionFlags.getStateFromString("allow", flag) ? "allow" : "deny";
-        });
+        }).autoUpdate(false).build();
     }
 
     private PlaceholdersLoader() {
